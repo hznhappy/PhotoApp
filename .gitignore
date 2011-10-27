@@ -1,0 +1,12 @@
+.DS_Store
+build/
+*.swp
+*~.nib
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.xcuserdata
+*.mode1v3
+*.mode2v3
+PhotoApp.xcodeproj/project.xcworkspace/xcuserdata/andy.xcuserdatad/UserInterfaceState.xcuserstate
+PhotoApp.xcodeproj/project.xcworkspace/xcuserdata/apple.xcuserdatad/UserInterfaceState.xcuserstate
