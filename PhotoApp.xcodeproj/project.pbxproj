@@ -34,7 +34,6 @@
 		A10FFFFF14593E3F00D007F3 /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = A10FFFFE14593E3F00D007F3 /* person.png */; };
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
 		A11CD18D1427281100B6824F /* DBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A11CD18C1427281100B6824F /* DBOperation.m */; };
-		A13BBB861457B1D8000D54D2 /* SinglePhotoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A13BBB851457B1D8000D54D2 /* SinglePhotoView.xib */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
 		A1675CC71451528200238DC4 /* TextController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1675CC61451528200238DC4 /* TextController.xib */; };
@@ -83,7 +82,6 @@
 		A100BFB414455FE300D85BD6 /* left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left@2x.png"; sourceTree = "<group>"; };
 		A100BFB514455FE300D85BD6 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
 		A100BFB614455FE300D85BD6 /* right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@2x.png"; sourceTree = "<group>"; };
-		A100BFC41445767100D85BD6 /* GlobalHeadFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalHeadFile.h; sourceTree = "<group>"; };
 		A106107514467B6B0055070A /* PopupPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupPanelView.h; sourceTree = "<group>"; };
 		A106107614467B6B0055070A /* PopupPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PopupPanelView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A106107914467B6B0055070A /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -94,7 +92,6 @@
 		A11401C41440016F007B4B95 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
 		A11CD18B1427281100B6824F /* DBOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOperation.h; sourceTree = "<group>"; };
 		A11CD18C1427281100B6824F /* DBOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBOperation.m; sourceTree = "<group>"; };
-		A13BBB851457B1D8000D54D2 /* SinglePhotoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SinglePhotoView.xib; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A1675CC61451528200238DC4 /* TextController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextController.xib; sourceTree = "<group>"; };
@@ -195,7 +192,6 @@
 				8D1107310486CEB800E47090 /* PhotoApp-Info.plist */,
 				A1675CC61451528200238DC4 /* TextController.xib */,
 				A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */,
-				A13BBB851457B1D8000D54D2 /* SinglePhotoView.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -248,9 +244,9 @@
 			children = (
 				184C5206144D745F00F0494A /* DeleteMeController.h */,
 				184C5207144D746300F0494A /* DeleteMeController.m */,
-				A106107A14467B6B0055070A /* User.m */,
 				A106107514467B6B0055070A /* PopupPanelView.h */,
 				A106107614467B6B0055070A /* PopupPanelView.m */,
+				A106107A14467B6B0055070A /* User.m */,
 				A106107914467B6B0055070A /* User.h */,
 				184C5205144D704300F0494A /* UserTableController.h */,
 				184C5201144D703500F0494A /* UserTableController.m */,
@@ -270,7 +266,6 @@
 				A1EF3DAA14441A640087972B /* PhotoImageView.m */,
 				A1EF3DAB14441A640087972B /* PhotoScrollView.h */,
 				A1EF3DAC14441A640087972B /* PhotoScrollView.m */,
-				A100BFC41445767100D85BD6 /* GlobalHeadFile.h */,
 			);
 			name = OnePhotoController;
 			sourceTree = "<group>";
@@ -339,7 +334,6 @@
 				184C5204144D703D00F0494A /* UserTableController.xib in Resources */,
 				A1675CC71451528200238DC4 /* TextController.xib in Resources */,
 				A1B97D90145699BE00F65806 /* AssetTablePicker.xib in Resources */,
-				A13BBB861457B1D8000D54D2 /* SinglePhotoView.xib in Resources */,
 				A10FFFFF14593E3F00D007F3 /* person.png in Resources */,
 				A10F000114593E7A00D007F3 /* playlist.png in Resources */,
 				A10F000314593E7F00D007F3 /* albums.png in Resources */,

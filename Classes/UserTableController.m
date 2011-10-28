@@ -9,30 +9,43 @@
 #import "UserTableController.h"
 #import "TextController.h"
 @implementation UserTableController
-@synthesize tableView,list;
+@synthesize tableView,list,tools;
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.tools.alpha = 1;
+    tools.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
+    
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    self.tools.alpha = 0;
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
+}
+
 -(void)viewDidLoad
 {
-   // NSMutableArray *arr=[[NSMutableArray alloc]initWithObjects:@"play1",@"play2",@"play3",@"play4",nil];
-    
-    //self.list=arr;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-	UIBarButtonItem *editButton=[[UIBarButtonItem alloc]initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleAdd:) ];
-	self.navigationItem.rightBarButtonItem=editButton;
-    [editButton release];
-    UIToolbar* tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 120,45)];
+    tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 90,45)];
     tools.barStyle = UIBarStyleBlackTranslucent;
-	[tools setTintColor:[self.navigationController.navigationBar tintColor]];
-	NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
-	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc]initWithTitle:@"back" style:UITabBarSystemItemContacts  target:self action:@selector(toggleback:)];
-	UIBarButtonItem *anotherButton1 = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
-	[buttons addObject:anotherButton];
-	[anotherButton release];
-	[buttons addObject:anotherButton1];
-	[anotherButton1 release];
+    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
+	
+    
+    UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
+    editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(toggleEdit:)];
+    addButon.style = UIBarButtonItemStyleBordered;
+    editButton.style = UIBarButtonItemStyleBordered;
+	[buttons addObject:editButton];
+    [buttons addObject:addButon];
 	[tools setItems:buttons animated:NO];
-	[buttons release];
+	
 	UIBarButtonItem *myBtn = [[UIBarButtonItem alloc] initWithCustomView:tools];
-	self.navigationItem.leftBarButtonItem = myBtn;
+	self.navigationItem.rightBarButtonItem = myBtn;
+	[addButon release];
+    [editButton release];
+    [buttons release];
 	da=[[DBOperation alloc]init];
     [da openDB];
     [da createTable3];
@@ -47,8 +60,20 @@
     
     
 }
+//-(void)
+/*-(void)viewWillDisappear:(BOOL)animated
+{
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
+}*/
+
 -(IBAction)toggleEdit:(id)sender
 {
+    if (self.tableView.editing) {
+        editButton.style = UIBarButtonSystemItemDone;
+    }else{
+        editButton.style = UIBarButtonSystemItemEdit;
+    }
+
     [self.tableView setEditing:!self.tableView.editing animated:YES];
     
 }
@@ -85,7 +110,8 @@
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *dic = [NSDictionary dictionaryWithObject:[tableView cellForRowAtIndexPath:indexPath].textLabel.text forKey:@"listTitle"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"SetTitle" object:self userInfo:dic];
-    [self dismissModalViewControllerAnimated:YES];
+    //[self dismissModalViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     [da openDB];
@@ -101,7 +127,9 @@
 -(IBAction)toggleback:(id)sender
 {
     [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-    [self.parentViewController dismissModalViewControllerAnimated:YES];    
+    //[self.parentViewController dismissModalViewControllerAnimated:YES];    
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark -
 #pragma mark Table View Data Source Methods
@@ -117,6 +145,7 @@
     
 }
 - (void)dealloc {
+    [editButton release];
     [list release];
     [super dealloc];
 }

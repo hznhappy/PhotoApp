@@ -8,6 +8,9 @@
 
 #define ZOOM_VIEW_TAG 0x101
 #import "PhotoImageView.h"
+#import "PhotoScrollView.h"
+#import <QuartzCore/QuartzCore.h>
+
 @interface RotateGesture : UIRotationGestureRecognizer {}
 @end
 

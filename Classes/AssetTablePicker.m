@@ -84,7 +84,10 @@
     [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.5];
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
 
+}
 -(void)viewDidDisappear:(BOOL)animated{
     for (Thumbnail *thub in crwAssets) {
         [thub setSelectOvlay];
@@ -223,14 +226,14 @@
 }
 -(IBAction)markNames{
     DeleteMeController *d=[[DeleteMeController alloc]init];
-	UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:d];
-	[self presentModalViewController:navController animated:YES];
+    [self.navigationController pushViewController:d animated:YES];
     [d release];
 }
 -(void)selectPlayList{
     UserTableController *u=[[UserTableController alloc]init];
-	UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:u];
-	[self presentModalViewController:navController animated:YES];
+	//UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:u];
+	//[self presentModalViewController:navController animated:YES];
+    [self.navigationController pushViewController:u animated:YES];
     [u release];
 }
 

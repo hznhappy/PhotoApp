@@ -8,7 +8,6 @@
 
 #import <MessageUI/MessageUI.h>
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "GlobalHeadFile.h"
 #import "DBOperation.h"
 #import "PopupPanelView.h"
 
@@ -29,7 +28,7 @@
 	UIBarButtonItem *_rightButton;
 	UIBarButtonItem *_actionButton;
 	
-	BOOL _storedOldStyles;
+	/*BOOL _storedOldStyles;
 	UIStatusBarStyle _oldStatusBarSyle;
 	UIBarStyle _oldNavBarStyle;
 	BOOL _oldNavBarTranslucent;
@@ -37,19 +36,17 @@
 	UIBarStyle _oldToolBarStyle;
 	BOOL _oldToolBarTranslucent;
 	UIColor* _oldToolBarTintColor;	
-	BOOL _oldToolBarHidden;
+	BOOL _oldToolBarHidden;*/
     UIBarButtonItem *edit;
     BOOL editing;
 	DBOperation *db;
     PopupPanelView *ppv;
-    UIButton *mainButton;
     CGFloat bty;
     NSMutableArray *listid;
     UILabel *nameTitle;
 	
 }
-@property(nonatomic,retain) IBOutlet PopupPanelView *ppv;
-@property(nonatomic,retain) IBOutlet UIButton *mainButton;
+@property(nonatomic,retain)PopupPanelView *ppv;
 
 @property(nonatomic,retain)NSMutableArray *listid;
 

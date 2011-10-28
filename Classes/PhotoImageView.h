@@ -6,8 +6,6 @@
 //  Copyright 2011 chinarewards. All rights reserved.
 //
 
-#import "GlobalHeadFile.h"
-
 
 @class PhotoScrollView;
 

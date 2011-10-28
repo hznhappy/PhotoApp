@@ -10,6 +10,7 @@
 #import "User.h"
 #import "PopupPanelView.h"
 #import "DeleteMeController.h"
+#import "PhotoImageView.h"
 
 @interface PhotoViewController (Private)
 - (void)loadScrollViewWithPage:(NSInteger)page;
@@ -27,7 +28,7 @@
 
 @implementation PhotoViewController
 @synthesize listid;
-@synthesize ppv,mainButton;
+@synthesize ppv;
 @synthesize scrollView=_scrollView;
 @synthesize photoSource;//=_photoSource; 
 @synthesize photoViews=_photoViews;
@@ -96,21 +97,13 @@
     self.listid=[[NSMutableArray arrayWithCapacity:100]retain];
     edit=[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;
-    mainButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	[mainButton setFrame:CGRectMake(0, 60, 50, 35)];
-	[mainButton addTarget:self action:@selector(doPopupPanelView) forControlEvents:UIControlEventTouchDown];
-	[mainButton setTitle:@"open" forState:UIControlStateNormal];
-    [self.view addSubview:mainButton];
-	ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 90, 100, 347)];
+    ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 90, 100, 347)];
     ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
     ppv.url = [[asset defaultRepresentation]url];
     [ppv Buttons];
     ppv.isOpen=NO;
     db = [[DBOperation alloc]init];
-    
-    mainButton.hidden=YES;
     [self.view addSubview:ppv];
-    ppv.hidden=YES;
     [ppv viewClose];
     [self doView];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(change:) name:@"change" object:nil];
@@ -121,7 +114,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
-	self.navigationItem.leftBarButtonItem.title = @"come";
+	/*self.navigationItem.leftBarButtonItem.title = @"come";
 	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 3.2) {
 		
 		UIView *view = self.view;
@@ -156,7 +149,7 @@
 		[self.navigationController setToolbarHidden:NO animated:YES];
 	}
 
-	
+	*/
 	[self setupToolbar];
 	[self setupScrollViewContentSize];
 	[self moveToPhotoAtIndex:_pageIndex animated:NO];
@@ -168,7 +161,7 @@
 - (void)viewWillDisappear:(BOOL)animated{
 	[super viewWillDisappear:animated];
 	
-	self.navigationController.navigationBar.barStyle = _oldNavBarStyle;
+	/*self.navigationController.navigationBar.barStyle = _oldNavBarStyle;
 	self.navigationController.navigationBar.tintColor = _oldNavBarTintColor;
 	self.navigationController.navigationBar.translucent = _oldNavBarTranslucent;
 	
@@ -184,13 +177,18 @@
 		self.navigationController.toolbar.tintColor = _oldNavBarTintColor;
 		self.navigationController.toolbar.translucent = _oldNavBarTranslucent;
 		
-	} else {
+	} else {*/
 		
-		[self.navigationController setToolbarHidden:_oldToolBarHidden animated:YES];
+		[self.navigationController setToolbarHidden:YES animated:YES];
 		
-	}
+	//}
 	
 		
+}
+-(void)viewDidDisappear:(BOOL)animated
+{
+//    //self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
+//    self.navigationController.toolbar.hidden = YES;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -243,8 +241,9 @@
 -(void)tiao:(NSNotification *)note
 {
     DeleteMeController *d=[[DeleteMeController alloc]init];
-	UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:d];
-	[self presentModalViewController:navController animated:YES];
+	//UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:d];
+	//[self presentModalViewController:navController animated:YES];
+    [self.navigationController pushViewController:d animated:YES];
     [d release];
     
 }
@@ -263,22 +262,17 @@
                                                        object:self];
     edit.style = UIBarButtonItemStyleBordered;
     edit.title = @"Edit";
-    mainButton.hidden=YES;
-    ppv.hidden=YES;
-    [mainButton setTitle:@"open" forState:UIControlStateNormal];
+    //ppv.hidden=YES;
     [ppv viewClose];
 }
 else{
     edit.style = UIBarButtonItemStyleDone;
     edit.title = @"Done";
-    mainButton.hidden=NO;
+    [ppv viewOpen];
 }
     editing = !editing;
 }
--(void)editMode{
-    mainButton.hidden=NO;
-    
-}
+
 
 -(void)doView
 {
@@ -288,7 +282,6 @@ else{
     }
     [self.view addSubview:_scrollView];
     self.navigationItem.rightBarButtonItem=edit;
-    [self.view addSubview:mainButton];
     [self.view addSubview:ppv];
     bty=0;
     
@@ -321,16 +314,6 @@ else{
     [db closeDB];
 }
 
--(void)doPopupPanelView{
-	if(ppv.isOpen){
-		[ppv viewClose];
-		[mainButton setTitle:@"open" forState:UIControlStateNormal];
-	}else{
-		[ppv viewOpen];
-        ppv.hidden=NO;
-		[mainButton setTitle:@"close" forState:UIControlStateNormal];
-	}
-}
 
 - (void)done:(id)sender {
 	[self dismissModalViewControllerAnimated:YES];
@@ -371,7 +354,7 @@ else{
 	}
 	
 	_actionButton=action;
-	
+	self.navigationController.toolbar.barStyle = UIBarStyleBlackTranslucent;
 	[action release];
 	[flex release];
 	
@@ -400,6 +383,19 @@ else{
 	[self setStatusBarHidden:hidden animated:animated];
     [self.navigationController setNavigationBarHidden:hidden animated:animated];
     [self.navigationController setToolbarHidden:hidden animated:animated];
+    if (hidden) {
+        [UIView animateWithDuration:0.4 
+                         animations:^{
+                             ppv.alpha = 0;
+                         }];
+
+    }else{
+        [UIView animateWithDuration:0.4 
+                         animations:^{
+                             ppv.alpha = 1;
+                         }];
+
+    }
 	_barsHidden=hidden;
 	
 }
@@ -793,8 +789,8 @@ else{
 	[_photoViews release], _photoViews=nil;
 	[photoSource release], photoSource=nil;
 	[_scrollView release], _scrollView=nil;
-	[_oldToolBarTintColor release], _oldToolBarTintColor = nil;
-	[_oldNavBarTintColor release], _oldNavBarTintColor = nil;
+	/*[_oldToolBarTintColor release], _oldToolBarTintColor = nil;
+	[_oldNavBarTintColor release], _oldNavBarTintColor = nil;*/
 	[listid release];
     [super dealloc];
 }

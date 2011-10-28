@@ -21,27 +21,25 @@
 	sqlite3 *db;	
 	NSMutableArray *list;
     UIToolbar *toolBar;
-    UIPickerView		*myPickerView; 
-    NSMutableArray			*pickerViewArray; 
-    DeleteMeController *d;
+    UIToolbar *tools;
+    NSMutableArray *pickerViewArray; 
     NSString *idx; 
     NSString *id1;
     IBOutlet UITableView *tableView;
+    UIPickerView *myPickerView;
+    BOOL addSign;
+    UIBarButtonItem *editButton;
+    
 }
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
-@property(nonatomic,retain)NSMutableDictionary *content;
-@property(nonatomic,retain)NSArray *keys;
-@property(nonatomic,retain)NSString *fcolor;
-@property(nonatomic,retain)NSString *fid;
-@property(nonatomic,retain)NSString *fname;
-@property (nonatomic, retain) UIPickerView *myPickerView;
-@property (nonatomic,retain)DeleteMeController *d;
+@property (nonatomic, retain)IBOutlet UIPickerView *myPickerView;
 @property (nonatomic, retain) NSMutableArray *pickerViewArray;
-@property (nonatomic,retain)UIToolbar *toolBar;
-@property (nonatomic,retain) NSString *selected;
-@property (nonatomic,retain)NSString *num;
+@property(nonatomic,retain)IBOutlet UIToolbar *toolBar;
 @property(nonatomic,retain)UIButton *button;
-@property(nonatomic,retain)NSString *idx;
-@property(nonatomic,retain)NSString *id1;
 @property(nonatomic,retain)NSMutableArray *list;
+@property(nonatomic,retain)UIToolbar *tools;
+-(IBAction)toggleEdit:(id)sender;
+-(IBAction)toggleback:(id)sender;
+-(IBAction)toggleAdd:(id)sender;
+-(IBAction) ButtonPressed;
 @end

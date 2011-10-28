@@ -14,7 +14,10 @@
     IBOutlet UITableView *tableView;
     NSMutableArray *list;
     DBOperation *da;
+    UIToolbar *tools;
+    UIBarButtonItem *editButton;
 }
+@property(nonatomic,retain)UIToolbar *tools;
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property(nonatomic,retain)NSMutableArray *list;
 @end

@@ -100,7 +100,7 @@
             
 			user.id = [NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
 			
-			user.name = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement,1)];
+			user.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
 			
 			user.color =[NSString stringWithFormat:@"%s",sqlite3_column_text(statement,2)];
             
@@ -125,7 +125,7 @@
 		while (sqlite3_step(statement)==SQLITE_ROW) {
 			
 			user1.id = [NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
-			user1.name = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement,1)];
+			user1.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
 			user1.color = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement,2)];
 		}
 		sqlite3_finalize(statement);
@@ -144,9 +144,9 @@
 	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		while (sqlite3_step(statement)==SQLITE_ROW) {
 			
-			user3.name = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement,0)];
-			user3.with = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement,1)];
-			user3.without = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement,2)];
+			user3.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,0)];
+			user3.with = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
+			user3.without = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,2)];
 		}
 		sqlite3_finalize(statement);
 		return user3;

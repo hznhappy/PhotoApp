@@ -18,10 +18,13 @@
     NSString *str2;
     NSString *str3;
 }
-@property(nonatomic,retain)UITextField *listName;
-@property(nonatomic,retain)UITextField *nameIn;
-@property(nonatomic,retain)UITextField *nameOut;
+@property(nonatomic,retain)IBOutlet UITextField *listName;
+@property(nonatomic,retain)IBOutlet UITextField *nameIn;
+@property(nonatomic,retain)IBOutlet UITextField *nameOut;
 @property(nonatomic,assign)NSString *str1;
 @property(nonatomic,assign)NSString *str2;
 @property(nonatomic,assign)NSString *str3;
+-(IBAction)save:(id)sender;
+-(IBAction)cance:(id)sender;
+
 @end
