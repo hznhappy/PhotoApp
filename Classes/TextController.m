@@ -36,6 +36,27 @@
     da=[[DBOperation alloc]init];
     [da openDB];
     [da createTable3];
+    if(listName.text==nil)
+    {
+        
+        NSString *message=[[NSString alloc] initWithFormat:
+                           @"规则名不能为空!"];
+        
+        
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"提示"
+                              message:message
+                              delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"确定!",nil];
+        [alert show];
+        [alert release];
+        [message release];
+        
+    }
+    else
+    {
+
     NSString *insertUsername = [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(Name,With,WithOut) VALUES('%@','%@','%@')",TableName3,listName.text,nameIn.text,nameOut.text];
     NSLog(@"%@",insertUsername);
     [da insertToTable:insertUsername];
@@ -44,6 +65,7 @@
                                                        object:self 
                                                      userInfo:dic1];
     [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)dealloc
