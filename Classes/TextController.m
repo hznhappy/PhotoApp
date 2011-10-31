@@ -29,9 +29,7 @@
 
 -(IBAction)cance:(id)sender
 {	
-    UserTableController *us = [[UserTableController alloc]init];
-	[self.navigationController pushViewController:us animated:YES];
-    [us release];
+	[self.navigationController popViewControllerAnimated:YES];
 }
 -(IBAction)save:(id)sender
 {
@@ -41,9 +39,11 @@
     NSString *insertUsername = [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(Name,With,WithOut) VALUES('%@','%@','%@')",TableName3,listName.text,nameIn.text,nameOut.text];
     NSLog(@"%@",insertUsername);
     [da insertToTable:insertUsername];
-    UserTableController *us = [[UserTableController alloc]init];
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                       object:self 
+                                                     userInfo:dic1];
     [self.navigationController popViewControllerAnimated:YES];
-    [us release];
 }
 
 - (void)dealloc

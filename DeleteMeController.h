@@ -39,7 +39,6 @@
 @property(nonatomic,retain)NSMutableArray *list;
 @property(nonatomic,retain)UIToolbar *tools;
 -(IBAction)toggleEdit:(id)sender;
--(IBAction)toggleback:(id)sender;
 -(IBAction)toggleAdd:(id)sender;
 -(IBAction) ButtonPressed;
 @end

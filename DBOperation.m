@@ -164,7 +164,7 @@
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-            newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
+            newid=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,0)];
             [playary addObject:newid];
         }
     }	

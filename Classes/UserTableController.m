@@ -27,14 +27,14 @@
 
 -(void)viewDidLoad
 {
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-    tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 90,45)];
-    tools.barStyle = UIBarStyleBlackTranslucent;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
+    tools.barStyle = UIBarStyleBlack;
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
 	
     
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
-    editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(toggleEdit:)];
+    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
     addButon.style = UIBarButtonItemStyleBordered;
     editButton.style = UIBarButtonItemStyleBordered;
 	[buttons addObject:editButton];
@@ -53,6 +53,7 @@
     [da selectFromTable3:selectPlay];
     self.list=da.playary;
 
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
 	[myBtn release];
 	[tools release];
     [da closeDB];
@@ -60,18 +61,20 @@
     
     
 }
-//-(void)
-/*-(void)viewWillDisappear:(BOOL)animated
+
+-(void)table1
 {
-    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
-}*/
+    [self viewDidLoad];
+    [self.tableView reloadData];
+}
+
 
 -(IBAction)toggleEdit:(id)sender
 {
     if (self.tableView.editing) {
-        editButton.style = UIBarButtonSystemItemDone;
+        editButton.title = @"Edit";
     }else{
-        editButton.style = UIBarButtonSystemItemEdit;
+        editButton.title = @"Done";
     }
 
     [self.tableView setEditing:!self.tableView.editing animated:YES];
@@ -124,13 +127,7 @@
     
 	[self.navigationController pushViewController:ts animated:YES];
 }
--(IBAction)toggleback:(id)sender
-{
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-    //[self.parentViewController dismissModalViewControllerAnimated:YES];    
-    
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -141,11 +138,11 @@
     [da deleteDB:countSQL];  
     [da closeDB];
     [self viewDidLoad];
+    editButton.title = @"Done";
     [self.tableView reloadData];
     
 }
 - (void)dealloc {
-    [editButton release];
     [list release];
     [super dealloc];
 }

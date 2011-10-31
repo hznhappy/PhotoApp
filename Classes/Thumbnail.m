@@ -7,7 +7,7 @@
 
 #import "Thumbnail.h"
 #import "AssetTablePicker.h"
-#import "GlobalHeadFile.h"
+#import "PhotoViewController.h"
 @implementation Thumbnail
 
 @synthesize asset;

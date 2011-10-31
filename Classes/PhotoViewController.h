@@ -28,15 +28,7 @@
 	UIBarButtonItem *_rightButton;
 	UIBarButtonItem *_actionButton;
 	
-	/*BOOL _storedOldStyles;
-	UIStatusBarStyle _oldStatusBarSyle;
-	UIBarStyle _oldNavBarStyle;
-	BOOL _oldNavBarTranslucent;
-	UIColor* _oldNavBarTintColor;	
-	UIBarStyle _oldToolBarStyle;
-	BOOL _oldToolBarTranslucent;
-	UIColor* _oldToolBarTintColor;	
-	BOOL _oldToolBarHidden;*/
+	
     UIBarButtonItem *edit;
     BOOL editing;
 	DBOperation *db;
@@ -57,9 +49,7 @@
 @property(nonatomic,assign) NSInteger _pageIndex;
 
 - (id)initWithPhotoSource:(NSMutableArray *)aSource;
--(void)MARK;
 -(void)doView;
--(void)saveMark;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 

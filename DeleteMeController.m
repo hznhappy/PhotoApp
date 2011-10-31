@@ -68,23 +68,17 @@ int j=1,count=0;
 
 -(IBAction)toggleAdd:(id)sender
 { 
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
     addSign = YES;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
-    //UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:picker];
     [self presentModalViewController:picker animated:YES];
-   // [self.navigationController pushViewController:picker animated:YES];
-    
-    
     [picker release]; 
-   // ABNewPersonViewController *picker = [[ABNewPersonViewController alloc] init];
-    //picker.newPersonViewDelegate = self;
-    //ABP *picker=[[ABPersonViewController alloc]init];
-    //[self.navigationController pushViewController:picker animated:YES];
-    //[picker release];
+   
 } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
 {
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     da=[[DBOperation alloc]init];
     [da openDB];
     NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
@@ -138,20 +132,14 @@ int j=1,count=0;
 -(IBAction)toggleEdit:(id)sender
 {
     if (self.tableView.editing) {
-        editButton.title = @"Done";
-    }else{
         editButton.title = @"Edit";
+    }else{
+        editButton.title = @"Done";
     }
     [self.tableView setEditing:!self.tableView.editing animated:YES];
     
 }
--(IBAction)toggleback:(id)sender
 
-{  [self.navigationController popViewControllerAnimated:YES];
-    
-    //[self.parentViewController dismissModalViewControllerAnimated:YES];    
-    j=1;  
-}
 /*- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
  // Return YES for supported orientations.
  return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft||
@@ -161,13 +149,13 @@ int j=1,count=0;
 {       
     
     addSign = NO;
-   tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 90,45)];
+   tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
     tools.barStyle = UIBarStyleBlack;
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
 	
     
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
-    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)]; //initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(toggleEdit:)];
+    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
     addButon.style = UIBarButtonItemStyleBordered;
     editButton.style = UIBarButtonItemStyleBordered;
 	[buttons addObject:editButton];
@@ -258,7 +246,6 @@ int j=1,count=0;
 -(void)dealloc
 {   
     [editButton release];
-    [tools release];
     [toolBar release];
     [button release];
     [tableView release];
@@ -413,6 +400,7 @@ int j=1,count=0;
         [da deleteDB:countSQL];
         [self viewDidLoad];
         [self.tableView reloadData];
+        editButton.title = @"Done";
     }
     
     
@@ -447,6 +435,7 @@ int j=1,count=0;
             [da closeDB];
             [self viewDidLoad];
             [self.tableView reloadData];
+            editButton.title = @"Done";
             
             break;
         case 0:
@@ -462,6 +451,7 @@ int j=1,count=0;
 
 -(void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker
 {
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
 	[self dismissModalViewControllerAnimated:YES];
 }
 

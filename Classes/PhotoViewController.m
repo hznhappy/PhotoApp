@@ -114,42 +114,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
-	/*self.navigationItem.leftBarButtonItem.title = @"come";
-	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 3.2) {
-		
-		UIView *view = self.view;
-		if (self.navigationController) {
-			view = self.navigationController.view;
-		}
-		
-			view = view.superview;
-		}
-    self.navigationController.navigationBar.tintColor = nil;
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.translucent = YES;
-    
-    self.navigationController.toolbar.tintColor = nil;
-    self.navigationController.toolbar.barStyle = UIBarStyleBlack;
-    self.navigationController.toolbar.translucent = YES;
-    if(!_storedOldStyles) {
-		_oldStatusBarSyle = [UIApplication sharedApplication].statusBarStyle;
-		
-		_oldNavBarTintColor = [self.navigationController.navigationBar.tintColor retain];
-		_oldNavBarStyle = self.navigationController.navigationBar.barStyle;
-		_oldNavBarTranslucent = self.navigationController.navigationBar.translucent;
-		
-		_oldToolBarTintColor = [self.navigationController.toolbar.tintColor retain];
-		_oldToolBarStyle = self.navigationController.toolbar.barStyle;
-		_oldToolBarTranslucent = self.navigationController.toolbar.translucent;
-		_oldToolBarHidden = [self.navigationController isToolbarHidden];
-		
-		_storedOldStyles = YES;
-	}	
-    if ([self.navigationController isToolbarHidden] && ([self.photoSource count] > 1)) {
-		[self.navigationController setToolbarHidden:NO animated:YES];
-	}
-
-	*/
+    [self.navigationController setToolbarHidden:NO animated:YES];
 	[self setupToolbar];
 	[self setupScrollViewContentSize];
 	[self moveToPhotoAtIndex:_pageIndex animated:NO];
@@ -160,41 +125,13 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
 	[super viewWillDisappear:animated];
-	
-	/*self.navigationController.navigationBar.barStyle = _oldNavBarStyle;
-	self.navigationController.navigationBar.tintColor = _oldNavBarTintColor;
-	self.navigationController.navigationBar.translucent = _oldNavBarTranslucent;
-	
-	[[UIApplication sharedApplication] setStatusBarStyle:_oldStatusBarSyle animated:YES];
-	
-	if(!_oldToolBarHidden) {
-		
-		if ([self.navigationController isToolbarHidden]) {
-			[self.navigationController setToolbarHidden:NO animated:YES];
-		}
-		
-		self.navigationController.toolbar.barStyle = _oldNavBarStyle;
-		self.navigationController.toolbar.tintColor = _oldNavBarTintColor;
-		self.navigationController.toolbar.translucent = _oldNavBarTranslucent;
-		
-	} else {*/
-		
-		[self.navigationController setToolbarHidden:YES animated:YES];
-		
-	//}
-	
-		
-}
--(void)viewDidDisappear:(BOOL)animated
-{
-//    //self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
-//    self.navigationController.toolbar.hidden = YES;
+    [self.navigationController setToolbarHidden:YES animated:YES];		
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
 	
-    return YES;//(UIInterfaceOrientationIsLandscape(interfaceOrientation) || interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || interfaceOrientation == UIInterfaceOrientationPortrait);
 	
 }
 /*
@@ -241,28 +178,21 @@
 -(void)tiao:(NSNotification *)note
 {
     DeleteMeController *d=[[DeleteMeController alloc]init];
-	//UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:d];
-	//[self presentModalViewController:navController animated:YES];
     [self.navigationController pushViewController:d animated:YES];
     [d release];
     
 }
--(void)MARK
-{
-    
-}
+
 -(void)change:(NSNotification *)note{
     [self doView];
 }
 -(void)edit
 {if (editing)
 {
-    //NSDictionary *dic = [NSDictionary dictionaryWithObject:[self.photoSource objectAtIndex:_pageIndex] forKey:@"key"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"Set Overlay" 
                                                        object:self];
     edit.style = UIBarButtonItemStyleBordered;
     edit.title = @"Edit";
-    //ppv.hidden=YES;
     [ppv viewClose];
 }
 else{
@@ -662,26 +592,9 @@ else{
 
 #pragma mark -
 #pragma mark Actions
-
--(void)saveMark{
-   //NSDictionary *dic = [NSDictionary dictionaryWithObject:[self.photoSource objectAtIndex:_pageIndex] forKey:@"key"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"Set Overlay" 
-                                                       object:self];
-    self.navigationItem.rightBarButtonItem = nil;
-    ppv.hidden = YES;
-    [ppv viewClose];
-
-}
-
 - (void)markPhoto{
-    self.navigationItem.rightBarButtonItem = nil;
-	UIBarButtonItem *done = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave 
-                                                                         target:self 
-                                                                         action:@selector(saveMark)];
-    self.navigationItem.rightBarButtonItem = done;
-    ppv.hidden = NO;
-    [ppv viewOpen];
-    [done release];
+    [self edit];
+
 }
 
 - (void)copyPhoto{
