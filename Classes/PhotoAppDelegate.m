@@ -66,7 +66,6 @@
      */
 }
 
-
 #pragma mark -
 #pragma mark Memory management
 
@@ -84,4 +83,15 @@
 }
 
 
+@end
+@implementation UITabBarController (MyApp) 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    return (UIInterfaceOrientationIsLandscape(toInterfaceOrientation) || toInterfaceOrientation == UIInterfaceOrientationPortrait);
+}
+@end
+
+@implementation UINavigationController (MyApp) 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    return (UIInterfaceOrientationIsLandscape(toInterfaceOrientation) || toInterfaceOrientation == UIInterfaceOrientationPortrait);
+}
 @end

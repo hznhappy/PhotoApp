@@ -1,32 +1,29 @@
 //
-//  PhotoViewController.h
+//  SingleViewController.h
 //  PhotoApp
 //
-//  Created by Andy on 10/12/11.
+//  Created by Andy on 11/1/11.
 //  Copyright 2011 chinarewards. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DBOperation.h"
 #import "PopupPanelView.h"
 
-#define PV_IMAGE_GAP 30
-
-@class PhotoImageView;
-@interface PhotoViewController : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
-@private
-	NSMutableArray *photoSource;
+@interface SingleViewController : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>{
+    NSMutableArray *photoSource;
 	NSMutableArray *_photoViews;
-	UIScrollView *_scrollView;	
+	UIScrollView *scrollView;	
 	
 	NSInteger _pageIndex;
 	BOOL _rotating;
 	BOOL _barsHidden;
 	
-	UIBarButtonItem *_leftButton;
-	UIBarButtonItem *_rightButton;
-	UIBarButtonItem *_actionButton;
+	IBOutlet UIBarButtonItem *_leftButton;
+	IBOutlet UIBarButtonItem *_rightButton;
+	IBOutlet UIBarButtonItem *_actionButton;
 	
 	
     UIBarButtonItem *edit;
@@ -37,10 +34,9 @@
     NSMutableArray *listid;
     UILabel *nameTitle;
     NSTimer *timer;
-    int countTimer;
-	
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
+
 @property(nonatomic,retain)NSMutableArray *listid;
 
 
@@ -53,6 +49,7 @@
 -(void)doView;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
--(void)fireTimer;
-
+- (IBAction)moveForward:(id)sender;
+- (IBAction)moveBack:(id)sender;
+- (IBAction)actionButtonHit:(id)sender;
 @end

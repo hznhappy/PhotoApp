@@ -112,7 +112,7 @@
 	
 	[self layoutScrollViewAnimated:NO];
 }
-
+/*
 - (void)setupImageViewWithImage:(UIImage*)aImage {	
 	if (!aImage) return; 
 
@@ -126,7 +126,7 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"PhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:NO], @"failed", nil]];
 	
 }
-
+*/
 - (void)prepareForReusue{
 	
 	//  reset view
@@ -273,7 +273,7 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
 	return [self.scrollView viewWithTag:ZOOM_VIEW_TAG];
 }
-
+/*
 - (CGRect)frameToFitCurrentView{
 	
 	CGFloat heightFactor = self.imageView.image.size.height / self.frame.size.height;
@@ -290,7 +290,7 @@
 	return rect;
 	
 }
-
+*/
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
 			
 	if (scrollView.zoomScale > 1.0f) {		

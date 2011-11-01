@@ -45,6 +45,8 @@
 		A1EF3DB014441A640087972B /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAC14441A640087972B /* PhotoScrollView.m */; };
 		A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DB214441A840087972B /* PhotoViewController.m */; };
 		A1EF3DC314441E900087972B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EF3DC214441E900087972B /* QuartzCore.framework */; };
+		A1F1FF52145FDAC9005FAB2F /* SingleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FF50145FDAC8005FAB2F /* SingleViewController.m */; };
+		A1F1FF53145FDAC9005FAB2F /* SingleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F1FF51145FDAC8005FAB2F /* SingleViewController.xib */; };
 		A1F9E5961428671E00A69E49 /* tagOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A1F9E5951428671E00A69E49 /* tagOverlay.png */; };
 		E29A5E3C1239C42A008BB149 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E29A5E3B1239C42A008BB149 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
@@ -106,6 +108,9 @@
 		A1EF3DB114441A840087972B /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1EF3DB214441A840087972B /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PhotoViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A1EF3DC214441E900087972B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A1F1FF4F145FDAC8005FAB2F /* SingleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleViewController.h; sourceTree = "<group>"; };
+		A1F1FF50145FDAC8005FAB2F /* SingleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleViewController.m; sourceTree = "<group>"; };
+		A1F1FF51145FDAC8005FAB2F /* SingleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SingleViewController.xib; sourceTree = "<group>"; };
 		A1F9E5951428671E00A69E49 /* tagOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tagOverlay.png; path = Classes/tagOverlay.png; sourceTree = "<group>"; };
 		E29A5E3B1239C42A008BB149 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -266,6 +271,9 @@
 				A1EF3DAA14441A640087972B /* PhotoImageView.m */,
 				A1EF3DAB14441A640087972B /* PhotoScrollView.h */,
 				A1EF3DAC14441A640087972B /* PhotoScrollView.m */,
+				A1F1FF4F145FDAC8005FAB2F /* SingleViewController.h */,
+				A1F1FF50145FDAC8005FAB2F /* SingleViewController.m */,
+				A1F1FF51145FDAC8005FAB2F /* SingleViewController.xib */,
 			);
 			name = OnePhotoController;
 			sourceTree = "<group>";
@@ -337,6 +345,7 @@
 				A10FFFFF14593E3F00D007F3 /* person.png in Resources */,
 				A10F000114593E7A00D007F3 /* playlist.png in Resources */,
 				A10F000314593E7F00D007F3 /* albums.png in Resources */,
+				A1F1FF53145FDAC9005FAB2F /* SingleViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +372,7 @@
 				184C5202144D703500F0494A /* UserTableController.m in Sources */,
 				184C5208144D746300F0494A /* DeleteMeController.m in Sources */,
 				184C5213144D77F000F0494A /* TextController.m in Sources */,
+				A1F1FF52145FDAC9005FAB2F /* SingleViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

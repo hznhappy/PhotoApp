@@ -38,12 +38,12 @@
 - (void)zoomRectWithCenter:(CGPoint)center{
 	
 	if (self.zoomScale > 1.0f) {
-
+        
 		[((PhotoImageView*)self.superview) killScrollViewZoom];
-	
+        
 		return;
 	}
-
+    
 	CGRect rect;
 	rect.size = CGSizeMake(self.frame.size.width / PV_ZOOM_SCALE, self.frame.size.height / PV_ZOOM_SCALE);
 	rect.origin.x = MAX((center.x - (rect.size.width / 2.0f)), 0.0f);		
@@ -54,7 +54,7 @@
 	CGFloat borderY = frame.origin.y;
 	
 	if (borderX > 0.0f && (center.x < borderX || center.x > self.frame.size.width - borderX)) {
-				
+        
 		if (center.x < (self.frame.size.width / 2.0f)) {
 			
 			rect.origin.x += (borderX/PV_ZOOM_SCALE);
@@ -67,21 +67,21 @@
 	}
 	
 	if (borderY > 0.0f && (center.y < borderY || center.y > self.frame.size.height - borderY)) {
-				
+        
 		if (center.y < (self.frame.size.height / 2.0f)) {
 			
 			rect.origin.y += (borderY/PV_ZOOM_SCALE);
 			
 		} else {
-
+            
 			rect.origin.y -= ((borderY/PV_ZOOM_SCALE) + rect.size.height);
 			
 		}
 		
 	}
-
+    
 	[self zoomToRect:rect animated:YES];	
-
+    
 }
 
 - (void)toggleBars{
@@ -99,7 +99,7 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
 	[super touchesEnded:touches withEvent:event];
 	UITouch *touch = [touches anyObject];
-	
+    
 	if (touch.tapCount == 1) {
 		[self performSelector:@selector(toggleBars) withObject:nil afterDelay:.2];
 	} else if (touch.tapCount == 2) {

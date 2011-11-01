@@ -11,6 +11,7 @@
 #import "UserTableController.h"
 #import "DeleteMeController.h"
 #import "TextController.h"
+#import "PhotoViewController.h"
 
 @implementation AssetTablePicker
 @synthesize assetGroup;
@@ -62,7 +63,7 @@
     pickerViewFrame = self.buttonPicker.frame;
     pickerViewFrame.origin.y = 480;
     self.buttonPicker.frame = pickerViewFrame;
-
+    [buttonPicker removeFromSuperview];
     UIBarButtonItem *listButton = [[UIBarButtonItem alloc]initWithTitle:@"Playlist" 
                                                                style:UIBarButtonItemStyleBordered 
                                                               target:self 
@@ -189,6 +190,12 @@
 #pragma mark -
 #pragma mark ButtonAction Methods
 -(IBAction)playPhotos{
+    PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.assetArrays];
+    playPhotoController._pageIndex = 0;
+    [playPhotoController fireTimer];
+    [self.navigationController pushViewController:playPhotoController animated:YES];
+    [playPhotoController release];
+    /*
     [dataBase openDB];
     if (self.navigationItem.title==@""||self.navigationItem.title==nil) {
         PlayPhotos *play = [[PlayPhotos alloc]init];
@@ -204,9 +211,10 @@
             [self.navigationController pushViewController:ts animated:YES];
         }
     }
-    
+    */
 }
 -(IBAction)setPickerView{
+    [self.view addSubview:buttonPicker];
     if (!showPicker) {
         self.table.scrollEnabled = NO;
         [UIView animateWithDuration:0.7 
@@ -231,8 +239,6 @@
 }
 -(void)selectPlayList{
     UserTableController *u=[[UserTableController alloc]init];
-	//UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:u];
-	//[self presentModalViewController:navController animated:YES];
     [self.navigationController pushViewController:u animated:YES];
     [u release];
 }

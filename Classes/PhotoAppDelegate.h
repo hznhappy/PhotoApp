@@ -15,4 +15,8 @@
 @property (nonatomic, retain) IBOutlet UITabBarController *rootViewController;
 
 @end
+@interface UITabBarController (MyApp)
+@end
 
+@interface UINavigationController (MyApp)
+@end

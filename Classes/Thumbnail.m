@@ -1,6 +1,4 @@
 //
-//  Asset.m
-//
 //  Created by Andy.
 //  Copyright 2011 chinarewards. All rights reserved.
 //
@@ -8,6 +6,7 @@
 #import "Thumbnail.h"
 #import "AssetTablePicker.h"
 #import "PhotoViewController.h"
+#import "SingleViewController.h"
 @implementation Thumbnail
 
 @synthesize asset;
@@ -70,9 +69,8 @@
             currenPage = [assetArray indexOfObject:aAsset];
         }
     }
-    PhotoViewController *photoController = [[PhotoViewController alloc]initWithNibName:@"SinglePhotoView" bundle:nil];//[[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
+    PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
     photoController._pageIndex = currenPage;
-    photoController.photoSource = self.assetArray;
     selectOverlay.hidden = NO;
     [self.fatherController.navigationController pushViewController:photoController animated:YES];
     [photoController release];

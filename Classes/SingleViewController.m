@@ -5,7 +5,7 @@
 //  Created by Andy on 10/12/11.
 //  Copyright 2011 chinarewards. All rights reserved.
 //
-
+/*
 #import "PhotoViewController.h"
 #import "User.h"
 #import "PopupPanelView.h"
@@ -59,29 +59,7 @@
 	self.view.backgroundColor = [UIColor blackColor];
 	self.wantsFullScreenLayout = YES;
     
-	if (!_scrollView) {
-		
-		_scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
-		_scrollView.delegate=self;
-		_scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-		_scrollView.multipleTouchEnabled=YES;
-		_scrollView.scrollEnabled=YES;
-		_scrollView.directionalLockEnabled=YES;
-		_scrollView.canCancelContentTouches=YES;
-		_scrollView.delaysContentTouches=YES;
-		_scrollView.clipsToBounds=YES;
-		_scrollView.alwaysBounceHorizontal=YES;
-		_scrollView.bounces=YES;
-		_scrollView.pagingEnabled=YES;
-		_scrollView.showsVerticalScrollIndicator=NO;
-		_scrollView.showsHorizontalScrollIndicator=NO;
-		_scrollView.backgroundColor = self.view.backgroundColor;
-		[self.view addSubview:_scrollView];
-        
-	}
-    
-    
-	//  load photoviews lazily
+    //  load photoviews lazily
 	NSMutableArray *views = [[NSMutableArray alloc] init];
 	for (unsigned i = 0; i < [self.photoSource count]; i++) {
 		[views addObject:[NSNull null]];
@@ -112,7 +90,6 @@
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
     [self.navigationController setToolbarHidden:NO animated:YES];
-	[self setupToolbar];
 	[self setupScrollViewContentSize];
 	[self moveToPhotoAtIndex:_pageIndex animated:NO];
 	
@@ -131,47 +108,7 @@
     return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || interfaceOrientation == UIInterfaceOrientationPortrait);
 	
 }
-/*
- - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
- _rotating = YES;
- NSInteger count = 0;
- for (PhotoImageView *view in self.photoViews){
- if ([view isKindOfClass:[PhotoImageView class]]) {
- if (count != _pageIndex) {
- [view setHidden:YES];
- }
- }
- count++;
- }
- 
- }
- 
- - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
- 
- for (PhotoImageView *view in self.photoViews){
- if ([view isKindOfClass:[PhotoImageView class]]) {
- [view rotateToOrientation:toInterfaceOrientation];
- }
- }
- 
- }
- 
- - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
- 
- [self setupScrollViewContentSize];
- [self moveToPhotoAtIndex:_pageIndex animated:NO];
- [self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).frame animated:YES];
- 
- //  unhide side views
- for (PhotoImageView *view in self.photoViews){
- if ([view isKindOfClass:[PhotoImageView class]]) {
- [view setHidden:NO];
- }
- }
- _rotating = NO;
- 
- }
- */
+
 -(void)tiao:(NSNotification *)note
 {
     DeleteMeController *d=[[DeleteMeController alloc]init];
@@ -246,48 +183,6 @@ else{
 	[self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)setupToolbar {
-	UIBarButtonItem *action = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonHit:)];
-	UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	
-	if ([self.photoSource count] > 1) {
-		
-		UIBarButtonItem *fixedCenter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-		fixedCenter.width = 80.0f;
-		UIBarButtonItem *fixedLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-		fixedLeft.width = 40.0f;
-		
-        
-		
-		UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"left.png"] 
-                                                                 style:UIBarButtonItemStylePlain 
-                                                                target:self action:@selector(moveBack:)];
-        
-		UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"right.png"] 
-                                                                  style:UIBarButtonItemStylePlain 
-                                                                 target:self 
-                                                                 action:@selector(moveForward:)];
-		
-		[self setToolbarItems:[NSArray arrayWithObjects:fixedLeft, flex, left, fixedCenter, right, flex, action, nil]];
-		
-		_rightButton = right;
-		_leftButton = left;
-		
-		[fixedCenter release];
-		[fixedLeft release];
-		[right release];
-		[left release];
-		
-	} else {
-		[self setToolbarItems:[NSArray arrayWithObjects:flex, action, nil]];
-	}
-	
-	_actionButton=action;
-	self.navigationController.toolbar.barStyle = UIBarStyleBlackTranslucent;
-	[action release];
-	[flex release];
-	
-}
 
 - (NSInteger)currentPhotoIndex{
 	
@@ -357,11 +252,11 @@ else{
 	
 }
 
-- (void)moveForward:(id)sender{
+- (IBAction)moveForward:(id)sender{
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];	
 }
 
-- (void)moveBack:(id)sender{
+- (IBAction)moveBack:(id)sender{
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
 }
 
@@ -640,7 +535,7 @@ else{
 #pragma mark -
 #pragma mark UIActionSheet Methods
 
-- (IBAction)actionButtonHit:(id)sender{
+- (void)actionButtonHit:(id)sender{
 	
 	UIActionSheet *actionSheet;
 	
@@ -679,22 +574,6 @@ else{
 }
 
 #pragma mark -
-#pragma mark timer method
-
--(void)fireTimer{
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.8 target:self selector:@selector(playPhoto) userInfo:nil repeats:YES];
-    
-}
--(void)playPhoto{
-    NSInteger _index = self._pageIndex;
-	if (_index >= [self.photoSource count] || _index < 0) {
-        [timer invalidate];
-    }else{
-    [self moveToPhotoAtIndex:_index animated:YES];
-        _pageIndex+=1;
-    }
-}
-#pragma mark -
 #pragma mark Memory
 
 - (void)didReceiveMemoryWarning{
@@ -702,7 +581,7 @@ else{
 }
 
 - (void)viewDidUnload{
-	timer = nil;
+	
 	_photoViews=nil;
 	photoSource=nil;
 	_scrollView=nil;
@@ -714,7 +593,7 @@ else{
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-    [timer invalidate];
+    
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];
@@ -723,4 +602,4 @@ else{
 }
 
 
-@end
+@end*/
