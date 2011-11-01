@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import<sqlite3.h>
 #import "User.h"
-#define TableName1  @"UserTable"
-#define TableName2 @"idTable"
-#define TableName @"TAG"
-#define TableName3 @"PlayTable"
+#define UserTable  @"UserTable"
+#define idTable @"idTable"
+#define TAG @"TAG"
+#define PlayTable @"PlayTable"
+#define rules @"rules"
 @interface DBOperation : NSObject {
     NSMutableArray *photos;
     NSDictionary *dic;
@@ -26,26 +27,18 @@
 @property(nonatomic,retain)NSMutableArray *ary;
 @property(nonatomic,retain)NSMutableArray *tagary;
 @property(nonatomic,retain)NSMutableArray *playary;
-- (NSMutableDictionary*)getUser1;
--(void)createTable2;
--(void)createTable1;
--(void)insertToTable:(NSString *)sql;
--(void)selectFromTable2:(NSString *)sql;
--(void)deleteDB:(NSString *)sql;
-- (User*)getUser:(int)id;
-- (User*)getUser3:(NSString *)name;
--(void)createTable3;
--(void)selectFromTable3:(NSString *)sql;
 -(void)openDB;
 -(void)createTable:(NSString *)sql;
+-(void)insertToTable:(NSString *)sql;
 -(void)updateTable:(NSString *)sql;
--(NSMutableArray *)selectNameID:(NSString *)sql;
--(NSMutableArray *)selectPhotos:(NSString *)sql;
--(BOOL)exitInDatabase:(NSString *)sql;
--(NSString *)filePath;
--(void)closeDB;
--(void)createTAG;
--(void)insertTAG:(NSString *)sql;
+-(void)selectFromIdTable:(NSString *)sql;
 -(void)selectFromTAG:(NSString *)sql;
-
+-(void)selectFromPlayTable:(NSString *)sql;
+- (User*)getUserFromUserTable:(int)id;
+- (User*)getUserFromPlayTable:(int)id;
+-(BOOL)exitInDatabase:(NSString *)sql;
+-(void)closeDB;
+-(void)deleteDB:(NSString *)sql;
+-(NSMutableArray *)selectPhotos:(NSString *)sql;
+-(NSString *)filePath;
 @end

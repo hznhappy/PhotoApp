@@ -8,16 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "DBOperation.h"
-#define TableName3 @"PlayTable"
+#define PlayTable @"PlayTable"
 @interface UserTableController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
     
     IBOutlet UITableView *tableView;
     NSMutableArray *list;
     DBOperation *da;
-    UIToolbar *tools;
+    UIToolbar* tools;
+    NSMutableArray *withlist;
+    NSMutableArray *withoutlist;
     UIBarButtonItem *editButton;
 }
-@property(nonatomic,retain)UIToolbar *tools;
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property(nonatomic,retain)NSMutableArray *list;
+@property(nonatomic,retain)NSMutableArray *withlist;
+@property(nonatomic,retain)NSMutableArray *withoutlist;
+@property(nonatomic,retain) UIToolbar* tools;
 @end

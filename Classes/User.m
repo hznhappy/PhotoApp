@@ -13,4 +13,5 @@
 @synthesize id;
 @synthesize with;
 @synthesize without;
+@synthesize name1;
 @end

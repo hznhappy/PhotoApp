@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "DBOperation.h"
-#define TableName3 @"PlayTable" 
-@interface TextController : UIViewController {
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
+#define PlayTable @"PlayTable" 
+@interface TextController : UIViewController<ABPeoplePickerNavigationControllerDelegate> {
     DBOperation *da;
     IBOutlet UITextField *listName;
     IBOutlet UITextField *nameIn;
@@ -17,6 +19,7 @@
     NSString *str1;
     NSString *str2;
     NSString *str3;
+    BOOL bo;
 }
 @property(nonatomic,retain)IBOutlet UITextField *listName;
 @property(nonatomic,retain)IBOutlet UITextField *nameIn;
@@ -26,5 +29,7 @@
 @property(nonatomic,assign)NSString *str3;
 -(IBAction)save:(id)sender;
 -(IBAction)cance:(id)sender;
+-(IBAction)addWith:(id)sender;
+-(IBAction)addWithout:(id)sender;
 
 @end

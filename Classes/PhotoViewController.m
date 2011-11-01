@@ -215,13 +215,14 @@ else{
     ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
     NSURL *url = [[asset defaultRepresentation]url];
     [db openDB];
-    [db createTAG];
+    NSString *createSQL= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TableName];
+    [db createTable:createSQL];  
     NSString *selectSql1 = [NSString stringWithFormat:@"select * from tag where url='%@'",url];
     [db selectFromTAG:selectSql1];
     
     self.listid=db.tagary;
     for(int i=0;i<[self.listid count];i++){
-        User *user1 = [db getUser:[[self.listid objectAtIndex:i]intValue]];
+        User *user1 = [db getUserFromUserTable:[[self.listid objectAtIndex:i]intValue]];
         nameTitle = [[UILabel alloc]initWithFrame:CGRectMake(300, 70+bty, 20, 20)];
         if([user1.color isEqualToString:@"greenColor"])
             [nameTitle setBackgroundColor:[UIColor greenColor]];
@@ -240,6 +241,7 @@ else{
     }
     [db closeDB];
 }
+
 
 
 - (void)done:(id)sender {

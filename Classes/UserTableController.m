@@ -9,22 +9,7 @@
 #import "UserTableController.h"
 #import "TextController.h"
 @implementation UserTableController
-@synthesize tableView,list,tools;
-
--(void)viewWillAppear:(BOOL)animated
-{
-    self.tools.alpha = 1;
-    tools.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
-    
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    self.tools.alpha = 0;
-    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
-}
-
+@synthesize tableView,list,tools,withlist,withoutlist;
 -(void)viewDidLoad
 {
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -48,11 +33,11 @@
     [buttons release];
 	da=[[DBOperation alloc]init];
     [da openDB];
-    [da createTable3];
+    NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    [da createTable:createSQL3];
     NSString *selectPlay = [NSString stringWithFormat:@"select * from PlayTable"];
-    [da selectFromTable3:selectPlay];
+    [da selectFromPlayTable:selectPlay];
     self.list=da.playary;
-
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
 	[myBtn release];
 	[tools release];
@@ -61,14 +46,22 @@
     
     
 }
-
 -(void)table1
 {
     [self viewDidLoad];
     [self.tableView reloadData];
 }
-
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    tools.alpha=1;
+    tools.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
+}
+-(void)viewWillDisappear:(BOOL)animated
+{       tools.alpha=0;
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
+ 
+}
 -(IBAction)toggleEdit:(id)sender
 {
     if (self.tableView.editing) {
@@ -76,10 +69,11 @@
     }else{
         editButton.title = @"Done";
     }
-
+    
     [self.tableView setEditing:!self.tableView.editing animated:YES];
     
 }
+
 -(IBAction)toggleAdd:(id)sender
 {
     TextController *ts=[[TextController alloc]init];
@@ -100,12 +94,13 @@
 	}
     da=[[DBOperation alloc]init];
     [da openDB];
-    [da createTable3];
-    User *user3 = [da getUser3:[list objectAtIndex:indexPath.row]];
+     NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    [da createTable:createSQL3];
+    User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
+    NSLog(@"%@",[list objectAtIndex:indexPath.row]);
     [cell.textLabel setNumberOfLines:10];
     cell.textLabel.lineBreakMode=UILineBreakModeWordWrap;
-    NSLog(@"%@",user3.name);
-    cell.textLabel.text=user3.name;
+    cell.textLabel.text=[NSString stringWithFormat:@"%@",user3.name];
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     [da closeDB];
     return cell;
@@ -113,12 +108,21 @@
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *dic = [NSDictionary dictionaryWithObject:[tableView cellForRowAtIndexPath:indexPath].textLabel.text forKey:@"listTitle"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"SetTitle" object:self userInfo:dic];
-    //[self dismissModalViewControllerAnimated:YES];
+    for(int i=0;i<[withlist count];i++)
+    {
+        NSString *countSQL = [NSString stringWithFormat:@"select * FROM TAG WHERE NAME='%@'",[list objectAtIndex:indexPath.row]];
+        [da selectFromTAG:countSQL];
+        NSMutableArray *pid;
+        pid=da.tagary;
+        
+    }
+    [da closeDB];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     [da openDB];
-    User *user3 = [da getUser3:[list objectAtIndex:indexPath.row]];
+    User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     TextController *ts=[[TextController alloc]init];
     ts.str1 = user3.name;
     ts.str2 = user3.with;
@@ -127,22 +131,27 @@
     
 	[self.navigationController pushViewController:ts animated:YES];
 }
-
+-(IBAction)toggleback:(id)sender
+{
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {   [da openDB];
-    [da createTable3];
-    NSString *countSQL = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE Name='%@'",[list objectAtIndex:indexPath.row]];
+    NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    [da createTable:createSQL3];
+    NSString *countSQL = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",countSQL);
     [da deleteDB:countSQL];  
     [da closeDB];
     [self viewDidLoad];
-    editButton.title = @"Done";
     [self.tableView reloadData];
     
 }
 - (void)dealloc {
+    [tableView release];
     [list release];
     [super dealloc];
 }

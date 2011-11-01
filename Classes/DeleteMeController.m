@@ -3,20 +3,68 @@
 #import "AddressBookUI/AddressBookUI.h"
 #import "DBOperation.h"
 #import "User.h"
+#import "AssetTablePicker.h"
 @implementation DeleteMeController
 @synthesize myPickerView,  pickerViewArray;
 @synthesize list;
 @synthesize button;
 @synthesize toolBar;
-//@synthesize d;
 @synthesize tableView,tools;
 int j=1,count=0;
+
+
+-(void)viewDidLoad
+{       
+    bool1 = NO;
+    tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
+    tools.barStyle = UIBarStyleBlack;
+    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
+	
+    
+    UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
+    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
+    addButon.style = UIBarButtonItemStyleBordered;
+    editButton.style = UIBarButtonItemStyleBordered;
+	[buttons addObject:editButton];
+    [buttons addObject:addButon];
+	[tools setItems:buttons animated:NO];
+	
+	UIBarButtonItem *myBtn = [[UIBarButtonItem alloc] initWithCustomView:tools];
+	self.navigationItem.rightBarButtonItem = myBtn;
+	[addButon release];
+    [buttons release];
+    
+	[tools release];
+    da=[[DBOperation alloc]init];
+    [da openDB];
+    NSString *createSQL1= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    [da createTable:createSQL1];
+    NSString *createSQL2= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idTable];
+    [da createTable:createSQL2];
+    NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM idTable"];
+    NSLog(@"%@",countSQL);  
+    [da selectFromIdTable:countSQL];
+    self.list=da.ary;
+    count = [list count];
+    NSMutableArray *arr=[[NSMutableArray alloc]initWithObjects:@"redColor",@"yellowColor",@"greenColor",@"grayColor",@"whiteColor",@"blueColor",nil];
+    self.pickerViewArray=arr;
+    [da closeDB];
+    [arr release];
+    myPickerView.hidden = YES;
+    toolBar.hidden =YES;
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table) name:@"add" object:nil];
+	[super viewDidLoad];
+   	
+}
+
 -(IBAction) ButtonPressed
 {
     
     da=[[DBOperation alloc]init];
     [da openDB];
-    [da createTable1];
+    NSString *createSQL1= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    [da createTable:createSQL1];
+
     NSInteger row=[myPickerView selectedRowInComponent:0];
     fcolor=[pickerViewArray objectAtIndex:row]; 
 	
@@ -33,10 +81,7 @@ int j=1,count=0;
 						  delegate:self
 						  cancelButtonTitle:nil
 						  otherButtonTitles:@"确定!",nil];
-	    //alert.backgroundColor=[UIColor orangeColor];
-    //[alert setBackgroundColor:[UIColor orangeColor]];
-
-	[alert show];
+    [alert show];
 	[alert release];
     
 	[message release];
@@ -56,7 +101,7 @@ int j=1,count=0;
     // new=new+1;
     NSLog(@"%d",new);
     NSLog(@"%@",fcolor);
-	NSString *insertUser2 = [NSString stringWithFormat:@"UPDATE %@ SET COLOR='%@' WHERE ID='%@'",TableName1,fcolor,[list objectAtIndex:new]];
+	NSString *insertUser2 = [NSString stringWithFormat:@"UPDATE %@ SET COLOR='%@' WHERE ID='%@'",UserTable,fcolor,[list objectAtIndex:new]];
 	NSLog(@"%@",insertUser2);
 	[da insertToTable:insertUser2];
     [da closeDB];
@@ -65,20 +110,21 @@ int j=1,count=0;
     
 }
 
-
+-(NSString*)databasePath
+{
+	NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *pathname = [path objectAtIndex:0];
+	return [pathname stringByAppendingPathComponent:@"data.db"];
+}
 -(IBAction)toggleAdd:(id)sender
-{ 
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
-    addSign = YES;
+{   bool1=YES;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
     [picker release]; 
-   
-} 
+   } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
 {
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     da=[[DBOperation alloc]init];
     [da openDB];
     NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
@@ -106,12 +152,12 @@ int j=1,count=0;
     }
     else
     {
-        NSString *insertUsername = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME,COLOR) VALUES(%d,'%@','%@')",TableName1,[fid intValue],fname,@"whiteColor"];
+        NSString *insertUsername = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME,COLOR) VALUES(%d,'%@','%@')",UserTable,[fid intValue],fname,@"whiteColor"];
         NSLog(@"%@",insertUsername);
         [da insertToTable:insertUsername];
         
         
-        NSString *insertUser = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",TableName2,[fid intValue]];
+        NSString *insertUser = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idTable,[fid intValue]];
         NSLog(@"%@",insertUser);
         [da insertToTable:insertUser];   
         NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
@@ -140,70 +186,20 @@ int j=1,count=0;
     
 }
 
-/*- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
- // Return YES for supported orientations.
- return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft||
- interfaceOrientation==UIInterfaceOrientationLandscapeRight);
- }*/
--(void)viewDidLoad
-{       
-    
-    addSign = NO;
-   tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
-    tools.barStyle = UIBarStyleBlack;
-    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
-	
-    
-    UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
-    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
-    addButon.style = UIBarButtonItemStyleBordered;
-    editButton.style = UIBarButtonItemStyleBordered;
-	[buttons addObject:editButton];
-    [buttons addObject:addButon];
-	[tools setItems:buttons animated:NO];
-	
-	UIBarButtonItem *myBtn = [[UIBarButtonItem alloc] initWithCustomView:tools];
-	self.navigationItem.rightBarButtonItem = myBtn;
-	[addButon release];
-    [buttons release];
-
-	[tools release];
-    da=[[DBOperation alloc]init];
-    [da openDB];
-    [da createTable2];
-    [da createTable1];
-    NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM idTable"];
-    NSLog(@"%@",countSQL);  
-    [da selectFromTable2:countSQL];
-    self.list=da.ary;
-    count = [list count];
-    NSMutableArray *arr=[[NSMutableArray alloc]initWithObjects:@"redColor",@"yellowColor",@"greenColor",@"grayColor",@"whiteColor",@"blueColor",nil];
-    
-    self.pickerViewArray=arr;
-    [da closeDB];
-    [arr release];
-    myPickerView.hidden = YES;
-    toolBar.hidden =YES;
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table) name:@"add" object:nil];
-	[super viewDidLoad];
-   	
-}
 -(void)viewWillAppear:(BOOL)animated
 {
-    addSign = NO;
-    self.tools.alpha = 1;
+         bool1=NO;
+    tools.alpha=1;
     tools.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
-    
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;    
 }
-
 -(void)viewWillDisappear:(BOOL)animated
+{   if(bool1==NO)
 {
-    if (!addSign) {
-        self.tools.alpha = 0;
-        self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
-    }
-    
+    tools.alpha=0;
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
+  
+} 
 }
 -(void)table
 {
@@ -230,22 +226,19 @@ int j=1,count=0;
 	return 1;
 }
 - (void)viewDidUnload
-{   
-    tools=nil;
-    toolBar=nil;
-    myPickerView=nil;
-    tableView=nil;
+{   self.toolBar=nil;
+    self.myPickerView=nil;
+    self.tableView=nil;
     da=nil;
-    pickerViewArray=nil;
-	list=nil;
-    button=nil;
+    self.pickerViewArray=nil;
+	self.list=nil;
+    self.button=nil;
 	[super viewDidUnload];
 	
 }
 
 -(void)dealloc
 {   
-    [editButton release];
     [toolBar release];
     [button release];
     [tableView release];
@@ -288,8 +281,9 @@ int j=1,count=0;
     [button setValue:[UIColor whiteColor] forKey:@"tintColor"];  
     da=[[DBOperation alloc]init];
     [da openDB];
-    [da createTable1];  
-    User *user1 = [da getUser:[[list objectAtIndex:indexPath.row]intValue]];
+    NSString *createSQL1= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    [da createTable:createSQL1];
+    User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
 	cell.textLabel.text = [NSString stringWithFormat:@"%@",user1.name];
     if([user1.color isEqualToString:@"greenColor"])
         [button setValue:[UIColor greenColor] forKey:@"tintColor"];
@@ -372,13 +366,12 @@ int j=1,count=0;
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {	
-    
-    // NSLog(@"%@",[list objectAtIndex:indexPath.row]);
     id1=[NSString stringWithFormat:@"%d",indexPath.row]; 
     [id1 retain];
     da=[[DBOperation alloc]init];
     [da openDB];
-    [da createTAG];
+     NSString *createSQL= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
+    [da createTable:createSQL];
     NSString *selectSql1 = [NSString stringWithFormat:@"select * from tag"];
     [da selectFromTAG:selectSql1];
     NSMutableArray *listid1=[NSMutableArray arrayWithCapacity:100];
@@ -400,7 +393,6 @@ int j=1,count=0;
         [da deleteDB:countSQL];
         [self viewDidLoad];
         [self.tableView reloadData];
-        editButton.title = @"Done";
     }
     
     
@@ -435,7 +427,6 @@ int j=1,count=0;
             [da closeDB];
             [self viewDidLoad];
             [self.tableView reloadData];
-            editButton.title = @"Done";
             
             break;
         case 0:
@@ -451,7 +442,6 @@ int j=1,count=0;
 
 -(void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker
 {
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
 	[self dismissModalViewControllerAnimated:YES];
 }
 
@@ -468,12 +458,13 @@ int j=1,count=0;
 	[object release];
     da=[[DBOperation alloc]init];
     [da openDB];
-    [da createTable2];
+    NSString *createSQL2= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idTable];
+    [da createTable:createSQL2];
     NSString *insertUser1 = [NSString stringWithFormat:@"DELETE FROM idTable"];	
 	NSLog(@"%@",insertUser1);
     [da deleteDB:insertUser1];
     for(int p=0;p<[list count];p++){
-        NSString *insertUser = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",TableName2,[[list objectAtIndex:p]intValue]];
+        NSString *insertUser = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idTable,[[list objectAtIndex:p]intValue]];
         NSLog(@"%@",insertUser);
         [da insertToTable:insertUser];    
 	}

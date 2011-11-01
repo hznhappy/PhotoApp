@@ -2,9 +2,9 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import "DBOperation.h"
-#define TableName1  @"UserTable"
+#define UserTable  @"UserTable"
 #import "/usr/include/sqlite3.h"
-#define TableName2  @"idTable"
+#define idTable  @"idTable"
 
 
 
@@ -27,9 +27,8 @@
     NSString *id1;
     IBOutlet UITableView *tableView;
     UIPickerView *myPickerView;
-    BOOL addSign;
+    BOOL bool1;
     UIBarButtonItem *editButton;
-    
 }
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property (nonatomic, retain)IBOutlet UIPickerView *myPickerView;
