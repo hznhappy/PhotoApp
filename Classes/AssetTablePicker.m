@@ -17,10 +17,7 @@
 @synthesize assetGroup;
 @synthesize dataBase;
 @synthesize pickerViewArray;
-@synthesize allPhotoes,crwAssets,assetArrays,tagPhotos,unTagPhotos;
-@synthesize show;
-@synthesize toolBar;
-@synthesize buttonPicker;
+@synthesize allPhotoes,crwAssets,assetArrays,tagPhotos,unTagPhotos,urlsArray;
 @synthesize table;
 
 #pragma mark -
@@ -53,23 +50,10 @@
 	[temArray3 release];
 	[temArray4 release];
 
-    showPicker = NO;
-    NSArray *pickArray = [NSArray arrayWithObjects:
-                            @"SHOW ALL",
-                            @"SHOW TAGGED",
-                            @"SHOW UNTAG",  
-                            nil];
-    self.pickerViewArray = pickArray;
-    pickerViewFrame = self.buttonPicker.frame;
-    pickerViewFrame.origin.y = 480;
-    self.buttonPicker.frame = pickerViewFrame;
-    [buttonPicker removeFromSuperview];
-    UIBarButtonItem *listButton = [[UIBarButtonItem alloc]initWithTitle:@"Playlist" 
-                                                               style:UIBarButtonItemStyleBordered 
-                                                              target:self 
-                                                              action:@selector(selectPlayList)];
-    self.navigationItem.rightBarButtonItem = listButton;
-    [listButton release];
+    UIBarButtonItem *playButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playPhotos)];
+    playButton.style = UIBarButtonItemStylePlain;
+    self.navigationItem.rightBarButtonItem = playButton;
+    [playButton release];
     
     [[NSNotificationCenter defaultCenter]addObserver:self 
                                             selector:@selector(setEditOverlay:) 
@@ -80,7 +64,6 @@
                                             selector:@selector(setListTitle:) 
                                                 name:@"SetTitle" 
                                               object:nil];  
-    
     [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
     [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.5];
 }
@@ -98,20 +81,37 @@
 -(void)loadPhotos {
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	
-    [self.assetGroup enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
-     {         
-         if(result == nil) 
-         {
-             return;
-         }
-         [self.assetArrays addObject:result];
-         thuView = [[Thumbnail alloc] initWithAsset:result];
-         thuView.fatherController = self;
-         [self.crwAssets addObject:thuView];
-         [thuView release];
-     }];
+    for (NSURL *assetUrl in self.urlsArray) {
+        void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
+        {
+            if (result == nil) 
+            {
+                return;
+            }
+            thuView = [[Thumbnail alloc] initWithAsset:result];
+            thuView.fatherController = self;
+            [self.crwAssets addObject:thuView];
+            [thuView release];
+            [self.assetArrays addObject:result];
+        };
+        
+        void (^failureBlock)(NSError *) = ^(NSError *error) {
+            
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                             message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+                                                            delegate:nil 
+                                                   cancelButtonTitle:@"Ok" 
+                                                   otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+            
+            NSLog(@"A problem occured %@", [error description]);	                                 
+        };	
+        
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+        [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
+        [library release];
+    }
     [dataBase openDB];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
     NSMutableArray *photos = [dataBase selectPhotos:selectSql];
@@ -131,19 +131,19 @@
             [thumbnail.assetArray addObject:asset];
         }
     }
-    NSMutableArray *strArray = [NSMutableArray arrayWithCapacity:40];
-    for (Thumbnail *thumbnail in self.crwAssets) {
-        NSURL *thumStr = [[thumbnail.asset defaultRepresentation]url];
-        [strArray addObject:thumStr];
-    }
-    
-    for (NSString *dataStr in photos){
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        if (![strArray containsObject:dbStr]) {
-            NSString *sql = [NSString stringWithFormat:@"DELETE FROM TAG WHERE URL='%@'",dataStr];
-            [dataBase updateTable:sql];
-        }
-    }
+//    NSMutableArray *strArray = [NSMutableArray arrayWithCapacity:40];
+//    for (Thumbnail *thumbnail in self.crwAssets) {
+//        NSURL *thumStr = [[thumbnail.asset defaultRepresentation]url];
+//        [strArray addObject:thumStr];
+//    }
+//    
+//    for (NSString *dataStr in photos){
+//        NSURL *dbStr = [NSURL URLWithString:dataStr];
+//        if (![strArray containsObject:dbStr]) {
+//            NSString *sql = [NSString stringWithFormat:@"DELETE FROM TAG WHERE URL='%@'",dataStr];
+//            [dataBase updateTable:sql];
+//        }
+//    }
     [dataBase closeDB];
 	[self.table reloadData];           
     [pool release];
@@ -152,9 +152,7 @@
 }
 
 -(void)viewDidUnload{
-    toolBar = nil;
     table = nil;
-    buttonPicker = nil;
     pickerViewArray = nil;
 	thuView = nil;
     tagPhotos = nil;
@@ -164,16 +162,14 @@
     allPhotoes = nil;
     assetArrays = nil;
     dataBase = nil;
-    show = nil;
+    urlsArray = nil;
     [super viewDidUnload];
 }
 
 - (void)dealloc
 {   
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [toolBar release];
     [table release];
-    [buttonPicker release];
     [pickerViewArray release];
 	[thuView release];
     [tagPhotos release];
@@ -183,7 +179,7 @@
     [allPhotoes release];
     [assetArrays release];
     [dataBase release];
-    [show release];
+    [urlsArray release];
     [super dealloc];    
 }
 
@@ -195,52 +191,6 @@
     [playPhotoController fireTimer];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
-    /*
-    [dataBase openDB];
-    if (self.navigationItem.title==@""||self.navigationItem.title==nil) {
-        PlayPhotos *play = [[PlayPhotos alloc]init];
-        play.assets = self.assetArrays;
-        [self.navigationController pushViewController:play animated:YES];
-        [play release];
-    }else{
-        NSString *sql = @"select count(*) from PlayTable;";
-        if ([dataBase exitInDatabase:sql]) {
-            [self selectPlayList];
-        }else{
-            TextController *ts=[[TextController alloc]init];
-            [self.navigationController pushViewController:ts animated:YES];
-        }
-    }
-    */
-}
--(IBAction)setPickerView{
-    [self.view addSubview:buttonPicker];
-    if (!showPicker) {
-        self.table.scrollEnabled = NO;
-        [UIView animateWithDuration:0.7 
-                         animations:^{
-                             pickerViewFrame.origin.y = 220;
-                             buttonPicker.frame = pickerViewFrame;
-                         }];
-    }else{
-        self.table.scrollEnabled = YES;
-        [UIView animateWithDuration:0.7 
-                         animations:^{
-                             pickerViewFrame.origin.y = 480;
-                             buttonPicker.frame = pickerViewFrame;                         
-                         }];
-    }
-    showPicker = !showPicker;
-}
--(IBAction)markNames{
-    DeleteMeController *d=[[DeleteMeController alloc]init];
-    [self.navigationController pushViewController:d animated:YES];
-    [d release];
-}
--(void)selectPlayList{
-    UserTableController *u=[[UserTableController alloc]init];
-    [self.navigationController pushViewController:u animated:YES];
-    [u release];
 }
 
 #pragma mark - 
@@ -269,17 +219,16 @@
 -(void)setListTitle:(NSNotification *)note{
     NSDictionary *dic = [note userInfo];
     [self.navigationItem setTitle:[dic valueForKey:@"listTitle"]];
+    [self displayTag];
 }
 
 #pragma mark -
-#pragma mark UIPickerViewDelegate
+#pragma mark TAG Display method
 
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    self.table.scrollEnabled = YES;
-    NSString *str = [NSString stringWithFormat:@"%@",[pickerViewArray objectAtIndex:[pickerView selectedRowInComponent:0]]];
-    self.show.title = str;
-    if ([str isEqualToString:@"SHOW TAGGED"]) {
+- (void)displayTag{
+
+   
+    if ([self.navigationItem.title isEqualToString:@"SHOW TAGGED"]) {
         [self.assetArrays removeAllObjects];
         [tagPhotos removeAllObjects];
 		for(Thumbnail *elcAsset in self.crwAssets) 
@@ -300,7 +249,6 @@
             }
 
         }else{
-            self.show.title = @"SHOW ALL";
 			UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Info" 
 														   message:@"There are no tagged images" 
 														  delegate:self 
@@ -310,7 +258,7 @@
 			[alert release];
 
         }
-    }else if([str isEqualToString:@"SHOW UNTAG"]){
+    }else if([self.navigationItem.title  isEqualToString:@"UNTAG"]){
         [self.assetArrays removeAllObjects];
         [unTagPhotos removeAllObjects];
 		for(Thumbnail *elcAsset in self.crwAssets) 
@@ -331,7 +279,6 @@
         }
         
         else{
-            self.show.title = @"SHOW ALL";
 			UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Info" 
 														   message:@"There are no untagged images" 
 														  delegate:self 
@@ -356,44 +303,7 @@
         [self.table reloadData];
         
     }
-    [UIView animateWithDuration:0.7 
-                     animations:^{
-                         pickerViewFrame.origin.y = 480;
-                         buttonPicker.frame = pickerViewFrame;
-                     }];
-    showPicker = !showPicker;
-
 }
-
-
-#pragma mark -
-#pragma mark UIPickerViewDataSource
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-	return [pickerViewArray objectAtIndex:row];
-}
-
-- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
-{
-	return 280;
-}
-
-- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
-{
-	return 30;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-	return [pickerViewArray count];
-}
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-	return 1;
-}
-
 
 #pragma mark -
 #pragma mark UITableViewDataSource Delegate Methods
@@ -405,9 +315,9 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if ([show.title isEqualToString:@"SHOW UNTAG"]) {
+	if ([self.navigationItem.title  isEqualToString:@"UNTAG"]) {
 		return ceil([unTagPhotos count]/4.0);
-	}else if ([show.title isEqualToString:@"SHOW TAGGED"]) {
+	}else if ([self.navigationItem.title  isEqualToString:@"SHOW TAGGED"]) {
 		return ceil([tagPhotos count] /4.0);
 	}else {
 		return ceil([crwAssets count] / 4.0);
@@ -422,7 +332,7 @@
 	int index = (_indexPath.row*4);
 	int maxIndex = (_indexPath.row*4+3);
     
-	if ([show.title isEqualToString:@"SHOW UNTAG"]) {
+	if ([self.navigationItem.title  isEqualToString:@"UNTAG"]) {
 		if(maxIndex < [unTagPhotos count]) {
 			
 			return [NSArray arrayWithObjects:[unTagPhotos objectAtIndex:index],
@@ -452,7 +362,7 @@
 			return [NSArray arrayWithObject:[unTagPhotos objectAtIndex:index]];
 		
 		}
-   }else if ([show.title isEqualToString:@"SHOW TAGGED"]) {
+   }else if ([self.navigationItem.title  isEqualToString:@"SHOW TAGGED"]) {
 		if(maxIndex < [tagPhotos count]) {
 			
 			return [NSArray arrayWithObjects:[tagPhotos objectAtIndex:index],

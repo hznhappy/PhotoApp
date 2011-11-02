@@ -22,49 +22,51 @@
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
 	self.assetGroups = tempArray;
     [tempArray release];
+    [self getAssetGroup];
+    }
 
+-(void)getAssetGroup{
     // Load Albums into assetGroups
     dispatch_async(dispatch_get_main_queue(), ^
-    {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        
-        void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
-        {
-            if (group == nil) 
-            {
-                return;
-            }
-            
-            [self.assetGroups addObject:group];
-            [group numberOfAssets];
-            // Reload albums
-            [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
-        };
-        
-        void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
-            
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                             message:[NSString stringWithFormat:@"Album Error: %@", [error description]] 
-                                                            delegate:nil 
-                                                   cancelButtonTitle:@"Ok" 
-                                                   otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            
-            NSLog(@"A problem occured %@", [error description]);	                                 
-        };	
-                
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-        [library enumerateGroupsWithTypes:ALAssetsGroupAll
-                               usingBlock:assetGroupEnumerator 
-                             failureBlock:assetGroupEnumberatorFailure];
-        
-        
-        [library release];
-        [pool release];
-    });    
+       {
+           NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+           
+           void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
+           {
+               if (group == nil) 
+               {
+                   return;
+               }
+               
+               [self.assetGroups addObject:group];
+               [group numberOfAssets];
+               // Reload albums
+               [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
+           };
+           
+           void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
+               
+               UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                                message:[NSString stringWithFormat:@"Album Error: %@", [error description]] 
+                                                               delegate:nil 
+                                                      cancelButtonTitle:@"Ok" 
+                                                      otherButtonTitles:nil];
+               [alert show];
+               [alert release];
+               
+               NSLog(@"A problem occured %@", [error description]);	                                 
+           };	
+           
+           ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+           [library enumerateGroupsWithTypes:ALAssetsGroupAll
+                                  usingBlock:assetGroupEnumerator 
+                                failureBlock:assetGroupEnumberatorFailure];
+           
+           
+           [library release];
+           [pool release];
+       });
 }
-
 -(void)reloadTableView {
 	
 	[self.tableView reloadData];
@@ -113,13 +115,25 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
+    NSMutableArray *assetsArray = [[NSMutableArray alloc]init];
+    ALAssetsGroup *group = [assetGroups objectAtIndex:indexPath.row];
+    [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+	[group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
+     {         
+         if(result == nil) 
+         {
+             return;
+         }
+         [assetsArray addObject:[[result defaultRepresentation]url]];
+    }];
+    NSLog(@"%d assetcount",[assetsArray count]);
+
 	AssetTablePicker *picker = [[AssetTablePicker alloc] initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
 
-    picker.assetGroup = [assetGroups objectAtIndex:indexPath.row];
-    [picker.assetGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
-    picker.hidesBottomBarWhenPushed = YES;
+    picker.urlsArray = assetsArray;
+    NSLog(@"%d",[picker.assetArrays count]);
 	[self.navigationController pushViewController:picker animated:YES];
+    [assetsArray release];
 	[picker release];
 }
 

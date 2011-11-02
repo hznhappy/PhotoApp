@@ -9,7 +9,7 @@
 #import "DBOperation.h"
 #import "User.h"
 @implementation DBOperation
-@synthesize ary,tagary,playary;
+@synthesize ary,tagary,playary,urlary;
 -(NSString *)filePath{
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *directory = [paths objectAtIndex:0];
@@ -76,17 +76,19 @@
     
 }
 -(void)selectFromTAG:(NSString *)sql
-{tagary=[NSMutableArray arrayWithCapacity:1000];
+{
+    tagary=[NSMutableArray arrayWithCapacity:1000];
+    urlary = [NSMutableArray arrayWithCapacity:20];
     NSString *newid;
+    NSString *url;
     sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
-
+            url=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 1)];
             [tagary addObject:newid];
-            
-           
+            [urlary addObject:url];
         }
 		
     }	
@@ -163,7 +165,8 @@
 }
 
 -(void)deleteDB:(NSString *)sql
-{char *et;
+{
+    char *et;
        if (sqlite3_exec(db, [sql UTF8String], NULL, NULL, &et) != SQLITE_OK) {
      NSAssert1(0,@"Updating table failed.%s",et);
     }    

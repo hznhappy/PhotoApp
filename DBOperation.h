@@ -22,8 +22,10 @@
     NSMutableArray *ary;
     NSMutableArray *tagary;
     NSMutableArray *playary;
+    NSMutableArray *urlary;
 
 }
+@property(nonatomic,retain)NSMutableArray *urlary;
 @property(nonatomic,retain)NSMutableArray *ary;
 @property(nonatomic,retain)NSMutableArray *tagary;
 @property(nonatomic,retain)NSMutableArray *playary;

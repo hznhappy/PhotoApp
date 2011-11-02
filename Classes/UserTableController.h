@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 #import "DBOperation.h"
 #define PlayTable @"PlayTable"
 @interface UserTableController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
@@ -14,14 +15,32 @@
     IBOutlet UITableView *tableView;
     NSMutableArray *list;
     DBOperation *da;
-    UIToolbar* tools;
+    
     NSMutableArray *withlist;
     NSMutableArray *withoutlist;
     UIBarButtonItem *editButton;
+    NSMutableArray *allUrl;
+    NSMutableArray *unTagUrl;
+    NSMutableArray *playListUrl;
+    NSMutableArray *assetGroups;
+    NSMutableArray *tagUrl;
+    
 }
+@property(nonatomic,retain)NSMutableArray *assetGroups;
+@property(nonatomic,retain)NSMutableArray *allUrl;
+@property(nonatomic,retain)NSMutableArray *unTagUrl;
+@property(nonatomic,retain)NSMutableArray *playListUrl;
+@property(nonatomic,retain)NSMutableArray *tagUrl;
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property(nonatomic,retain)NSMutableArray *list;
 @property(nonatomic,retain)NSMutableArray *withlist;
 @property(nonatomic,retain)NSMutableArray *withoutlist;
 @property(nonatomic,retain) UIToolbar* tools;
+
+-(void)getAssetGroup;
+-(void)getAllUrls;
+-(void)getTagUrls;
+-(void)getUnTagUrls;
+-(void)deleteUnExitUrls;
+
 @end
