@@ -46,9 +46,9 @@
         [da openDB];
         NSString *createIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];
         [da createTable:createIdTable];
-        NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idtable" ];
+        NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
         [da selectOrderId:selectIdOrder];
-        self.list=da.orderIdList; 
+        self.list=da.orderIdList;
           
         self.list1=[[NSMutableArray arrayWithCapacity:40]retain];
         
@@ -74,7 +74,7 @@ CGFloat byheight = 30;
     [da openDB];
     NSString *createIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];
     [da createTable:createIdTable];
-     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idtable" ];
+     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder" ];
     [da selectOrderId:selectIdOrder];
     self.list=da.orderIdList; 
     [myscroll setContentSize:CGSizeMake(320, 45*[self.list count])];

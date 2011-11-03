@@ -45,7 +45,7 @@
     
 	da=[[DBOperation alloc]init];
     [da openDB];
-<<<<<<< HEAD
+
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
     [da createTable:createPlayTable];
     NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
@@ -57,12 +57,7 @@
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [da createTable:createRules];
     self.list=da.playIdAry;
-=======
-    NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
-    [da createTable:createSQL3];
-    NSString *selectPlay = [NSString stringWithFormat:@"select * from PlayTable"];
-    [da selectFromPlayTable:selectPlay];
-    self.list=da.playary;
+
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
 	self.assetGroups = tempArray;
@@ -81,7 +76,7 @@
     
     [self getAssetGroup];
     
->>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
+
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
     [da closeDB];
    
@@ -224,17 +219,13 @@
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
-<<<<<<< HEAD
     da=[[DBOperation alloc]init];
     [da openDB];
-    User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
+   /* User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",[list objectAtIndex:indexPath.row]);
-=======
-    
->>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
     [cell.textLabel setNumberOfLines:10];
     cell.textLabel.lineBreakMode=UILineBreakModeWordWrap;
-    
+    */
     if (indexPath.row == [list count]) {
         cell.textLabel.text = @"UNTAG";
     }
@@ -256,16 +247,16 @@
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *dic = [NSDictionary dictionaryWithObject:[tableView cellForRowAtIndexPath:indexPath].textLabel.text forKey:@"listTitle"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"SetTitle" object:self userInfo:dic];
-    da=[[DBOperation alloc]init];
+  /*  da=[[DBOperation alloc]init];
     [da openDB];
-    [da selectFromRulesAndTag:[[list objectAtIndex:indexPath.row]intValue]];
+    //[da selectFromRulesAndTag:[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",da.playlistUrl);
     [da closeDB];
-<<<<<<< HEAD
+
    // select t.url,t.id from tag t,rules r where r.playlist_id=4 and r.user_id=t.id and r.playlist_rules=1 and t.url not in (select t2.url from tag t2,rules r2 where r2.playlist_id=4 and r2.playlist_rules=0 and r2.user_id=t2.id);
 
     [self.navigationController popViewControllerAnimated:YES];
-=======
+*/
     
     AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
     if (indexPath.row == [list count]) {
@@ -281,13 +272,13 @@
     [self.navigationController pushViewController:assetPicker animated:YES];
     [assetPicker release];
     
->>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
+
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     [da openDB];
     User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
-<<<<<<< HEAD
-    TextController *ts=[[TextController alloc]init];
+
+    /*TextController *ts=[[TextController alloc]init];
     ts.str1 = user3.name;
     NSLog(@"re%d",[[list objectAtIndex:indexPath.row]intValue]);
     NSString *selectRulesIn = [NSString stringWithFormat:@"select user_name from Rules where playList_id=%d and playList_rules=%d",[[list objectAtIndex:indexPath.row]intValue],1];
@@ -319,20 +310,20 @@
         {  ts.str3=[ts.str3 stringByAppendingString:@","];
             ts.str3=[ts.str3 stringByAppendingString:[da.playlist_name objectAtIndex:j]];
         }
-    }
-    [da closeDB];
-	[self.navigationController pushViewController:ts animated:YES];
+    }*/
+    //[da closeDB];
+	//[self.navigationController pushViewController:ts animated:YES];
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:[list objectAtIndex:indexPath.row],@"playlist_id",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"edit" 
                                                        object:self 
                                                      userInfo:dic1];
-=======
+
     [da closeDB];
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
     detailController.listName = user3.name;
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
->>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
+
 }
 -(IBAction)toggleback:(id)sender
 {
@@ -342,7 +333,7 @@
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-<<<<<<< HEAD
+
 {   [da openDB];
     NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",deletePlayTable );
@@ -350,24 +341,18 @@
     NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",deleteRules);
     [da deleteDB:deleteRules]; 
-=======
-{   
+
+  
     if (indexPath.row==[list count]||indexPath.row == [list count]+1) {
         return;
     }
-    [da openDB];
-    NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
-    [da createTable:createSQL3];
-    NSString *countSQL = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
-    NSLog(@"%@",countSQL);
-    [da deleteDB:countSQL];  
->>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
+
     [da closeDB];
     [self viewDidLoad];
     [self.tableView reloadData];
     
 }
-<<<<<<< HEAD
+
 
 
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
@@ -394,10 +379,10 @@
 } 
 
 
-=======
+
 #pragma mark -
 #pragma mark memory method
->>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
+
 - (void)dealloc {
     [allUrl release];
     [unTagUrl release];

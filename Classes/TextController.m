@@ -222,7 +222,7 @@ else
 
 
 
-<<<<<<< HEAD
+
 -(void)EDIT
 {
     NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playlist_name='%@' WHERE playlist_id=%d",PlayTable,listName.text,[playlist_id intValue]];
@@ -284,8 +284,7 @@ else
         }
     }
   }
-=======
->>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
+
 - (void)dealloc
 { 
     
