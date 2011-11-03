@@ -37,14 +37,14 @@ int j=1,count=0;
 	[tools release];
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createSQL1= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
-    [da createTable:createSQL1];
-    NSString *createSQL2= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idTable];
-    [da createTable:createSQL2];
-    NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM idTable"];
-    NSLog(@"%@",countSQL);  
-    [da selectFromIdTable:countSQL];
-    self.list=da.ary;
+    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    [da createTable:createUserTable];
+    NSString *createIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
+    [da createTable:createIdTable];
+    NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
+    [da selectOrderId:selectIdOrder];
+    self.list=da.orderIdList;
+    NSLog(@"xunshu%@",da.orderIdList);
     count = [list count];
     NSMutableArray *arr=[[NSMutableArray alloc]initWithObjects:@"redColor",@"yellowColor",@"greenColor",@"grayColor",@"whiteColor",@"blueColor",nil];
     self.pickerViewArray=arr;
@@ -62,9 +62,6 @@ int j=1,count=0;
     
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createSQL1= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
-    [da createTable:createSQL1];
-
     NSInteger row=[myPickerView selectedRowInComponent:0];
     fcolor=[pickerViewArray objectAtIndex:row]; 
 	
@@ -101,9 +98,9 @@ int j=1,count=0;
     // new=new+1;
     NSLog(@"%d",new);
     NSLog(@"%@",fcolor);
-	NSString *insertUser2 = [NSString stringWithFormat:@"UPDATE %@ SET COLOR='%@' WHERE ID='%@'",UserTable,fcolor,[list objectAtIndex:new]];
-	NSLog(@"%@",insertUser2);
-	[da insertToTable:insertUser2];
+	NSString *updateUserTable= [NSString stringWithFormat:@"UPDATE %@ SET COLOR='%@' WHERE ID='%@'",UserTable,fcolor,[list objectAtIndex:new]];
+	NSLog(@"%@",updateUserTable);
+	[da insertToTable:updateUserTable];
     [da closeDB];
     [self viewDidLoad];
     [self.tableView reloadData];
@@ -152,14 +149,14 @@ int j=1,count=0;
     }
     else
     {
-        NSString *insertUsername = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME,COLOR) VALUES(%d,'%@','%@')",UserTable,[fid intValue],fname,@"whiteColor"];
-        NSLog(@"%@",insertUsername);
-        [da insertToTable:insertUsername];
+        NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME,COLOR) VALUES(%d,'%@','%@')",UserTable,[fid intValue],fname,@"whiteColor"];
+        NSLog(@"%@",insertUserTable);
+        [da insertToTable:insertUserTable];
         
         
-        NSString *insertUser = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idTable,[fid intValue]];
-        NSLog(@"%@",insertUser);
-        [da insertToTable:insertUser];   
+        NSString *insertIdTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,[fid intValue]];
+        NSLog(@"%@",insertIdTable);
+        [da insertToTable:insertIdTable];   
         NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"add" 
                                                            object:self 
@@ -281,8 +278,8 @@ int j=1,count=0;
     [button setValue:[UIColor whiteColor] forKey:@"tintColor"];  
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createSQL1= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
-    [da createTable:createSQL1];
+    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    [da createTable:createUserTable];
     User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
 	cell.textLabel.text = [NSString stringWithFormat:@"%@",user1.name];
     if([user1.color isEqualToString:@"greenColor"])
@@ -370,12 +367,12 @@ int j=1,count=0;
     [id1 retain];
     da=[[DBOperation alloc]init];
     [da openDB];
-     NSString *createSQL= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
-    [da createTable:createSQL];
-    NSString *selectSql1 = [NSString stringWithFormat:@"select * from tag"];
-    [da selectFromTAG:selectSql1];
+     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
+    [da createTable:createTag];
+    NSString *selectTag= [NSString stringWithFormat:@"select * from tag"];
+    [da selectFromTAG:selectTag];
     NSMutableArray *listid1=[NSMutableArray arrayWithCapacity:100];
-    listid1=da.tagary;
+    listid1=da.tagIdAry;
     if([listid1 containsObject:[list objectAtIndex:indexPath.row]])
     {
         UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:@"你好" message:@"此人已作为照片标记使用,是否确定要删除" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:nil];
@@ -386,11 +383,11 @@ int j=1,count=0;
     }
     else
     {
-        NSString *countSQL2 = [NSString stringWithFormat:@"DELETE FROM idTable WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
-        NSLog(@"%@",countSQL2);
-        [da deleteDB:countSQL2];  
-        NSString *countSQL = [NSString stringWithFormat:@"DELETE FROM UserTable WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
-        [da deleteDB:countSQL];
+        NSString *deleteIdTable = [NSString stringWithFormat:@"DELETE FROM idOrder WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
+        NSLog(@"%@",deleteIdTable );
+        [da deleteDB:deleteIdTable ];  
+        NSString *DeleteUserTable= [NSString stringWithFormat:@"DELETE FROM UserTable WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
+        [da deleteDB:DeleteUserTable];
         [self viewDidLoad];
         [self.tableView reloadData];
     }
@@ -417,13 +414,13 @@ int j=1,count=0;
             NSLog(@"OB");
             da=[[DBOperation alloc]init];
             [da openDB];
-            NSString *countSQL1 = [NSString stringWithFormat:@"DELETE FROM idTable WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
-            NSLog(@"%@",countSQL1);
-            [da deleteDB:countSQL1];  
-            NSString *countSQL2 = [NSString stringWithFormat:@"DELETE FROM UserTable WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
-            [da deleteDB:countSQL2];
-            NSString *countSQL3 = [NSString stringWithFormat:@"DELETE FROM TAG WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
-            [da deleteDB:countSQL3];
+            NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
+            NSLog(@"%@",deleteIdTable);
+            [da deleteDB:deleteIdTable];  
+            NSString *deleteUserTable= [NSString stringWithFormat:@"DELETE FROM UserTable WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
+            [da deleteDB:deleteUserTable];
+            NSString *deleteTag= [NSString stringWithFormat:@"DELETE FROM TAG WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
+            [da deleteDB:deleteTag];
             [da closeDB];
             [self viewDidLoad];
             [self.tableView reloadData];
@@ -458,15 +455,13 @@ int j=1,count=0;
 	[object release];
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createSQL2= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idTable];
-    [da createTable:createSQL2];
-    NSString *insertUser1 = [NSString stringWithFormat:@"DELETE FROM idTable"];	
-	NSLog(@"%@",insertUser1);
-    [da deleteDB:insertUser1];
+    NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder"];	
+	NSLog(@"%@",deleteIdTable);
+    [da deleteDB:deleteIdTable];
     for(int p=0;p<[list count];p++){
-        NSString *insertUser = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idTable,[[list objectAtIndex:p]intValue]];
-        NSLog(@"%@",insertUser);
-        [da insertToTable:insertUser];    
+        NSString *insertIdTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,[[list objectAtIndex:p]intValue]];
+        NSLog(@"%@",insertIdTable);
+        [da insertToTable:insertIdTable];    
 	}
     [da closeDB];
 } 

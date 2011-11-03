@@ -11,46 +11,90 @@
 #import "AddressBook/AddressBook.h"
 #import "AddressBookUI/AddressBookUI.h"
 @implementation TextController
-@synthesize listName,nameIn,nameOut;
-@synthesize str1,str2,str3;
+@synthesize listName,nameIn,nameOut,listUserIdIn,listUserNameIn,listUserNameOut,listUserIdOut,list;
+@synthesize str1,str2,str3,readName,fid;
 -(void)viewDidLoad{
     bo=NO;
+    e=NO;
     self.listName.text = str1;
     self.nameIn.text = str2;
     self.nameOut.text =str3;
-  //  self.list=[NSMutableArray arrayWithCapacity:100];
+   
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(text:) name:@"text1" object:nil];
+    da=[[DBOperation alloc]init];
+    [da openDB];
+    NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
+    [da createTable:createRules];
+    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    [da createTable:createPlayTable];
+    NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
+    [da createTable:createPlayIdTable];
+
+    self.listUserIdIn=[NSMutableArray arrayWithCapacity:40];
+    self.listUserNameIn=[NSMutableArray arrayWithCapacity:40];
+    self.listUserIdOut=[NSMutableArray arrayWithCapacity:40];
+    self.listUserNameOut=[NSMutableArray arrayWithCapacity:40];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(edit:) name:@"edit" object:nil];
+    //NSLog(@"%@",self.listUserId);
   }
--(void)text:note
+-(void)edit:note
+{
+    e=YES;
+    NSDictionary *dic = [note userInfo];
+    NSLog(@"dsa%@",[dic valueForKey:@"playlist_id"]);
+    playlist_id=[NSString stringWithFormat:@"%@",[dic valueForKey:@"playlist_id"]];
+    NSLog(@"ID %@",playlist_id);
+    [playlist_id retain];
+    
+}
+-(void)text
 {
    // for(int j=0;j<2;j++)
    // {
-    NSDictionary *dic = [note userInfo];
+   // NSDictionary *dic = [note userInfo];
     if(bo==NO)
     {
         if(nameIn.text==nil||nameIn.text.length==0)
         {
             
-    self.nameIn.text=[dic valueForKey:@"name"];
+    self.nameIn.text=readName;
         }
         else
         {  self.nameIn.text=[self.nameIn.text stringByAppendingString:@","];
-            self.nameIn.text=[self.nameIn.text stringByAppendingString:[dic valueForKey:@"name"]];
+            self.nameIn.text=[self.nameIn.text stringByAppendingString:readName];
         }
-    
+       // [listUserNameIn removeAllObjects];
+        //[listUserIdIn removeAllObjects];
+        NSLog(@"YYYYY%@",fid);
+        [listUserIdIn addObject:fid];
+        [listUserNameIn addObject:readName];
+        NSLog(@"ID%@",listUserIdIn);
+        NSLog(@"NAME%@",listUserNameIn);
+      /*  NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_rules,user_id,user_name) VALUES(%d,%d,'%@')",Rules,1,[dic valueForKey:@"playid"],[dic valueForKey:@"name"]];
+        NSLog(@"%@",insertRules);
+        [da insertToTable:insertRules];*/
     }
     if(bo==YES)
     {
         if(nameOut.text==nil||nameOut.text.length==0)
         {
             
-            self.nameOut.text=[dic valueForKey:@"name"];
+            self.nameOut.text=readName;
         }
         else
         {  self.nameOut.text=[self.nameOut.text stringByAppendingString:@","];
-            self.nameOut.text=[self.nameOut.text stringByAppendingString:[dic valueForKey:@"name"]];
+            self.nameOut.text=[self.nameOut.text stringByAppendingString:readName];
         }
+       /* NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_rules,user_id,user_name) VALUES(%d,%d,'%@')",Rules,0,[dic valueForKey:@"playid"],[dic valueForKey:@"name"]];
+        NSLog(@"%@",insertRules);
+        [da insertToTable:insertRules];*/
+        [listUserIdOut addObject:fid];
+        [listUserNameOut addObject:readName];
+        NSLog(@"OUtID%@",listUserIdOut);
+        NSLog(@"OUtNAME%@",listUserNameOut);
+
     }
+    
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -68,11 +112,17 @@
 {
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:readName,@"name",nil];
+    readName=(NSString *)ABRecordCopyCompositeName(person);
+    ABRecordID recId = ABRecordGetRecordID(person);
+   fid=[NSString stringWithFormat:@"%d",recId];
+    NSLog(@"rrrrrr%@",fid);
+   // TextController *parent=[[TextController alloc]init];
+    //parent.listUserId=[NSMutableArray arrayWithCapacity:40];
+   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:readName,@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"text1" 
                                                        object:self 
-                                                     userInfo:dic1];
+                                                     userInfo:dic1];*/
+    [self text];
     [self dismissModalViewControllerAnimated:YES];
     
     return NO;
@@ -84,7 +134,7 @@
 }
 
 -(IBAction)addWith:(id)sender
-{
+{bo=NO;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
@@ -108,11 +158,9 @@
 {
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
-    [da createTable:createSQL3];
     if(listName.text==nil)
     {
-    
+        
         NSString *message=[[NSString alloc] initWithFormat:
                            @"规则名不能为空!"];
         
@@ -126,21 +174,115 @@
         [alert show];
         [alert release];
         [message release];
-
+        
     }
-    else
+else
+{
+    if(e==YES)
     {
-    NSString *insertUsername = [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,listName.text];
-    NSLog(@"%@",insertUsername);
-    [da insertToTable:insertUsername];
+        [self EDIT];         
+    } 
+ else{
+          NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,listName.text];
+    NSLog(@"%@",insertPlayTable);
+    [da insertToTable:insertPlayTable];
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
                                                      userInfo:dic1];
-    [self.navigationController popViewControllerAnimated:YES];
+        NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
+        [da selectFromPlayTable:selectPlayTable];
+        self.list=da.playIdAry;
+     NSLog(@"%@",da.playIdAry);
+        NSLog(@"HU%@",[list objectAtIndex:[list count]-1]);
+     
+     NSString *insertPlayIdTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[list objectAtIndex:[list count]-1]intValue]];
+     NSLog(@"%@",insertPlayIdTable);
+     [da insertToTable:insertPlayIdTable];
+        for(int i=0;i<[listUserIdIn count];i++)
+        {
+            NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%@',%d,'%@','%@')",Rules,[list objectAtIndex:[list count]-1],1,
+                                    [listUserIdIn objectAtIndex:i],[listUserNameIn objectAtIndex:i]];
+            NSLog(@"%@",insertRules);
+            [da insertToTable:insertRules];  
+        }
+        for(int i=0;i<[listUserIdOut count];i++)
+        {
+            NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%@',%d,'%@','%@')",Rules,[list objectAtIndex:[list count]-1],0,
+                                    [listUserIdOut objectAtIndex:i],[listUserNameOut objectAtIndex:i]];
+            NSLog(@"%@",insertRules);
+            [da insertToTable:insertRules];  
+        }
     }
 }
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
 
+
+
+
+-(void)EDIT
+{
+    NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playlist_name='%@' WHERE playlist_id=%d",PlayTable,listName.text,[playlist_id intValue]];
+	NSLog(@"%@",updateRules);
+	[da updateTable:updateRules];
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                       object:self 
+                                                     userInfo:dic1];
+
+    for(int i=0;i<[listUserIdIn count];i++)
+    {
+        NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%@',%d,'%@','%@')",Rules,playlist_id,1,
+                                [listUserIdIn objectAtIndex:i],[listUserNameIn objectAtIndex:i]];
+        NSLog(@"%@",insertRules);
+        [da insertToTable:insertRules];  
+    }
+    for(int i=0;i<[listUserIdOut count];i++)
+    {
+        NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%@',%d,'%@','%@')",Rules,playlist_id,0,
+                                [listUserIdOut objectAtIndex:i],[listUserNameOut objectAtIndex:i]];
+        NSLog(@"%@",insertRules);
+        [da insertToTable:insertRules];  
+    }
+    NSArray *withNameList= [nameIn.text componentsSeparatedByString:@","];
+    NSArray *withoutNameList= [nameOut.text componentsSeparatedByString:@","];
+    NSString *selectRulesId = [NSString stringWithFormat:@"select user_name from rules where playlist_id=%d and playlist_rules=%d",[playlist_id intValue],1];
+    [da selectIdFromRules:selectRulesId];
+    NSLog(@"play%@",da.playlist_Id);
+    for(int i=0;i<[da.playlist_Id count];i++)
+    {
+        if([withNameList containsObject:[da.playlist_Id objectAtIndex:i]])
+        {
+            continue;
+        }
+        else
+        {
+            NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and playlist_rules=%d and user_name='%@'",[playlist_id intValue],1,[da.playlist_Id objectAtIndex:i]];
+            NSLog(@"%@",deleteRules);
+            [da deleteDB:deleteRules];
+            
+        }
+    }
+    NSString *selectRulesId1 = [NSString stringWithFormat:@"select user_name from rules where playlist_id=%d and playlist_rules=%d",[playlist_id intValue],0];
+    [da selectIdFromRules:selectRulesId1];
+    NSLog(@"play%@",da.playlist_Id);
+    for(int i=0;i<[da.playlist_Id count];i++)
+    {
+        if([withoutNameList containsObject:[da.playlist_Id objectAtIndex:i]])
+        {
+            continue;
+        }
+        else
+        {
+            NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and playlist_rules=%d and user_name='%@'",[playlist_id intValue],0,[da.playlist_Id objectAtIndex:i]];
+            NSLog(@"%@",deleteRules);
+            [da deleteDB:deleteRules];
+            
+        }
+    }
+  }
 - (void)dealloc
 { 
     [str1 release];

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DBOperation.h"
 #define PlayTable @"PlayTable"
+#define playIdTable @"playIdTable"
 @interface UserTableController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
     
     IBOutlet UITableView *tableView;

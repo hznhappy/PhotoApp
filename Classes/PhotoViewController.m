@@ -215,12 +215,12 @@ else{
     ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
     NSURL *url = [[asset defaultRepresentation]url];
     [db openDB];
-    NSString *createSQL= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TableName];
-    [db createTable:createSQL];  
-    NSString *selectSql1 = [NSString stringWithFormat:@"select * from tag where url='%@'",url];
-    [db selectFromTAG:selectSql1];
+    NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
+    [db createTable:createTag];  
+    NSString *selectTag= [NSString stringWithFormat:@"select * from tag where url='%@'",url];
+    [db selectFromTAG:selectTag];
     
-    self.listid=db.tagary;
+    self.listid=db.tagIdAry;
     for(int i=0;i<[self.listid count];i++){
         User *user1 = [db getUserFromUserTable:[[self.listid objectAtIndex:i]intValue]];
         nameTitle = [[UILabel alloc]initWithFrame:CGRectMake(300, 70+bty, 20, 20)];

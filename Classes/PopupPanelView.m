@@ -44,13 +44,13 @@
         [self addSubview:toolBar];
         da=[[DBOperation alloc]init];
         [da openDB];
-        NSString *createSQL2= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idTable];
-        [da createTable:createSQL2];
-        NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM idTable"];
-        [da selectFromIdTable:countSQL];
-        self.list=da.ary; 
+        NSString *createIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];
+        [da createTable:createIdTable];
+        NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idtable" ];
+        [da selectOrderId:selectIdOrder];
+        self.list=da.orderIdList; 
           
-        self.list1=[[NSMutableArray arrayWithCapacity:100]retain];
+        self.list1=[[NSMutableArray arrayWithCapacity:40]retain];
         
         [da closeDB];
         [myscroll setContentSize:CGSizeMake(320, 45*[self.list count])];
@@ -72,17 +72,17 @@ CGFloat byheight = 30;
     }
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createSQL2= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idTable];
-    [da createTable:createSQL2];
-    NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM idTable"];
-    [da selectFromIdTable:countSQL];
-    self.list=da.ary; 
+    NSString *createIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];
+    [da createTable:createIdTable];
+     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idtable" ];
+    [da selectOrderId:selectIdOrder];
+    self.list=da.orderIdList; 
     [myscroll setContentSize:CGSizeMake(320, 45*[self.list count])];
     NSString *buttonName = nil;
 	UIButton *button = nil;
 	for(int i=0; i<[list count]; i++){
-        NSString *createSQL1= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
-        [da createTable:createSQL1];  
+        NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+        [da createTable:createUserTable];  
         User *user1 = [da getUserFromUserTable:[[list objectAtIndex:i]intValue]];
          button = [UIButton buttonWithType:UIButtonTypeCustom]; 
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -102,10 +102,10 @@ CGFloat byheight = 30;
 		[button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchDown];
     
         
-        NSString *selectSql1 = [NSString stringWithFormat:@"select * from tag where url='%@'",self.url];
-        [da selectFromTAG:selectSql1];
+        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where url='%@'",self.url];
+        [da selectFromTAG:selectTag];
         NSMutableArray *cid;
-        cid=da.tagary;
+        cid=da.tagIdAry;
         if([cid containsObject:[list objectAtIndex:i]])
         {
         if([user1.color isEqualToString:@"greenColor"])
@@ -144,20 +144,20 @@ CGFloat byheight = 30;
     [list1 addObject:[list objectAtIndex:tag]];
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createSQL= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TableName];
-    [da createTable:createSQL];  
+    NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
+    [da createTable:createTag];  
     NSMutableArray *ta;
-    NSString *selectSql1 = [NSString stringWithFormat:@"select * from tag where url='%@'",self.url];
-    [da selectFromTAG:selectSql1];
-    ta=da.tagary;
+    NSString *selectTag= [NSString stringWithFormat:@"select * from tag where url='%@'",self.url];
+    [da selectFromTAG:selectTag];
+    ta=da.tagIdAry;
     NSString *createSQL1= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
     [da createTable:createSQL1];
     User *user1 = [da getUserFromUserTable:[[list objectAtIndex:tag]intValue]];
         if([ta containsObject:user1.id])
         {
-            NSString *countSQL2 = [NSString stringWithFormat:@"DELETE FROM TAG WHERE ID='%@' and url='%@'",user1.id,self.url];
+            NSString *deleteTag= [NSString stringWithFormat:@"DELETE FROM TAG WHERE ID='%@' and url='%@'",user1.id,self.url];
             
-            [da deleteDB:countSQL2];
+            [da deleteDB:deleteTag];
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"fre",@"name",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"change" 
                                                                object:self 
@@ -167,8 +167,8 @@ CGFloat byheight = 30;
         }
         else
         {
-            NSString *insertUsername = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES(%d,'%@','%@')",TableName,[[list objectAtIndex:tag]intValue],self.url,user1.name];
-            [da insertToTable:insertUsername];
+            NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES(%d,'%@','%@')",TAG,[[list objectAtIndex:tag]intValue],self.url,user1.name];
+            [da insertToTable:insertTag];
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"fre",@"name",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"change" 
                                                                object:self 
