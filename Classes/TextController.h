@@ -13,9 +13,10 @@
 #define PlayTable @"PlayTable" 
 @interface TextController : UIViewController<ABPeoplePickerNavigationControllerDelegate> {
     DBOperation *da;
-    IBOutlet UITextField *listName;
-    IBOutlet UITextField *nameIn;
-    IBOutlet UITextField *nameOut;
+    
+    UITextField *listName;
+    UITextField *nameIn;
+    UITextField *nameOut;
     NSString *str1;
     NSString *str2;
     NSString *str3;

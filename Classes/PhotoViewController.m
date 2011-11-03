@@ -310,8 +310,7 @@ else{
 
 - (void)setBarsHidden:(BOOL)hidden animated:(BOOL)animated{
 	if (hidden&&_barsHidden) return;
-	
-	[self setStatusBarHidden:hidden animated:animated];
+    [self setStatusBarHidden:hidden animated:animated];
     [self.navigationController setNavigationBarHidden:hidden animated:animated];
     [self.navigationController setToolbarHidden:hidden animated:animated];
     if (hidden) {
@@ -684,7 +683,7 @@ else{
 #pragma mark timer method
 
 -(void)fireTimer{
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.8 target:self selector:@selector(playPhoto) userInfo:nil repeats:YES];
+    timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(playPhoto) userInfo:nil repeats:YES];
     
 }
 -(void)playPhoto{

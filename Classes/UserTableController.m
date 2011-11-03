@@ -9,6 +9,7 @@
 #import "UserTableController.h"
 #import "TextController.h"
 #import "AssetTablePicker.h"
+#import "PlaylistDetailController.h"
 @implementation UserTableController
 @synthesize tableView,list,tools,withlist,withoutlist;
 @synthesize assetGroups;
@@ -16,6 +17,20 @@
 @synthesize unTagUrl;
 @synthesize playListUrl;
 @synthesize tagUrl;
+
+#pragma mark -
+#pragma mark UIViewController method
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{       
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
+    
+}
+
 -(void)viewDidLoad
 {
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -52,14 +67,6 @@
     [tempArray3 release];
     
     [self getAssetGroup];
-   // [self getAllUrls];
-    [self getTagUrls];
-    //[self getUnTagUrls];
-    [self deleteUnExitUrls];
-//    NSLog(@"%d  is all",[allUrl count]);
-    NSLog(@"%d is tag",[tagUrl count]);
-//    NSLog(@"%d is untag ",[unTagUrl count]);
-//    NSLog(@"%d is group ",[assetGroups count]);
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
     [da closeDB];
@@ -68,6 +75,8 @@
     
     
 }
+#pragma mark -
+#pragma mark get URL method
 -(void)getAssetGroup{
     dispatch_async(dispatch_get_main_queue(), ^
        {
@@ -77,9 +86,10 @@
            {
                if (group == nil) 
                {
+                   [self performSelectorOnMainThread:@selector(getAllUrls) withObject:nil waitUntilDone:YES];
+                   [self deleteUnExitUrls];
                    return;
-               }
-               
+               }               
                [self.assetGroups addObject:group];
                [group numberOfAssets];
            };
@@ -104,15 +114,14 @@
            
            
            [library release];
+           NSLog(@"this is the get AssetGroup method %d",[assetGroups count]);
            [pool release];
        });
-
 }
 
 -(void)getAllUrls{
     [self.allUrl removeAllObjects];
     for (ALAssetsGroup *group in self.assetGroups) {
-        
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
         [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
         {         
@@ -124,7 +133,7 @@
         }];
 
     }
-    
+    NSLog(@"get allurl count is :%d",[allUrl count]);
 }
 
 -(void)getUnTagUrls{
@@ -134,40 +143,41 @@
             [unTagUrl addObject:urls];
         }
     }
+    NSLog(@"%d is untag ",[unTagUrl count]);
+
 }
 
 -(void)getTagUrls{
+    [tagUrl removeAllObjects];
+    [da openDB];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
     NSMutableArray *photos = [da selectPhotos:selectSql];
+    [da closeDB];
     for (NSString *dataStr in photos) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [self.tagUrl addObject:dbStr];
     } 
- 
+    NSLog(@"%d is tag",[tagUrl count]);
 }
+
 -(void)deleteUnExitUrls{
+    [self getTagUrls];
     for (NSURL *tagurl in tagUrl){
         if (![allUrl containsObject:tagurl]) {
+            [da openDB];
             NSString *sql = [NSString stringWithFormat:@"DELETE FROM TAG WHERE URL='%@'",tagurl];
             [da updateTable:sql];
+            [da closeDB];
         }
-    }
-
-    
+    }    
 }
+
+#pragma mark -
+#pragma Button Action
 -(void)table1
 {
     [self viewDidLoad];
     [self.tableView reloadData];
-}
--(void)viewWillAppear:(BOOL)animated
-{
-    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
-}
--(void)viewWillDisappear:(BOOL)animated
-{       
-    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
- 
 }
 -(IBAction)toggleEdit:(id)sender
 {
@@ -187,6 +197,8 @@
 	[self.navigationController pushViewController:ts animated:YES];
 }
 
+#pragma mark -
+#pragma mark TableView delegate method
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 
@@ -234,13 +246,14 @@
         
     }
     [da closeDB];
+    
     AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
     if (indexPath.row == [list count]) {
+        [self getTagUrls];
         [self getUnTagUrls];
         assetPicker.urlsArray = unTagUrl;
     }
     else if (indexPath.row == [list count]+1) {
-        [self getAllUrls];
         assetPicker.urlsArray = allUrl;
     }
     else
@@ -252,13 +265,11 @@
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     [da openDB];
     User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
-    TextController *ts=[[TextController alloc]init];
-    ts.str1 = user3.name;
-    ts.str2 = user3.with;
-    ts.str3 =user3.without; 
     [da closeDB];
-    
-	[self.navigationController pushViewController:ts animated:YES];
+    PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
+    detailController.listName = user3.name;
+	[self.navigationController pushViewController:detailController animated:YES];
+    [detailController release];
 }
 -(IBAction)toggleback:(id)sender
 {
@@ -283,6 +294,8 @@
     [self.tableView reloadData];
     
 }
+#pragma mark -
+#pragma mark memory method
 - (void)dealloc {
     [allUrl release];
     [unTagUrl release];

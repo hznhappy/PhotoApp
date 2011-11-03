@@ -350,6 +350,7 @@
 							<reference ref="1062404993"/>
 						</object>
 						<reference key="parent" ref="515290962"/>
+						<string key="objectName">User Table Controller - PlayList</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">65</int>

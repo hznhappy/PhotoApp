@@ -42,6 +42,13 @@
 		A1F1FFAC146007F9005FAB2F /* UserTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA6146007F9005FAB2F /* UserTableController.m */; };
 		A1F1FFAD146007F9005FAB2F /* TextController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA8146007F9005FAB2F /* TextController.m */; };
 		A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFAF14600813005FAB2F /* DBOperation.m */; };
+		A1F82E2D1462612F00BED207 /* PlaylistDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F82E2C1462612F00BED207 /* PlaylistDetailController.xib */; };
+		A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F82E841462909100BED207 /* PlaylistDetailController.m */; };
+		A1F82E871462A01F00BED207 /* TextController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F82E861462A01F00BED207 /* TextController.xib */; };
+		A1F82E8B1462A3A200BED207 /* TextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F82E891462A39F00BED207 /* TextFieldCell.m */; };
+		A1F82E8C1462A3A200BED207 /* TextFieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F82E8A1462A3A000BED207 /* TextFieldCell.xib */; };
+		A1F82E911462A40500BED207 /* SwitchButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F82E8F1462A40500BED207 /* SwitchButtonCell.m */; };
+		A1F82E921462A40500BED207 /* SwitchButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F82E901462A40500BED207 /* SwitchButtonCell.xib */; };
 		A1F9E5961428671E00A69E49 /* tagOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A1F9E5951428671E00A69E49 /* tagOverlay.png */; };
 		E29A5E3C1239C42A008BB149 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E29A5E3B1239C42A008BB149 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
@@ -99,6 +106,16 @@
 		A1F1FFA8146007F9005FAB2F /* TextController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextController.m; sourceTree = "<group>"; };
 		A1F1FFAE14600813005FAB2F /* DBOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOperation.h; sourceTree = "<group>"; };
 		A1F1FFAF14600813005FAB2F /* DBOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBOperation.m; sourceTree = "<group>"; };
+		A1F82E2C1462612F00BED207 /* PlaylistDetailController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistDetailController.xib; sourceTree = "<group>"; };
+		A1F82E831462909100BED207 /* PlaylistDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistDetailController.h; sourceTree = "<group>"; };
+		A1F82E841462909100BED207 /* PlaylistDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistDetailController.m; sourceTree = "<group>"; };
+		A1F82E861462A01F00BED207 /* TextController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextController.xib; sourceTree = "<group>"; };
+		A1F82E881462A39E00BED207 /* TextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextFieldCell.h; path = Classes/TextFieldCell.h; sourceTree = "<group>"; };
+		A1F82E891462A39F00BED207 /* TextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextFieldCell.m; path = Classes/TextFieldCell.m; sourceTree = "<group>"; };
+		A1F82E8A1462A3A000BED207 /* TextFieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextFieldCell.xib; path = Classes/TextFieldCell.xib; sourceTree = "<group>"; };
+		A1F82E8E1462A40500BED207 /* SwitchButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchButtonCell.h; sourceTree = "<group>"; };
+		A1F82E8F1462A40500BED207 /* SwitchButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchButtonCell.m; sourceTree = "<group>"; };
+		A1F82E901462A40500BED207 /* SwitchButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchButtonCell.xib; sourceTree = "<group>"; };
 		A1F9E5951428671E00A69E49 /* tagOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tagOverlay.png; path = Classes/tagOverlay.png; sourceTree = "<group>"; };
 		E29A5E3B1239C42A008BB149 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -126,12 +143,12 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1D3623240D0F684500981E51 /* PhotoAppDelegate.h */,
+				1D3623250D0F684500981E51 /* PhotoAppDelegate.m */,
 				A1F1FF9E146007ED005FAB2F /* TableView */,
 				A1EF3DA3144419710087972B /* OnePhotoController */,
 				A11CD1881427277B00B6824F /* DataBase */,
 				8FBE5D87131DC988001603C7 /* Image Picker */,
-				1D3623240D0F684500981E51 /* PhotoAppDelegate.h */,
-				1D3623250D0F684500981E51 /* PhotoAppDelegate.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -147,6 +164,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				A1F82E8D1462A3AD00BED207 /* TableViewCell */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -169,6 +187,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A1F82E861462A01F00BED207 /* TextController.xib */,
+				184C5203144D703D00F0494A /* UserTableController.xib */,
+				181D58F41447E0B10092AE68 /* DeleteMeController.xib */,
+				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
+				A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */,
+				A1F82E2C1462612F00BED207 /* PlaylistDetailController.xib */,
 				A10F000014593E7A00D007F3 /* playlist.png */,
 				A100BFB314455FE300D85BD6 /* left.png */,
 				A10F000214593E7F00D007F3 /* albums.png */,
@@ -178,11 +202,7 @@
 				A100BFB614455FE300D85BD6 /* right@2x.png */,
 				A11401C41440016F007B4B95 /* logo.jpg */,
 				A1F9E5951428671E00A69E49 /* tagOverlay.png */,
-				184C5203144D703D00F0494A /* UserTableController.xib */,
-				181D58F41447E0B10092AE68 /* DeleteMeController.xib */,
-				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* PhotoApp-Info.plist */,
-				A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -254,8 +274,23 @@
 				A1F1FFA6146007F9005FAB2F /* UserTableController.m */,
 				A1F1FFA7146007F9005FAB2F /* TextController.h */,
 				A1F1FFA8146007F9005FAB2F /* TextController.m */,
+				A1F82E831462909100BED207 /* PlaylistDetailController.h */,
+				A1F82E841462909100BED207 /* PlaylistDetailController.m */,
 			);
 			name = TableView;
+			sourceTree = "<group>";
+		};
+		A1F82E8D1462A3AD00BED207 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				A1F82E881462A39E00BED207 /* TextFieldCell.h */,
+				A1F82E891462A39F00BED207 /* TextFieldCell.m */,
+				A1F82E8A1462A3A000BED207 /* TextFieldCell.xib */,
+				A1F82E8E1462A40500BED207 /* SwitchButtonCell.h */,
+				A1F82E8F1462A40500BED207 /* SwitchButtonCell.m */,
+				A1F82E901462A40500BED207 /* SwitchButtonCell.xib */,
+			);
+			name = TableViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -323,6 +358,10 @@
 				A10FFFFF14593E3F00D007F3 /* person.png in Resources */,
 				A10F000114593E7A00D007F3 /* playlist.png in Resources */,
 				A10F000314593E7F00D007F3 /* albums.png in Resources */,
+				A1F82E2D1462612F00BED207 /* PlaylistDetailController.xib in Resources */,
+				A1F82E871462A01F00BED207 /* TextController.xib in Resources */,
+				A1F82E8C1462A3A200BED207 /* TextFieldCell.xib in Resources */,
+				A1F82E921462A40500BED207 /* SwitchButtonCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +387,9 @@
 				A1F1FFAC146007F9005FAB2F /* UserTableController.m in Sources */,
 				A1F1FFAD146007F9005FAB2F /* TextController.m in Sources */,
 				A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */,
+				A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */,
+				A1F82E8B1462A3A200BED207 /* TextFieldCell.m in Sources */,
+				A1F82E911462A40500BED207 /* SwitchButtonCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
