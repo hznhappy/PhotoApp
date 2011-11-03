@@ -14,6 +14,6 @@
 }
 
 @property (nonatomic, retain) NSMutableArray *assetGroups;
-
+-(void)getAssetGroup;
 @end
 

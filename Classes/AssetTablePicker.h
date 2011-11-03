@@ -10,17 +10,14 @@
 #import "Thumbnail.h"
 #import "sqlite3.h"
 #import "DBOperation.h"
-#import "PlayPhotos.h"
 
 
 
 
-@interface AssetTablePicker : UIViewController<UIPickerViewDelegate, UIPickerViewDataSource,UINavigationControllerDelegate>
+@interface AssetTablePicker : UIViewController<UINavigationControllerDelegate>
 {
     UITableView *table;
-    UIToolbar *toolBar;
     UIBarButtonItem *show;
-    UIPickerView *buttonPicker;
 
 	ALAssetsGroup *assetGroup;
 	
@@ -31,19 +28,16 @@
     NSMutableArray *allPhotoes; //store all the photoes;
     NSArray	*pickerViewArray;
     NSMutableArray *assetArrays;
-	
+	NSMutableArray *urlsArray;
 	
     DBOperation *dataBase;
 	Thumbnail *thuView;
-    BOOL showPicker;
     CGRect pickerViewFrame;
 }
-@property (nonatomic,retain)IBOutlet UIToolbar *toolBar;
-@property (nonatomic,retain)IBOutlet UIBarButtonItem *show;
 @property (nonatomic,retain)IBOutlet UITableView *table;
-@property (nonatomic,retain)IBOutlet UIPickerView *buttonPicker;
 
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
+
 @property (nonatomic,retain) DBOperation *dataBase;
 
 @property (nonatomic,retain) NSMutableArray *crwAssets;
@@ -52,10 +46,8 @@
 @property (nonatomic,retain) NSMutableArray *assetArrays;
 @property (nonatomic,retain) NSMutableArray *tagPhotos;
 @property (nonatomic,retain) NSMutableArray *unTagPhotos;
+@property (nonatomic,retain) NSMutableArray *urlsArray;
 -(IBAction)playPhotos;
--(IBAction)setPickerView;
--(IBAction)markNames;
 -(void)loadPhotos;
--(void)selectPlayList;
-
+- (void)displayTag;
 @end

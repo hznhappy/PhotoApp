@@ -20,6 +20,7 @@
     NSDictionary *dic;
     int tagValue;
     sqlite3 *db;
+<<<<<<< HEAD
     NSMutableArray *orderIdList;
     NSMutableArray *orderList;
     NSMutableArray *tagIdAry;
@@ -38,6 +39,18 @@
 //@property(nonatomic,retain)NSMutableArray *playlist_nameOut;
 @property(nonatomic,retain)NSMutableArray *playlistUrl;
 // apply to all views
+=======
+    NSMutableArray *ary;
+    NSMutableArray *tagary;
+    NSMutableArray *playary;
+    NSMutableArray *urlary;
+
+}
+@property(nonatomic,retain)NSMutableArray *urlary;
+@property(nonatomic,retain)NSMutableArray *ary;
+@property(nonatomic,retain)NSMutableArray *tagary;
+@property(nonatomic,retain)NSMutableArray *playary;
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 -(void)openDB;
 -(void)createTable:(NSString *)sql;
 -(void)insertToTable:(NSString *)sql;

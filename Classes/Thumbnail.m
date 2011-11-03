@@ -6,7 +6,6 @@
 #import "Thumbnail.h"
 #import "AssetTablePicker.h"
 #import "PhotoViewController.h"
-#import "SingleViewController.h"
 @implementation Thumbnail
 
 @synthesize asset;

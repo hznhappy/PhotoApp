@@ -72,12 +72,21 @@
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<bool key="IBUIHorizontal">NO</bool>
+<<<<<<< HEAD
 				<object class="IBUINavigationController" key="IBUISelectedViewController" id="774610927">
 					<object class="IBUITabBarItem" key="IBUITabBarItem" id="38005321">
 						<string key="IBUITitle">Person</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">person.png</string>
+=======
+				<object class="IBUINavigationController" key="IBUISelectedViewController" id="515290962">
+					<object class="IBUITabBarItem" key="IBUITabBarItem" id="605261531">
+						<string key="IBUITitle">PlayList</string>
+						<object class="NSCustomResource" key="IBUIImage">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">playlist.png</string>
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
@@ -89,7 +98,11 @@
 					</object>
 					<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					<bool key="IBUIHorizontal">NO</bool>
+<<<<<<< HEAD
 					<object class="IBUINavigationBar" key="IBUINavigationBar" id="113932411">
+=======
+					<object class="IBUINavigationBar" key="IBUINavigationBar" id="106136440">
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 						<nil key="NSNextResponder"/>
 						<int key="NSvFlags">256</int>
 						<string key="NSFrameSize">{0, 0}</string>
@@ -100,12 +113,21 @@
 					</object>
 					<object class="NSMutableArray" key="IBUIViewControllers">
 						<bool key="EncodedWithXMLCoder">YES</bool>
+<<<<<<< HEAD
 						<object class="IBUIViewController" id="598399772">
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="241591876">
 								<string key="IBUITitle">Person</string>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="774610927"/>
+=======
+						<object class="IBUIViewController" id="136113940">
+							<object class="IBUINavigationItem" key="IBUINavigationItem" id="1062404993">
+								<string key="IBUITitle">PlayList</string>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							</object>
+							<reference key="IBUIParentViewController" ref="515290962"/>
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 								<int key="IBUIInterfaceOrientation">1</int>
 								<int key="interfaceOrientation">1</int>
@@ -117,6 +139,10 @@
 				</object>
 				<object class="NSMutableArray" key="IBUIViewControllers">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+<<<<<<< HEAD
+=======
+					<reference ref="515290962"/>
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 					<object class="IBUINavigationController" id="596778407">
 						<object class="IBUITabBarItem" key="IBUITabBarItem" id="749458184">
 							<string key="IBUITitle">Albums</string>
@@ -161,13 +187,19 @@
 							</object>
 						</object>
 					</object>
+<<<<<<< HEAD
 					<reference ref="774610927"/>
 					<object class="IBUINavigationController" id="515290962">
 						<object class="IBUITabBarItem" key="IBUITabBarItem" id="605261531">
 							<string key="IBUITitle">PlayList</string>
+=======
+					<object class="IBUINavigationController" id="774610927">
+						<object class="IBUITabBarItem" key="IBUITabBarItem" id="38005321">
+							<string key="IBUITitle">Person</string>
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 							<object class="NSCustomResource" key="IBUIImage">
 								<string key="NSClassName">NSImage</string>
-								<string key="NSResourceName">playlist.png</string>
+								<string key="NSResourceName">person.png</string>
 							</object>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
@@ -179,7 +211,7 @@
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIHorizontal">NO</bool>
-						<object class="IBUINavigationBar" key="IBUINavigationBar" id="106136440">
+						<object class="IBUINavigationBar" key="IBUINavigationBar" id="113932411">
 							<nil key="NSNextResponder"/>
 							<int key="NSvFlags">256</int>
 							<string key="NSFrameSize">{0, 0}</string>
@@ -190,12 +222,12 @@
 						</object>
 						<object class="NSMutableArray" key="IBUIViewControllers">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBUIViewController" id="136113940">
-								<object class="IBUINavigationItem" key="IBUINavigationItem" id="1062404993">
-									<string key="IBUITitle">PlayList</string>
+							<object class="IBUIViewController" id="598399772">
+								<object class="IBUINavigationItem" key="IBUINavigationItem" id="241591876">
+									<string key="IBUITitle">Person</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
-								<reference key="IBUIParentViewController" ref="515290962"/>
+								<reference key="IBUIParentViewController" ref="774610927"/>
 								<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 									<int key="IBUIInterfaceOrientation">1</int>
 									<int key="interfaceOrientation">1</int>
@@ -286,8 +318,8 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="778130750"/>
 							<reference ref="774610927"/>
-							<reference ref="515290962"/>
 							<reference ref="596778407"/>
+							<reference ref="515290962"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Tab Bar Controller</string>
@@ -352,6 +384,7 @@
 							<reference ref="1062404993"/>
 						</object>
 						<reference key="parent" ref="515290962"/>
+						<string key="objectName">User Table Controller - PlayList</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">65</int>

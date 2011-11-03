@@ -8,31 +8,44 @@
 
 #import "UserTableController.h"
 #import "TextController.h"
+#import "AssetTablePicker.h"
+#import "PlaylistDetailController.h"
 @implementation UserTableController
 @synthesize tableView,list,tools,withlist,withoutlist;
+@synthesize assetGroups;
+@synthesize allUrl;
+@synthesize unTagUrl;
+@synthesize playListUrl;
+@synthesize tagUrl;
+
+#pragma mark -
+#pragma mark UIViewController method
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{       
+    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
+    
+}
+
 -(void)viewDidLoad
 {
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
-    tools.barStyle = UIBarStyleBlack;
-    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
-	
-    
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
     editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
     addButon.style = UIBarButtonItemStyleBordered;
     editButton.style = UIBarButtonItemStyleBordered;
-	[buttons addObject:editButton];
-    [buttons addObject:addButon];
-	[tools setItems:buttons animated:NO];
-	
-	UIBarButtonItem *myBtn = [[UIBarButtonItem alloc] initWithCustomView:tools];
-	self.navigationItem.rightBarButtonItem = myBtn;
-	[addButon release];
+    self.navigationItem.leftBarButtonItem = editButton;
+    self.navigationItem.rightBarButtonItem = addButon;
+    [addButon release];
     [editButton release];
-    [buttons release];
+    
 	da=[[DBOperation alloc]init];
     [da openDB];
+<<<<<<< HEAD
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
     [da createTable:createPlayTable];
     NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
@@ -44,27 +57,139 @@
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [da createTable:createRules];
     self.list=da.playIdAry;
+=======
+    NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    [da createTable:createSQL3];
+    NSString *selectPlay = [NSString stringWithFormat:@"select * from PlayTable"];
+    [da selectFromPlayTable:selectPlay];
+    self.list=da.playary;
+    
+    NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+	self.assetGroups = tempArray;
+    [tempArray release];
+
+    NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];
+    NSMutableArray *tempArray2 = [[NSMutableArray alloc]init];
+    NSMutableArray *tempArray3 = [[NSMutableArray alloc]init];
+    
+    self.allUrl = tempArray1;
+    self.unTagUrl = tempArray2;
+    self.tagUrl = tempArray3;
+    [tempArray1 release];
+    [tempArray2 release];
+    [tempArray3 release];
+    
+    [self getAssetGroup];
+    
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
-	[myBtn release];
-	[tools release];
     [da closeDB];
+   
 	[super viewDidLoad];
 }
+#pragma mark -
+#pragma mark get URL method
+-(void)getAssetGroup{
+    dispatch_async(dispatch_get_main_queue(), ^
+       {
+           NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+           
+           void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
+           {
+               if (group == nil) 
+               {
+                   [self performSelectorOnMainThread:@selector(getAllUrls) withObject:nil waitUntilDone:YES];
+                   [self deleteUnExitUrls];
+                   return;
+               }               
+               [self.assetGroups addObject:group];
+               [group numberOfAssets];
+           };
+           
+           void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
+               
+               UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                                message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+                                                               delegate:nil 
+                                                      cancelButtonTitle:@"Ok" 
+                                                      otherButtonTitles:nil];
+               [alert show];
+               [alert release];
+               
+               NSLog(@"A problem occured %@", [error description]);	                                 
+           };	
+           
+           ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+           [library enumerateGroupsWithTypes:ALAssetsGroupAll
+                                  usingBlock:assetGroupEnumerator 
+                                failureBlock:assetGroupEnumberatorFailure];
+           
+           
+           [library release];
+           NSLog(@"this is the get AssetGroup method %d",[assetGroups count]);
+           [pool release];
+       });
+}
+
+-(void)getAllUrls{
+    [self.allUrl removeAllObjects];
+    for (ALAssetsGroup *group in self.assetGroups) {
+        [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+        [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
+        {         
+            if(result == nil) 
+            {
+                return;
+            }
+            [self.allUrl addObject:[[result defaultRepresentation]url]];
+        }];
+
+    }
+    NSLog(@"get allurl count is :%d",[allUrl count]);
+}
+
+-(void)getUnTagUrls{
+    [unTagUrl removeAllObjects];
+    for (NSURL *urls in allUrl) {
+        if (![tagUrl containsObject:urls]) {
+            [unTagUrl addObject:urls];
+        }
+    }
+    NSLog(@"%d is untag ",[unTagUrl count]);
+
+}
+
+-(void)getTagUrls{
+    [tagUrl removeAllObjects];
+    [da openDB];
+    NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
+    NSMutableArray *photos = [da selectPhotos:selectSql];
+    [da closeDB];
+    for (NSString *dataStr in photos) {
+        NSURL *dbStr = [NSURL URLWithString:dataStr];
+        [self.tagUrl addObject:dbStr];
+    } 
+    NSLog(@"%d is tag",[tagUrl count]);
+}
+
+-(void)deleteUnExitUrls{
+    [self getTagUrls];
+    for (NSURL *tagurl in tagUrl){
+        if (![allUrl containsObject:tagurl]) {
+            [da openDB];
+            NSString *sql = [NSString stringWithFormat:@"DELETE FROM TAG WHERE URL='%@'",tagurl];
+            [da updateTable:sql];
+            [da closeDB];
+        }
+    }    
+}
+
+#pragma mark -
+#pragma Button Action
 -(void)table1
 {
     [self viewDidLoad];
     [self.tableView reloadData];
-}
--(void)viewWillAppear:(BOOL)animated
-{
-    tools.alpha=1;
-    tools.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
-}
--(void)viewWillDisappear:(BOOL)animated
-{       tools.alpha=0;
-    self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
- 
 }
 -(IBAction)toggleEdit:(id)sender
 {
@@ -84,9 +209,12 @@
 	[self.navigationController pushViewController:ts animated:YES];
 }
 
+#pragma mark -
+#pragma mark TableView delegate method
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-        return[self.list count];
+
+    return ([list count]+2);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -96,15 +224,33 @@
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
+<<<<<<< HEAD
     da=[[DBOperation alloc]init];
     [da openDB];
     User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",[list objectAtIndex:indexPath.row]);
+=======
+    
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
     [cell.textLabel setNumberOfLines:10];
     cell.textLabel.lineBreakMode=UILineBreakModeWordWrap;
+    
+    if (indexPath.row == [list count]) {
+        cell.textLabel.text = @"UNTAG";
+    }
+    else if (indexPath.row == [list count]+1) {
+        cell.textLabel.text = @"ALL";
+    }else{
+        da=[[DBOperation alloc]init];
+        [da openDB];
+        NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+        [da createTable:createSQL3];
+        User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
+        NSLog(@"%@",[list objectAtIndex:indexPath.row]);
     cell.textLabel.text=[NSString stringWithFormat:@"%@",user3.name];
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     [da closeDB];
+    }
     return cell;
 }
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -115,13 +261,32 @@
     [da selectFromRulesAndTag:[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",da.playlistUrl);
     [da closeDB];
+<<<<<<< HEAD
    // select t.url,t.id from tag t,rules r where r.playlist_id=4 and r.user_id=t.id and r.playlist_rules=1 and t.url not in (select t2.url from tag t2,rules r2 where r2.playlist_id=4 and r2.playlist_rules=0 and r2.user_id=t2.id);
 
     [self.navigationController popViewControllerAnimated:YES];
+=======
+    
+    AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
+    if (indexPath.row == [list count]) {
+        [self getTagUrls];
+        [self getUnTagUrls];
+        assetPicker.urlsArray = unTagUrl;
+    }
+    else if (indexPath.row == [list count]+1) {
+        assetPicker.urlsArray = allUrl;
+    }
+    else
+    assetPicker.urlsArray = playListUrl;
+    [self.navigationController pushViewController:assetPicker animated:YES];
+    [assetPicker release];
+    
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     [da openDB];
     User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
+<<<<<<< HEAD
     TextController *ts=[[TextController alloc]init];
     ts.str1 = user3.name;
     NSLog(@"re%d",[[list objectAtIndex:indexPath.row]intValue]);
@@ -161,6 +326,13 @@
     [[NSNotificationCenter defaultCenter]postNotificationName:@"edit" 
                                                        object:self 
                                                      userInfo:dic1];
+=======
+    [da closeDB];
+    PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
+    detailController.listName = user3.name;
+	[self.navigationController pushViewController:detailController animated:YES];
+    [detailController release];
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 }
 -(IBAction)toggleback:(id)sender
 {
@@ -170,6 +342,7 @@
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+<<<<<<< HEAD
 {   [da openDB];
     NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",deletePlayTable );
@@ -177,11 +350,24 @@
     NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",deleteRules);
     [da deleteDB:deleteRules]; 
+=======
+{   
+    if (indexPath.row==[list count]||indexPath.row == [list count]+1) {
+        return;
+    }
+    [da openDB];
+    NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    [da createTable:createSQL3];
+    NSString *countSQL = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
+    NSLog(@"%@",countSQL);
+    [da deleteDB:countSQL];  
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
     [da closeDB];
     [self viewDidLoad];
     [self.tableView reloadData];
     
 }
+<<<<<<< HEAD
 
 
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
@@ -208,7 +394,15 @@
 } 
 
 
+=======
+#pragma mark -
+#pragma mark memory method
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 - (void)dealloc {
+    [allUrl release];
+    [unTagUrl release];
+    [tagUrl release];
+    [playListUrl release];
     [tableView release];
     [list release];
     [super dealloc];

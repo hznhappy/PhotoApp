@@ -9,7 +9,11 @@
 #import "DBOperation.h"
 #import "User.h"
 @implementation DBOperation
+<<<<<<< HEAD
 @synthesize orderIdList,orderList,tagIdAry,playIdAry,playlist_name,playlistUrl,playlist_Id;
+=======
+@synthesize ary,tagary,playary,urlary;
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
 -(NSString *)filePath{
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *directory = [paths objectAtIndex:0];
@@ -94,17 +98,30 @@
     
 }
 -(void)selectFromTAG:(NSString *)sql
+<<<<<<< HEAD
 {tagIdAry=[NSMutableArray arrayWithCapacity:40];
+=======
+{
+    tagary=[NSMutableArray arrayWithCapacity:1000];
+    urlary = [NSMutableArray arrayWithCapacity:20];
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
     NSString *newid;
+    NSString *url;
     sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
+<<<<<<< HEAD
 
             [tagIdAry addObject:newid];
             
            
+=======
+            url=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 1)];
+            [tagary addObject:newid];
+            [urlary addObject:url];
+>>>>>>> 15e8e02534a590f74c6e26c281e6653427a25607
         }
 		
     }	
@@ -223,7 +240,8 @@
 }
 
 -(void)deleteDB:(NSString *)sql
-{char *et;
+{
+    char *et;
        if (sqlite3_exec(db, [sql UTF8String], NULL, NULL, &et) != SQLITE_OK) {
      NSAssert1(0,@"Updating table failed.%s",et);
     }    
