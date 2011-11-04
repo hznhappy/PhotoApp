@@ -232,7 +232,7 @@ else
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
                                                      userInfo:dic1];
-
+    
     for(int i=0;i<[listUserIdIn count];i++)
     {
         NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%@',%d,'%@','%@')",Rules,playlist_id,1,
@@ -249,42 +249,41 @@ else
     }
     NSArray *withNameList= [nameIn.text componentsSeparatedByString:@","];
     NSArray *withoutNameList= [nameOut.text componentsSeparatedByString:@","];
-    NSString *selectRulesId = [NSString stringWithFormat:@"select user_name from rules where playlist_id=%d and playlist_rules=%d",[playlist_id intValue],1];
-    [da selectIdFromRules:selectRulesId];
-    NSLog(@"play%@",da.playlist_Id);
-    for(int i=0;i<[da.playlist_Id count];i++)
+    NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[playlist_id intValue],1];
+    [da selectFromRules:selectRules];
+    NSLog(@"play%@",da.playlist_UserName);
+    for(int i=0;i<[da.playlist_UserName count];i++)
     {
-        if([withNameList containsObject:[da.playlist_Id objectAtIndex:i]])
+        if([withNameList containsObject:[da.playlist_UserName objectAtIndex:i]])
         {
             continue;
         }
         else
         {
-            NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and playlist_rules=%d and user_name='%@'",[playlist_id intValue],1,[da.playlist_Id objectAtIndex:i]];
+            NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and playlist_rules=%d and user_name='%@'",[playlist_id intValue],1,[da.playlist_UserName objectAtIndex:i]];
             NSLog(@"%@",deleteRules);
             [da deleteDB:deleteRules];
             
         }
     }
-    NSString *selectRulesId1 = [NSString stringWithFormat:@"select user_name from rules where playlist_id=%d and playlist_rules=%d",[playlist_id intValue],0];
-    [da selectIdFromRules:selectRulesId1];
-    NSLog(@"play%@",da.playlist_Id);
-    for(int i=0;i<[da.playlist_Id count];i++)
+    NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[playlist_id intValue],0];
+    [da selectFromRules:selectRules1];
+    NSLog(@"play%@",da.playlist_UserName);
+    for(int i=0;i<[da.playlist_UserName count];i++)
     {
-        if([withoutNameList containsObject:[da.playlist_Id objectAtIndex:i]])
+        if([withoutNameList containsObject:[da.playlist_UserName objectAtIndex:i]])
         {
             continue;
         }
         else
         {
-            NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and playlist_rules=%d and user_name='%@'",[playlist_id intValue],0,[da.playlist_Id objectAtIndex:i]];
+            NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and playlist_rules=%d and user_name='%@'",[playlist_id intValue],0,[da.playlist_UserName objectAtIndex:i]];
             NSLog(@"%@",deleteRules);
             [da deleteDB:deleteRules];
             
         }
     }
-  }
-
+}
 - (void)dealloc
 { 
     

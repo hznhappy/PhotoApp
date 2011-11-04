@@ -25,9 +25,11 @@
     NSMutableArray *playListUrl;
     NSMutableArray *assetGroups;
     NSMutableArray *tagUrl;
+    NSMutableArray *SUM;
     
 }
 @property(nonatomic,retain)NSMutableArray *assetGroups;
+@property(nonatomic,retain)NSMutableArray *SUM;
 @property(nonatomic,retain)NSMutableArray *allUrl;
 @property(nonatomic,retain)NSMutableArray *unTagUrl;
 @property(nonatomic,retain)NSMutableArray *playListUrl;

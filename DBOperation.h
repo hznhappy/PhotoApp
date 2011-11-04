@@ -20,26 +20,24 @@
     NSDictionary *dic;
     int tagValue;
     sqlite3 *db;
-
     NSMutableArray *orderIdList;
     NSMutableArray *orderList;
     NSMutableArray *tagIdAry;
     NSMutableArray *playIdAry;
-    NSMutableArray *playlist_name;
-    NSMutableArray *playlist_Id;
-   // NSMutableArray *playlist_nameOut;
-    NSMutableArray *playlistUrl;
+    NSMutableArray *playlist_UserName;
+    NSMutableArray *playlist_UserId;
+    // NSMutableArray *playlist_nameOut;
+    NSMutableArray *tagUrl;
 }
 @property(nonatomic,retain)NSMutableArray *orderIdList;
 @property(nonatomic,retain)NSMutableArray *orderList;
 @property(nonatomic,retain)NSMutableArray *tagIdAry;
 @property(nonatomic,retain)NSMutableArray *playIdAry;
-@property(nonatomic,retain)NSMutableArray *playlist_name;
-@property(nonatomic,retain)NSMutableArray *playlist_Id;
+@property(nonatomic,retain)NSMutableArray *playlist_UserName;
+@property(nonatomic,retain)NSMutableArray *playlist_UserId;
 //@property(nonatomic,retain)NSMutableArray *playlist_nameOut;
-@property(nonatomic,retain)NSMutableArray *playlistUrl;
+@property(nonatomic,retain)NSMutableArray *tagUrl;
 // apply to all views
-
 -(void)openDB;
 -(void)createTable:(NSString *)sql;
 -(void)insertToTable:(NSString *)sql;
@@ -49,12 +47,10 @@
 
 // apply to DeleteMeController , PopupPanelView for retreiving user_id  order by idOrder or playIdOrder
 -(void)selectOrderId:(NSString *)sql;
-//apply to UserTableController for retreiving user_name from Rules
--(void)selectNameFromRules:(NSString *)sql;
-//apply to UserTableController to retreiving user_id from rules;
--(void)selectIdFromRules:(NSString *)sql;
+//apply to UserTableController for retreiving user_id user_name from Rules
+-(void)selectFromRules:(NSString *)sql;
 //apply to UserTableController for retreiving url from TAG and Rules
--(void)selectFromRulesAndTag:(int)id;
+//-(void)selectFromRulesAndTag:(int)id;
 // apply to PhotoViewController PopupPanelView , DeleteMeController ,UserTableController for retreiving tag_id,tag_url from tag table
 -(void)selectFromTAG:(NSString *)sql;
 //apply to UserTableController for retreiving playlist_id,playlist_name from palytable
