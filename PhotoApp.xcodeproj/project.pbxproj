@@ -28,6 +28,8 @@
 		A10F000314593E7F00D007F3 /* albums.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F000214593E7F00D007F3 /* albums.png */; };
 		A10FFFFF14593E3F00D007F3 /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = A10FFFFE14593E3F00D007F3 /* person.png */; };
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
+		A116EB681463E35D00BE9BDA /* AnimaSelectController.m in Sources */ = {isa = PBXBuildFile; fileRef = A116EB661463E35D00BE9BDA /* AnimaSelectController.m */; };
+		A116EB691463E35D00BE9BDA /* AnimaSelectController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A116EB671463E35D00BE9BDA /* AnimaSelectController.xib */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
 		A1B97D90145699BE00F65806 /* AssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */; };
@@ -84,6 +86,9 @@
 		A10F000214593E7F00D007F3 /* albums.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = albums.png; sourceTree = "<group>"; };
 		A10FFFFE14593E3F00D007F3 /* person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = person.png; sourceTree = "<group>"; };
 		A11401C41440016F007B4B95 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
+		A116EB651463E35D00BE9BDA /* AnimaSelectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimaSelectController.h; sourceTree = "<group>"; };
+		A116EB661463E35D00BE9BDA /* AnimaSelectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimaSelectController.m; sourceTree = "<group>"; };
+		A116EB671463E35D00BE9BDA /* AnimaSelectController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnimaSelectController.xib; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssetTablePicker.xib; sourceTree = "<group>"; };
@@ -276,6 +281,9 @@
 				A1F1FFA8146007F9005FAB2F /* TextController.m */,
 				A1F82E831462909100BED207 /* PlaylistDetailController.h */,
 				A1F82E841462909100BED207 /* PlaylistDetailController.m */,
+				A116EB651463E35D00BE9BDA /* AnimaSelectController.h */,
+				A116EB661463E35D00BE9BDA /* AnimaSelectController.m */,
+				A116EB671463E35D00BE9BDA /* AnimaSelectController.xib */,
 			);
 			name = TableView;
 			sourceTree = "<group>";
@@ -362,6 +370,7 @@
 				A1F82E8C1462A3A200BED207 /* TextFieldCell.xib in Resources */,
 				A1F82E921462A40500BED207 /* SwitchButtonCell.xib in Resources */,
 				182F212E1462AF0400C3C74B /* MainWindow.xib in Resources */,
+				A116EB691463E35D00BE9BDA /* AnimaSelectController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +399,7 @@
 				A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */,
 				A1F82E8B1462A3A200BED207 /* TextFieldCell.m in Sources */,
 				A1F82E911462A40500BED207 /* SwitchButtonCell.m in Sources */,
+				A116EB681463E35D00BE9BDA /* AnimaSelectController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
