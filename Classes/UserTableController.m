@@ -67,7 +67,7 @@
     NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray2 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray3 = [[NSMutableArray alloc]init];
-    self.SUM=[NSMutableArray arrayWithCapacity:40];
+    self.SUM=[[NSMutableSet alloc]init];
     self.allUrl = tempArray1;
     self.unTagUrl = tempArray2;
     self.tagUrl = tempArray3;
@@ -203,28 +203,6 @@
 {
     TextController *ts1=[[TextController alloc]init];
 	[self.navigationController pushViewController:ts1 animated:YES];
-    NSSet *f = [[NSSet alloc] initWithObjects:
-                            @"A",
-                            @"B",
-                            @"C",
-                            nil
-                            ];
-    NSSet *h = [[NSSet alloc] initWithObjects:
-                         @"A",
-                         @"D",
-                         @"GF",
-                         @"JH",
-                         @"KJ",
-                         nil
-                         ];
-    //for(int i=0;i<[f count];i++)
-    //{
-    
-    //if([f intersectsSet:h] == YES){
-        //NSLog(@"EWEW");
-        // NSSet * b=[f intersectSet:h];
-        //}
-    //}
 }
 
 #pragma mark -
@@ -244,12 +222,7 @@
 	}
     da=[[DBOperation alloc]init];
     [da openDB];
-   /* User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
-    NSLog(@"%@",[list objectAtIndex:indexPath.row]);
-    [cell.textLabel setNumberOfLines:10];
-    cell.textLabel.lineBreakMode=UILineBreakModeWordWrap;
-    */
-    if (indexPath.row == [list count]) {
+     if (indexPath.row == [list count]) {
         cell.textLabel.text = @"UNTAG";
     }
     else if (indexPath.row == [list count]+1) {
@@ -270,18 +243,7 @@
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *dic = [NSDictionary dictionaryWithObject:[tableView cellForRowAtIndexPath:indexPath].textLabel.text forKey:@"listTitle"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"SetTitle" object:self userInfo:dic];
-  /*  da=[[DBOperation alloc]init];
-    [da openDB];
-    //[da selectFromRulesAndTag:[[list objectAtIndex:indexPath.row]intValue]];
-    NSLog(@"%@",da.playlistUrl);
-    [da closeDB];
-
-   // select t.url,t.id from tag t,rules r where r.playlist_id=4 and r.user_id=t.id and r.playlist_rules=1 and t.url not in (select t2.url from tag t2,rules r2 where r2.playlist_id=4 and r2.playlist_rules=0 and r2.user_id=t2.id);
-
-    [self.navigationController popViewControllerAnimated:YES];
-*/
-    
-    AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
+     AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
     if (indexPath.row == [list count]) {
         [self getTagUrls];
         [self getUnTagUrls];
@@ -294,13 +256,15 @@
     {
         da=[[DBOperation alloc]init];
         [da openDB];
-        NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
-        [da createTable:createRules];
+        NSString *createRules1=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
+        [da createTable:createRules1];
         NSLog(@"%d",[[list objectAtIndex:indexPath.row]intValue]);
-        NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",1,1];
+        NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[[list objectAtIndex:indexPath.row]intValue],1];
         [da selectFromRules:selectRules];
         NSLog(@"RRERRE");
         NSLog(@"%@",da.playlist_UserId);
+         SUM=[[NSMutableSet alloc]init];
+        SUM=NULL;
        for(int i=0;i<[da.playlist_UserId count];i++)
         {
             NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
@@ -313,35 +277,85 @@
             {
                 
                 SUM=da.tagUrl;
+                NSLog(@"WEEWEW");
+                NSLog(@"DIYICI %@",SUM);
+                continue;
                 
             }
             else
             {
-                for (NSString *url in list) {
-                    if ([SUM containsObject:url]) {
-                        [unTagUrl addObject:url];
-                    }
-                }
-                [SUM removeAllObjects];
-                SUM=unTagUrl;
-
-                // if([SUM intersectsSet:list] == YES)
-               // {
-                    
-               // }
-                //SUM intersect(SUM, list);
+                [SUM intersectSet:da.tagUrl];
+                NSLog(@"DIERCI %@",SUM);
                 
             }
+            NSLog(@"我%@",SUM);
         }
+        
+       NSString *selectRules0= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[[list objectAtIndex:indexPath.row]intValue],0];
+        [da selectFromRules:selectRules0];
+        NSLog(@"WITHOUT%@",da.playlist_UserId);
+        for(int i=0;i<[da.playlist_UserId count];i++)
+        {
+        
+            NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
+            [da createTable:createTag];
+            NSLog(@"CHAXUN");
+            NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
+            [da selectFromTAG:selectTag];
+            NSLog(@"%@",da.tagUrl);
+            if(SUM==NULL)
+            {
+                  NSMutableSet *t=[[NSMutableArray alloc]init];
+                for (NSURL *url in allUrl) {
+                    NSString *str= [NSString stringWithFormat:@"%@",url];
+                    NSLog(@"DDDDD%@",str);
+                  
+                     [t addObject:str];
+                    
+                    NSLog(@"1111%@",t);
+                }
+               SUM=t;
+                 for (NSString *data in da.tagUrl)
+                {
+                   if([SUM containsObject:data]) 
+                   {
+                       [SUM removeObject:data];
+                   }
+                       
+                }
+                NSLog(@"EE%@",SUM);
+                
+            }
+            else
+            {
+                for (NSString *data in da.tagUrl)
+                {
+                    if([SUM containsObject:data]) 
+                    {
+                        [SUM removeObject:data];
+                    }
+                    
+                }
+                
+            }
+            NSLog(@"我%@",SUM);
+        }
+
+        [da closeDB];
+        NSLog(@"还%@",SUM);
+        NSLog(@"%d",[SUM count]);
+        NSMutableArray *dbUrl=[[NSMutableArray alloc]init];
         for (NSString *dataStr in SUM) {
             NSURL *dbStr = [NSURL URLWithString:dataStr];
-            [self.tagUrl addObject:dbStr];
-        } 
+            [dbUrl addObject:dbStr];
+        }
+            assetPicker.urlsArray =dbUrl;
+            NSLog(@"777%@",assetPicker.urlsArray);
+        
 
-         assetPicker.urlsArray =tagUrl;
-        [da closeDB];
-    }
-    [self.navigationController pushViewController:assetPicker animated:YES];
+
+        } 
+      [self.navigationController pushViewController:assetPicker animated:YES];
     [assetPicker release];
     
 
@@ -384,19 +398,11 @@
      }
      }
      [da closeDB];
-   //  [self.navigationController pushViewController:ts animated:YES];
+     [self.navigationController pushViewController:ts animated:YES];
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:[list objectAtIndex:indexPath.row],@"playlist_id",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"edit" 
                                                        object:self 
                                                      userInfo:dic1];
-
-    //[da closeDB];
-    PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
-    detailController.listName = user3.name;
-	[self.navigationController pushViewController:detailController animated:YES];
-    [detailController release];
-    //[self.navigationController pushViewController:ts animated:YES];
-
 }
 -(IBAction)toggleback:(id)sender
 {
