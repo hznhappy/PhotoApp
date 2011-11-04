@@ -9,24 +9,18 @@
 #import "PlaylistDetailController.h"
 #import "TextFieldCell.h"
 #import "SwitchButtonCell.h"
-
+#import "TextController.h"
+#import "User.h"
+#import "DBOperation.h"
 @implementation PlaylistDetailController
 @synthesize listTable;
 @synthesize listName;
-@synthesize mySwitch;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize mySwc,a;
 
 - (void)dealloc
 {
-    [mySwitch release];
-    [listTable release];
+    //[listTable release];
+    [dataBase release];
     [listName release];
     [super dealloc];
 }
@@ -51,81 +45,184 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
-{
-    UISwitch *tempSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(0, 0, 94, 27)];
-    self.mySwitch = tempSwitch;
-    [tempSwitch release];
+{ NSLog(@"EE%@",a);
+        mySwc = NO;
+    dataBase=[[DBOperation alloc]init];
+    
     [super viewDidLoad];
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	[playlistName resignFirstResponder];
-}
 
 #pragma mark -
 #pragma mark UITableView Delegate method
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (mySwitch.on == YES) 
+    if (mySwc) 
         return 4;
     else
         return 3;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *CellIdentifier = @"CellIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    if (indexPath.row == 0) {
-        playlistName = [[UITextField alloc]initWithFrame:CGRectMake(30, 10, 280, 40)];
-        playlistName.text = listName;
-        playlistName.returnKeyType = UIReturnKeyDone;
-        [playlistName addTarget:self
-                          action:@selector(hidekeyBoard)
-                forControlEvents:UIControlEventEditingDidEndOnExit];
-        [cell.contentView addSubview:playlistName];
-        [playlistName release];
-    }
-    if (indexPath.row == 1) {
-        cell.textLabel.text = @"Transitions";
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    if (indexPath.row == 2) {
-        cell.textLabel.text = @"PlayMusic";
-        cell.accessoryView = self.mySwitch;
-    }
-    if (mySwitch.on == YES) {
-        if (indexPath.row == 4) {
+   	
+    int rowNum=indexPath.row;
+    UITableViewCell * cell=nil;
+    NSString * cellIdentifier=nil;
+    NSString *textField= @"textFieldCell";
+    NSString *switchField=@"switchFieldCell";
+    NSString *transField=@"Transitions";
+    NSString *musicField=@"Music";
+    switch (rowNum) {
+        case 0:
+            cellIdentifier = textField;
+            TextFieldCell *textCell =(TextFieldCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if (textCell == nil) {
+                NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:@"TextFieldCell" owner:self options:nil];
+                for (id currentObject in cellArray) {
+                    if([currentObject isKindOfClass:[UITableViewCell class]]){
+                        textCell = (TextFieldCell *)currentObject;
+                        break;
+                    }
+                }
+            }
+            textCell.myTextField.text = listName;
+            cell=(UITableViewCell *) textCell;
+            break;
+        case 1:
+            cellIdentifier = transField;
+            cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] 
+                         initWithStyle:UITableViewCellStyleDefault 
+                         reuseIdentifier:cellIdentifier]
+                        autorelease];
+                
+            }
+            cell.textLabel.text = @"Transitions";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            
+            break;
+        case 2:
+            cellIdentifier = switchField;
+            SwitchButtonCell *switchCell =(SwitchButtonCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if (switchCell == nil) {
+                NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:@"SwitchButtonCell" owner:self options:nil];
+                for (id currentObject in cellArray) {
+                    if([currentObject isKindOfClass:[UITableViewCell class]]){
+                        switchCell = (SwitchButtonCell *)currentObject;
+                        break;
+                    }
+                }
+            }        
+            switchCell.myLabel.text = @"PlayMusic";
+            switchCell.selectionStyle = UITableViewCellEditingStyleNone;
+            [switchCell.myCellSwitch addTarget:self action:@selector(updateTable:) forControlEvents:UIControlEventTouchUpInside];
+            cell=(UITableViewCell *) switchCell;
+            break;
+        case 3:
+            cellIdentifier = musicField;
+            cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] 
+                         initWithStyle:UITableViewCellStyleDefault 
+                         reuseIdentifier:cellIdentifier]
+                        autorelease ];
+                
+            }
             cell.textLabel.text = @"Music";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
+            break;
+        default:
+            cell=nil;
+            break;
     }
-    return cell;
+    return cell;  
 }
--(void)setEditing:(BOOL)editing animated:(BOOL)animated{
-    editing = mySwitch.on;
-    if (editing) {
-        [self.listTable insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:3  inSection:0]] withRowAnimation:UITableViewRowAnimationMiddle];
-        
-    }else {
-        [self.listTable deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:4 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
-    }
-    [super setEditing:editing animated:animated];
-}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
 }
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     
+    [dataBase openDB];
+    
+    
+ 
+    
+    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    [dataBase createTable:createPlayTable];
+    NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
+    [dataBase createTable:createPlayIdTable];
+    NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdTable"];
+    [dataBase selectOrderId:selectPlayIdOrder];
+    
+    NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
+    [dataBase selectFromPlayTable:selectPlayTable];
+    //self.list=da.playIdAry;
+    NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
+    [dataBase createTable:createRules];
+    
+
+    
+    
+    User *user3 = [dataBase getUserFromPlayTable:[[dataBase.playIdAry objectAtIndex:indexPath.row]intValue]];
+    
+    TextController *ts=[[TextController alloc]init];
+    ts.str1 = user3.name;
+    NSLog(@"re%d",[[dataBase.playIdAry objectAtIndex:indexPath.row]intValue]);
+    NSString *selectRulesIn= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],1];
+    [dataBase selectFromRules:selectRulesIn];
+    for(int i=0;i<[dataBase.playlist_UserName count];i++)
+    {
+        if(ts.str2==nil||ts.str2.length==0)
+        {
+            
+            ts.str2=[dataBase.playlist_UserName objectAtIndex:i];
+        }
+        else
+        {  ts.str2=[ts.str2 stringByAppendingString:@","];
+            ts.str2=[ts.str2 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:i]];
+        }
+        
+    }
+    NSString *selectRulesOut= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],0];
+    [dataBase selectFromRules:selectRulesOut];
+    for(int j=0;j<[dataBase.playlist_UserName count];j++)
+    {
+        if(ts.str3==nil||ts.str3.length==0)
+        {
+            
+            ts.str3=[dataBase.playlist_UserName objectAtIndex:j];
+        }
+        else
+        {  ts.str3=[ts.str3 stringByAppendingString:@","];
+            ts.str3=[ts.str3 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:j]];
+        }
+    }
+    [dataBase closeDB];
+    [self.navigationController pushViewController:ts animated:YES];
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:[dataBase.playIdAry objectAtIndex:indexPath.row],@"playlist_id",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"edit" 
+                                                       object:self 
+                                                     userInfo:dic1];
 }
--(void)hidekeyBoard{
-    [playlistName resignFirstResponder];
+-(void)updateTable:(id)sender{
+    UISwitch *newSwitcn  = (UISwitch *)sender;
+    mySwc = newSwitcn.on;
+    if (newSwitcn.on) {
+        [listTable beginUpdates];
+        [listTable insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+        [listTable endUpdates];
+    }else{
+        [listTable beginUpdates];
+        [listTable deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+        [listTable endUpdates];
+    }
 }
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    listTable =nil;
+    listName = nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
@@ -133,7 +230,7 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	return (UIInterfaceOrientationIsPortrait(interfaceOrientation) || interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 @end

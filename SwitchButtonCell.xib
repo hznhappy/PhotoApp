@@ -51,15 +51,21 @@
 							<object class="IBUILabel" id="539001649">
 								<reference key="NSNextResponder" ref="982672504"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{20, 11}, {154, 21}}</string>
+								<string key="NSFrame">{{14, 11}, {154, 21}}</string>
 								<reference key="NSSuperview" ref="982672504"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="988034080"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<string key="IBUIText">Label</string>
+								<object class="NSFont" key="IBUIFont">
+									<string key="NSName">Helvetica-Bold</string>
+									<double key="NSSize">17</double>
+									<int key="NSfFlags">16</int>
+								</object>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MCAwIDAAA</bytes>
@@ -71,19 +77,19 @@
 							<object class="IBUISwitch" id="988034080">
 								<reference key="NSNextResponder" ref="982672504"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{217, 8}, {94, 27}}</string>
+								<string key="NSFrame">{{182, 8}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="982672504"/>
 								<reference key="NSWindow"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentHorizontalAlignment">0</int>
 								<int key="IBUIContentVerticalAlignment">0</int>
-								<bool key="IBUIOn">YES</bool>
 							</object>
 						</object>
 						<string key="NSFrameSize">{320, 44}</string>
 						<reference key="NSSuperview" ref="290471619"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="539001649"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MCAwAA</bytes>
@@ -106,6 +112,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<int key="IBUISeparatorStyle">1</int>
 				<reference key="IBUIContentView" ref="982672504"/>
+				<string key="IBUIReuseIdentifier">switchButtonCell</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -114,18 +121,26 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">myLabel</string>
-						<reference key="source" ref="372490531"/>
+						<reference key="source" ref="290471619"/>
 						<reference key="destination" ref="539001649"/>
 					</object>
-					<int key="connectionID">6</int>
+					<int key="connectionID">9</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">mySwitch</string>
-						<reference key="source" ref="372490531"/>
+						<string key="label">accessoryView</string>
+						<reference key="source" ref="290471619"/>
 						<reference key="destination" ref="988034080"/>
 					</object>
-					<int key="connectionID">8</int>
+					<int key="connectionID">11</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">myCellSwitch</string>
+						<reference key="source" ref="290471619"/>
+						<reference key="destination" ref="988034080"/>
+					</object>
+					<int key="connectionID">12</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -153,8 +168,8 @@
 						<reference key="object" ref="290471619"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="539001649"/>
 							<reference ref="988034080"/>
+							<reference ref="539001649"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -174,16 +189,16 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="NSArray" key="dict.sortedKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>-1.CustomClassName</string>
 					<string>-2.CustomClassName</string>
+					<string>4.CustomClassName</string>
 					<string>4.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>7.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>SwitchButtonCell</string>
 					<string>UIResponder</string>
+					<string>SwitchButtonCell</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -201,7 +216,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">8</int>
+			<int key="maxID">12</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -213,31 +228,31 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>myCellSwitch</string>
 							<string>myLabel</string>
-							<string>mySwitch</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UILabel</string>
 							<string>UISwitch</string>
+							<string>UILabel</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>myCellSwitch</string>
 							<string>myLabel</string>
-							<string>mySwitch</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
-								<string key="name">myLabel</string>
-								<string key="candidateClassName">UILabel</string>
+								<string key="name">myCellSwitch</string>
+								<string key="candidateClassName">UISwitch</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">mySwitch</string>
-								<string key="candidateClassName">UISwitch</string>
+								<string key="name">myLabel</string>
+								<string key="candidateClassName">UILabel</string>
 							</object>
 						</object>
 					</object>

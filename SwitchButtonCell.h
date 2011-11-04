@@ -10,10 +10,10 @@
 
 
 @interface SwitchButtonCell : UITableViewCell {
-    UISwitch *mySwitch;
+    UISwitch *myCellSwitch;
     UILabel *myLabel;
 }
-@property(nonatomic,retain)IBOutlet UISwitch *mySwitch;
+@property(nonatomic,retain)IBOutlet UISwitch *myCellSwitch;
 @property(nonatomic,retain)IBOutlet UILabel *myLabel;
 
 @end

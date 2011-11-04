@@ -26,7 +26,7 @@
     NSMutableArray *playIdAry;
     NSMutableArray *playlist_UserName;
     NSMutableArray *playlist_UserId;
-    // NSMutableArray *playlist_nameOut;
+   // NSMutableArray *playlist_name;
    NSMutableSet *tagUrl;
 }
 @property(nonatomic,retain)NSMutableArray *orderIdList;
