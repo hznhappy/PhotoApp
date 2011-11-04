@@ -13,12 +13,13 @@
     UITableView *listTable;
     BOOL mySwc;
     NSString *listName;
-    
+    NSString *a;
     DBOperation *dataBase;
 
 }
 @property(nonatomic,retain)IBOutlet UITableView *listTable;
 @property(nonatomic,assign)BOOL mySwc;
 @property(nonatomic,retain)NSString *listName;
+@property(nonatomic,retain)NSString *a;
 -(void)updateTable:(id)sender;
 @end

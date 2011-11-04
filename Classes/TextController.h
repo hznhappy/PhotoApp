@@ -18,10 +18,11 @@
     UITextField *listName;
     UITextField *nameIn;
     UITextField *nameOut;
+    UITextField *nameOr;
     NSString *str1;
     NSString *str2;
     NSString *str3;
-    BOOL bo;
+    int bo;
     NSMutableArray *listUserNameIn;
     NSMutableArray *listUserIdIn;
     NSMutableArray *listUserNameOut;
@@ -36,11 +37,12 @@
 @property(nonatomic,retain)IBOutlet UITextField *listName;
 @property(nonatomic,retain)IBOutlet UITextField *nameIn;
 @property(nonatomic,retain)IBOutlet UITextField *nameOut;
+@property(nonatomic,retain)IBOutlet UITextField *nameOr;
 @property(nonatomic,assign)NSString *str1;
 @property(nonatomic,assign)NSString *str2;
 @property(nonatomic,assign)NSString *str3;
-@property(nonatomic,assign)NSString *readName;
-@property(nonatomic,assign)NSString *fid;
+//@property(nonatomic,assign)NSString *readName;
+//@property(nonatomic,assign)NSString *fid;
 @property(nonatomic,retain)NSMutableArray *listUserNameIn;
 @property(nonatomic,retain)NSMutableArray *listUserIdIn;
 @property(nonatomic,retain)NSMutableArray *listUserNameOut;
@@ -50,5 +52,6 @@
 -(IBAction)cance:(id)sender;
 -(IBAction)addWith:(id)sender;
 -(IBAction)addWithout:(id)sender;
+-(IBAction)addNameOr:(id)sender;
 -(void)EDIT;
 @end

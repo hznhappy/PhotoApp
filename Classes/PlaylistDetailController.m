@@ -17,11 +17,11 @@
 @implementation PlaylistDetailController
 @synthesize listTable;
 @synthesize listName;
-@synthesize mySwc;
+@synthesize mySwc,a;
 
 - (void)dealloc
 {
-    [listTable release];
+    //[listTable release];
     [dataBase release];
     [listName release];
     [super dealloc];
@@ -47,9 +47,10 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
-{
-    dataBase = [[DBOperation alloc]init];
-    mySwc = NO;
+{ NSLog(@"EE%@",a);
+        mySwc = NO;
+    dataBase=[[DBOperation alloc]init];
+    
     [super viewDidLoad];
 }
 
@@ -142,14 +143,32 @@
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     
     [dataBase openDB];
+    
+    
+ 
+    
+    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    [dataBase createTable:createPlayTable];
+    NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
+    [dataBase createTable:createPlayIdTable];
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdTable"];
     [dataBase selectOrderId:selectPlayIdOrder];
+    
+    NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
+    [dataBase selectFromPlayTable:selectPlayTable];
+    //self.list=da.playIdAry;
+    NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
+    [dataBase createTable:createRules];
+    
+
+    
+    
     User *user3 = [dataBase getUserFromPlayTable:[[dataBase.playIdAry objectAtIndex:indexPath.row]intValue]];
-
-
+    
     TextController *ts=[[TextController alloc]init];
     ts.str1 = user3.name;
-    NSString *selectRulesIn= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[[dataBase.playIdAry objectAtIndex:indexPath.row]intValue],1];
+    NSLog(@"re%d",[[dataBase.playIdAry objectAtIndex:indexPath.row]intValue]);
+    NSString *selectRulesIn= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],1];
     [dataBase selectFromRules:selectRulesIn];
     for(int i=0;i<[dataBase.playlist_UserName count];i++)
     {
@@ -164,7 +183,7 @@
         }
         
     }
-    NSString *selectRulesOut= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[[dataBase.playIdAry objectAtIndex:indexPath.row]intValue],0];
+    NSString *selectRulesOut= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],0];
     [dataBase selectFromRules:selectRulesOut];
     for(int j=0;j<[dataBase.playlist_UserName count];j++)
     {

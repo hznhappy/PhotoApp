@@ -11,10 +11,10 @@
 #import "AddressBook/AddressBook.h"
 #import "AddressBookUI/AddressBookUI.h"
 @implementation TextController
-@synthesize listName,nameIn,nameOut,listUserIdIn,listUserNameIn,listUserNameOut,listUserIdOut,list;
-@synthesize str1,str2,str3,readName,fid;
+@synthesize listName,nameIn,nameOut,nameOr,listUserIdIn,listUserNameIn,listUserNameOut,listUserIdOut,list;
+@synthesize str1,str2,str3;
 -(void)viewDidLoad{
-    bo=NO;
+    //bo=NO;
     e=NO;
     self.listName.text = str1;
     self.nameIn.text = str2;
@@ -52,7 +52,28 @@
    // for(int j=0;j<2;j++)
    // {
    // NSDictionary *dic = [note userInfo];
-    if(bo==NO)
+    if(bo==0)
+    {
+        if(nameOut.text==nil||nameOut.text.length==0)
+        {
+            
+            self.nameOut.text=readName;
+        }
+        else
+        {  self.nameOut.text=[self.nameOut.text stringByAppendingString:@","];
+            self.nameOut.text=[self.nameOut.text stringByAppendingString:readName];
+        }
+        /* NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_rules,user_id,user_name) VALUES(%d,%d,'%@')",Rules,0,[dic valueForKey:@"playid"],[dic valueForKey:@"name"]];
+         NSLog(@"%@",insertRules);
+         [da insertToTable:insertRules];*/
+        [listUserIdOut addObject:fid];
+        [listUserNameOut addObject:readName];
+        NSLog(@"OUtID%@",listUserIdOut);
+        NSLog(@"OUtNAME%@",listUserNameOut);
+        
+    }
+
+    if(bo==1)
     {
         if(nameIn.text==nil||nameIn.text.length==0)
         {
@@ -74,27 +95,20 @@
         NSLog(@"%@",insertRules);
         [da insertToTable:insertRules];*/
     }
-    if(bo==YES)
+    if(bo==2)
     {
-        if(nameOut.text==nil||nameOut.text.length==0)
+        if(nameOr.text==nil||nameOr.text.length==0)
         {
             
-            self.nameOut.text=readName;
+            self.nameOr.text=readName;
         }
         else
-        {  self.nameOut.text=[self.nameOut.text stringByAppendingString:@","];
-            self.nameOut.text=[self.nameOut.text stringByAppendingString:readName];
+        {  self.nameOr.text=[self.nameOr.text stringByAppendingString:@","];
+            self.nameOr.text=[self.nameOr.text stringByAppendingString:readName];
         }
-       /* NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_rules,user_id,user_name) VALUES(%d,%d,'%@')",Rules,0,[dic valueForKey:@"playid"],[dic valueForKey:@"name"]];
-        NSLog(@"%@",insertRules);
-        [da insertToTable:insertRules];*/
-        [listUserIdOut addObject:fid];
-        [listUserNameOut addObject:readName];
-        NSLog(@"OUtID%@",listUserIdOut);
-        NSLog(@"OUtNAME%@",listUserNameOut);
+           }
 
-    }
-    
+        
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -115,13 +129,6 @@
     readName=(NSString *)ABRecordCopyCompositeName(person);
     ABRecordID recId = ABRecordGetRecordID(person);
    fid=[NSString stringWithFormat:@"%d",recId];
-    NSLog(@"rrrrrr%@",fid);
-   // TextController *parent=[[TextController alloc]init];
-    //parent.listUserId=[NSMutableArray arrayWithCapacity:40];
-   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:readName,@"name",nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"text1" 
-                                                       object:self 
-                                                     userInfo:dic1];*/
     [self text];
     [self dismissModalViewControllerAnimated:YES];
     
@@ -134,7 +141,7 @@
 }
 
 -(IBAction)addWith:(id)sender
-{bo=NO;
+{bo=1;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
@@ -142,14 +149,21 @@
     
 }
 -(IBAction)addWithout:(id)sender
-{bo=YES;
+{bo=0;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
     [picker release]; 
     
 }
-
+-(IBAction)addNameOr:(id)sender
+{bo=2;
+    
+    ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
+    picker.peoplePickerDelegate = self;
+    [self presentModalViewController:picker animated:YES];
+    [picker release];
+}
 -(IBAction)cance:(id)sender
 {	
     [self.navigationController popViewControllerAnimated:YES];
@@ -215,7 +229,7 @@ else
         }
     }
 }
-    [self.navigationController popViewControllerAnimated:YES];
+   [self.navigationController popViewControllerAnimated:YES];
     
 }
 
@@ -293,6 +307,11 @@ else
     [listName dealloc];
     [nameOut release];
     [nameIn release];
+    [listUserIdIn release];
+    [listUserNameIn release];
+    [listUserIdOut release];
+    [listUserNameOut release];
+
     [super dealloc];
 }
 

@@ -25,11 +25,12 @@
     NSMutableArray *playListUrl;
     NSMutableArray *assetGroups;
     NSMutableArray *tagUrl;
-    NSMutableArray *SUM;
+    NSMutableSet *SUM;
+ 
     
 }
 @property(nonatomic,retain)NSMutableArray *assetGroups;
-@property(nonatomic,retain)NSMutableArray *SUM;
+@property(nonatomic,retain)NSMutableSet *SUM;
 @property(nonatomic,retain)NSMutableArray *allUrl;
 @property(nonatomic,retain)NSMutableArray *unTagUrl;
 @property(nonatomic,retain)NSMutableArray *playListUrl;
@@ -40,10 +41,12 @@
 @property(nonatomic,retain)NSMutableArray *withoutlist;
 @property(nonatomic,retain) UIToolbar* tools;
 
+
 -(void)getAssetGroup;
 -(void)getAllUrls;
 -(void)getTagUrls;
 -(void)getUnTagUrls;
 -(void)deleteUnExitUrls;
-
+-(void)creatTable;
+-(void)playlistUrl;
 @end
