@@ -13,4 +13,5 @@
     UITextField *myTextField;
 }
 @property(nonatomic,retain)IBOutlet UITextField *myTextField;
+-(IBAction)hideKeyBoard:(id)sender;
 @end

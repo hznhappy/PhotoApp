@@ -252,12 +252,17 @@
         [self getTagUrls];
         [self getUnTagUrls];
         assetPicker.urlsArray = unTagUrl;
+        assetPicker.navigationItem.title = @"UNTAG";
     }
     else if (indexPath.row == [list count]+1) {
         assetPicker.urlsArray = allUrl;
+        assetPicker.navigationItem.title = @"ALL";
     }
-    else
-    assetPicker.urlsArray = playListUrl;
+    else{
+        assetPicker.urlsArray = playListUrl;
+        assetPicker.navigationItem.title = [list objectAtIndex:indexPath.row];
+    }
+    
     [self.navigationController pushViewController:assetPicker animated:YES];
     [assetPicker release];
     

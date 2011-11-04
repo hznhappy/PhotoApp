@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-
+@class SwitchButtonCell;
 @interface PlaylistDetailController : UIViewController<UITableViewDelegate,UITableViewDataSource> {
     UITableView *listTable;
     UISwitch *mySwitch;
-    UITextField *playlistName;
     NSString *listName;
+    
 
 }
 @property(nonatomic,retain)IBOutlet UITableView *listTable;
 @property(nonatomic,retain)UISwitch *mySwitch;
-@property(nonatomic,retain)IBOutlet NSString *listName;
+@property(nonatomic,retain)NSString *listName;
 
 @end

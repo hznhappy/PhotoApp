@@ -26,7 +26,7 @@
 - (void)dealloc
 {
     [mySwitch release];
-    [listTable release];
+   // [listTable release];
     [listName release];
     [super dealloc];
 }
@@ -52,16 +52,9 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
-    UISwitch *tempSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(0, 0, 94, 27)];
-    self.mySwitch = tempSwitch;
-    [tempSwitch release];
     [super viewDidLoad];
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	[playlistName resignFirstResponder];
-}
 
 #pragma mark -
 #pragma mark UITableView Delegate method
@@ -70,39 +63,74 @@
     if (mySwitch.on == YES) 
         return 4;
     else
-        return 3;
+        return 4;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *CellIdentifier = @"CellIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
     if (indexPath.row == 0) {
-        playlistName = [[UITextField alloc]initWithFrame:CGRectMake(30, 10, 280, 40)];
-        playlistName.text = listName;
-        playlistName.returnKeyType = UIReturnKeyDone;
-        [playlistName addTarget:self
-                          action:@selector(hidekeyBoard)
-                forControlEvents:UIControlEventEditingDidEndOnExit];
-        [cell.contentView addSubview:playlistName];
-        [playlistName release];
+        static NSString *cellIdentifier = @"textFieldCell";
+        TextFieldCell *cell =(TextFieldCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:@"TextFieldCell" owner:self options:nil];
+        if (cell == nil) {
+            for (id currentObject in cellArray) {
+                if([currentObject isKindOfClass:[UITableViewCell class]]){
+                    cell = (TextFieldCell *)currentObject;
+                    break;
+                }
+            }
+            
+        }
+        cell.myTextField.text = listName;
+        return cell;
     }
+//        if (indexPath.row == 0) {
+//        playlistName = [[UITextField alloc]initWithFrame:CGRectMake(30, 10, 280, 40)];
+//        playlistName.text = listName;
+//        playlistName.returnKeyType = UIReturnKeyDone;
+//       
+//        [cell.contentView addSubview:playlistName];
+//        [playlistName release];
+//    }
     if (indexPath.row == 1) {
+        static NSString *CellIdentifier = @"CellIdentifier";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        }
+
         cell.textLabel.text = @"Transitions";
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        return cell;
     }
     if (indexPath.row == 2) {
-        cell.textLabel.text = @"PlayMusic";
-        cell.accessoryView = self.mySwitch;
+        static NSString *cellIdentifier = @"switchButtonCell";
+        SwitchButtonCell *cell =(SwitchButtonCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:@"SwitchButtonCell" owner:self options:nil];
+        if (cell == nil) {
+            for (id currentObject in cellArray) {
+                if([currentObject isKindOfClass:[UITableViewCell class]]){
+                    cell = (SwitchButtonCell *)currentObject;
+                    break;
+                }
+            }
+        }
+        cell.myLabel.text = @"PlayMusic";
+        cell.selected = NO;
+        mySwitch.on = cell.myCellSwitch.on;
+        return cell;
     }
-    if (mySwitch.on == YES) {
-        if (indexPath.row == 4) {
+    //if (mySwitch.on == YES) {
+        //if (indexPath.row == 3) {
+    else{
+            static NSString *CellIdentifier = @"CellIdentifier";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            }
             cell.textLabel.text = @"Music";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            return cell;
         }
-    }
-    return cell;
+    //}
 }
 -(void)setEditing:(BOOL)editing animated:(BOOL)animated{
     editing = mySwitch.on;
@@ -120,12 +148,13 @@
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     
 }
--(void)hidekeyBoard{
-    [playlistName resignFirstResponder];
-}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    listTable =nil;
+    mySwitch = nil;
+    listName = nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
