@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "DBOperation.h"
-#define TableName @"TAG"
+#define TAG @"TAG"
 @interface PopupPanelView :UIView{
 	CGRect rectForOpen;
 	CGRect rectForClose;

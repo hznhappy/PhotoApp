@@ -4,9 +4,10 @@
 #import "DBOperation.h"
 #define UserTable  @"UserTable"
 #import "/usr/include/sqlite3.h"
-#define idTable  @"idTable"
+#define idOrder  @"idOrder"
+//
 
-
+//select t.id,orserid from usertable t,idtable where t.id=idtable.id order by orserid asc;
 
 @interface DeleteMeController :UIViewController <UITableViewDelegate,UITableViewDataSource,ABPeoplePickerNavigationControllerDelegate,UIPickerViewDelegate, UIPickerViewDataSource> 
 
