@@ -98,6 +98,7 @@
         [library release];
     }
     [self setPhotoTag];
+    //prepare ALAsset for ThumbnailView to init PhotoViewController to display Photo;
     for (Thumbnail *thumbnail in self.crwAssets) {
         for (id asset in self.assetArrays) {
             [thumbnail.assetArray addObject:asset];

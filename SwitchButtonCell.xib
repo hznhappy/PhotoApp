@@ -80,12 +80,10 @@
 								<string key="NSFrame">{{182, 8}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="982672504"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentHorizontalAlignment">0</int>
 								<int key="IBUIContentVerticalAlignment">0</int>
-								<bool key="IBUIOn">YES</bool>
 							</object>
 						</object>
 						<string key="NSFrameSize">{320, 44}</string>

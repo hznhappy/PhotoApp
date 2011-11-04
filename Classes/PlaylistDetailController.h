@@ -8,16 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@class SwitchButtonCell;
+@class DBOperation;
 @interface PlaylistDetailController : UIViewController<UITableViewDelegate,UITableViewDataSource> {
     UITableView *listTable;
-    UISwitch *mySwitch;
+    BOOL mySwc;
     NSString *listName;
     
+    DBOperation *dataBase;
 
 }
 @property(nonatomic,retain)IBOutlet UITableView *listTable;
-@property(nonatomic,retain)UISwitch *mySwitch;
+@property(nonatomic,assign)BOOL mySwc;
 @property(nonatomic,retain)NSString *listName;
-
+-(void)updateTable:(id)sender;
 @end

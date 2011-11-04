@@ -53,11 +53,13 @@
     [da createTable:createPlayIdTable];
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdTable"];
     [da selectOrderId:selectPlayIdOrder];
+    
     NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
     [da selectFromPlayTable:selectPlayTable];
+    self.list=da.playIdAry;
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [da createTable:createRules];
-    self.list=da.playIdAry;
+    
 
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
@@ -236,8 +238,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	static NSString *CellIdentifier = @"CellIdentifier";
+{    
+    static NSString *CellIdentifier = @"CellIdentifier";
 	UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -259,6 +261,7 @@
         [da openDB];
         NSString *createSQL3= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
         [da createTable:createSQL3];
+        NSLog(@"frrrrr");
         User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
         NSLog(@"%@",[list objectAtIndex:indexPath.row]);
     cell.textLabel.text=[NSString stringWithFormat:@"%@",user3.name];
@@ -268,19 +271,6 @@
     return cell;
 }
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSDictionary *dic = [NSDictionary dictionaryWithObject:[tableView cellForRowAtIndexPath:indexPath].textLabel.text forKey:@"listTitle"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"SetTitle" object:self userInfo:dic];
-  /*  da=[[DBOperation alloc]init];
-    [da openDB];
-    //[da selectFromRulesAndTag:[[list objectAtIndex:indexPath.row]intValue]];
-    NSLog(@"%@",da.playlistUrl);
-    [da closeDB];
-
-   // select t.url,t.id from tag t,rules r where r.playlist_id=4 and r.user_id=t.id and r.playlist_rules=1 and t.url not in (select t2.url from tag t2,rules r2 where r2.playlist_id=4 and r2.playlist_rules=0 and r2.user_id=t2.id);
-
-    [self.navigationController popViewControllerAnimated:YES];
-*/
-    
     AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
     if (indexPath.row == [list count]) {
         [self getTagUrls];
@@ -298,19 +288,14 @@
         [da openDB];
         NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
         [da createTable:createRules];
-        NSLog(@"%d",[[list objectAtIndex:indexPath.row]intValue]);
         NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",1,1];
         [da selectFromRules:selectRules];
-        NSLog(@"RRERRE");
-        NSLog(@"%@",da.playlist_UserId);
        for(int i=0;i<[da.playlist_UserId count];i++)
         {
             NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
             [da createTable:createTag];
-            NSLog(@"CHAXUN");
             NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
             [da selectFromTAG:selectTag];
-            NSLog(@"%@",da.tagUrl);
             if(SUM==NULL)
             {
                 
@@ -349,52 +334,16 @@
 
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-   [da openDB];
-    User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
+   
+    
 
-    TextController *ts=[[TextController alloc]init];
-     ts.str1 = user3.name;
-     NSLog(@"re%d",[[list objectAtIndex:indexPath.row]intValue]);
-     NSString *selectRulesIn= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[[list objectAtIndex:indexPath.row]intValue],1];
-     [da selectFromRules:selectRulesIn];
-     NSLog(@"%@",da.playlist_UserName);
-     for(int i=0;i<[da.playlist_UserName count];i++)
-     {
-     if(ts.str2==nil||ts.str2.length==0)
-     {
-     
-     ts.str2=[da.playlist_UserName objectAtIndex:i];
-     }
-     else
-     {  ts.str2=[ts.str2 stringByAppendingString:@","];
-     ts.str2=[ts.str2 stringByAppendingString:[da.playlist_UserName objectAtIndex:i]];
-     }
-     
-     }
-     NSString *selectRulesOut= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[[list objectAtIndex:indexPath.row]intValue],0];
-     [da selectFromRules:selectRulesOut];
-     for(int j=0;j<[da.playlist_UserName count];j++)
-     {
-     if(ts.str3==nil||ts.str3.length==0)
-     {
-     
-     ts.str3=[da.playlist_UserName objectAtIndex:j];
-     }
-     else
-     {  ts.str3=[ts.str3 stringByAppendingString:@","];
-     ts.str3=[ts.str3 stringByAppendingString:[da.playlist_UserName objectAtIndex:j]];
-     }
-     }
-     [da closeDB];
-   //  [self.navigationController pushViewController:ts animated:YES];
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:[list objectAtIndex:indexPath.row],@"playlist_id",nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"edit" 
-                                                       object:self 
-                                                     userInfo:dic1];
-
-    //[da closeDB];
+    [da openDB];
+    NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select playList_id from playTable"];
+    [da selectFromPlayTable:selectPlayIdOrder];
+    User *user3 = [da getUserFromPlayTable:[[da.playIdAry objectAtIndex:indexPath.row]intValue]];
+    [da closeDB];
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
-    detailController.listName = user3.name;
+    detailController.listName =[NSString stringWithFormat:@"%@",user3.name];
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
     //[self.navigationController pushViewController:ts animated:YES];
