@@ -66,17 +66,17 @@
 {
     da=[[DBOperation alloc]init];
     [da openDB];
-    
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
     [da createTable:createPlayTable];
     NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
     [da createTable:createPlayIdTable];
-    NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdTable"];
+    NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select * from playIdOrder"];
     [da selectOrderId:selectPlayIdOrder];
-    
+     self.list=da.orderIdList;
     NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
     [da selectFromPlayTable:selectPlayTable];
-    self.list=da.playIdAry;
+   
+    NSLog(@"re%d",[list count]);
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [da createTable:createRules];
     
@@ -85,6 +85,7 @@
     
     
     [da closeDB];
+   
 
 }
 #pragma mark -
@@ -189,7 +190,6 @@
 #pragma Button Action
 -(void)table1
 {
-    //[self viewDidLoad];
     [self creatTable];
     [self.tableView reloadData];
 }
@@ -197,7 +197,18 @@
 {
     if (self.tableView.editing) {
         editButton.title = @"Edit";
+        r=0;
+        [self.tableView reloadData];
+       /* [self.tableView beginUpdates];
+        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[list count]+2 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView endUpdates];
+*/
     }else{
+        r=2;
+        [self.tableView reloadData];
+      /*  [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[list count]+2 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView endUpdates];*/
         editButton.title = @"Done";
     }
     
@@ -214,9 +225,11 @@
 #pragma mark -
 #pragma mark TableView delegate method
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+{ if (self.tableView.editing) {
+}
 
-    return ([list count]+2);
+
+    return [list count]-r+2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -227,7 +240,7 @@
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
     [da openDB];
-     if (indexPath.row == [list count]) {
+     if (indexPath.row == [list count]+0) {
         cell.textLabel.text = @"UNTAG";
     }
     else if (indexPath.row == [list count]+1) {
@@ -257,15 +270,17 @@
     }
     else
     {
-        assetPicker.urlsArray =playListUrl;
-    } 
+        int row_id=[[list objectAtIndex:indexPath.row]intValue];
+       
+        [self playlistUrl:row_id];
+         assetPicker.urlsArray =dbUrl;
+            } 
       [self.navigationController pushViewController:assetPicker animated:YES];
     [assetPicker release];
 }
--(void)playlistUrl:(NSInteger)selectRow
-{
-    [da openDB];
-    NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[[da.playlist_UserId objectAtIndex:selectRow]intValue],1];
+-(void)playlistUrl:(int)row_id
+{    [da openDB];
+    NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
     [da selectFromRules:selectRules1];
     SUM=NULL;
     for(int i=0;i<[da.playlist_UserId count];i++)
@@ -282,8 +297,24 @@
             [SUM intersectSet:da.tagUrl];
         }
     }
+    NSString *selectRules2= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
+    [da selectFromRules:selectRules2];
+    for(int i=0;i<[da.playlist_UserId count];i++)
+    {
+        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
+        [da selectFromTAG:selectTag];
+        NSLog(@"WE%@",da.playlist_UserId);
+        if(SUM==NULL)
+        {
+            SUM=da.tagUrl;
+        }
+        else
+        {
+            [SUM unionSet:da.tagUrl];
+        }
+    }
     
-    NSString *selectRules0= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[[list objectAtIndex:selectRow]intValue],0];
+    NSString *selectRules0= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
     [da selectFromRules:selectRules0];
     for(int i=0;i<[da.playlist_UserId count];i++)
     {
@@ -318,25 +349,25 @@
             }
         }
     }
-    
     [da closeDB];
+  dbUrl=[[NSMutableArray alloc]init];
     for (NSString *dataStr in SUM) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
-        [playListUrl addObject:dbStr];
+        [dbUrl addObject:dbStr];
     }
+   
 
-    
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
       [da openDB];
-    NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select playList_id from playTable"];
-    [da selectFromPlayTable:selectPlayIdOrder];
-    User *user3 = [da getUserFromPlayTable:[[da.playIdAry objectAtIndex:indexPath.row]intValue]];
+    //NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select playList_id from playTable"];
+   // [da selectFromPlayTable:selectPlayIdOrder];
+    User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     [da closeDB];
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
     detailController.listName =[NSString stringWithFormat:@"%@",user3.name];
-    detailController.a=[NSString stringWithFormat:@"%@",[da.playIdAry objectAtIndex:indexPath.row]];
-    detailController.hidesBottomBarWhenPushed = YES;
+    detailController.a=[NSString stringWithFormat:@"%@",[list objectAtIndex:indexPath.row]];
+    NSLog(@"EE%@", detailController.a);
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
 }
@@ -344,14 +375,25 @@
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{   if (indexPath.row == [list count]||indexPath.row == [list count]+1)
+    {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"你好" message:@"固有成员,无法删除" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
 
-{   [da openDB];
+    }
+    else
+    {
+    [da openDB];
     NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",deletePlayTable );
     [da deleteDB:deletePlayTable ]; 
     NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",deleteRules);
     [da deleteDB:deleteRules]; 
+    NSString *deleteplayIdOrder= [NSString stringWithFormat:@"DELETE FROM playIdOrder WHERE play_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
+    NSLog(@"%@",deleteplayIdOrder);
+    [da deleteDB:deleteplayIdOrder]; 
 
   
     if (indexPath.row==[list count]||indexPath.row == [list count]+1) {
@@ -359,16 +401,16 @@
     }
 
     [da closeDB];
-    [self viewDidLoad];
+    [self creatTable];
     [self.tableView reloadData];
     
+    }
 }
 
 
 
-/*-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
-    
     
     NSUInteger fromRow=[fromIndexPath row];
 	NSUInteger toRow=[toIndexPath row];
@@ -378,18 +420,18 @@
 	[object release];
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder"];	
+    NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM playIdOrder"];	
 	NSLog(@"%@",deleteIdTable);
     [da deleteDB:deleteIdTable];
     for(int p=0;p<[list count];p++){
-        NSString *insertIdTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,[[list objectAtIndex:p]intValue]];
+        NSString *insertIdTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(play_id) VALUES(%d)",playIdOrder,[[list objectAtIndex:p]intValue]];
         NSLog(@"%@",insertIdTable);
         [da insertToTable:insertIdTable];    
 	}
     [da closeDB];
 } 
 
-*/
+
 
 #pragma mark -
 #pragma mark memory method
@@ -401,6 +443,8 @@
     [playListUrl release];
     [tableView release];
     [list release];
+    [withlist release];
+    [withoutlist release];
     [super dealloc];
 }
 @end
