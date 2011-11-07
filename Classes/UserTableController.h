@@ -48,5 +48,5 @@
 -(void)getUnTagUrls;
 -(void)deleteUnExitUrls;
 -(void)creatTable;
--(void)playlistUrl;
+-(void)playlistUrl:(NSInteger)selectRow;
 @end

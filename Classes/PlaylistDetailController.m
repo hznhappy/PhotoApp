@@ -7,8 +7,6 @@
 //
 
 #import "PlaylistDetailController.h"
-#import "TextFieldCell.h"
-#import "SwitchButtonCell.h"
 #import "TextController.h"
 #import "User.h"
 #import "DBOperation.h"
@@ -16,14 +14,28 @@
 
 @implementation PlaylistDetailController
 @synthesize listTable;
+@synthesize textFieldCell,switchCell,tranCell,musicCell;
+@synthesize tranLabel,musicLabel;
+@synthesize textField;
+@synthesize mySwitch;
 @synthesize listName;
 @synthesize mySwc,a;
 
 - (void)dealloc
 {
-    //[listTable release];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [musicLabel release];
+    [tranLabel release];
+    [mySwitch release];
+    [textField release];
+    [textFieldCell release];
+    [switchCell release];
+    [tranCell release];
+    [musicCell release];
+    [listTable release];
     [dataBase release];
     [listName release];
+    [a release];
     [super dealloc];
 }
 
@@ -47,10 +59,11 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
-{ NSLog(@"EE%@",a);
-        mySwc = NO;
+{ 
+    mySwc = YES;
     dataBase=[[DBOperation alloc]init];
-    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeMusicAccessoryLabel:) name:@"changeMusicLabel" object:nil];
     [super viewDidLoad];
 }
 
@@ -59,94 +72,63 @@
 #pragma mark UITableView Delegate method
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (mySwc) 
+    if (mySwc) {
         return 4;
-    else
+    }
+    else{
         return 3;
+    }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     int rowNum=indexPath.row;
-    UIViewController *tmpCon=nil;
-    UITableViewCell * cell=nil;
-    NSString * cellIdentifier=nil;
-    NSString *textField= @"textFieldCell";
-    NSString *switchField=@"switchFieldCell";
-    NSString *transField=@"Transitions";
-    NSString *musicField=@"Music";
+    UITableViewCell *cell = nil;
     switch (rowNum) {
         case 0:
-            cellIdentifier = textField;
-            TextFieldCell *textCell =(TextFieldCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            if (textCell == nil) {
-                tmpCon=[[UIViewController alloc] initWithNibName:@"TextFieldCell" bundle:nil];
-                textCell=(TextFieldCell *) tmpCon.view;
-                [tmpCon release];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"textFieldCell"];
+            if (cell == nil) {
+                cell = self.textFieldCell;
             }
-            textCell.myTextField.text = listName;
-            cell=(UITableViewCell *) textCell;
+            self.textField.text = listName;
             break;
         case 1:
-            cellIdentifier = transField;
-            cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"transitionsCell"];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] 
-                         initWithStyle:UITableViewCellStyleDefault 
-                         reuseIdentifier:cellIdentifier]
-                        autorelease];
-                
+                cell = self.tranCell;
             }
-            cell.textLabel.text = @"Transitions";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             break;
         case 2:
-            cellIdentifier = switchField;
-            SwitchButtonCell *switchCell =(SwitchButtonCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            if (switchCell == nil) {
-                tmpCon=[[UIViewController alloc] initWithNibName:@"SwitchButtonCell" bundle:nil];
-                switchCell=(SwitchButtonCell* )tmpCon.view;
-                [tmpCon release];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"playMusicCell"];
+            if (cell == nil) {
+                cell = self.switchCell;
             }
-            switchCell.myLabel.text = @"PlayMusic";
-            switchCell.selectionStyle = UITableViewCellEditingStyleNone;
-            [switchCell.myCellSwitch addTarget:self action:@selector(updateTable:) forControlEvents:UIControlEventTouchUpInside];
-            cell=(UITableViewCell *) switchCell;
             break;
         case 3:
-            cellIdentifier = musicField;
-            cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"musicCell"];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] 
-                         initWithStyle:UITableViewCellStyleDefault 
-                         reuseIdentifier:cellIdentifier]
-                        autorelease ];
-                
+                cell = self.musicCell;
             }
-            cell.textLabel.text = @"Music";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         default:
-            cell=nil;
+            cell = nil;
             break;
     }
-    return cell;  
+    return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 1) {
         AnimaSelectController *animateController = [[AnimaSelectController alloc]init];
+        animateController.tranStyle = self.tranLabel.text;
         [self.navigationController pushViewController:animateController animated:YES];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [animateController release];
     }
+    [self.textField resignFirstResponder];
 }
 
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     
     [dataBase openDB];
-    
-    
- 
-    
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
     [dataBase createTable:createPlayTable];
     NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
@@ -193,7 +175,8 @@
             ts.str3=[dataBase.playlist_UserName objectAtIndex:j];
         }
         else
-        {  ts.str3=[ts.str3 stringByAppendingString:@","];
+        {  
+            ts.str3=[ts.str3 stringByAppendingString:@","];
             ts.str3=[ts.str3 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:j]];
         }
     }
@@ -204,7 +187,13 @@
                                                        object:self 
                                                      userInfo:dic1];
 }
--(void)updateTable:(id)sender{
+#pragma mark -
+#pragma mark IBAction method
+-(IBAction)hideKeyBoard:(id)sender{
+    [sender resignFirstResponder];
+}
+
+-(IBAction)updateTable:(id)sender{
     UISwitch *newSwitcn  = (UISwitch *)sender;
     mySwc = newSwitcn.on;
     if (newSwitcn.on) {
@@ -217,9 +206,31 @@
         [listTable endUpdates];
     }
 }
+
+#pragma mark -
+#pragma mark Notification method
+-(void)changeTransitionAccessoryLabel:(NSNotification *)note{
+    NSDictionary *dic = [note userInfo];
+    NSString *labelText = [dic objectForKey:@"tranStyle"];
+    self.tranLabel.text = labelText;
+}
+
+-(void)changeMusicAccessoryLabel:(NSNotification *)note{
+    
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    textFieldCell = nil;
+    textField = nil;
+    tranCell = nil;
+    tranLabel = nil;
+    switchCell = nil;
+    mySwitch = nil;
+    musicCell = nil;
+    musicLabel = nil;
+    a = nil;
+    dataBase = nil;
     listTable =nil;
     listName = nil;
     // Release any retained subviews of the main view.

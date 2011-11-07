@@ -97,7 +97,8 @@
            void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
            {
                if (group == nil) 
-               {[self.allUrl removeAllObjects];
+               {
+                   [self.allUrl removeAllObjects];
                    [self performSelectorOnMainThread:@selector(getAllUrls) withObject:nil waitUntilDone:YES];
                    [self deleteUnExitUrls];
                    return;
@@ -256,74 +257,74 @@
     }
     else
     {
-        [da openDB];
-        NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[[list objectAtIndex:indexPath.row]intValue],1];
-        [da selectFromRules:selectRules1];
-        SUM=NULL;
-       for(int i=0;i<[da.playlist_UserId count];i++)
-        {
-            NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
-            [da selectFromTAG:selectTag];
-            if(SUM==NULL)
-            {
-                SUM=da.tagUrl;
-                continue;
-            }
-            else
-            {
-                [SUM intersectSet:da.tagUrl];
-            }
-        }
-        
-       NSString *selectRules0= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[[list objectAtIndex:indexPath.row]intValue],0];
-        [da selectFromRules:selectRules0];
-        for(int i=0;i<[da.playlist_UserId count];i++)
-        {
-            NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
-            [da selectFromTAG:selectTag];
-            if(SUM==NULL)
-            {
-                  NSMutableSet *t=[[NSMutableArray alloc]init];
-                for (NSURL *url in allUrl) {
-                    NSString *str= [NSString stringWithFormat:@"%@",url];
-                     [t addObject:str];
-                }
-                
-               SUM=t;
-                 for (NSString *data in da.tagUrl)
-                {
-                   if([SUM containsObject:data]) 
-                   {
-                       [SUM removeObject:data];
-                   }
-                       
-                }
-            }
-            else
-            {
-                for (NSString *data in da.tagUrl)
-                {
-                    if([SUM containsObject:data]) 
-                    {
-                        [SUM removeObject:data];
-                    }
-                }
-            }
-        }
-
-        [da closeDB];
-        NSMutableArray *dbUrl=[[NSMutableArray alloc]init];
-        for (NSString *dataStr in SUM) {
-            NSURL *dbStr = [NSURL URLWithString:dataStr];
-            [dbUrl addObject:dbStr];
-        }
-            assetPicker.urlsArray =dbUrl;
-        } 
+        assetPicker.urlsArray =playListUrl;
+    } 
       [self.navigationController pushViewController:assetPicker animated:YES];
     [assetPicker release];
 }
--(void)playlistUrl
+-(void)playlistUrl:(NSInteger)selectRow
 {
+    [da openDB];
+    NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[[da.playlist_UserId objectAtIndex:selectRow]intValue],1];
+    [da selectFromRules:selectRules1];
+    SUM=NULL;
+    for(int i=0;i<[da.playlist_UserId count];i++)
+    {
+        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
+        [da selectFromTAG:selectTag];
+        if(SUM==NULL)
+        {
+            SUM=da.tagUrl;
+            continue;
+        }
+        else
+        {
+            [SUM intersectSet:da.tagUrl];
+        }
+    }
+    
+    NSString *selectRules0= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",[[list objectAtIndex:selectRow]intValue],0];
+    [da selectFromRules:selectRules0];
+    for(int i=0;i<[da.playlist_UserId count];i++)
+    {
+        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
+        [da selectFromTAG:selectTag];
+        if(SUM==NULL)
+        {
+            NSMutableSet *t=[[NSMutableArray alloc]init];
+            for (NSURL *url in allUrl) {
+                NSString *str= [NSString stringWithFormat:@"%@",url];
+                [t addObject:str];
+            }
+            
+            SUM=t;
+            for (NSString *data in da.tagUrl)
+            {
+                if([SUM containsObject:data]) 
+                {
+                    [SUM removeObject:data];
+                }
+                
+            }
+        }
+        else
+        {
+            for (NSString *data in da.tagUrl)
+            {
+                if([SUM containsObject:data]) 
+                {
+                    [SUM removeObject:data];
+                }
+            }
+        }
+    }
+    
+    [da closeDB];
+    for (NSString *dataStr in SUM) {
+        NSURL *dbStr = [NSURL URLWithString:dataStr];
+        [playListUrl addObject:dbStr];
+    }
+
     
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
@@ -335,15 +336,11 @@
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
     detailController.listName =[NSString stringWithFormat:@"%@",user3.name];
     detailController.a=[NSString stringWithFormat:@"%@",[da.playIdAry objectAtIndex:indexPath.row]];
-    NSLog(@"EE%@", detailController.a);
+    detailController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
 }
--(IBAction)toggleback:(id)sender
-{
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
