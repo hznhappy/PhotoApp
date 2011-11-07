@@ -46,27 +46,8 @@
 	}
     
 }
-
-/*-(void)selectFromRulesAndTag:(int)id;
-{
-    playlistUrl=[NSMutableArray arrayWithCapacity:40];
-    NSString *newUrl;
-    NSString *selectRuleAndTag= [NSString stringWithFormat:@"select t.url,t.id from tag t,rules r where r.playlist_id=%d and r.user_id=t.id and r.playlist_rules=1 and t.url not in (select t2.url from tag t2,rules r2 where r2.playlist_id=%d and r2.playlist_rules=0 and r2.user_id=t2.id);",id,id];
-    sqlite3_stmt *statement;
-	if (sqlite3_prepare_v2(db, [selectRuleAndTag UTF8String], -1, &statement, nil) == SQLITE_OK) {
-		
-		while (sqlite3_step(statement)==SQLITE_ROW) {
-            newUrl=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
-            
-            [playlistUrl addObject:newUrl];
-            
-        }
-        
-    }
-}
-*/
 -(NSMutableArray *)selectPhotos:(NSString *)sql{
-    photos = [NSMutableArray arrayWithCapacity:40];
+    photos = [[NSMutableArray arrayWithCapacity:40]retain];
     sqlite3_stmt *stmt;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &stmt, nil) == SQLITE_OK) {
 		while (sqlite3_step(stmt)==SQLITE_ROW) {
@@ -79,7 +60,7 @@
 }
 -(void)selectFromPlayTable:(NSString *)sql
 {
-    playIdAry=[NSMutableArray arrayWithCapacity:40];
+    playIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newid;
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
@@ -94,8 +75,8 @@
     
 }
 -(void)selectFromTAG:(NSString *)sql
-{tagIdAry=[NSMutableArray arrayWithCapacity:40];
- tagUrl=[[NSMutableSet alloc]init];
+{tagIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
+ tagUrl=[[[NSMutableSet alloc]init]retain];
     NSString *newid;
     NSString *newUrl;
     sqlite3_stmt *statement;
@@ -116,21 +97,17 @@
     sqlite3_finalize(statement);  
 }
 -(void)selectOrderId:(NSString *)sql
-{orderIdList=[NSMutableArray arrayWithCapacity:40];
+{orderIdList=[[NSMutableArray arrayWithCapacity:40]retain];
     //orderList=[NSMutableArray arrayWithCapacity:40];
     NSString *newid;
-    // NSString *newOrderid;
+    
 	sqlite3_stmt *statement;
-    NSLog(@"fewre");
-    //NSString *selectIdTablendUserTable=[NSString stringWithFormat:@"select id from idtable" ]; 
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
-		NSLog(@"FG");
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
-            //newOrderid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
-            NSLog(@"EWEW%@",newid);
+            
             [orderIdList addObject:newid];
-            //[orderList addObject:newOrderid];
+           
             
         }
     }	
@@ -138,21 +115,17 @@
     
 }
 -(void)selectFromRules:(NSString *)sql
-{NSLog(@"frfrt");
-    playlist_UserId=[NSMutableArray arrayWithCapacity:40];
+{
+    playlist_UserId=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newId;
-    playlist_UserName=[NSMutableArray arrayWithCapacity:40];
+    playlist_UserName=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newname;
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
-		NSLog(@"ONE");
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-            NSLog(@"TWO");
             newId=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement,0)];
-            NSLog(@"weishenme%@",newId);
             [playlist_UserId addObject:newId];
-            newname=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement,1)];
-            //NSLog(@"%@",newname);
+            newname=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
             [playlist_UserName addObject:newname];
             // NSLog(@"FSD%@",playlist_nameIn);
         }
@@ -160,23 +133,6 @@
     sqlite3_finalize(statement);  
     
 }
-/*-(void)selectNameFromRules:(NSString *)sql
- {
- playlist_UserName=[NSMutableArray arrayWithCapacity:40];
- NSString *newname;
- sqlite3_stmt *statement;
- if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
- 
- while (sqlite3_step(statement)==SQLITE_ROW) {
- newname=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement,0)];
- //NSLog(@"%@",newname);
- [playlist_UserName addObject:newname];
- // NSLog(@"FSD%@",playlist_nameIn);
- }
- }	
- sqlite3_finalize(statement);  
- 
- }*/
 - (User*)getUserFromUserTable:(int)id
 {
 	User *user1 = [[User alloc] init];
@@ -245,7 +201,22 @@
     sqlite3_close(db);
 }
 
+-(void)dealloc
+{
+    [orderIdList release];
+    [orderList release];
+    [tagIdAry release];
+    [playIdAry release];
+    [playlist_UserName release];
+    [playlist_UserId release];
+    // NSMutableArray *playlist_name;
+    [tagUrl release];
+    [photos release];
 
+    
+   
+    [super dealloc];
+}
 
 
 

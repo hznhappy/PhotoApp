@@ -22,11 +22,14 @@
     NSString *str1;
     NSString *str2;
     NSString *str3;
+    NSString *str4;
     int bo;
     NSMutableArray *listUserNameIn;
     NSMutableArray *listUserIdIn;
     NSMutableArray *listUserNameOut;
     NSMutableArray *listUserIdOut;
+    NSMutableArray *listUserIdOr;
+    NSMutableArray *listUserNameOr;
     NSMutableArray *list;
     NSString *readName;
     NSString *fid;
@@ -41,12 +44,13 @@
 @property(nonatomic,assign)NSString *str1;
 @property(nonatomic,assign)NSString *str2;
 @property(nonatomic,assign)NSString *str3;
-//@property(nonatomic,assign)NSString *readName;
-//@property(nonatomic,assign)NSString *fid;
+@property(nonatomic,assign)NSString *str4;
 @property(nonatomic,retain)NSMutableArray *listUserNameIn;
 @property(nonatomic,retain)NSMutableArray *listUserIdIn;
 @property(nonatomic,retain)NSMutableArray *listUserNameOut;
 @property(nonatomic,retain)NSMutableArray *listUserIdOut;
+@property(nonatomic,retain)NSMutableArray *listUserNameOr;
+@property(nonatomic,retain)NSMutableArray *listUserIdOr;
 @property(nonatomic,retain)NSMutableArray *list;
 -(IBAction)save:(id)sender;
 -(IBAction)cance:(id)sender;
@@ -54,4 +58,6 @@
 -(IBAction)addWithout:(id)sender;
 -(IBAction)addNameOr:(id)sender;
 -(void)EDIT;
+-(void)insert;
+-(void)deletes;
 @end

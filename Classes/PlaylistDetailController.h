@@ -22,4 +22,5 @@
 @property(nonatomic,retain)NSString *listName;
 @property(nonatomic,retain)NSString *a;
 -(void)updateTable:(id)sender;
+-(void)creatTable;
 @end

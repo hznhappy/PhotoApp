@@ -11,6 +11,7 @@
 #import "DBOperation.h"
 #define PlayTable @"PlayTable"
 #define playIdTable @"playIdTable"
+#define playIdOrder @"PlayIdOrder"
 @interface UserTableController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
     
     IBOutlet UITableView *tableView;
@@ -26,8 +27,8 @@
     NSMutableArray *assetGroups;
     NSMutableArray *tagUrl;
     NSMutableSet *SUM;
- 
-    
+    NSMutableArray *dbUrl;
+    int r;
 }
 @property(nonatomic,retain)NSMutableArray *assetGroups;
 @property(nonatomic,retain)NSMutableSet *SUM;
@@ -40,13 +41,11 @@
 @property(nonatomic,retain)NSMutableArray *withlist;
 @property(nonatomic,retain)NSMutableArray *withoutlist;
 @property(nonatomic,retain) UIToolbar* tools;
-
-
 -(void)getAssetGroup;
 -(void)getAllUrls;
 -(void)getTagUrls;
 -(void)getUnTagUrls;
 -(void)deleteUnExitUrls;
 -(void)creatTable;
--(void)playlistUrl;
+-(void)playlistUrl:(int)row_id;
 @end

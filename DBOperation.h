@@ -43,14 +43,11 @@
 -(void)insertToTable:(NSString *)sql;
 -(void)updateTable:(NSString *)sql;
 -(void)closeDB;
--(void)deleteDB:(NSString *)sql;
-
+-(void)deleteDB:(NSString *)sql; 
 // apply to DeleteMeController , PopupPanelView for retreiving user_id  order by idOrder or playIdOrder
 -(void)selectOrderId:(NSString *)sql;
 //apply to UserTableController for retreiving user_id user_name from Rules
 -(void)selectFromRules:(NSString *)sql;
-//apply to UserTableController for retreiving url from TAG and Rules
-//-(void)selectFromRulesAndTag:(int)id;
 // apply to PhotoViewController PopupPanelView , DeleteMeController ,UserTableController for retreiving tag_id,tag_url from tag table
 -(void)selectFromTAG:(NSString *)sql;
 //apply to UserTableController for retreiving playlist_id,playlist_name from palytable
