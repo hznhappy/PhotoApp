@@ -12,6 +12,8 @@
 #import "TextController.h"
 #import "User.h"
 #import "DBOperation.h"
+#import "AnimaSelectController.h"
+
 @implementation PlaylistDetailController
 @synthesize listTable;
 @synthesize listName;
@@ -65,8 +67,8 @@
         return 3;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-   	
     int rowNum=indexPath.row;
+    UIViewController *tmpCon=nil;
     UITableViewCell * cell=nil;
     NSString * cellIdentifier=nil;
     NSString *textField= @"textFieldCell";
@@ -78,13 +80,9 @@
             cellIdentifier = textField;
             TextFieldCell *textCell =(TextFieldCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             if (textCell == nil) {
-                NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:@"TextFieldCell" owner:self options:nil];
-                for (id currentObject in cellArray) {
-                    if([currentObject isKindOfClass:[UITableViewCell class]]){
-                        textCell = (TextFieldCell *)currentObject;
-                        break;
-                    }
-                }
+                tmpCon=[[UIViewController alloc] initWithNibName:@"TextFieldCell" bundle:nil];
+                textCell=(TextFieldCell *) tmpCon.view;
+                [tmpCon release];
             }
             textCell.myTextField.text = listName;
             cell=(UITableViewCell *) textCell;
@@ -101,20 +99,16 @@
             }
             cell.textLabel.text = @"Transitions";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             break;
         case 2:
             cellIdentifier = switchField;
             SwitchButtonCell *switchCell =(SwitchButtonCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             if (switchCell == nil) {
-                NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:@"SwitchButtonCell" owner:self options:nil];
-                for (id currentObject in cellArray) {
-                    if([currentObject isKindOfClass:[UITableViewCell class]]){
-                        switchCell = (SwitchButtonCell *)currentObject;
-                        break;
-                    }
-                }
-            }        
+                tmpCon=[[UIViewController alloc] initWithNibName:@"SwitchButtonCell" bundle:nil];
+                switchCell=(SwitchButtonCell* )tmpCon.view;
+                [tmpCon release];
+            }
             switchCell.myLabel.text = @"PlayMusic";
             switchCell.selectionStyle = UITableViewCellEditingStyleNone;
             [switchCell.myCellSwitch addTarget:self action:@selector(updateTable:) forControlEvents:UIControlEventTouchUpInside];
@@ -141,7 +135,11 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if (indexPath.row == 1) {
+        AnimaSelectController *animateController = [[AnimaSelectController alloc]init];
+        [self.navigationController pushViewController:animateController animated:YES];
+        [animateController release];
+    }
 }
 -(void)creatTable
 {

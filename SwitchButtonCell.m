@@ -13,12 +13,6 @@
 @synthesize myCellSwitch;
 @synthesize myLabel;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
-    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
-        // Initialization code
-    }
-    return self;
-}
 -(void)dealloc{
     [super dealloc];
     [myCellSwitch release];
