@@ -11,9 +11,11 @@
 
 @implementation AnimaSelectController
 @synthesize animaArray;
+@synthesize tranStyle;
 
 - (void)dealloc
 {
+    [tranStyle release];
     [animaArray release];
     [super dealloc];
 }
@@ -47,22 +49,28 @@
     static NSString *cellIdentifier = @"cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier]autorelease];
     }
-    cell.textLabel.text = [animaArray objectAtIndex:indexPath.row];
+    NSString *animateString = [animaArray objectAtIndex:indexPath.row];
+    cell.textLabel.text = animateString;
+    if ([animateString isEqualToString:self.tranStyle]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+        
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-	if (cell.accessoryType==UITableViewCellAccessoryCheckmark) {
-		cell.accessoryType = UITableViewCellAccessoryNone;
-	}else {
-		cell.accessoryType = UITableViewCellAccessoryCheckmark;
-	}
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:cell.textLabel.text forKey:@"tranStyle"];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"changeTransitionLabel" object:nil userInfo:dictionary];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)viewDidUnload
 {
+    tranStyle = nil;
     animaArray = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.

@@ -12,6 +12,9 @@
 @interface AnimaSelectController : UIViewController<UITableViewDelegate,UITableViewDataSource>
  {
     NSMutableArray *animaArray;
+     NSString *tranStyle;
 }
 @property(nonatomic,retain)NSMutableArray *animaArray;
+@property(nonatomic,retain)NSString *tranStyle;
+
 @end

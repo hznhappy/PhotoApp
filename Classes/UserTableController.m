@@ -115,7 +115,8 @@
            void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
            {
                if (group == nil) 
-               {[self.allUrl removeAllObjects];
+               {
+                   [self.allUrl removeAllObjects];
                    [self performSelectorOnMainThread:@selector(getAllUrls) withObject:nil waitUntilDone:YES];
                    [self deleteUnExitUrls];
                    return;
@@ -390,16 +391,12 @@
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
     detailController.listName =[NSString stringWithFormat:@"%@",user3.name];
     detailController.a=[NSString stringWithFormat:@"%@",[list objectAtIndex:indexPath.row]];
-    NSLog(@"EE%@", detailController.a);
+    detailController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
     }
 }
--(IBAction)toggleback:(id)sender
-{
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath

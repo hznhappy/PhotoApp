@@ -115,13 +115,13 @@ int j=1,count=0;
 	return [pathname stringByAppendingPathComponent:@"data.db"];
 }
 -(IBAction)toggleAdd:(id)sender
-{  /* bool1=YES;
+{   bool1=YES;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
-    [picker release]; */
-    ContactsController * c=[[ContactsController alloc]init];
-    [self.navigationController pushViewController:c animated:YES];
+    [picker release]; 
+   // ContactsController * c=[[ContactsController alloc]init];
+    //[self.navigationController pushViewController:c animated:YES];
     
    } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
@@ -314,7 +314,6 @@ int j=1,count=0;
         toolBar.hidden = NO;
         [UIView animateWithDuration:0.8 
                          animations:^{
-                             //myPickerView.frame = CGRectMake(0, 210, 310, 180);
                              myPickerView.alpha = 1;
                              toolBar.alpha=1;
                          }];
@@ -326,7 +325,6 @@ int j=1,count=0;
 	{   //self.myPickerView.hidden = YES;
         [UIView animateWithDuration:0.8 
                          animations:^{
-                             //myPickerView.frame = CGRectMake(0, 210, 310,180);
                              myPickerView.alpha = 0;
                              toolBar.alpha=0;
                          }];
