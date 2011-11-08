@@ -12,14 +12,14 @@
 #import "AddressBookUI/AddressBookUI.h"
 @implementation TextController
 @synthesize listName,nameIn,nameOut,nameOr,listUserIdIn,listUserNameIn,listUserNameOut,listUserIdOut,listUserIdOr,listUserNameOr,list;
-@synthesize str1,str2,str3,str4;
+@synthesize strListName,strNameIn,strNameOut,strNameOr;
 -(void)viewDidLoad{
     //bo=NO;
     e=NO;
-    self.listName.text = str1;
-    self.nameIn.text = str2;
-    self.nameOut.text =str3;
-    self.nameOr.text =str4;
+    self.listName.text = strListName;
+    self.nameIn.text = strNameIn;
+    self.nameOut.text =strNameOut;
+    self.nameOr.text =strNameOr;
    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(text:) name:@"text1" object:nil];
     da=[[DBOperation alloc]init];
@@ -28,8 +28,8 @@
     [da createTable:createRules];
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
     [da createTable:createPlayTable];
-    NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
-    [da createTable:createPlayIdTable];
+    NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
+    [da createTable:createPlayIdOrder];
 
     self.listUserIdIn=[NSMutableArray arrayWithCapacity:40];
     self.listUserNameIn=[NSMutableArray arrayWithCapacity:40];
@@ -192,9 +192,9 @@ else
         NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
         [da selectFromPlayTable:selectPlayTable];
         self.list=da.playIdAry;
-    NSString *insertPlayIdTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[list objectAtIndex:[list count]-1]intValue]];
-     NSLog(@"%@",insertPlayIdTable);
-     [da insertToTable:insertPlayIdTable];
+    NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[list objectAtIndex:[list count]-1]intValue]];
+     NSLog(@"%@",insertPlayIdOrder);
+     [da insertToTable:insertPlayIdOrder];
         
      NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
      [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
@@ -330,10 +330,10 @@ else
 - (void)dealloc
 { 
     
-    [str1 release];
-    [str3 release];
-    [str2 release];
-    [str4 release];
+    [strListName release];
+    [strNameIn release];
+    [strNameOr release];
+    [strNameOut release];
     [list release];
     [listName release];
     [nameOut release];

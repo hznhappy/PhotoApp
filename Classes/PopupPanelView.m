@@ -72,8 +72,8 @@ CGFloat byheight = 30;
     }
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];
-    [da createTable:createIdTable];
+    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];
+    [da createTable:createIdOrder];
      NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder" ];
     [da selectOrderId:selectIdOrder];
     self.list=da.orderIdList; 

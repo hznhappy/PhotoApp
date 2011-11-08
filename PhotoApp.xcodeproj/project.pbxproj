@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		181D58F51447E0B10092AE68 /* DeleteMeController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181D58F41447E0B10092AE68 /* DeleteMeController.xib */; };
 		182F212E1462AF0400C3C74B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 182F212D1462AF0400C3C74B /* MainWindow.xib */; };
+		183E4E78146926EA0090BE7B /* ContactsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183E4E77146926EA0090BE7B /* ContactsController.m */; };
 		184C5204144D703D00F0494A /* UserTableController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C5203144D703D00F0494A /* UserTableController.xib */; };
+		186A4F3A1468C54E0074042A /* ContactsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186A4F391468C54E0074042A /* ContactsController.xib */; };
 		1D3623260D0F684500981E51 /* PhotoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* PhotoAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -58,7 +60,10 @@
 /* Begin PBXFileReference section */
 		181D58F41447E0B10092AE68 /* DeleteMeController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeleteMeController.xib; sourceTree = "<group>"; };
 		182F212D1462AF0400C3C74B /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		183E4E76146926EA0090BE7B /* ContactsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsController.h; sourceTree = "<group>"; };
+		183E4E77146926EA0090BE7B /* ContactsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsController.m; sourceTree = "<group>"; };
 		184C5203144D703D00F0494A /* UserTableController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UserTableController.xib; path = Classes/UserTableController.xib; sourceTree = "<group>"; };
+		186A4F391468C54E0074042A /* ContactsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactsController.xib; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* PhotoAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		1D3623250D0F684500981E51 /* PhotoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PhotoAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -192,6 +197,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				186A4F391468C54E0074042A /* ContactsController.xib */,
 				182F212D1462AF0400C3C74B /* MainWindow.xib */,
 				A1F82E861462A01F00BED207 /* TextController.xib */,
 				184C5203144D703D00F0494A /* UserTableController.xib */,
@@ -284,6 +290,8 @@
 				A116EB651463E35D00BE9BDA /* AnimaSelectController.h */,
 				A116EB661463E35D00BE9BDA /* AnimaSelectController.m */,
 				A116EB671463E35D00BE9BDA /* AnimaSelectController.xib */,
+				183E4E76146926EA0090BE7B /* ContactsController.h */,
+				183E4E77146926EA0090BE7B /* ContactsController.m */,
 			);
 			name = TableView;
 			sourceTree = "<group>";
@@ -371,6 +379,7 @@
 				A1F82E921462A40500BED207 /* SwitchButtonCell.xib in Resources */,
 				182F212E1462AF0400C3C74B /* MainWindow.xib in Resources */,
 				A116EB691463E35D00BE9BDA /* AnimaSelectController.xib in Resources */,
+				186A4F3A1468C54E0074042A /* ContactsController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +409,7 @@
 				A1F82E8B1462A3A200BED207 /* TextFieldCell.m in Sources */,
 				A1F82E911462A40500BED207 /* SwitchButtonCell.m in Sources */,
 				A116EB681463E35D00BE9BDA /* AnimaSelectController.m in Sources */,
+				183E4E78146926EA0090BE7B /* ContactsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

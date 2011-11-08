@@ -4,6 +4,7 @@
 #import "DBOperation.h"
 #import "User.h"
 #import "AssetTablePicker.h"
+#import "ContactsController.h"
 @implementation DeleteMeController
 @synthesize myPickerView,  pickerViewArray;
 @synthesize list;
@@ -39,8 +40,8 @@ int j=1,count=0;
     [da openDB];
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
     [da createTable:createUserTable];
-    NSString *createIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
-    [da createTable:createIdTable];
+    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
+    [da createTable:createIdOrder];
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     [da selectOrderId:selectIdOrder];
     self.list=da.orderIdList;
@@ -114,11 +115,14 @@ int j=1,count=0;
 	return [pathname stringByAppendingPathComponent:@"data.db"];
 }
 -(IBAction)toggleAdd:(id)sender
-{   bool1=YES;
+{  /* bool1=YES;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
-    [picker release]; 
+    [picker release]; */
+    ContactsController * c=[[ContactsController alloc]init];
+    [self.navigationController pushViewController:c animated:YES];
+    
    } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
 {
@@ -154,9 +158,9 @@ int j=1,count=0;
         [da insertToTable:insertUserTable];
         
         
-        NSString *insertIdTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,[fid intValue]];
-        NSLog(@"%@",insertIdTable);
-        [da insertToTable:insertIdTable];   
+        NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,[fid intValue]];
+        NSLog(@"%@",insertIdOrder);
+        [da insertToTable:insertIdOrder];   
         NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"add" 
                                                            object:self 
@@ -278,8 +282,8 @@ int j=1,count=0;
     [button setValue:[UIColor whiteColor] forKey:@"tintColor"];  
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
-    [da createTable:createUserTable];
+   // NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    //[da createTable:createUserTable];
     User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
 	cell.textLabel.text = [NSString stringWithFormat:@"%@",user1.name];
     if([user1.color isEqualToString:@"greenColor"])

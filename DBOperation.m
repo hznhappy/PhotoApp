@@ -9,7 +9,7 @@
 #import "DBOperation.h"
 #import "User.h"
 @implementation DBOperation
-@synthesize orderIdList,orderList,tagIdAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId;
+@synthesize orderIdList,orderList,tagIdAry,playNameAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId;
 -(NSString *)filePath{
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *directory = [paths objectAtIndex:0];
@@ -61,13 +61,17 @@
 -(void)selectFromPlayTable:(NSString *)sql
 {
     playIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
+    playNameAry=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newid;
+    NSString *newname;
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-            newid=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];;
+            newid=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
+            newname=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,1)];
             [playIdAry addObject:newid];
+            [playNameAry addObject:newname];
         }
     }	
     sqlite3_finalize(statement);  

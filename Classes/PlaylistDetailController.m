@@ -38,16 +38,6 @@
 }
 
 #pragma mark - View lifecycle
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView
-{
-}
-*/
-
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 { NSLog(@"EE%@",a);
         mySwc = NO;
@@ -145,8 +135,8 @@
 {
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
     [dataBase createTable:createPlayTable];
-    NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
-    [dataBase createTable:createPlayIdTable];
+    NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
+    [dataBase createTable:createPlayIdOrder];
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdOrder"];
     [dataBase selectOrderId:selectPlayIdOrder];
     
@@ -162,18 +152,18 @@
     [self creatTable];
     User *user3 = [dataBase getUserFromPlayTable:[a intValue]];
     TextController *ts=[[TextController alloc]init];
-    ts.str1 = user3.name;
+    ts.strListName = user3.name;
     NSString *selectRulesIn= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],1];
     [dataBase selectFromRules:selectRulesIn];
     for(int i=0;i<[dataBase.playlist_UserName count];i++)
     {
-        if(ts.str2==nil||ts.str2.length==0)
+        if(ts.strNameIn==nil||ts.strNameIn.length==0)
         {
-            ts.str2=[dataBase.playlist_UserName objectAtIndex:i];
+            ts.strNameIn=[dataBase.playlist_UserName objectAtIndex:i];
         }
         else
-        {  ts.str2=[ts.str2 stringByAppendingString:@","];
-            ts.str2=[ts.str2 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:i]];
+        {  ts.strNameIn=[ts.strNameIn stringByAppendingString:@","];
+            ts.strNameIn=[ts.strNameIn stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:i]];
         }
         
     }
@@ -181,31 +171,30 @@
     [dataBase selectFromRules:selectRulesOut];
     for(int j=0;j<[dataBase.playlist_UserName count];j++)
     {
-        if(ts.str3==nil||ts.str3.length==0)
+        if(ts.strNameOut==nil||ts.strNameOut.length==0)
         {
             
-            ts.str3=[dataBase.playlist_UserName objectAtIndex:j];
+            ts.strNameOut=[dataBase.playlist_UserName objectAtIndex:j];
         }
         else
-        {  ts.str3=[ts.str3 stringByAppendingString:@","];
-            ts.str3=[ts.str3 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:j]];
+        {  ts.strNameOut=[ts.strNameOut stringByAppendingString:@","];
+            ts.strNameOut=[ts.strNameOut stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:j]];
         }
     }
     NSString *selectRulesOr= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],2];
     [dataBase selectFromRules:selectRulesOr];
     for(int k=0;k<[dataBase.playlist_UserName count];k++)
     {
-        if(ts.str4==nil||ts.str4.length==0)
+        if(ts.strNameOr==nil||ts.strNameOr.length==0)
         {
             
-            ts.str4=[dataBase.playlist_UserName objectAtIndex:k];
+            ts.strNameOr=[dataBase.playlist_UserName objectAtIndex:k];
         }
         else
-        {  ts.str4=[ts.str4 stringByAppendingString:@","];
-            ts.str4=[ts.str4 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:k]];
+        {  ts.strNameOr=[ts.strNameOr stringByAppendingString:@","];
+            ts.strNameOr=[ts.strNameOr stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:k]];
         }
     }
-
     [dataBase closeDB];
     [self.navigationController pushViewController:ts animated:YES];
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:a,@"playlist_id",nil];

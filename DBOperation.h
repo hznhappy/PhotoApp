@@ -24,6 +24,7 @@
     NSMutableArray *orderList;
     NSMutableArray *tagIdAry;
     NSMutableArray *playIdAry;
+    NSMutableArray *playNameAry;
     NSMutableArray *playlist_UserName;
     NSMutableArray *playlist_UserId;
    // NSMutableArray *playlist_name;
@@ -33,6 +34,7 @@
 @property(nonatomic,retain)NSMutableArray *orderList;
 @property(nonatomic,retain)NSMutableArray *tagIdAry;
 @property(nonatomic,retain)NSMutableArray *playIdAry;
+@property(nonatomic,retain)NSMutableArray *playNameAry;
 @property(nonatomic,retain)NSMutableArray *playlist_UserName;
 @property(nonatomic,retain)NSMutableArray *playlist_UserId;
 //@property(nonatomic,retain)NSMutableArray *playlist_nameOut;

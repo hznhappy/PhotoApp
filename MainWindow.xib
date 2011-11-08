@@ -308,6 +308,7 @@
 							<reference ref="38005321"/>
 						</object>
 						<reference key="parent" ref="558861746"/>
+						<string key="objectName">Navigation Controller - Person</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">60</int>
