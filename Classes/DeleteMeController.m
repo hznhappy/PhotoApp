@@ -310,7 +310,6 @@ int j=1,count=0;
         toolBar.hidden = NO;
         [UIView animateWithDuration:0.8 
                          animations:^{
-                             //myPickerView.frame = CGRectMake(0, 210, 310, 180);
                              myPickerView.alpha = 1;
                              toolBar.alpha=1;
                          }];
@@ -322,7 +321,6 @@ int j=1,count=0;
 	{   //self.myPickerView.hidden = YES;
         [UIView animateWithDuration:0.8 
                          animations:^{
-                             //myPickerView.frame = CGRectMake(0, 210, 310,180);
                              myPickerView.alpha = 0;
                              toolBar.alpha=0;
                          }];

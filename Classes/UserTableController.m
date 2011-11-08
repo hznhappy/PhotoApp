@@ -367,7 +367,7 @@
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
     detailController.listName =[NSString stringWithFormat:@"%@",user3.name];
     detailController.a=[NSString stringWithFormat:@"%@",[list objectAtIndex:indexPath.row]];
-    NSLog(@"EE%@", detailController.a);
+    detailController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
 }

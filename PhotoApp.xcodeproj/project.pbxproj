@@ -26,6 +26,8 @@
 		A100BFBA14455FE300D85BD6 /* right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A100BFB614455FE300D85BD6 /* right@2x.png */; };
 		A10F000114593E7A00D007F3 /* playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F000014593E7A00D007F3 /* playlist.png */; };
 		A10F000314593E7F00D007F3 /* albums.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F000214593E7F00D007F3 /* albums.png */; };
+		A10F59FF1468E8F100A0AC22 /* Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F59FD1468E8F100A0AC22 /* Selected.png */; };
+		A10F5A001468E8F100A0AC22 /* Unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F59FE1468E8F100A0AC22 /* Unselected.png */; };
 		A10FFFFF14593E3F00D007F3 /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = A10FFFFE14593E3F00D007F3 /* person.png */; };
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
 		A116EB681463E35D00BE9BDA /* AnimaSelectController.m in Sources */ = {isa = PBXBuildFile; fileRef = A116EB661463E35D00BE9BDA /* AnimaSelectController.m */; };
@@ -80,6 +82,8 @@
 		A100BFB614455FE300D85BD6 /* right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@2x.png"; sourceTree = "<group>"; };
 		A10F000014593E7A00D007F3 /* playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist.png; sourceTree = "<group>"; };
 		A10F000214593E7F00D007F3 /* albums.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = albums.png; sourceTree = "<group>"; };
+		A10F59FD1468E8F100A0AC22 /* Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Selected.png; sourceTree = "<group>"; };
+		A10F59FE1468E8F100A0AC22 /* Unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Unselected.png; sourceTree = "<group>"; };
 		A10FFFFE14593E3F00D007F3 /* person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = person.png; sourceTree = "<group>"; };
 		A11401C41440016F007B4B95 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
 		A116EB651463E35D00BE9BDA /* AnimaSelectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimaSelectController.h; sourceTree = "<group>"; };
@@ -187,6 +191,8 @@
 				181D58F41447E0B10092AE68 /* DeleteMeController.xib */,
 				A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */,
 				A1F82E2C1462612F00BED207 /* PlaylistDetailController.xib */,
+				A10F59FD1468E8F100A0AC22 /* Selected.png */,
+				A10F59FE1468E8F100A0AC22 /* Unselected.png */,
 				A10F000014593E7A00D007F3 /* playlist.png */,
 				A100BFB314455FE300D85BD6 /* left.png */,
 				A10F000214593E7F00D007F3 /* albums.png */,
@@ -345,6 +351,8 @@
 				A1F82E871462A01F00BED207 /* TextController.xib in Resources */,
 				182F212E1462AF0400C3C74B /* MainWindow.xib in Resources */,
 				A116EB691463E35D00BE9BDA /* AnimaSelectController.xib in Resources */,
+				A10F59FF1468E8F100A0AC22 /* Selected.png in Resources */,
+				A10F5A001468E8F100A0AC22 /* Unselected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

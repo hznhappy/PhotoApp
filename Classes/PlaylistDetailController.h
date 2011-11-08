@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#define MUST     @"Must"
+#define EXCLUDE  @"Exclude"
+#define OPTIONAL @"Optional"
 @class DBOperation;
 @interface PlaylistDetailController : UIViewController<UITableViewDelegate,UITableViewDataSource> {
     UITableView *listTable;
@@ -19,7 +22,11 @@
     UILabel *musicLabel;
     UITextField *textField;
     UISwitch *mySwitch;
+    UIImage *selectImg;
+    UIImage *unselectImg;
     
+    NSMutableArray *userNames;
+    UILabel *state;
     BOOL mySwc;
     NSString *listName;
     NSString *a;
@@ -35,10 +42,14 @@
 @property(nonatomic,retain)IBOutlet UILabel *musicLabel;
 @property(nonatomic,retain)IBOutlet UITextField *textField;
 @property(nonatomic,retain)IBOutlet UISwitch *mySwitch;
+@property(nonatomic,retain)IBOutlet UILabel *state;
 
+@property(nonatomic,retain)NSMutableArray *userNames;
 @property(nonatomic,assign)BOOL mySwc;
 @property(nonatomic,retain)NSString *listName;
 @property(nonatomic,retain)NSString *a;
 -(IBAction)hideKeyBoard:(id)sender;
 -(IBAction)updateTable:(id)sender;
+-(IBAction)resetAll;
+-(UIButton *)getStateButton;
 @end
