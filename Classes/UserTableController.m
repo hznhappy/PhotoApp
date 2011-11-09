@@ -7,7 +7,6 @@
 //
 
 #import "UserTableController.h"
-#import "TextController.h"
 #import "AssetTablePicker.h"
 #import "PlaylistDetailController.h"
 @implementation UserTableController

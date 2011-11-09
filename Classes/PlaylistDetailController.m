@@ -7,7 +7,6 @@
 //
 
 #import "PlaylistDetailController.h"
-#import "TextController.h"
 #import "User.h"
 #import "DBOperation.h"
 #import "AnimaSelectController.h"
@@ -21,7 +20,6 @@
 @synthesize listName;
 @synthesize userNames;
 @synthesize selectedIndexPaths;
-@synthesize mySwc,a;
 @synthesize mySwc,a,playrules_idList,playrules_nameList,playrules_ruleList,playIdList,orderList;
 
 - (void)dealloc
@@ -255,6 +253,8 @@
     [self.textField resignFirstResponder];
 }
 
+#pragma mark -
+#pragma mark media picker delegate method
 - (void) mediaPicker: (MPMediaPickerController *) mediaPicker didPickMediaItems: (MPMediaItemCollection *) mediaItemCollection
 {
     if (mediaItemCollection) {
@@ -452,6 +452,9 @@
     NSDictionary *dic = [note userInfo];
     NSString *labelText = [dic objectForKey:@"tranStyle"];
     self.tranLabel.text = labelText;
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [textField resignFirstResponder];
 }
 
 - (void)viewDidUnload

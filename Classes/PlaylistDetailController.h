@@ -11,6 +11,7 @@
 #define MUST     @"Must"
 #define EXCLUDE  @"Exclude"
 #define OPTIONAL @"Optional"
+#define Rules    @"Rules"
 @class DBOperation;
 @interface PlaylistDetailController : UIViewController<UITableViewDelegate,UITableViewDataSource,MPMediaPickerControllerDelegate> {
     UITableView *listTable;

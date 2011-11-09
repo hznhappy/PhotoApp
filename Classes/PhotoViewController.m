@@ -716,7 +716,6 @@ else{
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-    [timer invalidate];
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];

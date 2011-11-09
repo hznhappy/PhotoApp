@@ -12,6 +12,7 @@
 #define PlayTable @"PlayTable"
 #define playIdTable @"playIdTable"
 #define playIdOrder @"PlayIdOrder"
+#define Rules @"Rules"
 @interface UserTableController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
     
     IBOutlet UITableView *tableView;
