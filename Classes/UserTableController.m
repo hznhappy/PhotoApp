@@ -48,6 +48,9 @@
     NSMutableArray *tempArray2 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray3 = [[NSMutableArray alloc]init];
     self.SUM=[[NSMutableSet alloc]init];
+    // NSMutableSet *tempArray4 = [[NSMutableSet alloc]init];
+   // self.SUM=tempArray4;
+   // [SUM R]
     self.allUrl = tempArray1;
     self.unTagUrl = tempArray2;
     self.tagUrl = tempArray3;
@@ -232,8 +235,10 @@
 
 -(IBAction)toggleAdd:(id)sender
 {
-    TextController *ts1=[[TextController alloc]init];
-	[self.navigationController pushViewController:ts1 animated:YES];
+   // TextController *ts1=[[TextController alloc]init];
+     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
+	[self.navigationController pushViewController:detailController animated:YES];
+    [detailController release];
 }
 
 #pragma mark -

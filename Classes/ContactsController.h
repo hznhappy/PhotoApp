@@ -29,5 +29,5 @@
 -(void)logGroups:(id)group;
 @property(nonatomic,retain)IBOutlet UITableView *ContractTable;
 @property(nonatomic,retain)NSMutableArray *list;
-
+-(IBAction)back;
 @end

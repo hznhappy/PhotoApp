@@ -31,7 +31,12 @@
     NSString *listName;
     NSString *a;
     DBOperation *dataBase;
-
+    NSMutableArray *playrules_idList;
+    NSMutableArray *playrules_nameList;
+    NSMutableArray *playrules_ruleList;
+    NSMutableArray *playIdList;
+    NSMutableArray *orderList;
+    UIButton *stateButton;
 }
 @property(nonatomic,retain)IBOutlet UITableView *listTable;
 @property(nonatomic,retain)IBOutlet UITableViewCell *textFieldCell;
@@ -48,8 +53,19 @@
 @property(nonatomic,assign)BOOL mySwc;
 @property(nonatomic,retain)NSString *listName;
 @property(nonatomic,retain)NSString *a;
+@property(nonatomic,retain)NSMutableArray *playrules_idList;
+@property(nonatomic,retain)NSMutableArray *playrules_nameList;
+@property(nonatomic,retain)NSMutableArray *playrules_ruleList;
+@property(nonatomic,retain)NSMutableArray *playIdList;
+@property(nonatomic,retain)NSMutableArray *orderList;
+@property(nonatomic,retain)UIButton *stateButton;
 -(IBAction)hideKeyBoard:(id)sender;
 -(IBAction)updateTable:(id)sender;
 -(IBAction)resetAll;
 -(UIButton *)getStateButton;
+-(IBAction)save;
+-(void)insert:(NSInteger)Row;
+-(void)deletes:(NSInteger)Row;
+-(void)creatTable;
+-(void)update:(NSInteger)Row rule:(int)rule;
 @end

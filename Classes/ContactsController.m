@@ -13,7 +13,9 @@
 -(void)viewDidLoad
  {
  list=[[NSMutableArray alloc]init];
- fu=[[NSMutableArray alloc]init];
+ NSMutableArray *A=[[NSMutableArray alloc]init];
+     self.fu=A;
+     [A release];
 
  NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];  
  self.names = dict;
@@ -35,9 +37,13 @@
  [super viewDidLoad];
  
  }
+-(IBAction)back
+{
+   [self dismissModalViewControllerAnimated:YES];
+}
  -(void)logContact:(id)person
  {
- CFStringRef name = ABRecordCopyCompositeName(person);
+ NSString *name=(NSString *)ABRecordCopyCompositeName(person);
  ABRecordID recId = ABRecordGetRecordID(person);
  NSLog(@"Person Name: %@ RecordID:%d",name, recId);
  NSString *newname=[NSString stringWithFormat:@"%@",name];
@@ -45,7 +51,7 @@
  [list addObject:newname];
  NSLog(@"EWEW%@",list);
     // for (NSString * word in newname) {
-     NSString * firstLetter;
+     NSString * firstLetter=nil;
          if ([newname length] > 0) {
              firstLetter = [newname substringToIndex:1];
              NSLog(@"WW%@",firstLetter);
@@ -57,13 +63,15 @@
          [fu addObject:firstLetter];
      }
      [self.names setObject:newname forKey:firstLetter];
-
+     [name release];
+     
  }
  -(void)logGroups:(id)group
- {
- CFStringRef name = ABRecordCopyValue(group,kABGroupNameProperty);
+{NSString *name=(NSString *)ABRecordCopyCompositeName(group);
  ABRecordID recId = ABRecordGetRecordID(group);
  NSLog(@"Group Name: %@ RecordID:%d",name, recId);
+
+[name release];
  }
  
 
@@ -78,16 +86,31 @@
  return[list count];
  }*/
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section  
-{  
+{  NSMutableArray *nameSe=[[[NSMutableArray alloc]init]autorelease];
     NSLog(@"%d",[keys count]);
     NSString *key = [keys objectAtIndex:section];
     NSLog(@"RREREEEEER%@",key);//section为其中一个分区，获取section的索引 
-    NSLog(@"%@",names);
-    NSString *nameSection = [names objectForKey:key];
-    NSMutableArray *nameSe=[[NSMutableArray alloc]init];
-    [nameSe addObject:nameSection];
-    NSLog(@"%d",[nameSe count]);//根据索引获取分区里面的所有数据  
-    return [nameSe count];   
+    //NSLog(@"%@",names);
+    for(NSString *u in list)
+    {
+        NSString * firstLetter=nil;
+        if ([u length] > 0) {
+            firstLetter = [u substringToIndex:1];
+            NSLog(@"WW%@",firstLetter);
+        }
+        if([firstLetter isEqualToString:key])
+        {NSLog(@"ER");
+             [nameSe addObject:u];
+        }
+
+    }
+    //NSString *nameSection = [names objectForKey:key];
+    
+   
+    NSLog(@"%d",[nameSe count]);
+ //根据索引获取分区里面的所有数据  
+    return [nameSe count]; 
+    
     //return [list count];//返回分区里的行的数量  
 }  
 - (UITableViewCell *)tableView:(UITableView *)tableView   
@@ -96,10 +119,27 @@
     //NSLog(@"tianshi\n");  
     NSUInteger section = [indexPath section];//返回第几分区  
     NSUInteger row = [indexPath row];//获取第几分区的第几行  
-    NSString *key = [keys objectAtIndex:section]; //返回 分区的索引key  
-    NSArray *nameSection = [names objectForKey:key];
-    NSMutableArray *nameSe=[[NSMutableArray alloc]init];
-    [nameSe addObject:nameSection];//返回 根据key获得：当前分区的所有内容，  
+    NSString *key = [keys objectAtIndex:section];
+    NSMutableArray *nameSe=[[NSMutableArray alloc]init];//返回 分区的索引key  
+    for(NSString *u in list)
+    {
+        NSString * firstLetter=nil;
+        if ([u length] > 0) {
+            firstLetter = [u substringToIndex:1];
+            NSLog(@"WW%@",firstLetter);
+        }
+        if([firstLetter isEqualToString:key])
+        {NSLog(@"ER");
+          //  NSArray *nameSection = [names objectForKey:key];
+
+            [nameSe addObject:u];
+        }
+        
+    }
+
+  // NSArray *nameSection = [names objectForKey:key];
+    
+   // [nameSe addObject:nameSection];//返回 根据key获得：当前分区的所有内容，  
     static NSString *SectionsTableIdentifier = @"SectionsTableIdentifier";  
     //判断cell是否存在，如果没有，则新建一个  
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:  
@@ -110,12 +150,14 @@
     }  
     //给cell赋值  
     cell.textLabel.text = [nameSe objectAtIndex:row];  
+    [nameSe release];
     return cell;  
 }  
 
  
  - (void)dealloc
  {
+     [fu release];
  [super dealloc];
  }
 

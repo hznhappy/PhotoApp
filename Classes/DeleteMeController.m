@@ -120,8 +120,9 @@ int j=1,count=0;
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
     [picker release]; 
-   // ContactsController * c=[[ContactsController alloc]init];
-    //[self.navigationController pushViewController:c animated:YES];
+    //ContactsController * c=[[ContactsController alloc]init];
+   // [self.navigationController pushViewController:c animated:YES];
+    //[self presentModalViewController:c animated:YES];
     
    } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
@@ -373,8 +374,7 @@ int j=1,count=0;
     [da createTable:createTag];
     NSString *selectTag= [NSString stringWithFormat:@"select * from tag"];
     [da selectFromTAG:selectTag];
-    NSMutableArray *listid1=[NSMutableArray arrayWithCapacity:100];
-    listid1=da.tagIdAry;
+    NSMutableArray *listid1=da.tagIdAry;
     if([listid1 containsObject:[list objectAtIndex:indexPath.row]])
     {
         UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:@"你好" message:@"此人已作为照片标记使用,是否确定要删除" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:nil];
@@ -394,7 +394,7 @@ int j=1,count=0;
         [self.tableView reloadData];
     }
     
-    
+    //[listid1 release];
     [da closeDB];
     
     
