@@ -75,8 +75,9 @@
     
 }
 -(void)selectFromTAG:(NSString *)sql
-{tagIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
- tagUrl=[[[NSMutableSet alloc]init]retain];
+{
+    tagIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
+    tagUrl=[[[NSMutableSet alloc]init]retain];
     NSString *newid;
     NSString *newUrl;
     sqlite3_stmt *statement;

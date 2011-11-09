@@ -163,7 +163,7 @@ int j=1,count=0;
                                                          userInfo:dic1];
         
     }
-    
+    [readName release];
     
     [da closeDB];
     [self dismissModalViewControllerAnimated:YES];
@@ -403,11 +403,6 @@ int j=1,count=0;
 
 -(void)alertView:(UIAlertView *)alert1 didDismissWithButtonIndex:(NSInteger)buttonIndex{
     switch (buttonIndex) {
-            
-            
-            int i=[id1 intValue];
-            
-            
         case 1:
             NSLog(@"OB");
             da=[[DBOperation alloc]init];
@@ -421,13 +416,9 @@ int j=1,count=0;
             [da deleteDB:deleteTag];
             [da closeDB];
             [self viewDidLoad];
-            [self.tableView reloadData];
-            
+            [self.tableView reloadData];            
             break;
         case 0:
-            NSLog(@"%d",[id1 intValue]);
-            NSLog(@"www%d",i);
-            NSLog(@"cance");
             [self.tableView reloadData];
             break;
     }

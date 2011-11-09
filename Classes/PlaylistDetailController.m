@@ -20,11 +20,13 @@
 @synthesize mySwitch;
 @synthesize listName;
 @synthesize userNames;
+@synthesize selectedIndexPaths;
 @synthesize mySwc,a;
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [selectedIndexPaths release];
     [musicLabel release];
     [tranLabel release];
     [mySwitch release];
@@ -70,8 +72,11 @@
     unselectImg = [UIImage imageNamed:@"Unselected.png"];
     dataBase=[[DBOperation alloc]init];
     NSMutableArray *tempArray = [[NSMutableArray alloc]init];
+    NSMutableArray *temArray = [[NSMutableArray alloc]init];
+    self.selectedIndexPaths = temArray;
     self.userNames = tempArray;
     [tempArray release];
+    [temArray release];
     [dataBase openDB];
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     [dataBase selectOrderId:selectIdOrder];
@@ -83,7 +88,6 @@
     [dataBase closeDB];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeMusicAccessoryLabel:) name:@"changeMusicLabel" object:nil];
     [super viewDidLoad];
 }
 
@@ -156,6 +160,7 @@
             name.tag = indexPath.row;
             name.text = [userNames objectAtIndex:indexPath.row];
             [cell.contentView addSubview:name];
+            [name release];
 
             UIButton *selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
             selectButton.tag = indexPath.row;
@@ -164,11 +169,9 @@
             [selectButton setImage:unselectImg forState:UIControlStateNormal];
             [cell.contentView addSubview:selectButton];
             
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-           // cell.detailTextLabel.text = @"Optional";
-            //[cell.detailTextLabel setFont:[UIFont boldSystemFontOfSize:13]];
         }
-                return cell;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
     }
 }
 
@@ -179,6 +182,16 @@
         [self.navigationController pushViewController:animateController animated:YES];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [animateController release];
+    }
+    if (indexPath.section ==0 && indexPath.row == 3) {
+        MPMediaPickerController *mediaPicker = [[MPMediaPickerController alloc] initWithMediaTypes: MPMediaTypeMusic];
+        
+        mediaPicker.delegate = self;
+        mediaPicker.allowsPickingMultipleItems = YES;
+        mediaPicker.prompt = @"Select songs";
+        
+        [self.navigationController pushViewController:mediaPicker animated:YES];
+        [mediaPicker release];    
     }
     if (indexPath.section == 1) {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -192,8 +205,10 @@
             if ([button isKindOfClass:[UIButton class]]) {
                 if ([button.currentImage isEqual:unselectImg]) {
                     [button setImage:selectImg forState:UIControlStateNormal];
+                    [selectedIndexPaths addObject:indexPath];
                 }else{
                     [button setImage:unselectImg forState:UIControlStateNormal];
+                    [selectedIndexPaths removeObject:indexPath];
                 }
             }
         }
@@ -201,6 +216,21 @@
     [self.textField resignFirstResponder];
 }
 
+- (void) mediaPicker: (MPMediaPickerController *) mediaPicker didPickMediaItems: (MPMediaItemCollection *) mediaItemCollection
+{
+    if (mediaItemCollection) {
+        MPMusicPlayerController *musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
+        [musicPlayer setQueueWithItemCollection: mediaItemCollection];
+        [musicPlayer play];
+        self.musicLabel.text = [musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyTitle];
+    }
+    [self dismissModalViewControllerAnimated: YES];
+}
+
+- (void) mediaPickerDidCancel: (MPMediaPickerController *) mediaPicker
+{
+    [self dismissModalViewControllerAnimated: YES];
+}
 -(void)creatTable
 {
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
@@ -273,6 +303,7 @@
     [[NSNotificationCenter defaultCenter]postNotificationName:@"edit" 
                                                        object:self 
                                                      userInfo:dic1];
+    [ts release];
 }
 
 #pragma mark -
@@ -282,7 +313,7 @@
     stateButton.frame = CGRectMake(0, 0, 75, 28);
     [stateButton addTarget:self action:@selector(changeState:) forControlEvents:UIControlEventTouchUpInside];
     [stateButton setTitle:MUST forState:UIControlStateNormal];
-    stateButton.backgroundColor = [UIColor greenColor];
+    stateButton.backgroundColor = [UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
     [stateButton.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
     return stateButton;
 }
@@ -290,13 +321,13 @@
     UIButton *button = (UIButton *)sender;
     [button.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
     if ([button.titleLabel.text isEqualToString:MUST]) {
-        button.backgroundColor = [UIColor redColor];
+        button.backgroundColor = [UIColor colorWithRed:44/255.0 green:100/255.0 blue:196/255.0 alpha:1.0];
         [button setTitle:EXCLUDE forState:UIControlStateNormal];
     }else if([button.titleLabel.text isEqualToString:EXCLUDE]){
-        button.backgroundColor = [UIColor cyanColor];
+        button.backgroundColor = [UIColor colorWithRed:81/255.0 green:142/255.0 blue:72/255.0 alpha:1.0];
         [button setTitle:OPTIONAL forState:UIControlStateNormal];
     }else{
-        button.backgroundColor = [UIColor greenColor];
+        button.backgroundColor = [UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         [button setTitle:MUST forState:UIControlStateNormal];
     }
 }
@@ -305,9 +336,13 @@
     UITableViewCell *cell = (UITableViewCell *)[[button superview] superview];
     if ([button.currentImage isEqual:selectImg]) {
         [button setImage:unselectImg forState:UIControlStateNormal];
+        NSIndexPath *index = [listTable indexPathForCell:cell];
+        [selectedIndexPaths removeObject:index];
         cell.accessoryView = nil;
     }else{
         [button setImage:selectImg forState:UIControlStateNormal];
+        NSIndexPath *index = [listTable indexPathForCell:cell];
+        [selectedIndexPaths addObject:index];
         cell.accessoryView = [self getStateButton];
     }
     
@@ -334,7 +369,20 @@
 }
 
 -(IBAction)resetAll{
-  
+    for (NSIndexPath *path in selectedIndexPaths) {
+        if (path.section == 1) {
+            UITableViewCell *cell = [listTable cellForRowAtIndexPath:path];
+            cell.accessoryView = nil;
+            for (UIButton *button in cell.contentView.subviews) {
+                if ([button isKindOfClass:[UIButton class]]) {
+                    if ([button.currentImage isEqual:selectImg]) {
+                        [button setImage:unselectImg forState:UIControlStateNormal];
+                    }
+                }
+            }
+        }
+    }
+    [selectedIndexPaths removeAllObjects];
 }
 
 #pragma mark -
@@ -345,12 +393,10 @@
     self.tranLabel.text = labelText;
 }
 
--(void)changeMusicAccessoryLabel:(NSNotification *)note{
-    
-}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    selectedIndexPaths = nil;
     textFieldCell = nil;
     textField = nil;
     tranCell = nil;
@@ -369,10 +415,5 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-	return (UIInterfaceOrientationIsPortrait(interfaceOrientation) || interfaceOrientation == UIInterfaceOrientationPortrait);
-}
 
 @end

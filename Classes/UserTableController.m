@@ -76,7 +76,6 @@
     NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
     [da selectFromPlayTable:selectPlayTable];
    
-    NSLog(@"re%d",[list count]);
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [da createTable:createRules];
     
@@ -118,7 +117,7 @@
                [alert show];
                [alert release];
                
-               NSLog(@"A problem occured %@", [error description]);	                                 
+               //NSLog(@"A problem occured %@", [error description]);	                                 
            };	
            
            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
@@ -128,7 +127,7 @@
            
            
            [library release];
-           NSLog(@"this is the get AssetGroup method %d",[assetGroups count]);
+          // NSLog(@"this is the get AssetGroup method %d",[assetGroups count]);
            [pool release];
        });
 }
@@ -147,7 +146,7 @@
         }];
 
     }
-    NSLog(@"get allurl count is :%d",[allUrl count]);
+    //NSLog(@"get allurl count is :%d",[allUrl count]);
 }
 
 -(void)getUnTagUrls{
@@ -157,7 +156,7 @@
             [unTagUrl addObject:urls];
         }
     }
-    NSLog(@"%d is untag ",[unTagUrl count]);
+   // NSLog(@"%d is untag ",[unTagUrl count]);
 
 }
 
@@ -171,7 +170,7 @@
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [self.tagUrl addObject:dbStr];
     } 
-    NSLog(@"%d is tag",[tagUrl count]);
+    //NSLog(@"%d is tag",[tagUrl count]);
 }
 
 -(void)deleteUnExitUrls{
@@ -220,6 +219,7 @@
 {
     TextController *ts1=[[TextController alloc]init];
 	[self.navigationController pushViewController:ts1 animated:YES];
+    //[ts1 release];
 }
 
 #pragma mark -
@@ -247,7 +247,6 @@
         cell.textLabel.text = @"ALL";
     }else{
         User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
-        NSLog(@"%@",[list objectAtIndex:indexPath.row]);
     cell.textLabel.text=[NSString stringWithFormat:@"%@",user3.name];
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     }
@@ -303,7 +302,6 @@
     {
         NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
         [da selectFromTAG:selectTag];
-        NSLog(@"WE%@",da.playlist_UserId);
         if(SUM==NULL)
         {
             SUM=da.tagUrl;

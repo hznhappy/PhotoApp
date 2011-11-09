@@ -121,6 +121,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    [timer invalidate];
 	[super viewWillDisappear:animated];
     [self.navigationController setToolbarHidden:YES animated:YES];		
 }
@@ -131,47 +132,47 @@
     return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || interfaceOrientation == UIInterfaceOrientationPortrait);
 	
 }
-/*
- - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
- _rotating = YES;
- NSInteger count = 0;
- for (PhotoImageView *view in self.photoViews){
- if ([view isKindOfClass:[PhotoImageView class]]) {
- if (count != _pageIndex) {
- [view setHidden:YES];
- }
- }
- count++;
- }
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    _rotating = YES;
+    NSInteger count = 0;
+    for (PhotoImageView *view in self.photoViews){
+        if ([view isKindOfClass:[PhotoImageView class]]) {
+            if (count != _pageIndex) {
+                [view setHidden:YES];
+            }
+        }
+        count++;
+    }
+    
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    
+    for (PhotoImageView *view in self.photoViews){
+        if ([view isKindOfClass:[PhotoImageView class]]) {
+            [view rotateToOrientation:toInterfaceOrientation];
+        }
+    }
+    
+}
  
- }
- 
- - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
- 
- for (PhotoImageView *view in self.photoViews){
- if ([view isKindOfClass:[PhotoImageView class]]) {
- [view rotateToOrientation:toInterfaceOrientation];
- }
- }
- 
- }
- 
- - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
- 
- [self setupScrollViewContentSize];
- [self moveToPhotoAtIndex:_pageIndex animated:NO];
- [self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).frame animated:YES];
- 
- //  unhide side views
- for (PhotoImageView *view in self.photoViews){
- if ([view isKindOfClass:[PhotoImageView class]]) {
- [view setHidden:NO];
- }
- }
- _rotating = NO;
- 
- }
- */
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    
+    [self setupScrollViewContentSize];
+    [self moveToPhotoAtIndex:_pageIndex animated:NO];
+    [self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).frame animated:YES];
+    
+    //  unhide side views
+    for (PhotoImageView *view in self.photoViews){
+        if ([view isKindOfClass:[PhotoImageView class]]) {
+            [view setHidden:NO];
+        }
+    }
+    _rotating = NO;
+    
+}
+
 -(void)tiao:(NSNotification *)note
 {
     DeleteMeController *d=[[DeleteMeController alloc]init];
@@ -683,7 +684,7 @@ else{
 #pragma mark timer method
 
 -(void)fireTimer{
-    timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(playPhoto) userInfo:nil repeats:YES];
+    timer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(playPhoto) userInfo:nil repeats:YES];
     
 }
 -(void)playPhoto{
