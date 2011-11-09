@@ -15,13 +15,14 @@
 @implementation PlaylistDetailController
 @synthesize listTable;
 @synthesize textFieldCell,switchCell,tranCell,musicCell;
-@synthesize tranLabel,musicLabel,state;
+@synthesize tranLabel,musicLabel,state,stateButton;
 @synthesize textField;
 @synthesize mySwitch;
 @synthesize listName;
 @synthesize userNames;
 @synthesize selectedIndexPaths;
 @synthesize mySwc,a;
+@synthesize mySwc,a,playrules_idList,playrules_nameList,playrules_ruleList,playIdList,orderList;
 
 - (void)dealloc
 {
@@ -53,38 +54,38 @@
 }
 
 #pragma mark - View lifecycle
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView
-{
-}
-*/
-
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 { 
     
     mySwc = YES;
-    
     selectImg = [UIImage imageNamed:@"Selected.png"];
     unselectImg = [UIImage imageNamed:@"Unselected.png"];
     dataBase=[[DBOperation alloc]init];
     NSMutableArray *tempArray = [[NSMutableArray alloc]init];
+    NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    NSMutableArray *IdOrderArray = [[NSMutableArray alloc]init];
+     NSMutableArray *IdArray = [[NSMutableArray alloc]init];
     NSMutableArray *temArray = [[NSMutableArray alloc]init];
     self.selectedIndexPaths = temArray;
     self.userNames = tempArray;
+   // self.playIdList = playArray;
+    //self.orderList =IdOrderArray;
+    //self.playrules_idList =IdArray;
+    [IdOrderArray release];
+    [IdArray release];
     [tempArray release];
     [temArray release];
+    [playArray release];
     [dataBase openDB];
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     [dataBase selectOrderId:selectIdOrder];
-    NSMutableArray *orderList=dataBase.orderIdList;   //dataBase.orderIdlist count is 0;
+    self.orderList=dataBase.orderIdList;
+    NSLog(@"QQ%@",dataBase.orderList);//dataBase.orderIdlist count is 0;
     for (id object in orderList) {
         User *userName = [dataBase getUserFromUserTable:[object intValue]];
         [userNames addObject:userName.name];
     }
+    [self creatTable];
     [dataBase closeDB];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
@@ -167,6 +168,38 @@
             [selectButton addTarget:self action:@selector(setSelectState:) forControlEvents:UIControlEventTouchUpInside];
             selectButton.frame = CGRectMake(10, 11, 30, 30);
             [selectButton setImage:unselectImg forState:UIControlStateNormal];
+            if([playrules_idList containsObject:[orderList objectAtIndex:indexPath.row]])
+            {[dataBase openDB];
+                NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name,playlist_rules from rules where user_id=%d and playlist_id=%d",[[orderList objectAtIndex:indexPath.row]intValue],[a intValue]];
+                [dataBase selectFromRules:selectRules];
+                NSLog(@"F");
+                 cell.accessoryView = [self getStateButton];
+                [selectButton setImage:selectImg forState:UIControlStateNormal];
+                for(NSString * rule in dataBase.playlist_UserRules)
+                {NSLog(@"ew%d",[rule intValue]);
+                    if([rule intValue]==1)
+                    {
+                        NSLog(@"1111");
+                        [stateButton setTitle:MUST forState:UIControlStateNormal];
+                        stateButton.backgroundColor = [UIColor greenColor];
+                    }
+                    else if([rule intValue]==0)
+                    {
+                          NSLog(@"000");
+                        stateButton.backgroundColor = [UIColor redColor];
+                        [stateButton setTitle:EXCLUDE forState:UIControlStateNormal];
+                    }
+                    else if([rule intValue]==2)
+                    {  NSLog(@"2222");
+                       stateButton.backgroundColor = [UIColor cyanColor];
+                        [stateButton setTitle:OPTIONAL forState:UIControlStateNormal];
+                    }
+                }
+               
+
+                [dataBase closeDB];
+            }
+
             [cell.contentView addSubview:selectButton];
             
         }
@@ -201,12 +234,18 @@
         }else{
             cell.accessoryView = nil;
         }
+          NSInteger Row=indexPath.row;
         for (UIButton *button in cell.contentView.subviews) {
             if ([button isKindOfClass:[UIButton class]]) {
                 if ([button.currentImage isEqual:unselectImg]) {
                     [button setImage:selectImg forState:UIControlStateNormal];
                     [selectedIndexPaths addObject:indexPath];
+                [button setImage:selectImg forState:UIControlStateNormal];
+                  
+                    [self insert:Row];
+                   // NSLog(@"")
                 }else{
+                    [self deletes:Row];
                     [button setImage:unselectImg forState:UIControlStateNormal];
                     [selectedIndexPaths removeObject:indexPath];
                 }
@@ -235,81 +274,93 @@
 {
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
     [dataBase createTable:createPlayTable];
-    NSString *createPlayIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
-    [dataBase createTable:createPlayIdTable];
+    NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
+    [dataBase createTable:createPlayIdOrder];
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdOrder"];
     [dataBase selectOrderId:selectPlayIdOrder];
     
     NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
     [dataBase selectFromPlayTable:selectPlayTable];
     //self.list=da.playIdAry;
+     self.playIdList=dataBase.playIdAry;
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [dataBase createTable:createRules];
+    NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d",[a intValue]];
+    [dataBase selectFromRules:selectRules];
+    self.playrules_idList=dataBase.playlist_UserId;
+    NSLog(@"YYYY%@",playrules_idList);
+
 }
--(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-    
+-(void)insert:(NSInteger)Row
+{
     [dataBase openDB];
-    [self creatTable];
-    User *user3 = [dataBase getUserFromPlayTable:[a intValue]];
-    TextController *ts=[[TextController alloc]init];
-    ts.str1 = user3.name;
-    NSString *selectRulesIn= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],1];
-    [dataBase selectFromRules:selectRulesIn];
-    for(int i=0;i<[dataBase.playlist_UserName count];i++)
+    NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%d','%d','%@','%@')",Rules,[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1,1,
+                            [orderList objectAtIndex:Row],[userNames objectAtIndex:Row]];
+    NSLog(@"%@",insertRules);
+    [dataBase insertToTable:insertRules];  
+    [dataBase closeDB];
+
+}
+-(void)deletes:(NSInteger)Row
+{[dataBase openDB];
+    NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and user_id='%@'",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1,[orderList objectAtIndex:Row]];
+    NSLog(@"%@",deleteRules);
+    [dataBase deleteDB:deleteRules];
+    [dataBase closeDB];
+}
+-(void)update:(NSInteger)Row rule:(int)rule
+{[dataBase openDB];
+    NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playList_rules=%d WHERE playlist_id=%d and user_id='%@'",Rules,rule,[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1,[orderList objectAtIndex:Row]];
+	NSLog(@"%@",updateRules);
+	[dataBase updateTable:updateRules];
+    [dataBase closeDB];
+}
+-(IBAction)save
+{
+    dataBase=[[DBOperation alloc]init];
+    [dataBase openDB];
+    if(textField.text==nil)
     {
-        if(ts.str2==nil||ts.str2.length==0)
-        {
-            ts.str2=[dataBase.playlist_UserName objectAtIndex:i];
-        }
-        else
-        {  ts.str2=[ts.str2 stringByAppendingString:@","];
-            ts.str2=[ts.str2 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:i]];
-        }
+        
+        NSString *message=[[NSString alloc] initWithFormat:
+                           @"规则名不能为空!"];
+        
+        
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"提示"
+                              message:message
+                              delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"确定!",nil];
+        [alert show];
+        [alert release];
+        [message release];
         
     }
-    NSString *selectRulesOut= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],0];
-    [dataBase selectFromRules:selectRulesOut];
-    for(int j=0;j<[dataBase.playlist_UserName count];j++)
-    {
-        if(ts.str3==nil||ts.str3.length==0)
-        {
-            
-            ts.str3=[dataBase.playlist_UserName objectAtIndex:j];
-        }
-        else
-        {  
-            ts.str3=[ts.str3 stringByAppendingString:@","];
-            ts.str3=[ts.str3 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:j]];
-        }
-    }
-    NSString *selectRulesOr= [NSString stringWithFormat:@"select user_id,user_name from Rules where playList_id=%d and playList_rules=%d",[a intValue],2];
-    [dataBase selectFromRules:selectRulesOr];
-    for(int k=0;k<[dataBase.playlist_UserName count];k++)
-    {
-        if(ts.str4==nil||ts.str4.length==0)
-        {
-            
-            ts.str4=[dataBase.playlist_UserName objectAtIndex:k];
-        }
-        else
-        {  ts.str4=[ts.str4 stringByAppendingString:@","];
-            ts.str4=[ts.str4 stringByAppendingString:[dataBase.playlist_UserName objectAtIndex:k]];
-        }
-    }
+    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,textField.text];
+    NSLog(@"%@",insertPlayTable);
+    [dataBase insertToTable:insertPlayTable];
 
-    [dataBase closeDB];
-    [self.navigationController pushViewController:ts animated:YES];
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:a,@"playlist_id",nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"edit" 
+    NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
+    [dataBase selectFromPlayTable:selectPlayTable];
+    //NSMutableArray *playIdList;
+    playIdList=dataBase.playIdAry;
+    NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
+    NSLog(@"%@",insertPlayIdOrder);
+    [dataBase insertToTable:insertPlayIdOrder];
+    
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
                                                      userInfo:dic1];
-    [ts release];
-}
 
+    NSLog(@"D");
+    
+}
 #pragma mark -
 #pragma mark Coustom method
 -(UIButton *)getStateButton{
-    UIButton *stateButton = [UIButton buttonWithType:UIButtonTypeCustom];
+   stateButton = [UIButton buttonWithType:UIButtonTypeCustom];
     stateButton.frame = CGRectMake(0, 0, 75, 28);
     [stateButton addTarget:self action:@selector(changeState:) forControlEvents:UIControlEventTouchUpInside];
     [stateButton setTitle:MUST forState:UIControlStateNormal];
@@ -319,27 +370,37 @@
 }
 -(void)changeState:(id)sender{
     UIButton *button = (UIButton *)sender;
+    UITableViewCell *cell = (UITableViewCell *)[[button superview] superview];
+    NSIndexPath *index = [listTable indexPathForCell:cell];
+    NSInteger Row=index.row;
     [button.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
     if ([button.titleLabel.text isEqualToString:MUST]) {
         button.backgroundColor = [UIColor colorWithRed:44/255.0 green:100/255.0 blue:196/255.0 alpha:1.0];
         [button setTitle:EXCLUDE forState:UIControlStateNormal];
+        [self update:Row rule:0];
     }else if([button.titleLabel.text isEqualToString:EXCLUDE]){
         button.backgroundColor = [UIColor colorWithRed:81/255.0 green:142/255.0 blue:72/255.0 alpha:1.0];
         [button setTitle:OPTIONAL forState:UIControlStateNormal];
+        [self update:Row rule:2];
     }else{
         button.backgroundColor = [UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         [button setTitle:MUST forState:UIControlStateNormal];
+        [self update:Row rule:1];
     }
 }
 -(void)setSelectState:(id)sender{
     UIButton *button = (UIButton *)sender;
     UITableViewCell *cell = (UITableViewCell *)[[button superview] superview];
+    NSIndexPath *index = [listTable indexPathForCell:cell];
+     NSInteger Row=index.row;
     if ([button.currentImage isEqual:selectImg]) {
+        [self deletes:Row];
         [button setImage:unselectImg forState:UIControlStateNormal];
         NSIndexPath *index = [listTable indexPathForCell:cell];
         [selectedIndexPaths removeObject:index];
         cell.accessoryView = nil;
     }else{
+        [self insert:Row];
         [button setImage:selectImg forState:UIControlStateNormal];
         NSIndexPath *index = [listTable indexPathForCell:cell];
         [selectedIndexPaths addObject:index];

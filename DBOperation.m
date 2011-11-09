@@ -9,7 +9,7 @@
 #import "DBOperation.h"
 #import "User.h"
 @implementation DBOperation
-@synthesize orderIdList,orderList,tagIdAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId;
+@synthesize orderIdList,orderList,tagIdAry,playNameAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId,playlist_UserRules,photos;
 -(NSString *)filePath{
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *directory = [paths objectAtIndex:0];
@@ -47,7 +47,10 @@
     
 }
 -(NSMutableArray *)selectPhotos:(NSString *)sql{
-    photos = [[NSMutableArray arrayWithCapacity:40]retain];
+    NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    self.photos= playArray;
+    [playArray release];
+    //photos = [[NSMutableArray arrayWithCapacity:40]retain];
     sqlite3_stmt *stmt;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &stmt, nil) == SQLITE_OK) {
 		while (sqlite3_step(stmt)==SQLITE_ROW) {
@@ -59,15 +62,24 @@
     return photos;
 }
 -(void)selectFromPlayTable:(NSString *)sql
-{
-    playIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
+{NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    self.playNameAry= playArray;
+    [playArray release];
+    NSMutableArray *playArray1 = [[NSMutableArray alloc]init];
+    self. playIdAry= playArray1;
+    [playArray1 release];
+   // playIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
+    //playNameAry=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newid;
+    NSString *newname;
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-            newid=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];;
+            newid=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
+            newname=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,1)];
             [playIdAry addObject:newid];
+            [playNameAry addObject:newname];
         }
     }	
     sqlite3_finalize(statement);  
@@ -75,9 +87,15 @@
     
 }
 -(void)selectFromTAG:(NSString *)sql
-{
-    tagIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
-    tagUrl=[[[NSMutableSet alloc]init]retain];
+{ NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    self.tagIdAry= playArray;
+    [playArray release];
+    NSMutableSet *playArray1 = [[NSMutableSet alloc]init];
+    self.tagUrl= playArray1;
+    [playArray1 release];
+    
+   // tagIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
+ //tagUrl=[[[NSMutableSet alloc]init]retain];
     NSString *newid;
     NSString *newUrl;
     sqlite3_stmt *statement;
@@ -98,7 +116,12 @@
     sqlite3_finalize(statement);  
 }
 -(void)selectOrderId:(NSString *)sql
-{orderIdList=[[NSMutableArray arrayWithCapacity:40]retain];
+{
+    NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    self.orderIdList = playArray;
+    [playArray release];
+
+   // orderIdList=[[NSMutableArray arrayWithCapacity:40]retain];
     //orderList=[NSMutableArray arrayWithCapacity:40];
     NSString *newid;
     
@@ -117,10 +140,21 @@
 }
 -(void)selectFromRules:(NSString *)sql
 {
-    playlist_UserId=[[NSMutableArray arrayWithCapacity:40]retain];
+    NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    NSMutableArray *playArray1 = [[NSMutableArray alloc]init];
+     NSMutableArray *playArray2 = [[NSMutableArray alloc]init];
+    self.playlist_UserId= playArray;
+    self.playlist_UserName= playArray1;
+    self.playlist_UserRules= playArray2;
+    [playArray release];
+    [playArray1 release];
+    [playArray2 release];
+   // playlist_UserId=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newId;
-    playlist_UserName=[[NSMutableArray arrayWithCapacity:40]retain];
+   // playlist_UserName=[[NSMutableArray arrayWithCapacity:40]retain];
+  //  playlist_UserRules=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newname;
+    NSString *newRule;
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		while (sqlite3_step(statement)==SQLITE_ROW) {
@@ -128,7 +162,9 @@
             [playlist_UserId addObject:newId];
             newname=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
             [playlist_UserName addObject:newname];
-            // NSLog(@"FSD%@",playlist_nameIn);
+             newRule=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement,2)];
+            [playlist_UserRules addObject:newRule];
+             NSLog(@"FSD%@",playlist_UserRules);
         }
     }	
     sqlite3_finalize(statement);  
@@ -136,7 +172,7 @@
 }
 - (User*)getUserFromUserTable:(int)id
 {
-	User *user1 = [[User alloc] init];
+	User *user1 = [[[User alloc] init] autorelease];
 	NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM UserTable WHERE ID= %d",id];
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
@@ -150,13 +186,13 @@
 		return user1;
 		
 	}
-    [user1 release];
+   
 	return nil;
     
 }
 - (User*)getUserFromPlayTable:(int)id
 {
-	User *user3 = [[User alloc] init];
+	User *user3 = [[[User alloc] init]autorelease];
 	NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM PlayTable WHERE playList_id=%d",id];
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
@@ -166,19 +202,20 @@
 			
 		}
 		sqlite3_finalize(statement);
-		return user3;
+		
+        return user3;
 		
 	}
 	return nil;
-    [user3 release];
+    
     
 }
 -(BOOL)exitInDatabase:(NSString *)sql{
     sqlite3_stmt *stmt;
-    int *value;
+    int value=0;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &stmt, nil) == SQLITE_OK) {
         while (sqlite3_step(stmt)==SQLITE_ROW) {
-            value = (int*)sqlite3_column_int(stmt, 0);
+            value = (int)sqlite3_column_int(stmt, 0);
         }
 	}
     
@@ -213,6 +250,7 @@
     // NSMutableArray *playlist_name;
     [tagUrl release];
     [photos release];
+    [playlist_UserRules release];
 
     
    
