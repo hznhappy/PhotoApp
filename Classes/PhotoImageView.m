@@ -296,34 +296,34 @@
 	if (scrollView.zoomScale > 1.0f) {		
 		
 		
-		CGFloat height, width, originX, originY;
-		height = MIN(CGRectGetHeight(self.imageView.frame) + self.imageView.frame.origin.x, CGRectGetHeight(self.bounds));
-		width = MIN(CGRectGetWidth(self.imageView.frame) + self.imageView.frame.origin.y, CGRectGetWidth(self.bounds));
+		CGFloat height, width; //originX, originY;
+		//height = MIN(CGRectGetHeight(self.imageView.frame) + self.imageView.frame.origin.x, CGRectGetHeight(self.bounds));
+		//width = MIN(CGRectGetWidth(self.imageView.frame) + self.imageView.frame.origin.y, CGRectGetWidth(self.bounds));
 
 		
 		if (CGRectGetMaxX(self.imageView.frame) > self.bounds.size.width) {
 			width = CGRectGetWidth(self.bounds);
-			originX = 0.0f;
+			//originX = 0.0f;
 		} else {
 			width = CGRectGetMaxX(self.imageView.frame);
 			
-			if (self.imageView.frame.origin.x < 0.0f) {
+			/*if (self.imageView.frame.origin.x < 0.0f) {
 				originX = 0.0f;
 			} else {
 				originX = self.imageView.frame.origin.x;
-			}	
+			}*/	
 		}
 		
 		if (CGRectGetMaxY(self.imageView.frame) > self.bounds.size.height) {
 			height = CGRectGetHeight(self.bounds);
-			originY = 0.0f;
+			//originY = 0.0f;
 		} else {
 			height = CGRectGetMaxY(self.imageView.frame);
 			
 			if (self.imageView.frame.origin.y < 0.0f) {
-				originY = 0.0f;
+				//originY = 0.0f;
 			} else {
-				originY = self.imageView.frame.origin.y;
+				//originY = self.imageView.frame.origin.y;
 			}
 		}
 

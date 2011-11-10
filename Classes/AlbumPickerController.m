@@ -126,12 +126,10 @@
          }
          [assetsArray addObject:[[result defaultRepresentation]url]];
     }];
-    NSLog(@"%d assetcount",[assetsArray count]);
 
 	AssetTablePicker *picker = [[AssetTablePicker alloc] initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
 
     picker.urlsArray = assetsArray;
-    NSLog(@"%d",[picker.assetArrays count]);
 	[self.navigationController pushViewController:picker animated:YES];
     [assetsArray release];
 	[picker release];

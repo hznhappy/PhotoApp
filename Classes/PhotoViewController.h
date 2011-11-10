@@ -36,9 +36,7 @@
     CGFloat bty;
     NSMutableArray *listid;
     UILabel *nameTitle;
-    NSTimer *timer;
-    int countTimer;
-	
+    NSTimer *timer;	
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
 @property(nonatomic,retain)NSMutableArray *listid;

@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <MediaPlayer/MediaPlayer.h>
 #define MUST     @"Must"
 #define EXCLUDE  @"Exclude"
 #define OPTIONAL @"Optional"
+#define Rules    @"Rules"
 @class DBOperation;
-@interface PlaylistDetailController : UIViewController<UITableViewDelegate,UITableViewDataSource> {
+@interface PlaylistDetailController : UIViewController<UITableViewDelegate,UITableViewDataSource,MPMediaPickerControllerDelegate> {
     UITableView *listTable;
     UITableViewCell *textFieldCell;
     UITableViewCell *switchCell;
@@ -26,6 +27,7 @@
     UIImage *unselectImg;
     
     NSMutableArray *userNames;
+    NSMutableArray *selectedIndexPaths;
     UILabel *state;
     BOOL mySwc;
     NSString *listName;
@@ -37,7 +39,6 @@
     NSMutableArray *playIdList;
     NSMutableArray *orderList;
     UIButton *stateButton;
-    BOOL bo;
     int key;
 }
 @property(nonatomic,retain)IBOutlet UITableView *listTable;
@@ -51,6 +52,7 @@
 @property(nonatomic,retain)IBOutlet UISwitch *mySwitch;
 @property(nonatomic,retain)IBOutlet UILabel *state;
 
+@property(nonatomic,retain)NSMutableArray *selectedIndexPaths;
 @property(nonatomic,retain)NSMutableArray *userNames;
 @property(nonatomic,assign)BOOL mySwc;
 @property(nonatomic,retain)NSString *listName;

@@ -10,7 +10,6 @@
 #import "AlbumPickerController.h"
 #import "UserTableController.h"
 #import "DeleteMeController.h"
-#import "TextController.h"
 #import "PhotoViewController.h"
 
 @implementation AssetTablePicker

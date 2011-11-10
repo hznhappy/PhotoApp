@@ -7,7 +7,6 @@
 //
 
 #import "UserTableController.h"
-#import "TextController.h"
 #import "AssetTablePicker.h"
 #import "PlaylistDetailController.h"
 @implementation UserTableController
@@ -138,7 +137,7 @@
                [alert show];
                [alert release];
                
-               NSLog(@"A problem occured %@", [error description]);	                                 
+               //NSLog(@"A problem occured %@", [error description]);	                                 
            };	
            
            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
@@ -148,7 +147,7 @@
            
            
            [library release];
-           NSLog(@"this is the get AssetGroup method %d",[assetGroups count]);
+          // NSLog(@"this is the get AssetGroup method %d",[assetGroups count]);
            [pool release];
        });
 }
@@ -167,7 +166,7 @@
         }];
 
     }
-    NSLog(@"get allurl count is :%d",[allUrl count]);
+    //NSLog(@"get allurl count is :%d",[allUrl count]);
 }
 
 -(void)getUnTagUrls{
@@ -177,7 +176,7 @@
             [unTagUrl addObject:urls];
         }
     }
-    NSLog(@"%d is untag ",[unTagUrl count]);
+   // NSLog(@"%d is untag ",[unTagUrl count]);
 
 }
 
@@ -191,7 +190,7 @@
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [self.tagUrl addObject:dbStr];
     } 
-    NSLog(@"%d is tag",[tagUrl count]);
+    //NSLog(@"%d is tag",[tagUrl count]);
 }
 
 -(void)deleteUnExitUrls{
@@ -217,15 +216,9 @@
 {
     if (self.tableView.editing) {
         editButton.title = @"Edit";
-               /* [self.tableView beginUpdates];
-        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[list count]+2 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
-        [self.tableView endUpdates];
-*/
-    }else{
+        }
+    else{
        
-      /*  [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[list count]+2 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
-        [self.tableView endUpdates];*/
         editButton.title = @"Done";
     }
     
@@ -235,7 +228,6 @@
 
 -(IBAction)toggleAdd:(id)sender
 {
-   // TextController *ts1=[[TextController alloc]init];
      PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
@@ -260,10 +252,9 @@
 	}
     [da openDB];
             User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
-        NSLog(@"%@",[list objectAtIndex:indexPath.row]);
     if([[list objectAtIndex:indexPath.row]intValue]<=2)
     {
-        cell.textLabel.textColor=[UIColor redColor];
+        cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
     }
     cell.textLabel.text=[NSString stringWithFormat:@"%@",user3.name];
    
@@ -301,6 +292,7 @@
 -(void)playlistUrl:(int)row_id
 {    [da openDB];
     NSLog(@"UUUUU");
+    [SUM removeAllObjects];
     NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
     [da selectFromRules:selectRules1];
     //self.SUM=nil;
@@ -312,13 +304,13 @@
         [da selectFromTAG:selectTag];
         if([self.SUM count]==0)
         {
-            self.SUM=da.tagUrl;
+           self.SUM=da.tagUrl;
         
         }
         else
             NSLog(@"JIAOJI");
         {
-            [SUM intersectSet:da.tagUrl];
+            [self.SUM intersectSet:da.tagUrl];
         }
     }
     NSString *selectRules2= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
@@ -327,14 +319,16 @@
     {
         NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
         [da selectFromTAG:selectTag];
+
         NSLog(@"WE%@",da.playlist_UserId);
         if([self.SUM count]==0)
+
         {
             self.SUM=da.tagUrl;
         }
         else
         {
-            [self.SUM unionSet:da.tagUrl];
+            [SUM unionSet:da.tagUrl];
         }
     }
     
@@ -346,6 +340,7 @@
         [da selectFromTAG:selectTag];
         if([self.SUM count]==0)
         {
+            NSLog(@"0A");
             NSMutableSet *t=[[NSMutableArray alloc]init];
             for (NSURL *url in allUrl) {
                 NSString *str= [NSString stringWithFormat:@"%@",url];
@@ -381,7 +376,7 @@
         [dbUrl addObject:dbStr];
     }
    
-
+    //[SUM release];
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
       [da openDB];

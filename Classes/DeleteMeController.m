@@ -6,10 +6,10 @@
 #import "AssetTablePicker.h"
 #import "ContactsController.h"
 @implementation DeleteMeController
-@synthesize myPickerView,  pickerViewArray;
+//@synthesize myPickerView,  pickerViewArray;
 @synthesize list;
 @synthesize button;
-@synthesize toolBar;
+//@synthesize toolBar;
 @synthesize tableView,tools;
 int j=1,count=0;
 
@@ -34,8 +34,17 @@ int j=1,count=0;
 	self.navigationItem.rightBarButtonItem = myBtn;
 	[addButon release];
     [buttons release];
-    
-	[tools release];
+    [self creatTable];
+    [self nobody];
+    	[tools release];
+       NSLog(@"xunshu%@",da.orderIdList);
+    count = [list count];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table) name:@"add" object:nil];
+	[super viewDidLoad];
+   	
+}
+-(void)creatTable
+{
     da=[[DBOperation alloc]init];
     [da openDB];
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
@@ -45,69 +54,40 @@ int j=1,count=0;
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     [da selectOrderId:selectIdOrder];
     self.list=da.orderIdList;
-    NSLog(@"xunshu%@",da.orderIdList);
-    count = [list count];
-    NSMutableArray *arr=[[NSMutableArray alloc]initWithObjects:@"redColor",@"yellowColor",@"greenColor",@"grayColor",@"whiteColor",@"blueColor",nil];
-    self.pickerViewArray=arr;
-    [da closeDB];
-    [arr release];
-    myPickerView.hidden = YES;
-    toolBar.hidden =YES;
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table) name:@"add" object:nil];
-	[super viewDidLoad];
-   	
-}
 
--(IBAction) ButtonPressed
+    [da closeDB];
+    }
+-(void)nobody
 {
-    
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSInteger row=[myPickerView selectedRowInComponent:0];
-    fcolor=[pickerViewArray objectAtIndex:row]; 
-	
+    NSString *selectIdOrder1=[NSString stringWithFormat:@"select id from idOrder where id=0"];
+    [da selectOrderId:selectIdOrder1];
+    if([da.orderIdList count]!=0)
+    {
+        NSLog(@"DER");
+    }
+    else
+    {
+        NSLog(@"no");
+        
+        NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES(%d,'%@')",UserTable,0,@"NoBody"];
+        NSLog(@"%@",insertUserTable);
+        [da insertToTable:insertUserTable];
+        
+        
+        NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,0];
+        NSLog(@"%@",insertIdOrder);
+        [da insertToTable:insertIdOrder];
+        
+    }
+    NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
+    [da selectOrderId:selectIdOrder];
+    self.list=da.orderIdList;
     
-    
-    
-    NSString *message=[[NSString alloc] initWithFormat:
-					   @"选取的是：%@!",fcolor];
-	
-	
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"提示"
-						  message:message
-						  delegate:self
-						  cancelButtonTitle:nil
-						  otherButtonTitles:@"确定!",nil];
-    [alert show];
-	[alert release];
-    
-	[message release];
-    
-    [UIView animateWithDuration:0.8 
-                     animations:^{
-                         //myPickerView.frame = CGRectMake(0, 210, 310,180);
-                         myPickerView.alpha = 0;
-                         toolBar.alpha=0;
-                     }];
-    j=j+1;
-    
-    
-    
-    num=idx;
-    int new=[num intValue];
-    // new=new+1;
-    NSLog(@"%d",new);
-    NSLog(@"%@",fcolor);
-	NSString *updateUserTable= [NSString stringWithFormat:@"UPDATE %@ SET COLOR='%@' WHERE ID='%@'",UserTable,fcolor,[list objectAtIndex:new]];
-	NSLog(@"%@",updateUserTable);
-	[da insertToTable:updateUserTable];
     [da closeDB];
-    [self viewDidLoad];
-    [self.tableView reloadData];
-    
-}
 
+}
 -(NSString*)databasePath
 {
 	NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -126,10 +106,10 @@ int j=1,count=0;
     
    } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
-{
-    da=[[DBOperation alloc]init];
+{ da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
+
+       NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
     ABRecordID recId = ABRecordGetRecordID(person);
     
     NSLog(@"%@",readName);
@@ -168,7 +148,7 @@ int j=1,count=0;
                                                          userInfo:dic1];
         
     }
-    
+    [readName release];
     
     [da closeDB];
     [self dismissModalViewControllerAnimated:YES];
@@ -205,34 +185,15 @@ int j=1,count=0;
 }
 -(void)table
 {
-    [self viewDidLoad];
+    [self creatTable];
     [self.tableView reloadData];
 }
-#pragma mark -
-#pragma mark UIPickerViewDataSource
-- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
-    UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(12.0f, 0.0f, [pickerView rowSizeForComponent:component].width-12, [pickerView rowSizeForComponent:component].height)] autorelease];
-    
-    [label setText:[pickerViewArray objectAtIndex:row]];
-    [label setTextAlignment:UITextAlignmentCenter];
-    return label;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-	return [pickerViewArray count];
-}
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-	return 1;
-}
 - (void)viewDidUnload
-{   self.toolBar=nil;
-    self.myPickerView=nil;
+{   //self.toolBar=nil;
+    //self.myPickerView=nil;
     self.tableView=nil;
     da=nil;
-    self.pickerViewArray=nil;
+    //self.pickerViewArray=nil;
 	self.list=nil;
     self.button=nil;
 	[super viewDidUnload];
@@ -241,12 +202,12 @@ int j=1,count=0;
 
 -(void)dealloc
 {   
-    [toolBar release];
+   // [toolBar release];
     [button release];
     [tableView release];
-    [myPickerView release];
+   // [myPickerView release];
     [da release];
-    [pickerViewArray release];
+    //[pickerViewArray release];
 	[list release];
 	[super dealloc];
 	
@@ -272,96 +233,21 @@ int j=1,count=0;
         
 		
 	}
-    button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    Class theClass = NSClassFromString(@"UIGlassButton");
-    button = [[theClass alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
-    [button addTarget:self action:@selector(btnClicked:event:)forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"color" forState:UIControlStateNormal];
-    
-    
-    cell.accessoryView=button;           
-    [button setValue:[UIColor whiteColor] forKey:@"tintColor"];  
     da=[[DBOperation alloc]init];
     [da openDB];
-   // NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
-    //[da createTable:createUserTable];
     User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
+    if([user1.id intValue]==0)
+    {
+        cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
+        
+
+    }
 	cell.textLabel.text = [NSString stringWithFormat:@"%@",user1.name];
-    if([user1.color isEqualToString:@"greenColor"])
-        [button setValue:[UIColor greenColor] forKey:@"tintColor"];
-    else if([user1.color isEqualToString:@"redColor"])
-        [button setValue:[UIColor redColor] forKey:@"tintColor"];
-    else if([user1.color isEqualToString:@"grayColor"])
-        [button setValue:[UIColor grayColor] forKey:@"tintColor"];
-    else if([user1.color isEqualToString:@"yellowColor"])
-        [button setValue:[UIColor yellowColor] forKey:@"tintColor"];
-    else if([user1.color isEqualToString:@"whiteColor"])
-        [button setValue:[UIColor whiteColor] forKey:@"tintColor"];
-    else if([user1.color isEqualToString:@"blueColor"])
-        [button setValue:[UIColor blueColor] forKey:@"tintColor"];  
     [da closeDB];
-    
-	return cell; 
+    return cell; 
     [user1 release];
     
 }
-
--( void )tableView:( UITableView *) table accessoryButtonTappedForRowWithIndexPath:( NSIndexPath *)indexPath{
-    idx=[NSString stringWithFormat:@"%d",indexPath.row]; 
-    [idx retain];
-    if(j%2!=0)
-    {       // myPickerView.frame =CGRectMake(0, 200, 310, 180);
-        self.myPickerView.hidden = NO;
-        toolBar.hidden = NO;
-        [UIView animateWithDuration:0.8 
-                         animations:^{
-                             myPickerView.alpha = 1;
-                             toolBar.alpha=1;
-                         }];
-        
-        
-    }
-	
-	if(j%2==0)
-	{   //self.myPickerView.hidden = YES;
-        [UIView animateWithDuration:0.8 
-                         animations:^{
-                             myPickerView.alpha = 0;
-                             toolBar.alpha=0;
-                         }];
-	}
-	j++;
-	
-    
-}
-- ( void )btnClicked:( id )sender event:( id )event
-
-{
-    
-    NSSet *touches = [event allTouches ];
-    
-    UITouch *touch = [touches anyObject ];
-    
-    CGPoint currentTouchPosition = [touch locationInView:self.tableView ];
-    
-    NSIndexPath *indexPath = [ self.tableView indexPathForRowAtPoint : currentTouchPosition];
-    
-    if (indexPath!= nil )
-        
-    {
-        
-        [ self tableView :self.tableView accessoryButtonTappedForRowWithIndexPath:indexPath];
-        
-    }
-}
--(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    return UITableViewCellEditingStyleDelete;
-	
-	
-}
-
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -375,6 +261,14 @@ int j=1,count=0;
     NSString *selectTag= [NSString stringWithFormat:@"select * from tag"];
     [da selectFromTAG:selectTag];
     NSMutableArray *listid1=da.tagIdAry;
+    if([[self.list objectAtIndex:indexPath.row]intValue]==0)
+    {
+        UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:@"你好" message:@"固有成员,无法删除" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert1 show];
+        [alert1 release];
+    }
+    else
+    {
     if([listid1 containsObject:[list objectAtIndex:indexPath.row]])
     {
         UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:@"你好" message:@"此人已作为照片标记使用,是否确定要删除" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:nil];
@@ -390,28 +284,22 @@ int j=1,count=0;
         [da deleteDB:deleteIdTable ];  
         NSString *DeleteUserTable= [NSString stringWithFormat:@"DELETE FROM UserTable WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
         [da deleteDB:DeleteUserTable];
-        [self viewDidLoad];
+        [self creatTable];
         [self.tableView reloadData];
     }
-    
+    }
     //[listid1 release];
     [da closeDB];
     
     
 }
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.navigationController popViewControllerAnimated:YES];
-    
+- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [table deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
 -(void)alertView:(UIAlertView *)alert1 didDismissWithButtonIndex:(NSInteger)buttonIndex{
     switch (buttonIndex) {
-            
-            
-            int i=[id1 intValue];
-            
-            
         case 1:
             NSLog(@"OB");
             da=[[DBOperation alloc]init];
@@ -425,13 +313,9 @@ int j=1,count=0;
             [da deleteDB:deleteTag];
             [da closeDB];
             [self viewDidLoad];
-            [self.tableView reloadData];
-            
+            [self.tableView reloadData];            
             break;
         case 0:
-            NSLog(@"%d",[id1 intValue]);
-            NSLog(@"www%d",i);
-            NSLog(@"cance");
             [self.tableView reloadData];
             break;
     }
