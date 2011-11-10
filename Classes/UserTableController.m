@@ -47,10 +47,10 @@
     NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray2 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray3 = [[NSMutableArray alloc]init];
-    self.SUM=[[NSMutableSet alloc]init];
-    // NSMutableSet *tempArray4 = [[NSMutableSet alloc]init];
-   // self.SUM=tempArray4;
-   // [SUM R]
+    //self.SUM=[[NSMutableSet alloc]init];
+     //NSMutableSet *tempArray4 = [[NSMutableSet alloc]init];
+    //self.SUM=tempArray4;
+   // [tempArray4 release];
     self.allUrl = tempArray1;
     self.unTagUrl = tempArray2;
     self.tagUrl = tempArray3;
@@ -289,6 +289,7 @@
     else
     {
         int row_id=[[list objectAtIndex:indexPath.row]intValue];
+        NSLog(@"eeee%d",row_id);
        
         [self playlistUrl:row_id];
          assetPicker.urlsArray =dbUrl;
@@ -299,19 +300,23 @@
 }
 -(void)playlistUrl:(int)row_id
 {    [da openDB];
+    NSLog(@"UUUUU");
     NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
     [da selectFromRules:selectRules1];
-    SUM=NULL;
+    //self.SUM=nil;
+   // NSMutableArray *Y=da.playlist_UserId;
+   // NSLog(@"EE%@",Y);
     for(int i=0;i<[da.playlist_UserId count];i++)
     {
         NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
         [da selectFromTAG:selectTag];
-        if(SUM==NULL)
+        if([self.SUM count]==0)
         {
-            SUM=da.tagUrl;
-            continue;
+            self.SUM=da.tagUrl;
+        
         }
         else
+            NSLog(@"JIAOJI");
         {
             [SUM intersectSet:da.tagUrl];
         }
@@ -323,13 +328,13 @@
         NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
         [da selectFromTAG:selectTag];
         NSLog(@"WE%@",da.playlist_UserId);
-        if(SUM==NULL)
+        if([self.SUM count]==0)
         {
-            SUM=da.tagUrl;
+            self.SUM=da.tagUrl;
         }
         else
         {
-            [SUM unionSet:da.tagUrl];
+            [self.SUM unionSet:da.tagUrl];
         }
     }
     
@@ -339,7 +344,7 @@
     {
         NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
         [da selectFromTAG:selectTag];
-        if(SUM==NULL)
+        if([self.SUM count]==0)
         {
             NSMutableSet *t=[[NSMutableArray alloc]init];
             for (NSURL *url in allUrl) {
@@ -347,12 +352,12 @@
                 [t addObject:str];
             }
             
-            SUM=t;
+            self.SUM=t;
             for (NSString *data in da.tagUrl)
             {
-                if([SUM containsObject:data]) 
+                if([self.SUM containsObject:data]) 
                 {
-                    [SUM removeObject:data];
+                    [self.SUM removeObject:data];
                 }
                 
             }
@@ -361,16 +366,17 @@
         {
             for (NSString *data in da.tagUrl)
             {
-                if([SUM containsObject:data]) 
+                if([self.SUM containsObject:data]) 
                 {
-                    [SUM removeObject:data];
+                    NSLog(@"GGGGG");
+                    [self.SUM removeObject:data];
                 }
             }
         }
     }
     [da closeDB];
   dbUrl=[[NSMutableArray alloc]init];
-    for (NSString *dataStr in SUM) {
+    for (NSString *dataStr in self.SUM) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [dbUrl addObject:dbStr];
     }
@@ -391,12 +397,20 @@
     }
    
     else{
+        NSLog(@"wwji");
+        NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"playListedit" 
+                                                           object:self 
+                                                         userInfo:dic1];
+
     User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     [da closeDB];
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
     detailController.listName =[NSString stringWithFormat:@"%@",user3.name];
     detailController.a=[NSString stringWithFormat:@"%@",[list objectAtIndex:indexPath.row]];
     detailController.hidesBottomBarWhenPushed = YES;
+        
+
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
     }
@@ -475,6 +489,7 @@
     [list release];
     [withlist release];
     [withoutlist release];
+    [SUM release];
     [super dealloc];
 }
 @end

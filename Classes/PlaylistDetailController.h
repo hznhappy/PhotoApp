@@ -37,6 +37,8 @@
     NSMutableArray *playIdList;
     NSMutableArray *orderList;
     UIButton *stateButton;
+    BOOL bo;
+    int key;
 }
 @property(nonatomic,retain)IBOutlet UITableView *listTable;
 @property(nonatomic,retain)IBOutlet UITableViewCell *textFieldCell;
@@ -63,9 +65,9 @@
 -(IBAction)updateTable:(id)sender;
 -(IBAction)resetAll;
 -(UIButton *)getStateButton;
--(IBAction)save;
--(void)insert:(NSInteger)Row;
--(void)deletes:(NSInteger)Row;
+//-(IBAction)save;
+-(void)insert:(NSInteger)Row playId:(int)playId;
+-(void)deletes:(NSInteger)Row playId:(int)playId;
 -(void)creatTable;
--(void)update:(NSInteger)Row rule:(int)rule;
+-(void)update:(NSInteger)Row rule:(int)rule playId:(int)playId;
 @end

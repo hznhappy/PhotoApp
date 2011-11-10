@@ -53,8 +53,14 @@
 #pragma mark - View lifecycle
 - (void)viewDidLoad
 { 
+    key=0;
+    if(a==nil)
+    {
+        NSLog(@"DFD");
+    }
     
     mySwc = YES;
+    bo=NO;
     selectImg = [UIImage imageNamed:@"Selected.png"];
     unselectImg = [UIImage imageNamed:@"Unselected.png"];
     dataBase=[[DBOperation alloc]init];
@@ -81,13 +87,19 @@
     }
     [self creatTable];
     [dataBase closeDB];
-    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(playListedit:) name:@"playListedit" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeMusicAccessoryLabel:) name:@"changeMusicLabel" object:nil];
+   
     [super viewDidLoad];
 }
 
-
+-(void)playListedit:(NSNotification *)note
+{
+    NSLog(@"DE");
+    bo=YES;
+    
+}
 #pragma mark -
 #pragma mark UITableView  method
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -213,6 +225,25 @@
         [animateController release];
     }
     if (indexPath.section == 1) {
+        if(textField.text==nil||textField.text.length==0)
+        { NSString *message=[[NSString alloc] initWithFormat:
+                             @"请先填写规则名!"];
+            
+            
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:@"提示"
+                                  message:message
+                                  delegate:self
+                                  cancelButtonTitle:nil
+                                  otherButtonTitles:@"确定!",nil];
+            [alert show];
+            [alert release];
+            [message release];
+            
+
+        }
+        else
+        {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         UIButton *button = [self getStateButton];
         if (cell.accessoryView==nil) {
@@ -221,19 +252,45 @@
             cell.accessoryView = nil;
         }
           NSInteger Row=indexPath.row;
+        int playID=0;
+        if(textField.text==nil||textField.text.length==0)
+        {
+            playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
+        }
+        else
+        {
+         playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
+        }
+        NSLog(@"coco%d",playID);
         for (UIButton *button in cell.contentView.subviews) {
             if ([button isKindOfClass:[UIButton class]]) {
                 if ([button.currentImage isEqual:unselectImg]) {
                 [button setImage:selectImg forState:UIControlStateNormal];
-                  
-                    [self insert:Row];
+                   NSLog(@"o%d",playID);
+                    if(a==nil)
+                    {
+                      [self insert:Row playId:playID];
+                    }
+                    else{
+                          [self insert:Row playId:[a intValue]];
+                    
+                    }
                    // NSLog(@"")
                 }else{
-                    [self deletes:Row];
+                    if(a==nil)
+                    {
+                           [self deletes:Row playId:playID];
+                    }
+                    else{
+                        [self deletes:Row playId:[a intValue]];
+
+                 
+                    }
                     [button setImage:unselectImg forState:UIControlStateNormal];
                 }
             }
         }
+    }
     }
     [self.textField resignFirstResponder];
 }
@@ -247,7 +304,7 @@
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdOrder"];
     [dataBase selectOrderId:selectPlayIdOrder];
     
-    NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
+    NSString *selectPlayTable = [NSString stringWithFormat:@"select playlist_id from PlayTable"];
     [dataBase selectFromPlayTable:selectPlayTable];
     //self.list=da.playIdAry;
      self.playIdList=dataBase.playIdAry;
@@ -259,71 +316,28 @@
     NSLog(@"YYYY%@",playrules_idList);
 
 }
--(void)insert:(NSInteger)Row
+-(void)insert:(NSInteger)Row playId:(int)playId
 {
     [dataBase openDB];
-    NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%d','%d','%@','%@')",Rules,[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1,1,
-                            [orderList objectAtIndex:Row],[userNames objectAtIndex:Row]];
+    NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%d','%d','%@','%@')",Rules,playId,1,[orderList objectAtIndex:Row],[userNames objectAtIndex:Row]];
     NSLog(@"%@",insertRules);
     [dataBase insertToTable:insertRules];  
     [dataBase closeDB];
 
 }
--(void)deletes:(NSInteger)Row
+-(void)deletes:(NSInteger)Row playId:(int)playId
 {[dataBase openDB];
-    NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and user_id='%@'",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1,[orderList objectAtIndex:Row]];
+    NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and user_id='%@'",playId,[orderList objectAtIndex:Row]];
     NSLog(@"%@",deleteRules);
     [dataBase deleteDB:deleteRules];
     [dataBase closeDB];
 }
--(void)update:(NSInteger)Row rule:(int)rule
+-(void)update:(NSInteger)Row rule:(int)rule playId:(int)playId
 {[dataBase openDB];
-    NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playList_rules=%d WHERE playlist_id=%d and user_id='%@'",Rules,rule,[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1,[orderList objectAtIndex:Row]];
+    NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playList_rules=%d WHERE playlist_id=%d and user_id='%@'",Rules,rule,playId,[orderList objectAtIndex:Row]];
 	NSLog(@"%@",updateRules);
 	[dataBase updateTable:updateRules];
     [dataBase closeDB];
-}
--(IBAction)save
-{
-    dataBase=[[DBOperation alloc]init];
-    [dataBase openDB];
-    if(textField.text==nil)
-    {
-        
-        NSString *message=[[NSString alloc] initWithFormat:
-                           @"规则名不能为空!"];
-        
-        
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"提示"
-                              message:message
-                              delegate:self
-                              cancelButtonTitle:nil
-                              otherButtonTitles:@"确定!",nil];
-        [alert show];
-        [alert release];
-        [message release];
-        
-    }
-    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,textField.text];
-    NSLog(@"%@",insertPlayTable);
-    [dataBase insertToTable:insertPlayTable];
-
-    NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
-    [dataBase selectFromPlayTable:selectPlayTable];
-    //NSMutableArray *playIdList;
-    playIdList=dataBase.playIdAry;
-    NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
-    NSLog(@"%@",insertPlayIdOrder);
-    [dataBase insertToTable:insertPlayIdOrder];
-    
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
-                                                       object:self 
-                                                     userInfo:dic1];
-
-    NSLog(@"D");
-    
 }
 #pragma mark -
 #pragma mark Coustom method
@@ -341,19 +355,51 @@
     UITableViewCell *cell = (UITableViewCell *)[[button superview] superview];
     NSIndexPath *index = [listTable indexPathForCell:cell];
     NSInteger Row=index.row;
+    int playID=0;
+    if(textField.text==nil||textField.text.length==0)
+    {
+        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
+    }
+    else
+    {
+        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
+    }
     [button.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
     if ([button.titleLabel.text isEqualToString:MUST]) {
         button.backgroundColor = [UIColor redColor];
         [button setTitle:EXCLUDE forState:UIControlStateNormal];
-        [self update:Row rule:0];
+        if(a==nil)
+        {
+        [self update:Row rule:0 playId:playID];
+        }
+        else
+        {
+            [self update:Row rule:0 playId:[a intValue]];
+        }
     }else if([button.titleLabel.text isEqualToString:EXCLUDE]){
         button.backgroundColor = [UIColor cyanColor];
         [button setTitle:OPTIONAL forState:UIControlStateNormal];
-        [self update:Row rule:2];
+        if(a==nil)
+        {
+        [self update:Row rule:2 playId:playID];
+        }
+        else
+        {
+            [self update:Row rule:2 playId:[a intValue]];
+            
+        }
     }else{
         button.backgroundColor = [UIColor greenColor];
         [button setTitle:MUST forState:UIControlStateNormal];
-        [self update:Row rule:1];
+        if(a==nil)
+        {
+            [self update:Row rule:1 playId:playID];
+        }
+        else
+        {
+            [self update:Row rule:1 playId:[a intValue]];
+            
+        }
     }
 }
 -(void)setSelectState:(id)sender{
@@ -361,12 +407,37 @@
     UITableViewCell *cell = (UITableViewCell *)[[button superview] superview];
     NSIndexPath *index = [listTable indexPathForCell:cell];
      NSInteger Row=index.row;
+    int playID=0;
+    if(textField.text==nil||textField.text.length==0)
+    {
+        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
+    }
+    else
+    {
+        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
+    }
+
     if ([button.currentImage isEqual:selectImg]) {
-        [self deletes:Row];
+        if(a==nil)
+        {
+            [self deletes:Row playId:playID];
+        }
+        else{
+        
+            [self deletes:Row playId:[a intValue]];
+        }
         [button setImage:unselectImg forState:UIControlStateNormal];
         cell.accessoryView = nil;
     }else{
-        [self insert:Row];
+        if(a==nil)
+        {
+            [self insert:Row playId:playID];
+            
+        }
+        else
+        {
+        [self insert:Row playId:[a intValue]];
+        }
         [button setImage:selectImg forState:UIControlStateNormal];
         cell.accessoryView = [self getStateButton];
     }
@@ -376,6 +447,75 @@
 #pragma mark IBAction method
 -(IBAction)hideKeyBoard:(id)sender{
     [sender resignFirstResponder];
+    key=key+1;
+    dataBase=[[DBOperation alloc]init];
+    [dataBase openDB];
+    if(textField.text==nil||textField.text.length==0)
+    {
+        
+        NSString *message=[[NSString alloc] initWithFormat:
+                           @"规则名不能为空!"];
+        
+        
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"提示"
+                              message:message
+                              delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"确定!",nil];
+        [alert show];
+        [alert release];
+        [message release];
+        
+    }
+    else
+    {
+        if(a==nil)
+    {
+    if(key==1)
+     {
+        NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,textField.text];
+        NSLog(@"%@",insertPlayTable);
+        [dataBase insertToTable:insertPlayTable];
+        
+        NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
+        [dataBase selectFromPlayTable:selectPlayTable];
+        //NSMutableArray *playIdList;
+        playIdList=dataBase.playIdAry;
+        NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
+        NSLog(@"%@",insertPlayIdOrder);
+        [dataBase insertToTable:insertPlayIdOrder];
+        }
+        else
+        {
+            NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playlist_name='%@' WHERE playlist_id=%d",PlayTable,textField.text,[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
+            NSLog(@"%@",updateRules);
+            [dataBase updateTable:updateRules];
+ 
+        }
+        NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                           object:self 
+                                                         userInfo:dic1];
+        
+        NSLog(@"D");
+    }
+   else{
+        
+       NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playlist_name='%@' WHERE playlist_id=%d",PlayTable,textField.text,[a intValue]];
+       NSLog(@"%@",updateRules);
+       [dataBase updateTable:updateRules];
+       NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+       [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                          object:self 
+                                                        userInfo:dic1];
+
+
+
+       }
+    }
+    
+
 }
 
 

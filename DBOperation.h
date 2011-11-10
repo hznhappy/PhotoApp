@@ -28,6 +28,7 @@
     NSMutableArray *playlist_UserName;
     NSMutableArray *playlist_UserId;
     NSMutableArray *playlist_UserRules;
+    NSMutableArray *playRules_PlayID;
    // NSMutableArray *playlist_name;
    NSMutableSet *tagUrl;
 }
@@ -40,6 +41,7 @@
 @property(nonatomic,retain)NSMutableArray *playlist_UserId;
 @property(nonatomic,retain)NSMutableArray *playlist_UserRules;
 @property(nonatomic,retain)NSMutableArray *photos;
+@property(nonatomic,retain)NSMutableArray *playRules_PlayID;
 //@property(nonatomic,retain)NSMutableArray *playlist_nameOut;
 @property(nonatomic,retain)NSMutableSet *tagUrl;
 // apply to all views
@@ -65,4 +67,5 @@
 -(NSMutableArray *)selectPhotos:(NSString *)sql;
 -(NSString *)filePath;
 -(BOOL)exitInDatabase:(NSString *)sql;
+-(void)selectPlayList_IDfromRules:(NSString *)sql;
 @end

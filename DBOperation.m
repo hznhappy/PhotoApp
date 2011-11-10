@@ -9,7 +9,7 @@
 #import "DBOperation.h"
 #import "User.h"
 @implementation DBOperation
-@synthesize orderIdList,orderList,tagIdAry,playNameAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId,playlist_UserRules,photos;
+@synthesize orderIdList,orderList,tagIdAry,playNameAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId,playlist_UserRules,photos,playRules_PlayID;
 -(NSString *)filePath{
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *directory = [paths objectAtIndex:0];
@@ -63,10 +63,12 @@
 }
 -(void)selectFromPlayTable:(NSString *)sql
 {NSMutableArray *playArray = [[NSMutableArray alloc]init];
+     NSMutableArray *playArray1 = [[NSMutableArray alloc]init];
+        
     self.playNameAry= playArray;
-    [playArray release];
-    NSMutableArray *playArray1 = [[NSMutableArray alloc]init];
+
     self. playIdAry= playArray1;
+    [playArray release];
     [playArray1 release];
    // playIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
     //playNameAry=[[NSMutableArray arrayWithCapacity:40]retain];
@@ -86,13 +88,34 @@
     
     
 }
+-(void)selectPlayList_IDfromRules:(NSString *)sql
+{
+    NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    self.playRules_PlayID= playArray;
+    [playArray release];
+  
+    // playIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
+    //playNameAry=[[NSMutableArray arrayWithCapacity:40]retain];
+    NSString *newid;
+	sqlite3_stmt *statement;
+	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+		
+		while (sqlite3_step(statement)==SQLITE_ROW) {
+            newid=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
+            [playRules_PlayID addObject:newid];
+        }
+    }	
+    sqlite3_finalize(statement);  
+
+    
+}
 -(void)selectFromTAG:(NSString *)sql
 { NSMutableArray *playArray = [[NSMutableArray alloc]init];
-    self.tagIdAry= playArray;
-    [playArray release];
     NSMutableSet *playArray1 = [[NSMutableSet alloc]init];
+    self.tagIdAry= playArray;
     self.tagUrl= playArray1;
-    [playArray1 release];
+    [playArray release];
+     [playArray1 release];
     
    // tagIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
  //tagUrl=[[[NSMutableSet alloc]init]retain];
@@ -252,7 +275,7 @@
     [photos release];
     [playlist_UserRules release];
 
-    
+    [playRules_PlayID release];
    
     [super dealloc];
 }
