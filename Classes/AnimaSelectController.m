@@ -32,7 +32,8 @@
 
 - (void)viewDidLoad
 {
-    NSMutableArray *tempArray = [[NSMutableArray alloc]initWithObjects:@"Dissolve",@"Cube",@"Ripple",@"Wipe Across",@"Wipe Down", nil];
+    NSMutableArray *tempArray = [[NSMutableArray alloc]initWithObjects:@"Fade",@"Cube",@"Reveal",@"Push",@"MoveIn",@"suckEffect", @"oglFlip",@"rippleEffect",@"pageCurl",
+                                 @"pageUnCurl",nil];
     self.animaArray = tempArray;
     [tempArray release];
     [super viewDidLoad];

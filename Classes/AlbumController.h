@@ -1,5 +1,5 @@
 //
-//  UserTableController.h
+//  AlbumController.h
 //  PhotoApp
 //
 //  Created by apple on 11-10-18.
@@ -13,7 +13,7 @@
 #define playIdTable @"playIdTable"
 #define playIdOrder @"PlayIdOrder"
 #define Rules @"Rules"
-@interface UserTableController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
+@interface AlbumController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
     
     IBOutlet UITableView *tableView;
     NSMutableArray *list;
@@ -31,6 +31,7 @@
     NSMutableArray *dbUrl;
     int r;
     ALAsset *img;
+     NSMutableArray *date;
    }
 @property(nonatomic,retain)NSMutableArray *assetGroups;
 @property(nonatomic,retain)NSMutableSet *SUM;
@@ -53,4 +54,5 @@
 -(void)playlistUrl:(int)row_id;
 -(void)loadPhotos:(NSMutableArray *)url;
 -(void)Special;
+-(void)getDate:(ALAsset*)rule;
 @end

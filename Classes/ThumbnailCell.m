@@ -11,6 +11,7 @@
 @implementation ThumbnailCell
 
 @synthesize rowAssets;
+@synthesize tagOverlay;
 
 -(id)initWithAssets:(NSArray*)_assets reuseIdentifier:(NSString*)_identifier {
     
@@ -37,11 +38,11 @@
     
 	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
-	for(Thumbnail *elcAsset in self.rowAssets) {
-		
-		[elcAsset setFrame:frame];
-		[elcAsset addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:elcAsset action:@selector(toggleSelection)] autorelease]];
-		[self addSubview:elcAsset];
+	for(Thumbnail *thum in self.rowAssets) {
+        thum.overlay = tagOverlay;
+		[thum setFrame:frame];
+		[thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
+		[self addSubview:thum];
 		frame.origin.x = frame.origin.x + frame.size.width + 4;
 	}
 }

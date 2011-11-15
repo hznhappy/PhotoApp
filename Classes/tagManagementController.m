@@ -90,14 +90,14 @@ int j=1,count=0;
 	return [pathname stringByAppendingPathComponent:@"data.db"];
 }
 -(IBAction)toggleAdd:(id)sender
-{  bool1=YES;
+{ /*  bool1=YES;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
-    [picker release]; 
-   // ContactsController * c=[[ContactsController alloc]init];
-   //[self.navigationController pushViewController:c animated:YES];
-    //[self presentModalViewController:c animated:YES];
+    [picker release]; */
+    ContactsController * c=[[ContactsController alloc]init];
+   [self.navigationController pushViewController:c animated:YES];
+    [self presentModalViewController:c animated:YES];
     
    } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 

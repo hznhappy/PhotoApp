@@ -51,6 +51,6 @@
 -(void)doView;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
--(void)fireTimer;
+-(void)fireTimer:(NSString *)animateStyle;
 
 @end

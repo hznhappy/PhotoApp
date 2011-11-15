@@ -11,11 +11,20 @@
 		182F212E1462AF0400C3C74B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 182F212D1462AF0400C3C74B /* MainWindow.xib */; };
 		183E4E78146926EA0090BE7B /* ContactsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183E4E77146926EA0090BE7B /* ContactsController.m */; };
 		184F8D87146B9B81004A87DE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184F8D86146B9B81004A87DE /* MediaPlayer.framework */; };
+		184FCFBF1471F7D50082B51D /* AssetTablePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFBE1471F7D50082B51D /* AssetTablePicker.m */; };
+		184FCFC31471F7EB0082B51D /* Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFC21471F7EB0082B51D /* Thumbnail.m */; };
+		184FCFCA1471FDBB0082B51D /* AlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFC91471FDBB0082B51D /* AlbumController.m */; };
+		184FCFCC1471FE410082B51D /* tagManagementController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFCB1471FE410082B51D /* tagManagementController.m */; };
+		184FCFF21472028A0082B51D /* AssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184FCFF11472028A0082B51D /* AssetTablePicker.xib */; };
+		184FCFF4147202A00082B51D /* selectOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 184FCFF3147202A00082B51D /* selectOverlay.png */; };
+		184FCFF6147202A70082B51D /* selectOverlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 184FCFF5147202A70082B51D /* selectOverlay@2x.png */; };
+		184FCFF9147202D70082B51D /* ThumbnailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFF8147202D70082B51D /* ThumbnailCell.m */; };
+		184FD004147208F20082B51D /* AnimaSelectController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FD003147208F20082B51D /* AnimaSelectController.m */; };
+		184FD006147208F90082B51D /* AnimaSelectController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184FD005147208F90082B51D /* AnimaSelectController.xib */; };
 		185DEC54146CCA9700C100A4 /* untag.png in Resources */ = {isa = PBXBuildFile; fileRef = 185DEC53146CCA9700C100A4 /* untag.png */; };
 		185DEC58146D100E00C100A4 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 185DEC57146D100E00C100A4 /* empty.png */; };
 		185DEC5A146D115500C100A4 /* empty1.png in Resources */ = {isa = PBXBuildFile; fileRef = 185DEC59146D115500C100A4 /* empty1.png */; };
-		186BF9BF1470AEB500961C67 /* UserTableController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186BF9C01470AEB500961C67 /* UserTableController.xib */; };
-		186BFB511470F22300961C67 /* UserTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186BFB501470F22300961C67 /* UserTableController.m */; };
+		186BF9BF1470AEB500961C67 /* AlbumController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186BF9C01470AEB500961C67 /* AlbumController.xib */; };
 		18E88789147114A10067C54E /*  Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18E8878B147114A10067C54E /*  Localizable.strings */; };
 		1D3623260D0F684500981E51 /* PhotoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* PhotoAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -24,9 +33,6 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		844C363813FA73E5000510AF /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 844C363713FA73E5000510AF /* libsqlite3.dylib */; };
 		84F099D613EE801C0095FAEB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F099D513EE801C0095FAEB /* MessageUI.framework */; };
-		8FBE5D99131DC988001603C7 /* AlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBE5D89131DC988001603C7 /* AlbumPickerController.m */; };
-		8FBE5D9A131DC988001603C7 /* AssetTablePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBE5D8B131DC988001603C7 /* AssetTablePicker.m */; };
-		8FBE5D9C131DC988001603C7 /* ThumbnailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBE5D8F131DC988001603C7 /* ThumbnailCell.m */; };
 		A100BFB714455FE300D85BD6 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = A100BFB314455FE300D85BD6 /* left.png */; };
 		A100BFB814455FE300D85BD6 /* left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A100BFB414455FE300D85BD6 /* left@2x.png */; };
 		A100BFB914455FE300D85BD6 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = A100BFB514455FE300D85BD6 /* right.png */; };
@@ -37,17 +43,12 @@
 		A10F5A001468E8F100A0AC22 /* Unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F59FE1468E8F100A0AC22 /* Unselected.png */; };
 		A10FFFFF14593E3F00D007F3 /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = A10FFFFE14593E3F00D007F3 /* person.png */; };
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
-		A116EB681463E35D00BE9BDA /* AnimaSelectController.m in Sources */ = {isa = PBXBuildFile; fileRef = A116EB661463E35D00BE9BDA /* AnimaSelectController.m */; };
-		A116EB691463E35D00BE9BDA /* AnimaSelectController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A116EB671463E35D00BE9BDA /* AnimaSelectController.xib */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
-		A1B97D90145699BE00F65806 /* AssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */; };
-		A1DE03D614483B0400DBE4FB /* Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBE5D8D131DC988001603C7 /* Thumbnail.m */; };
 		A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAA14441A640087972B /* PhotoImageView.m */; };
 		A1EF3DB014441A640087972B /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAC14441A640087972B /* PhotoScrollView.m */; };
 		A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DB214441A840087972B /* PhotoViewController.m */; };
 		A1EF3DC314441E900087972B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EF3DC214441E900087972B /* QuartzCore.framework */; };
-		A1F1FFA9146007F9005FAB2F /* tagManagementController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA0146007F9005FAB2F /* tagManagementController.m */; };
 		A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */; };
 		A1F1FFAB146007F9005FAB2F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA3146007F9005FAB2F /* User.m */; };
 		A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFAF14600813005FAB2F /* DBOperation.m */; };
@@ -63,13 +64,26 @@
 		183E4E76146926EA0090BE7B /* ContactsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsController.h; sourceTree = "<group>"; };
 		183E4E77146926EA0090BE7B /* ContactsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsController.m; sourceTree = "<group>"; };
 		184F8D86146B9B81004A87DE /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		184FCFBE1471F7D50082B51D /* AssetTablePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetTablePicker.m; sourceTree = "<group>"; };
+		184FCFC01471F7DC0082B51D /* AssetTablePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetTablePicker.h; sourceTree = "<group>"; };
+		184FCFC11471F7E60082B51D /* Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thumbnail.h; sourceTree = "<group>"; };
+		184FCFC21471F7EB0082B51D /* Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Thumbnail.m; sourceTree = "<group>"; };
+		184FCFC81471FD990082B51D /* tagManagementController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tagManagementController.h; sourceTree = "<group>"; };
+		184FCFC91471FDBB0082B51D /* AlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumController.m; sourceTree = "<group>"; };
+		184FCFCB1471FE410082B51D /* tagManagementController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tagManagementController.m; sourceTree = "<group>"; };
+		184FCFF11472028A0082B51D /* AssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssetTablePicker.xib; sourceTree = "<group>"; };
+		184FCFF3147202A00082B51D /* selectOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selectOverlay.png; sourceTree = "<group>"; };
+		184FCFF5147202A70082B51D /* selectOverlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selectOverlay@2x.png"; sourceTree = "<group>"; };
+		184FCFF7147202D00082B51D /* ThumbnailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailCell.h; sourceTree = "<group>"; };
+		184FCFF8147202D70082B51D /* ThumbnailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailCell.m; sourceTree = "<group>"; };
+		184FD002147208E90082B51D /* AnimaSelectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimaSelectController.h; sourceTree = "<group>"; };
+		184FD003147208F20082B51D /* AnimaSelectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimaSelectController.m; sourceTree = "<group>"; };
+		184FD005147208F90082B51D /* AnimaSelectController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimaSelectController.xib; path = Classes/AnimaSelectController.xib; sourceTree = "<group>"; };
 		185DEC53146CCA9700C100A4 /* untag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = untag.png; sourceTree = "<group>"; };
 		185DEC57146D100E00C100A4 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
 		185DEC59146D115500C100A4 /* empty1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty1.png; sourceTree = "<group>"; };
 		186A4F391468C54E0074042A /* ContactsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactsController.xib; sourceTree = "<group>"; };
-		186BF9C01470AEB500961C67 /* UserTableController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = UserTableController.xib; path = Classes/UserTableController.xib; sourceTree = "<group>"; };
-		186BFA3B1470C05E00961C67 /* tagManagementController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tagManagementController.h; sourceTree = "<group>"; };
-		186BFB501470F22300961C67 /* UserTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTableController.m; sourceTree = "<group>"; };
+		186BF9C01470AEB500961C67 /* AlbumController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumController.xib; path = Classes/AlbumController.xib; sourceTree = "<group>"; };
 		18E8878A147114A10067C54E /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/ Localizable.strings"; sourceTree = "<group>"; };
 		18E8878C147114AC0067C54E /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ Localizable.strings"; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -83,14 +97,6 @@
 		844C363713FA73E5000510AF /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		84F099D513EE801C0095FAEB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* PhotoApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PhotoApp-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		8FBE5D88131DC988001603C7 /* AlbumPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumPickerController.h; sourceTree = "<group>"; };
-		8FBE5D89131DC988001603C7 /* AlbumPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumPickerController.m; sourceTree = "<group>"; };
-		8FBE5D8A131DC988001603C7 /* AssetTablePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetTablePicker.h; sourceTree = "<group>"; };
-		8FBE5D8B131DC988001603C7 /* AssetTablePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetTablePicker.m; sourceTree = "<group>"; };
-		8FBE5D8C131DC988001603C7 /* Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thumbnail.h; sourceTree = "<group>"; };
-		8FBE5D8D131DC988001603C7 /* Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Thumbnail.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		8FBE5D8E131DC988001603C7 /* ThumbnailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailCell.h; sourceTree = "<group>"; };
-		8FBE5D8F131DC988001603C7 /* ThumbnailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailCell.m; sourceTree = "<group>"; };
 		A100BFB314455FE300D85BD6 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
 		A100BFB414455FE300D85BD6 /* left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left@2x.png"; sourceTree = "<group>"; };
 		A100BFB514455FE300D85BD6 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
@@ -101,12 +107,8 @@
 		A10F59FE1468E8F100A0AC22 /* Unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Unselected.png; sourceTree = "<group>"; };
 		A10FFFFE14593E3F00D007F3 /* person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = person.png; sourceTree = "<group>"; };
 		A11401C41440016F007B4B95 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
-		A116EB651463E35D00BE9BDA /* AnimaSelectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimaSelectController.h; sourceTree = "<group>"; };
-		A116EB661463E35D00BE9BDA /* AnimaSelectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimaSelectController.m; sourceTree = "<group>"; };
-		A116EB671463E35D00BE9BDA /* AnimaSelectController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnimaSelectController.xib; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
-		A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssetTablePicker.xib; sourceTree = "<group>"; };
 		A1EF3DA914441A640087972B /* PhotoImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1EF3DAA14441A640087972B /* PhotoImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PhotoImageView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A1EF3DAB14441A640087972B /* PhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoScrollView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -114,12 +116,11 @@
 		A1EF3DB114441A840087972B /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1EF3DB214441A840087972B /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PhotoViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A1EF3DC214441E900087972B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		A1F1FFA0146007F9005FAB2F /* tagManagementController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tagManagementController.m; sourceTree = "<group>"; };
 		A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupPanelView.h; sourceTree = "<group>"; };
 		A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupPanelView.m; sourceTree = "<group>"; };
 		A1F1FFA3146007F9005FAB2F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		A1F1FFA4146007F9005FAB2F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		A1F1FFA5146007F9005FAB2F /* UserTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTableController.h; sourceTree = "<group>"; };
+		A1F1FFA5146007F9005FAB2F /* AlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumController.h; sourceTree = "<group>"; };
 		A1F1FFAE14600813005FAB2F /* DBOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOperation.h; sourceTree = "<group>"; };
 		A1F1FFAF14600813005FAB2F /* DBOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBOperation.m; sourceTree = "<group>"; };
 		A1F82E2C1462612F00BED207 /* PlaylistDetailController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistDetailController.xib; sourceTree = "<group>"; };
@@ -195,14 +196,17 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				184FCFF3147202A00082B51D /* selectOverlay.png */,
+				184FCFF5147202A70082B51D /* selectOverlay@2x.png */,
 				185DEC57146D100E00C100A4 /* empty.png */,
 				185DEC59146D115500C100A4 /* empty1.png */,
 				186A4F391468C54E0074042A /* ContactsController.xib */,
 				185DEC53146CCA9700C100A4 /* untag.png */,
 				182F212D1462AF0400C3C74B /* MainWindow.xib */,
-				186BF9C01470AEB500961C67 /* UserTableController.xib */,
+				184FD005147208F90082B51D /* AnimaSelectController.xib */,
+				186BF9C01470AEB500961C67 /* AlbumController.xib */,
+				184FCFF11472028A0082B51D /* AssetTablePicker.xib */,
 				181D58F41447E0B10092AE68 /* tagManagementController.xib */,
-				A1B97D8F145699BE00F65806 /* AssetTablePicker.xib */,
 				A1F82E2C1462612F00BED207 /* PlaylistDetailController.xib */,
 				A10F59FD1468E8F100A0AC22 /* Selected.png */,
 				A10F59FE1468E8F100A0AC22 /* Unselected.png */,
@@ -242,15 +246,13 @@
 		8FBE5D87131DC988001603C7 /* Image Picker */ = {
 			isa = PBXGroup;
 			children = (
+				184FCFC01471F7DC0082B51D /* AssetTablePicker.h */,
+				184FCFBE1471F7D50082B51D /* AssetTablePicker.m */,
+				184FCFC11471F7E60082B51D /* Thumbnail.h */,
+				184FCFC21471F7EB0082B51D /* Thumbnail.m */,
+				184FCFF7147202D00082B51D /* ThumbnailCell.h */,
+				184FCFF8147202D70082B51D /* ThumbnailCell.m */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				8FBE5D88131DC988001603C7 /* AlbumPickerController.h */,
-				8FBE5D89131DC988001603C7 /* AlbumPickerController.m */,
-				8FBE5D8A131DC988001603C7 /* AssetTablePicker.h */,
-				8FBE5D8B131DC988001603C7 /* AssetTablePicker.m */,
-				8FBE5D8C131DC988001603C7 /* Thumbnail.h */,
-				8FBE5D8D131DC988001603C7 /* Thumbnail.m */,
-				8FBE5D8E131DC988001603C7 /* ThumbnailCell.h */,
-				8FBE5D8F131DC988001603C7 /* ThumbnailCell.m */,
 			);
 			name = "Image Picker";
 			sourceTree = "<group>";
@@ -281,21 +283,20 @@
 		A1F1FF9E146007ED005FAB2F /* TableView */ = {
 			isa = PBXGroup;
 			children = (
-				186BFA3B1470C05E00961C67 /* tagManagementController.h */,
-				A1F1FFA0146007F9005FAB2F /* tagManagementController.m */,
+				184FCFC81471FD990082B51D /* tagManagementController.h */,
+				184FCFCB1471FE410082B51D /* tagManagementController.m */,
 				A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */,
 				A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */,
 				A1F1FFA3146007F9005FAB2F /* User.m */,
 				A1F1FFA4146007F9005FAB2F /* User.h */,
-				186BFB501470F22300961C67 /* UserTableController.m */,
-				A1F1FFA5146007F9005FAB2F /* UserTableController.h */,
+				184FCFC91471FDBB0082B51D /* AlbumController.m */,
+				A1F1FFA5146007F9005FAB2F /* AlbumController.h */,
 				A1F82E831462909100BED207 /* PlaylistDetailController.h */,
 				A1F82E841462909100BED207 /* PlaylistDetailController.m */,
-				A116EB651463E35D00BE9BDA /* AnimaSelectController.h */,
-				A116EB661463E35D00BE9BDA /* AnimaSelectController.m */,
-				A116EB671463E35D00BE9BDA /* AnimaSelectController.xib */,
 				183E4E76146926EA0090BE7B /* ContactsController.h */,
 				183E4E77146926EA0090BE7B /* ContactsController.m */,
+				184FD002147208E90082B51D /* AnimaSelectController.h */,
+				184FD003147208F20082B51D /* AnimaSelectController.m */,
 			);
 			name = TableView;
 			sourceTree = "<group>";
@@ -364,20 +365,22 @@
 				A100BFB914455FE300D85BD6 /* right.png in Resources */,
 				A100BFBA14455FE300D85BD6 /* right@2x.png in Resources */,
 				181D58F51447E0B10092AE68 /* tagManagementController.xib in Resources */,
-				186BF9BF1470AEB500961C67 /* UserTableController.xib in Resources */,
-				A1B97D90145699BE00F65806 /* AssetTablePicker.xib in Resources */,
+				186BF9BF1470AEB500961C67 /* AlbumController.xib in Resources */,
 				A10FFFFF14593E3F00D007F3 /* person.png in Resources */,
 				A10F000114593E7A00D007F3 /* playlist.png in Resources */,
 				A10F000314593E7F00D007F3 /* albums.png in Resources */,
 				A1F82E2D1462612F00BED207 /* PlaylistDetailController.xib in Resources */,
 				182F212E1462AF0400C3C74B /* MainWindow.xib in Resources */,
-				A116EB691463E35D00BE9BDA /* AnimaSelectController.xib in Resources */,
 				A10F59FF1468E8F100A0AC22 /* Selected.png in Resources */,
 				A10F5A001468E8F100A0AC22 /* Unselected.png in Resources */,
 				185DEC54146CCA9700C100A4 /* untag.png in Resources */,
 				185DEC58146D100E00C100A4 /* empty.png in Resources */,
 				185DEC5A146D115500C100A4 /* empty1.png in Resources */,
 				18E88789147114A10067C54E /*  Localizable.strings in Resources */,
+				184FCFF21472028A0082B51D /* AssetTablePicker.xib in Resources */,
+				184FCFF4147202A00082B51D /* selectOverlay.png in Resources */,
+				184FCFF6147202A70082B51D /* selectOverlay@2x.png in Resources */,
+				184FD006147208F90082B51D /* AnimaSelectController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,23 +391,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1DE03D614483B0400DBE4FB /* Thumbnail.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* PhotoAppDelegate.m in Sources */,
-				8FBE5D99131DC988001603C7 /* AlbumPickerController.m in Sources */,
-				8FBE5D9A131DC988001603C7 /* AssetTablePicker.m in Sources */,
-				8FBE5D9C131DC988001603C7 /* ThumbnailCell.m in Sources */,
 				A1EF3DB014441A640087972B /* PhotoScrollView.m in Sources */,
 				A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */,
 				A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */,
-				A1F1FFA9146007F9005FAB2F /* tagManagementController.m in Sources */,
 				A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */,
 				A1F1FFAB146007F9005FAB2F /* User.m in Sources */,
 				A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */,
 				A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */,
-				A116EB681463E35D00BE9BDA /* AnimaSelectController.m in Sources */,
 				183E4E78146926EA0090BE7B /* ContactsController.m in Sources */,
-				186BFB511470F22300961C67 /* UserTableController.m in Sources */,
+				184FCFBF1471F7D50082B51D /* AssetTablePicker.m in Sources */,
+				184FCFC31471F7EB0082B51D /* Thumbnail.m in Sources */,
+				184FCFCA1471FDBB0082B51D /* AlbumController.m in Sources */,
+				184FCFCC1471FE410082B51D /* tagManagementController.m in Sources */,
+				184FCFF9147202D70082B51D /* ThumbnailCell.m in Sources */,
+				184FD004147208F20082B51D /* AnimaSelectController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

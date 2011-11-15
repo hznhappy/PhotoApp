@@ -11,11 +11,14 @@
 @interface Thumbnail : UIView {
 	ALAsset *asset;
 	UIView *selectOverlay;
-	BOOL selected;
-	id parent;
-	UIImageView *tagOverlay;
+    UIImageView *overlayView;
+    UIImageView *tagOverlay;
     UIViewController *fatherController;
+    
     NSMutableArray *assetArray;
+    
+    BOOL overlay;
+	id parent;
 
 }
 
@@ -28,6 +31,8 @@
 -(BOOL)selected;
 -(void)setOverlayHidden:(BOOL)hide;
 -(void)setSelectOvlay;
+-(void)setTagOverlayHidden:(BOOL)hide;
+-(BOOL)tagOverlay;
 
 
 

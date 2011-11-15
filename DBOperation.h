@@ -53,15 +53,15 @@
 -(void)deleteDB:(NSString *)sql; 
 // apply to tagManagementController , PopupPanelView for retreiving user_id  order by idOrder or playIdOrder
 -(void)selectOrderId:(NSString *)sql;
-//apply to UserTableController for retreiving user_id user_name from Rules
+//apply to AlbumController for retreiving user_id user_name from Rules
 -(void)selectFromRules:(NSString *)sql;
-// apply to PhotoViewController PopupPanelView , tagManagementController ,UserTableController for retreiving tag_id,tag_url from tag table
+// apply to PhotoViewController PopupPanelView , tagManagementController ,AlbumController for retreiving tag_id,tag_url from tag table
 -(void)selectFromTAG:(NSString *)sql;
-//apply to UserTableController for retreiving playlist_id,playlist_name from palytable
+//apply to AlbumController for retreiving playlist_id,playlist_name from palytable
 -(void)selectFromPlayTable:(NSString *)sql;
 //apply to tagManagementController , PopupPanelView,for retreiving user_id,user_name,user_color from UserTable;
 - (User*)getUserFromUserTable:(int)id;
-//apply to UserTableController for retreiving playlist_id,playlist_name from playTable
+//apply to AlbumController for retreiving playlist_id,playlist_name from playTable
 - (User*)getUserFromPlayTable:(int)id;
 //apply to AssetTablePickerController for retreiving url from TAG
 -(NSMutableArray *)selectPhotos:(NSString *)sql;

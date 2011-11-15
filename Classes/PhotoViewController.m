@@ -687,17 +687,40 @@ else{
 #pragma mark -
 #pragma mark timer method
 
--(void)fireTimer{
-    timer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(playPhoto) userInfo:nil repeats:YES];
+-(void)fireTimer:(NSString *)animateStyle{
+    timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
     
 }
 -(void)playPhoto{
+    [self setBarsHidden:YES animated:YES];
+    NSString *animateStyle = [timer userInfo];
+    CATransition *animation = [CATransition animation];
+    animation.delegate = self;
+    animation.duration = 0.7;
+    animation.timingFunction = UIViewAnimationCurveEaseInOut;
+    animation.subtype = kCATransitionFromRight;
+    if ([animateStyle isEqualToString:@"Fade"]) {
+        animation.type = kCATransitionFade;
+    }
+    else if([animateStyle isEqualToString:@"Reveal"]) {
+        animation.type = kCATransitionReveal;
+    }
+    else if([animateStyle isEqualToString:@"Push"]) {
+        animation.type = kCATransitionPush;
+    }
+    else if([animateStyle isEqualToString:@"MoveIn"]) {
+        animation.type = kCATransitionMoveIn;
+    }
+    else{
+        animation.type = animateStyle;
+    }
+    [self.scrollView.layer addAnimation:animation forKey:@"animation"];
+    _pageIndex+=1;
     NSInteger _index = self._pageIndex;
 	if (_index >= [self.photoSource count] || _index < 0) {
         [timer invalidate];
     }else{
-    [self moveToPhotoAtIndex:_index animated:YES];
-        _pageIndex+=1;
+        [self moveToPhotoAtIndex:_index animated:NO];
     }
 }
 #pragma mark -
