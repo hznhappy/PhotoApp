@@ -76,6 +76,10 @@
         [tagBg addSubview:tagCount];
         [self addSubview:tagBg];
         [UIApplication sharedApplication].applicationIconBadgeNumber = 999;
+        
+        [tagCount release];
+        [count release];
+        [tagBg release];
 
     }
 	return self;	

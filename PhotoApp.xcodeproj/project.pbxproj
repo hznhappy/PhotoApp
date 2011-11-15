@@ -21,8 +21,6 @@
 		184FCFF9147202D70082B51D /* ThumbnailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFF8147202D70082B51D /* ThumbnailCell.m */; };
 		184FD004147208F20082B51D /* AnimaSelectController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FD003147208F20082B51D /* AnimaSelectController.m */; };
 		184FD006147208F90082B51D /* AnimaSelectController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184FD005147208F90082B51D /* AnimaSelectController.xib */; };
-		185DEC54146CCA9700C100A4 /* untag.png in Resources */ = {isa = PBXBuildFile; fileRef = 185DEC53146CCA9700C100A4 /* untag.png */; };
-		185DEC58146D100E00C100A4 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 185DEC57146D100E00C100A4 /* empty.png */; };
 		185DEC5A146D115500C100A4 /* empty1.png in Resources */ = {isa = PBXBuildFile; fileRef = 185DEC59146D115500C100A4 /* empty1.png */; };
 		186BF9BF1470AEB500961C67 /* AlbumController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186BF9C01470AEB500961C67 /* AlbumController.xib */; };
 		18E88789147114A10067C54E /*  Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18E8878B147114A10067C54E /*  Localizable.strings */; };
@@ -79,8 +77,6 @@
 		184FD002147208E90082B51D /* AnimaSelectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimaSelectController.h; sourceTree = "<group>"; };
 		184FD003147208F20082B51D /* AnimaSelectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimaSelectController.m; sourceTree = "<group>"; };
 		184FD005147208F90082B51D /* AnimaSelectController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimaSelectController.xib; path = Classes/AnimaSelectController.xib; sourceTree = "<group>"; };
-		185DEC53146CCA9700C100A4 /* untag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = untag.png; sourceTree = "<group>"; };
-		185DEC57146D100E00C100A4 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
 		185DEC59146D115500C100A4 /* empty1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty1.png; sourceTree = "<group>"; };
 		186A4F391468C54E0074042A /* ContactsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactsController.xib; sourceTree = "<group>"; };
 		186BF9C01470AEB500961C67 /* AlbumController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumController.xib; path = Classes/AlbumController.xib; sourceTree = "<group>"; };
@@ -198,10 +194,8 @@
 			children = (
 				184FCFF3147202A00082B51D /* selectOverlay.png */,
 				184FCFF5147202A70082B51D /* selectOverlay@2x.png */,
-				185DEC57146D100E00C100A4 /* empty.png */,
 				185DEC59146D115500C100A4 /* empty1.png */,
 				186A4F391468C54E0074042A /* ContactsController.xib */,
-				185DEC53146CCA9700C100A4 /* untag.png */,
 				182F212D1462AF0400C3C74B /* MainWindow.xib */,
 				184FD005147208F90082B51D /* AnimaSelectController.xib */,
 				186BF9C01470AEB500961C67 /* AlbumController.xib */,
@@ -289,8 +283,8 @@
 				A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */,
 				A1F1FFA3146007F9005FAB2F /* User.m */,
 				A1F1FFA4146007F9005FAB2F /* User.h */,
-				184FCFC91471FDBB0082B51D /* AlbumController.m */,
 				A1F1FFA5146007F9005FAB2F /* AlbumController.h */,
+				184FCFC91471FDBB0082B51D /* AlbumController.m */,
 				A1F82E831462909100BED207 /* PlaylistDetailController.h */,
 				A1F82E841462909100BED207 /* PlaylistDetailController.m */,
 				183E4E76146926EA0090BE7B /* ContactsController.h */,
@@ -373,8 +367,6 @@
 				182F212E1462AF0400C3C74B /* MainWindow.xib in Resources */,
 				A10F59FF1468E8F100A0AC22 /* Selected.png in Resources */,
 				A10F5A001468E8F100A0AC22 /* Unselected.png in Resources */,
-				185DEC54146CCA9700C100A4 /* untag.png in Resources */,
-				185DEC58146D100E00C100A4 /* empty.png in Resources */,
 				185DEC5A146D115500C100A4 /* empty1.png in Resources */,
 				18E88789147114A10067C54E /*  Localizable.strings in Resources */,
 				184FCFF21472028A0082B51D /* AssetTablePicker.xib in Resources */,

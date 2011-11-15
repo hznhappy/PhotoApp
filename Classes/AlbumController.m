@@ -218,7 +218,8 @@
 
 
 -(void)getDate:(ALAsset*)rule
-{   NSDictionary *dic = [[rule defaultRepresentation]metadata];
+{   
+    NSDictionary *dic = [[rule defaultRepresentation]metadata];
     id dateTime = [[dic objectForKey:@"{TIFF}"]objectForKey:@"DateTime"];
     if (dateTime!=nil) {
         NSArray *time = [dateTime componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -366,6 +367,7 @@
     NSDictionary *dic = [NSDictionary dictionaryWithObject:[tableView cellForRowAtIndexPath:indexPath].textLabel.text forKey:@"listTitle"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"SetTitle" object:self userInfo:dic];
      AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
+    assetPicker.hidesBottomBarWhenPushed = YES;
     if ([[list objectAtIndex:indexPath.row]intValue]==2) {
         [self getTagUrls];
         [self getUnTagUrls];
@@ -383,8 +385,8 @@
         int row_id=[[list objectAtIndex:indexPath.row]intValue];
         [self playlistUrl:row_id];
          assetPicker.urlsArray =dbUrl;
-            } 
-      [self.navigationController pushViewController:assetPicker animated:YES];
+    } 
+    [self.navigationController pushViewController:assetPicker animated:YES];
     [assetPicker release];
     [table deselectRowAtIndexPath:indexPath animated:YES];
 }

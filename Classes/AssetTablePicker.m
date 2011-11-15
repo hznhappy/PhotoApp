@@ -172,7 +172,8 @@
 }
 -(IBAction)selectFromFavoriteNames{
     tagManagementController *nameController = [[tagManagementController alloc]init];
-    [self presentModalViewController:nameController animated:YES];
+    UINavigationController *root = [[UINavigationController alloc]initWithRootViewController:nameController];
+    [self presentModalViewController:root animated:YES];
     [nameController release];
 }
 -(IBAction)selectFromAllNames{
@@ -232,7 +233,7 @@
     }
     else
     {
-    return [dateArry count];
+        return [dateArry count];
     }
 }
 
@@ -244,7 +245,11 @@
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return [dateArry objectAtIndex:section];
+    if ([dateArry count] == 0) {
+        return nil;
+    }else{
+        return [dateArry objectAtIndex:section];
+    }
 }
 
 -(NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView{
@@ -291,7 +296,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    //cell.tagOverlay = mode;
+    cell.tagOverlay = mode;
     if (cell == nil) 
     {		        
         cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] 
