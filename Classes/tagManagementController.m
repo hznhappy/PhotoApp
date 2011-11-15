@@ -6,44 +6,69 @@
 #import "AssetTablePicker.h"
 #import "ContactsController.h"
 @implementation tagManagementController
-//@synthesize myPickerView,  pickerViewArray;
 @synthesize list;
 @synthesize button;
-//@synthesize toolBar;
-@synthesize tableView,tools;
+@synthesize tableView,tools,bo;
 int j=1,count=0;
 
 
 -(void)viewDidLoad
 {       
     bool1 = NO;
-    tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
-    tools.barStyle = UIBarStyleBlack;
-    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
-	
     
-    UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
-    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
-    addButon.style = UIBarButtonItemStyleBordered;
-    editButton.style = UIBarButtonItemStyleBordered;
-	[buttons addObject:editButton];
-    [buttons addObject:addButon];
-	[tools setItems:buttons animated:NO];
-	
-	UIBarButtonItem *myBtn = [[UIBarButtonItem alloc] initWithCustomView:tools];
-	self.navigationItem.rightBarButtonItem = myBtn;
-	[addButon release];
-    [buttons release];
+   	NSLog(@"GGEG%@",bo);
+    
+    if(bo!=nil)
+    {  
+        [self creatButton];
+    }
+    if(bo==nil)
+    {
+        [self creatButton1];
+    }
     [self creatTable];
     [self nobody];
-    	[tools release];
-       NSLog(@"xunshu%@",da.orderIdList);
     count = [list count];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table) name:@"add" object:nil];
 	[super viewDidLoad];
    	
 }
--(void)creatTable
+-(void)creatButton
+{
+    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
+    tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
+    tools.barStyle = UIBarStyleBlack;
+    NSLog(@"ooollll");
+    UIBarButtonItem *BackButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleback)];
+    self.navigationItem.leftBarButtonItem=BackButton;
+    UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
+    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
+    addButon.style = UIBarButtonItemStyleBordered;
+    editButton.style = UIBarButtonItemStyleBordered;
+    [buttons addObject:editButton];
+    [buttons addObject:addButon];
+    [tools setItems:buttons animated:NO];
+    UIBarButtonItem *myBtn = [[UIBarButtonItem alloc] initWithCustomView:tools];
+    self.navigationItem.rightBarButtonItem = myBtn;
+    [editButton release];
+    [BackButton release];
+    [addButon release];
+    [buttons release];
+    [tools release];
+    
+}
+-(void)creatButton1
+{
+    UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
+    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
+    addButon.style = UIBarButtonItemStyleBordered;
+    editButton.style = UIBarButtonItemStyleBordered;
+    self.navigationItem.rightBarButtonItem = addButon;
+    self.navigationItem.leftBarButtonItem = editButton;
+    [addButon release];
+    [editButton release];
+    
+}-(void)creatTable
 {
     da=[[DBOperation alloc]init];
     [da openDB];
@@ -162,6 +187,10 @@ int j=1,count=0;
     [self.tableView setEditing:!self.tableView.editing animated:YES];
     
 }
+-(void)toggleback
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -184,11 +213,9 @@ int j=1,count=0;
     [self.tableView reloadData];
 }
 - (void)viewDidUnload
-{   //self.toolBar=nil;
-    //self.myPickerView=nil;
+{
     self.tableView=nil;
     da=nil;
-    //self.pickerViewArray=nil;
 	self.list=nil;
     self.button=nil;
 	[super viewDidUnload];
@@ -197,12 +224,10 @@ int j=1,count=0;
 
 -(void)dealloc
 {   
-   // [toolBar release];
+    [bo release];
     [button release];
     [tableView release];
-   // [myPickerView release];
     [da release];
-    //[pickerViewArray release];
 	[list release];
 	[super dealloc];
 	
@@ -289,6 +314,15 @@ int j=1,count=0;
     
 }
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    //AssetTablePicker *U=[[AssetTablePicker alloc]init];
+   // U.UserId= [NSString stringWithFormat:@"%@",[self.list objectAtIndex:indexPath.row]];
+   // NSLog(@"UESRid %@",U.UserId);
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUserId" 
+                                                       object:self 
+                                                     userInfo:dic];
+
+     [self dismissModalViewControllerAnimated:YES];
     [table deselectRowAtIndexPath:indexPath animated:YES];
 }
 

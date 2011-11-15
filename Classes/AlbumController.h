@@ -31,7 +31,8 @@
     NSMutableArray *dbUrl;
     int r;
     ALAsset *img;
-     NSMutableArray *date;
+    NSMutableArray *date;
+   
    }
 @property(nonatomic,retain)NSMutableArray *assetGroups;
 @property(nonatomic,retain)NSMutableSet *SUM;
@@ -45,6 +46,7 @@
 @property(nonatomic,retain)NSMutableArray *withoutlist;
 @property(nonatomic,retain) UIToolbar* tools;
 @property(nonatomic,retain)ALAsset *img;
+
 -(void)getAssetGroup;
 -(void)getAllUrls;
 -(void)getTagUrls;

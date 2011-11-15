@@ -27,13 +27,18 @@
     UITableView *tableView;
     BOOL bool1;
     UIBarButtonItem *editButton;
+    NSString *bo;
 }
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property(nonatomic,retain)UIButton *button;
 @property(nonatomic,retain)NSMutableArray *list;
 @property(nonatomic,retain)UIToolbar *tools;
+@property(nonatomic,retain)NSString *bo;
 -(IBAction)toggleEdit:(id)sender;
 -(IBAction)toggleAdd:(id)sender;
 -(void)creatTable;
 -(void)nobody;
+-(void)creatButton;
+-(void)creatButton1;
+
 @end

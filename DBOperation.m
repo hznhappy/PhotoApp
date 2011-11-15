@@ -5,7 +5,6 @@
 //  Created by Andy on 9/19/11.
 //  Copyright 2011 chinarewards. All rights reserved.
 //
-
 #import "DBOperation.h"
 #import "User.h"
 @implementation DBOperation

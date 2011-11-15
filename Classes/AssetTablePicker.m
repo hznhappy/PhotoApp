@@ -16,11 +16,15 @@
 @synthesize crwAssets,assetArrays,urlsArray,selectUrls,dateArry;
 @synthesize table;
 @synthesize viewBar,tagBar;
-@synthesize save,reset;
+@synthesize save,reset,UserId,UrlList;
 
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
+     NSLog(@"UESRidKKWK %@",UserId);
+    NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+    self.UrlList=tempArray;
+    [tempArray release];
     self.table.delegate = self;
     self.table.maximumZoomScale = 2;
     self.table.minimumZoomScale = 1;
@@ -57,11 +61,54 @@
                                             selector:@selector(getSelectedUrls:) 
                                                 name:@"selectedUrls" 
                                               object:nil];
-    
+    [self creatTable];
     [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
     [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.5];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUserId:) name:@"AddUserId" object:nil];
 }
+-(void)creatTable
+{
+    dataBase=[[DBOperation alloc]init];
+    [dataBase openDB];
+    NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
+    [dataBase createTable:createTag];  
+    [dataBase closeDB];
+}
+-(void)AddUrl:(NSNotification *)note{
+    NSDictionary *dic = [note userInfo];
+    [UrlList addObject:[dic objectForKey:@"url"]];
+    NSLog(@"JJJ%@",UrlList);
+    if([UrlList count]!=0)
+    {
+        save.enabled = YES;
+        reset.enabled = YES;
+    }
+    //NSString *labelText = [dic objectForKey:@"tranStyle"];
+    //self.tranLabel.text = labelText;
+}
+-(void)RemoveUrl:(NSNotification *)note
+{
+    NSDictionary *dic = [note userInfo];
+    [UrlList removeObject:[dic objectForKey:@"Removeurl"]];
+    NSLog(@"JJJ%@",UrlList);
+    if([UrlList count]==0)
+    {
+        save.enabled = NO;
+        reset.enabled = NO;
+    }
 
+
+}
+-(void)AddUserId:(NSNotification *)note
+{
+    NSDictionary *dic = [note userInfo];
+    UserId=[dic objectForKey:@"UserId"];
+    NSLog(@"JJJ%@",UserId);
+    
+}
 -(void)viewDidAppear:(BOOL)animated{
     self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
 
@@ -129,7 +176,13 @@
         for (Thumbnail *thumbnail in self.crwAssets) {
             NSURL *thumStr = [[thumbnail.asset defaultRepresentation]url];
             if ([dbStr isEqual:thumStr]) {
-                [thumbnail setOverlayHidden:NO];
+                NSLog(@"FD");
+                NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
+                [dataBase selectFromTAG:selectTag];
+                NSLog(@"KOKO%@",dataBase.tagIdAry);
+                NSString *num=[NSString stringWithFormat:@"%d",[dataBase.tagIdAry count]];
+                [thumbnail setOverlayHidden:num];
+                
             }
         }
     } 
@@ -145,6 +198,8 @@
     tagBar.hidden = YES;
     viewBar.hidden = NO;
     mode = NO;
+    save.enabled=NO;
+    reset.enabled=NO;
     [self resetTags];
     [self.table reloadData];
 }
@@ -161,7 +216,35 @@
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 -(IBAction)saveTags{
-    
+    if(UserId==nil)
+    {
+        
+        NSString *message=[[NSString alloc] initWithFormat:
+                           @"please select tag name"];
+        
+        
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"note"
+                              message:message
+                              delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"OK!",nil];
+        [alert show];
+        [alert release];
+        [message release];
+
+    }
+    else
+    {
+    [dataBase openDB];
+    for(int i=0;i<[UrlList count];i++)
+    {
+    NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL) VALUES(%d,'%@')",TAG,[UserId intValue],[UrlList objectAtIndex:i]];
+    [dataBase insertToTable:insertTag];
+    }
+    [dataBase closeDB];
+    [self cancelTag];
+    }
 }
 -(IBAction)resetTags{
     for (Thumbnail *thum in self.crwAssets) {
@@ -169,11 +252,13 @@
             [thum setTagOverlayHidden:YES];
         }
     }
+    [UrlList removeAllObjects];
 }
 -(IBAction)selectFromFavoriteNames{
     tagManagementController *nameController = [[tagManagementController alloc]init];
-    UINavigationController *root = [[UINavigationController alloc]initWithRootViewController:nameController];
-    [self presentModalViewController:root animated:YES];
+    nameController.bo=[NSString stringWithFormat:@"yes"];
+	UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:nameController];
+	[self presentModalViewController:navController animated:YES];
     [nameController release];
 }
 -(IBAction)selectFromAllNames{

@@ -81,7 +81,7 @@
     }
     [self creatTable];
     [dataBase closeDB];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(playListedit:) name:@"playListedit" object:nil];
+    //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(playListedit:) name:@"playListedit" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
     [super viewDidLoad];
 }

@@ -32,11 +32,7 @@
 
 -(void)viewDidLoad
 {
-     date = [[NSMutableArray alloc]init];
-    NSUserDefaults *defaults = [ NSUserDefaults standardUserDefaults ];  
-    // 取得 iPhone 支持的所有语言设置  
-    NSArray *languages = [defaults objectForKey : @"AppleLanguages" ];  
-    NSLog ( @"%@" , languages); 
+    date = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray2 = [[NSMutableArray alloc]init];
@@ -53,8 +49,8 @@
 	[self.navigationItem setTitle:@"Loading..."];
     [self getAssetGroup];
     NSString *bu=NSLocalizedString(@"Edit", @"button");
-     NSString *u=NSLocalizedString(@"ok", @"button");
-    NSString *a=NSLocalizedString(@"no", @"button");
+   //  NSString *u=NSLocalizedString(@"ok", @"button");
+    //NSString *a=NSLocalizedString(@"no", @"button");
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
     editButton = [[UIBarButtonItem alloc] initWithTitle:bu style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
@@ -572,6 +568,7 @@
 #pragma mark memory method
 
 - (void)dealloc {
+    
     [allUrl release];
     [unTagUrl release];
     [tagUrl release];

@@ -188,13 +188,14 @@
 -(void)edit
 {if (editing)
 {  ppv.hidden=NO;
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"Set Overlay" 
-                                                       object:self];
+    
+    ppv.alpha=0.4;
+   // [[NSNotificationCenter defaultCenter]postNotificationName:@"Set Overlay" 
+                                                  //     object:self];
      [self.view addSubview:ppv];
     edit.style = UIBarButtonItemStyleBordered;
     edit.title = @"Edit";
     [ppv viewClose];
-     //[ppv viewOpen];
 }
 else{
     ppv.hidden=NO;

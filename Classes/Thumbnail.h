@@ -19,7 +19,8 @@
     
     BOOL overlay;
 	id parent;
-
+    UIView *tagBg;
+    UILabel *count;
 }
 
 @property (nonatomic, retain) ALAsset *asset;
@@ -29,7 +30,7 @@
 @property (nonatomic,retain)NSMutableArray *assetArray;
 -(id)initWithAsset:(ALAsset*)_asset;
 -(BOOL)selected;
--(void)setOverlayHidden:(BOOL)hide;
+-(void)setOverlayHidden:(NSString *)hide;
 -(void)setSelectOvlay;
 -(void)setTagOverlayHidden:(BOOL)hide;
 -(BOOL)tagOverlay;

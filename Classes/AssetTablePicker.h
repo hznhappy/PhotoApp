@@ -12,8 +12,7 @@
 #import "Thumbnail.h"
 #import "sqlite3.h"
 #import "DBOperation.h"
-
-
+#define TAG @"TAG"
 
 
 @interface AssetTablePicker : UIViewController<UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource>
@@ -37,13 +36,15 @@
     DBOperation *dataBase;
 	Thumbnail *thuView;
     BOOL mode;
+     NSString *UserId;
+    NSMutableArray *UrlList;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;
 @property (nonatomic,retain)IBOutlet UIToolbar *tagBar;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *save;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
-
+@property(nonatomic,retain)NSString *UserId;
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
 
 @property (nonatomic,retain) DBOperation *dataBase;
@@ -53,6 +54,7 @@
 @property (nonatomic,retain) NSMutableArray *urlsArray;
 @property (nonatomic,retain) NSMutableArray *selectUrls;
 @property (nonatomic,retain) NSMutableArray *dateArry;
+@property (nonatomic,retain) NSMutableArray *UrlList;
 -(IBAction)actionButtonPressed;
 -(IBAction)playPhotos;
 -(IBAction)lockButtonPressed;
@@ -62,4 +64,8 @@
 -(IBAction)selectFromAllNames;
 -(void)loadPhotos;
 -(void)setPhotoTag;
+-(void)AddUrl:(NSNotification *)note;
+-(void)RemoveUrl:(NSNotification *)note;
+-(void)AddUserId:(NSNotification *)note;
+-(void)creatTable;
 @end

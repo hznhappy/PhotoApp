@@ -55,7 +55,7 @@
 		[self addSubview:tagOverlay];
         [tagOverlay release];
         
-        UIView *tagBg = [[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
+        tagBg = [[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
         [tagBg setBackgroundColor:[UIColor whiteColor]];
         CGPoint tagBgCenter = tagBg.center;
         tagBg.layer.cornerRadius = 25 / 2.0;
@@ -66,26 +66,24 @@
         CGPoint saveCenter = tagCount.center;
         tagCount.layer.cornerRadius = 20 / 2.0;
         tagCount.center = saveCenter;
-        UITextField *count = [[UITextField alloc]initWithFrame:CGRectMake(3, 4, 13, 12)];
+        count = [[UILabel alloc]initWithFrame:CGRectMake(3, 4, 13, 12)];
         count.backgroundColor = [UIColor colorWithRed:182/255.0 green:0 blue:0 alpha:1];
         count.textColor = [UIColor whiteColor];
-        count.textAlignment = UITextAlignmentLeft;
+        count.textAlignment = UITextAlignmentCenter;
         count.font = [UIFont boldSystemFontOfSize:11];
-        count.text = @"18";
         [tagCount addSubview:count];
         [tagBg addSubview:tagCount];
         [self addSubview:tagBg];
         [UIApplication sharedApplication].applicationIconBadgeNumber = 999;
-        
+        tagBg.hidden=YES; 
         [tagCount release];
-        [count release];
-        [tagBg release];
-
     }
 	return self;	
 }
--(void)setOverlayHidden:(BOOL)hide{
-	tagOverlay.hidden = hide;
+-(void)setOverlayHidden:(NSString *)hide{
+    count.text = hide;
+      tagBg.hidden=NO; 
+
 }
 
 -(void)setSelectOvlay{
@@ -94,12 +92,45 @@
 
 -(void)setTagOverlayHidden:(BOOL)hide{
     overlayView.hidden = hide;
+    if([count.text intValue]-1==0)
+    {
+        tagBg.hidden=YES; 
+    }
+    count.text = [NSString stringWithFormat:@"%d",[count.text intValue]-1];
+
 }
 
 -(void)toggleSelection {
     
     if (overlay) {
         overlayView.hidden = [self tagOverlay];
+        if ([self tagOverlay]) {
+            NSURL *url = [[self.asset defaultRepresentation]url];
+            NSLog(@"url %@",url);
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:url,@"url",nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUrl" 
+                                                               object:self 
+                                                             userInfo:dic];
+           
+             count.text = [NSString stringWithFormat:@"%d",[count.text intValue]+1];
+            tagBg.hidden=NO;
+        }
+        else
+        {
+            NSURL *url = [[self.asset defaultRepresentation]url];
+            NSLog(@"url %@",url);
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:url,@"Removeurl",nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"RemoveUrl" 
+                                                               object:self 
+                                                             userInfo:dic];
+            if([count.text intValue]-1==0)
+            {
+                  tagBg.hidden=YES; 
+            }
+            count.text = [NSString stringWithFormat:@"%d",[count.text intValue]-1];
+            
+        }
+        
     }else{
         NSInteger currenPage = 0;
         for (id aAsset in self.assetArray) {
