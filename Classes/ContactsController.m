@@ -63,6 +63,8 @@
          [fu addObject:firstLetter];
      }
      [self.names setObject:newname forKey:firstLetter];
+     NSLog(@"  NAME  IS %@",names);
+      NSLog(@"  NAME KEY IS %@",[names allKeys]);
      [name release];
      
  }

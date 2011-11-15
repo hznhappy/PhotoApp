@@ -9,7 +9,7 @@
 #import "ThumbnailCell.h"
 #import "AlbumPickerController.h"
 #import "UserTableController.h"
-#import "DeleteMeController.h"
+#import "tagManagementController.h"
 #import "PhotoViewController.h"
 
 @implementation AssetTablePicker

@@ -8,7 +8,7 @@
 
 #import "PopupPanelView.h"
 #import "User.h"
-#import "DeleteMeController.h"
+#import "tagManagementController.h"
 #import "PhotoViewController.h"
 @implementation PopupPanelView
 @synthesize isOpen;
@@ -21,19 +21,21 @@
 - (id)initWithFrame:(CGRect)frame {
     if (self == [super initWithFrame:frame]) {
         self.url = nil;
-		isOpen = YES;
+		isOpen = NO;
 		rectForOpen = self.frame;
-		rectForClose = CGRectMake(rectForOpen.origin.x , rectForOpen.origin.y, 0, rectForOpen.size.height);
+		rectForClose = CGRectMake(0 ,440, rectForOpen.size.width, 0);
 		
-		[self setBackgroundColor:[UIColor lightGrayColor]];
+		[self setBackgroundColor:[UIColor whiteColor]];
+        self.alpha=0.4;
 		[self.layer setCornerRadius:10.0];
 		[self setClipsToBounds:YES];   
 		myscroll=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 347)];
         [self addSubview:myscroll]; 
-        [myscroll setBackgroundColor:[UIColor lightGrayColor]];        
+        [myscroll setBackgroundColor:[UIColor clearColor]];        
         toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 307, 320, 40)];
         toolBar.barStyle = UIBarStyleBlackTranslucent;
-        UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithTitle:@"MarkAll" 
+          NSString *a =NSLocalizedString(@"Edit",@"Used to ask the");
+        UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithTitle:a
                                                                  style:UIBarButtonItemStyleBordered 
                                                                 target:self 
                                                          action:@selector(markname)];
@@ -41,7 +43,7 @@
         
         NSArray *items = [NSArray arrayWithObjects:item1,nil];
         [toolBar setItems:items];
-        [self addSubview:toolBar];
+        //[self addSubview:toolBar];
         da=[[DBOperation alloc]init];
         [da openDB];
         NSString *createIdTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];
@@ -86,7 +88,7 @@ CGFloat byheight = 30;
         User *user1 = [da getUserFromUserTable:[[list objectAtIndex:i]intValue]];
          button = [UIButton buttonWithType:UIButtonTypeCustom]; 
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-       NSMutableString * firstCharacters = [NSMutableString string];
+       /*NSMutableString * firstCharacters = [NSMutableString string];
         NSArray * words = [user1.name componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         for (NSString * word in words) {
             if ([word length] > 0) {
@@ -94,8 +96,8 @@ CGFloat byheight = 30;
                 [firstCharacters appendString:[firstLetter uppercaseString]];
             }
         }
-        [firstCharacters retain];
-        buttonName =firstCharacters;
+        [firstCharacters retain];*/
+        buttonName =user1.name;
 		button.frame = CGRectMake(btx, bty, btwidth, byheight);
 		[button setTitle:buttonName forState:UIControlStateNormal];
 		button.tag = i;

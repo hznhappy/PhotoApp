@@ -71,12 +71,12 @@
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<bool key="IBUIHorizontal">NO</bool>
-				<object class="IBUINavigationController" key="IBUISelectedViewController" id="596778407">
-					<object class="IBUITabBarItem" key="IBUITabBarItem" id="749458184">
-						<string key="IBUITitle">Albums</string>
+				<object class="IBUINavigationController" key="IBUISelectedViewController" id="515290962">
+					<object class="IBUITabBarItem" key="IBUITabBarItem" id="605261531">
+						<string key="IBUITitle">PlayList</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">albums.png</string>
+							<string key="NSResourceName">playlist.png</string>
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
@@ -88,7 +88,7 @@
 					</object>
 					<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					<bool key="IBUIHorizontal">NO</bool>
-					<object class="IBUINavigationBar" key="IBUINavigationBar" id="988731399">
+					<object class="IBUINavigationBar" key="IBUINavigationBar" id="106136440">
 						<nil key="NSNextResponder"/>
 						<int key="NSvFlags">256</int>
 						<string key="NSFrameSize">{0, 0}</string>
@@ -96,16 +96,15 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<int key="IBUIBarStyle">2</int>
 					</object>
 					<object class="NSMutableArray" key="IBUIViewControllers">
 						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="IBUIViewController" id="892394022">
-							<object class="IBUINavigationItem" key="IBUINavigationItem" id="289150635">
-								<string key="IBUITitle">Albums</string>
+						<object class="IBUIViewController" id="136113940">
+							<object class="IBUINavigationItem" key="IBUINavigationItem" id="1062404993">
+								<string key="IBUITitle">PlayList</string>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
-							<reference key="IBUIParentViewController" ref="596778407"/>
+							<reference key="IBUIParentViewController" ref="515290962"/>
 							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 								<int key="IBUIInterfaceOrientation">1</int>
 								<int key="interfaceOrientation">1</int>
@@ -117,12 +116,13 @@
 				</object>
 				<object class="NSMutableArray" key="IBUIViewControllers">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUINavigationController" id="515290962">
-						<object class="IBUITabBarItem" key="IBUITabBarItem" id="605261531">
-							<string key="IBUITitle">PlayList</string>
+					<reference ref="515290962"/>
+					<object class="IBUINavigationController" id="596778407">
+						<object class="IBUITabBarItem" key="IBUITabBarItem" id="749458184">
+							<string key="IBUITitle">Albums</string>
 							<object class="NSCustomResource" key="IBUIImage">
 								<string key="NSClassName">NSImage</string>
-								<string key="NSResourceName">playlist.png</string>
+								<string key="NSResourceName">albums.png</string>
 							</object>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
@@ -134,7 +134,7 @@
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIHorizontal">NO</bool>
-						<object class="IBUINavigationBar" key="IBUINavigationBar" id="106136440">
+						<object class="IBUINavigationBar" key="IBUINavigationBar" id="988731399">
 							<nil key="NSNextResponder"/>
 							<int key="NSvFlags">256</int>
 							<string key="NSFrameSize">{0, 0}</string>
@@ -142,15 +142,16 @@
 							<bool key="IBUIClipsSubviews">YES</bool>
 							<bool key="IBUIMultipleTouchEnabled">YES</bool>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							<int key="IBUIBarStyle">2</int>
 						</object>
 						<object class="NSMutableArray" key="IBUIViewControllers">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBUIViewController" id="136113940">
-								<object class="IBUINavigationItem" key="IBUINavigationItem" id="1062404993">
-									<string key="IBUITitle">PlayList</string>
+							<object class="IBUIViewController" id="892394022">
+								<object class="IBUINavigationItem" key="IBUINavigationItem" id="289150635">
+									<string key="IBUITitle">Albums</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
-								<reference key="IBUIParentViewController" ref="515290962"/>
+								<reference key="IBUIParentViewController" ref="596778407"/>
 								<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 									<int key="IBUIInterfaceOrientation">1</int>
 									<int key="interfaceOrientation">1</int>
@@ -160,7 +161,6 @@
 							</object>
 						</object>
 					</object>
-					<reference ref="596778407"/>
 					<object class="IBUINavigationController" id="774610927">
 						<object class="IBUITabBarItem" key="IBUITabBarItem" id="38005321">
 							<string key="IBUITitle">Person</string>
@@ -444,7 +444,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>DeleteMeController</string>
+					<string>tagManagementController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

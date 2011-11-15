@@ -9,7 +9,7 @@
 #import "PhotoViewController.h"
 #import "User.h"
 #import "PopupPanelView.h"
-#import "DeleteMeController.h"
+#import "tagManagementController.h"
 #import "PhotoImageView.h"
 
 @interface PhotoViewController (Private)
@@ -94,14 +94,15 @@
     self.listid=[[NSMutableArray arrayWithCapacity:100]retain];
     edit=[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;
-    ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 90, 100, 347)];
+  
+    ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
     ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
     ppv.url = [[asset defaultRepresentation]url];
     [ppv Buttons];
-    ppv.isOpen=NO;
+ 
     db = [[DBOperation alloc]init];
-    [self.view addSubview:ppv];
-    [ppv viewClose];
+    ppv.hidden=YES;
+   // ppv.isOpen=YES;
     [self doView];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(change:) name:@"change" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tiao:) name:@"tiao" object:nil];
@@ -175,7 +176,7 @@
 
 -(void)tiao:(NSNotification *)note
 {
-    DeleteMeController *d=[[DeleteMeController alloc]init];
+    tagManagementController *d=[[tagManagementController alloc]init];
     [self.navigationController pushViewController:d animated:YES];
     [d release];
     
@@ -186,14 +187,17 @@
 }
 -(void)edit
 {if (editing)
-{
+{  ppv.hidden=NO;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"Set Overlay" 
                                                        object:self];
+     [self.view addSubview:ppv];
     edit.style = UIBarButtonItemStyleBordered;
     edit.title = @"Edit";
     [ppv viewClose];
+     //[ppv viewOpen];
 }
 else{
+    ppv.hidden=NO;
     edit.style = UIBarButtonItemStyleDone;
     edit.title = @"Done";
     [ppv viewOpen];
@@ -212,7 +216,7 @@ else{
     self.navigationItem.rightBarButtonItem=edit;
     [self.view addSubview:ppv];
     bty=0;
-    
+    ppv.isOpen=NO;
     ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
     NSURL *url = [[asset defaultRepresentation]url];
     [db openDB];
@@ -323,7 +327,7 @@ else{
     }else{
         [UIView animateWithDuration:0.4 
                          animations:^{
-                             ppv.alpha = 1;
+                             ppv.alpha = 0.5;
                          }];
         
     }

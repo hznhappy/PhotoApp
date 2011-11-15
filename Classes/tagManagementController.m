@@ -1,11 +1,11 @@
-#import "DeleteMeController.h"
+#import "tagManagementController.h"
 #import "AddressBook/AddressBook.h"
 #import "AddressBookUI/AddressBookUI.h"
 #import "DBOperation.h"
 #import "User.h"
 #import "AssetTablePicker.h"
 #import "ContactsController.h"
-@implementation DeleteMeController
+@implementation tagManagementController
 //@synthesize myPickerView,  pickerViewArray;
 @synthesize list;
 @synthesize button;
@@ -65,17 +65,12 @@ int j=1,count=0;
     [da selectOrderId:selectIdOrder1];
     if([da.orderIdList count]!=0)
     {
-        NSLog(@"DER");
     }
     else
     {
-        NSLog(@"no");
-        
         NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES(%d,'%@')",UserTable,0,@"NoBody"];
         NSLog(@"%@",insertUserTable);
         [da insertToTable:insertUserTable];
-        
-        
         NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,0];
         NSLog(@"%@",insertIdOrder);
         [da insertToTable:insertIdOrder];
@@ -95,13 +90,13 @@ int j=1,count=0;
 	return [pathname stringByAppendingPathComponent:@"data.db"];
 }
 -(IBAction)toggleAdd:(id)sender
-{   bool1=YES;
+{  bool1=YES;
     ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc]init];
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
     [picker release]; 
-    //ContactsController * c=[[ContactsController alloc]init];
-   // [self.navigationController pushViewController:c animated:YES];
+   // ContactsController * c=[[ContactsController alloc]init];
+   //[self.navigationController pushViewController:c animated:YES];
     //[self presentModalViewController:c animated:YES];
     
    } 

@@ -30,7 +30,8 @@
     NSMutableSet *SUM;
     NSMutableArray *dbUrl;
     int r;
-}
+    ALAsset *img;
+   }
 @property(nonatomic,retain)NSMutableArray *assetGroups;
 @property(nonatomic,retain)NSMutableSet *SUM;
 @property(nonatomic,retain)NSMutableArray *allUrl;
@@ -42,6 +43,7 @@
 @property(nonatomic,retain)NSMutableArray *withlist;
 @property(nonatomic,retain)NSMutableArray *withoutlist;
 @property(nonatomic,retain) UIToolbar* tools;
+@property(nonatomic,retain)ALAsset *img;
 -(void)getAssetGroup;
 -(void)getAllUrls;
 -(void)getTagUrls;
@@ -49,4 +51,6 @@
 -(void)deleteUnExitUrls;
 -(void)creatTable;
 -(void)playlistUrl:(int)row_id;
+-(void)loadPhotos:(NSMutableArray *)url;
+-(void)Special;
 @end
