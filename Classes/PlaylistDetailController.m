@@ -17,7 +17,7 @@
 @synthesize tranLabel,musicLabel,state,stateButton;
 @synthesize textField;
 @synthesize mySwitch;
-@synthesize listName;
+@synthesize listName,photos;
 @synthesize userNames;
 @synthesize selectedIndexPaths;
 @synthesize mySwc,a,playrules_idList,playrules_nameList,playrules_ruleList,playIdList,orderList;
@@ -40,6 +40,7 @@
     [userNames release];
     [state release];
     [a release];
+    [photos release];
     [super dealloc];
 }
 
@@ -80,6 +81,11 @@
         [userNames addObject:userName.name];
     }
     [self creatTable];
+    NSString *selectSql = @"SELECT DISTINCT NAME FROM TAG";
+    self.photos = [dataBase selectPhotos:selectSql];
+    NSLog(@"%@",photos);
+ 
+
     [dataBase closeDB];
     //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(playListedit:) name:@"playListedit" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
@@ -157,7 +163,10 @@
            
             UILabel *name = [[UILabel alloc]initWithFrame:CGRectMake(45, 11, 126, 20)];
             name.tag = indexPath.row;
-            name.text = [userNames objectAtIndex:indexPath.row];
+            if([self.photos count]!=0)
+            {
+            name.text = [self.photos objectAtIndex:indexPath.row];
+            }
             [cell.contentView addSubview:name];
             [name release];
 
@@ -259,14 +268,12 @@
         {
          playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
         }
-        NSLog(@"coco%d",playID);
         for (UIButton *button in cell.contentView.subviews) {
             if ([button isKindOfClass:[UIButton class]]) {
                 if ([button.currentImage isEqual:unselectImg]) {
                     [button setImage:selectImg forState:UIControlStateNormal];
                     [selectedIndexPaths addObject:indexPath];
                 [button setImage:selectImg forState:UIControlStateNormal];
-                   NSLog(@"o%d",playID);
                     if(a==nil)
                     {
                       [self insert:Row playId:playID];
@@ -293,6 +300,10 @@
     }
     }
     [self.textField resignFirstResponder];
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                       object:self 
+                                                     userInfo:dic1];
 }
 
 #pragma mark -
@@ -508,7 +519,6 @@
         
         NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
         [dataBase selectFromPlayTable:selectPlayTable];
-        //NSMutableArray *playIdList;
         playIdList=dataBase.playIdAry;
         NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
         NSLog(@"%@",insertPlayIdOrder);
@@ -589,6 +599,10 @@
     }
     [dataBase closeDB];
     [selectedIndexPaths removeAllObjects];
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                       object:self 
+                                                     userInfo:dic1];
 }
 
 #pragma mark -

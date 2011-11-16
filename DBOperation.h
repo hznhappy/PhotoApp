@@ -28,9 +28,8 @@
     NSMutableArray *playlist_UserName;
     NSMutableArray *playlist_UserId;
     NSMutableArray *playlist_UserRules;
-  
-   // NSMutableArray *playlist_name;
-   NSMutableSet *tagUrl;
+    NSMutableSet *tagUrl;
+    NSMutableArray *tagUserName;
 }
 @property(nonatomic,retain)NSMutableArray *orderIdList;
 @property(nonatomic,retain)NSMutableArray *orderList;
@@ -41,9 +40,8 @@
 @property(nonatomic,retain)NSMutableArray *playlist_UserId;
 @property(nonatomic,retain)NSMutableArray *playlist_UserRules;
 @property(nonatomic,retain)NSMutableArray *photos;
-
-//@property(nonatomic,retain)NSMutableArray *playlist_nameOut;
 @property(nonatomic,retain)NSMutableSet *tagUrl;
+@property(nonatomic,retain)NSMutableArray *tagUserName;
 // apply to all views
 -(void)openDB;
 -(void)createTable:(NSString *)sql;

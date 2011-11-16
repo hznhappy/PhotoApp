@@ -33,9 +33,7 @@
     BOOL editing;
 	DBOperation *db;
     PopupPanelView *ppv;
-    CGFloat bty;
     NSMutableArray *listid;
-    UILabel *nameTitle;
     NSTimer *timer;	
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
@@ -48,7 +46,6 @@
 @property(nonatomic,assign) NSInteger _pageIndex;
 
 - (id)initWithPhotoSource:(NSMutableArray *)aSource;
--(void)doView;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;

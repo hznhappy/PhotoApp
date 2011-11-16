@@ -36,7 +36,8 @@
     DBOperation *dataBase;
 	Thumbnail *thuView;
     BOOL mode;
-     NSString *UserId;
+    NSString *UserId;
+    NSString *UserName;
     NSMutableArray *UrlList;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
@@ -45,6 +46,7 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *save;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
 @property(nonatomic,retain)NSString *UserId;
+@property(nonatomic,retain)NSString *UserName;
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
 
 @property (nonatomic,retain) DBOperation *dataBase;
@@ -66,6 +68,6 @@
 -(void)setPhotoTag;
 -(void)AddUrl:(NSNotification *)note;
 -(void)RemoveUrl:(NSNotification *)note;
--(void)AddUserId:(NSNotification *)note;
+-(void)AddUser:(NSNotification *)note;
 -(void)creatTable;
 @end

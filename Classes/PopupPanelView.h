@@ -16,7 +16,6 @@
 	BOOL isOpen;
     NSMutableArray *list;
     DBOperation *da;
-    NSMutableArray *list1;
     UIScrollView *myscroll;
     UIToolbar *toolBar;
     NSURL *url;
@@ -26,11 +25,11 @@
 @property CGRect rectForOpen;
 @property CGRect rectForClose;
 @property (nonatomic,retain)NSMutableArray *list;
-@property (nonatomic,retain)NSMutableArray *list1;
 @property (nonatomic,retain)UIScrollView *myscroll;
 @property (nonatomic,retain)NSURL *url;
 -(void)buttonPressed:(UIButton *)button;
 -(void)viewOpen;
 -(void)viewClose;
 -(void)Buttons;
+-(void)selectTable;
 @end

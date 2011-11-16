@@ -38,6 +38,7 @@
 @property(nonatomic,retain)NSMutableSet *SUM;
 @property(nonatomic,retain)NSMutableArray *allUrl;
 @property(nonatomic,retain)NSMutableArray *unTagUrl;
+@property(nonatomic,retain)NSMutableArray *dbUrl;
 @property(nonatomic,retain)NSMutableArray *playListUrl;
 @property(nonatomic,retain)NSMutableArray *tagUrl;
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 

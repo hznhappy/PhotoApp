@@ -13,7 +13,7 @@
 @synthesize tableView,list,tools,withlist,withoutlist;
 @synthesize assetGroups;
 @synthesize allUrl;
-@synthesize unTagUrl;
+@synthesize unTagUrl,dbUrl;
 @synthesize playListUrl;
 @synthesize tagUrl;
 @synthesize SUM,img;
@@ -37,14 +37,17 @@
     NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray2 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray3 = [[NSMutableArray alloc]init];
+    NSMutableArray *tempArray4 = [[NSMutableArray alloc]init];
     self.allUrl = tempArray1;
     self.unTagUrl = tempArray2;
     self.tagUrl = tempArray3;
     self.assetGroups = tempArray;
+    self.dbUrl=tempArray4;
     [tempArray release];
     [tempArray1 release];
     [tempArray2 release];
     [tempArray3 release];
+    [tempArray4 release];
     [self setWantsFullScreenLayout:YES];
 	[self.navigationItem setTitle:@"Loading..."];
     [self getAssetGroup];
@@ -60,9 +63,7 @@
     self.navigationItem.rightBarButtonItem = addButon;
     [addButon release];
     [editButton release];
-       
-    
-       [self creatTable];
+    [self creatTable];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
 	[super viewDidLoad];
 }
@@ -77,7 +78,6 @@
    
     NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
     [da selectFromPlayTable:selectPlayTable];
-    NSLog(@"EEEEE%d",[da.playIdAry count]);
   if([da.playIdAry count]==0)
     {   
         [self Special];
@@ -85,14 +85,11 @@
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select * from playIdOrder"];
     [da selectOrderId:selectPlayIdOrder];
     self.list=da.orderIdList;
-    NSLog(@"re%d",[list count]);
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [da createTable:createRules];
     
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag];
-    
-    
     [da closeDB];
    
 
@@ -259,9 +256,9 @@
 #pragma mark TableView delegate method
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 { 
-   // return [list count];
+   //return [list count];
    if([assetGroups count]==0)
-    {
+   {
         return[assetGroups count];
     }
     else
@@ -308,22 +305,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {    
-    NSLog(@"FFFFF");
     static NSString *CellIdentifier = @"CellIdentifier";
 	UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
+    
     [da openDB];
     User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     if([[list objectAtIndex:indexPath.row]intValue]==1)
     {
-        ALAssetsGroup *group = (ALAssetsGroup*)[assetGroups objectAtIndex:indexPath.row];
+        ALAssetsGroup *group = (ALAssetsGroup*)[assetGroups objectAtIndex:0];
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
          NSInteger gCount = [group numberOfAssets];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",user3.name,gCount];
-        [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:indexPath.row] posterImage]]];
+        [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:0] posterImage]]];
 
     }
      else if([[list objectAtIndex:indexPath.row]intValue]==2)
@@ -379,7 +376,9 @@
     else
     {
         int row_id=[[list objectAtIndex:indexPath.row]intValue];
+        [da openDB];
         [self playlistUrl:row_id];
+          [da closeDB];
          assetPicker.urlsArray =dbUrl;
     } 
     [self.navigationController pushViewController:assetPicker animated:YES];
@@ -387,8 +386,9 @@
     [table deselectRowAtIndexPath:indexPath animated:YES];
 }
 -(void)playlistUrl:(int)row_id
-{    [da openDB];
+{    
     [SUM removeAllObjects];
+    [dbUrl removeAllObjects];
     NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
     [da selectFromRules:selectRules1];
      for(int i=0;i<[da.playlist_UserId count];i++)
@@ -461,8 +461,8 @@
             }
         }
     }
-    [da closeDB];
-  dbUrl=[[NSMutableArray alloc]init];
+  
+  
     for (NSString *dataStr in self.SUM) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [dbUrl addObject:dbStr];
@@ -578,6 +578,7 @@
     [withlist release];
     [withoutlist release];
     [SUM release];
+    [dbUrl release];
     [super dealloc];
 }
 @end

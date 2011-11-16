@@ -40,6 +40,7 @@
     NSMutableArray *orderList;
     UIButton *stateButton;
     int key;
+    NSMutableArray *photos;
 }
 @property(nonatomic,retain)IBOutlet UITableView *listTable;
 @property(nonatomic,retain)IBOutlet UITableViewCell *textFieldCell;
@@ -51,7 +52,7 @@
 @property(nonatomic,retain)IBOutlet UITextField *textField;
 @property(nonatomic,retain)IBOutlet UISwitch *mySwitch;
 @property(nonatomic,retain)IBOutlet UILabel *state;
-
+@property(nonatomic,retain)NSMutableArray *photos;
 @property(nonatomic,retain)NSMutableArray *selectedIndexPaths;
 @property(nonatomic,retain)NSMutableArray *userNames;
 @property(nonatomic,assign)BOOL mySwc;

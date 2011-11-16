@@ -16,12 +16,11 @@
 @synthesize crwAssets,assetArrays,urlsArray,selectUrls,dateArry;
 @synthesize table;
 @synthesize viewBar,tagBar;
-@synthesize save,reset,UserId,UrlList;
+@synthesize save,reset,UserId,UrlList,UserName;
 
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
-     NSLog(@"UESRidKKWK %@",UserId);
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
     [tempArray release];
@@ -67,7 +66,7 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUserId:) name:@"AddUserId" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
 }
 -(void)creatTable
 {
@@ -86,8 +85,6 @@
         save.enabled = YES;
         reset.enabled = YES;
     }
-    //NSString *labelText = [dic objectForKey:@"tranStyle"];
-    //self.tranLabel.text = labelText;
 }
 -(void)RemoveUrl:(NSNotification *)note
 {
@@ -102,11 +99,13 @@
 
 
 }
--(void)AddUserId:(NSNotification *)note
+-(void)AddUser:(NSNotification *)note
 {
     NSDictionary *dic = [note userInfo];
-    UserId=[dic objectForKey:@"UserId"];
+    self.UserId=[dic objectForKey:@"UserId"];
+    UserName=[dic objectForKey:@"UserName"];
     NSLog(@"JJJ%@",UserId);
+    NSLog(@"JJJ%@",UserName);
     
 }
 -(void)viewDidAppear:(BOOL)animated{
@@ -235,15 +234,26 @@
 
     }
     else
-    {
+    {NSLog(@"JEJE");
+         
+        NSLog(@"nm%@",UserName);
+       NSLog(@"nid%@",self.UserId);
+       
+
     [dataBase openDB];
     for(int i=0;i<[UrlList count];i++)
-    {
-    NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL) VALUES(%d,'%@')",TAG,[UserId intValue],[UrlList objectAtIndex:i]];
+    {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[UrlList objectAtIndex:i],UserName];
     [dataBase insertToTable:insertTag];
     }
     [dataBase closeDB];
     [self cancelTag];
+    [self setPhotoTag];
+        NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                           object:self 
+                                                         userInfo:dic1];
+        
+
     }
 }
 -(IBAction)resetTags{
@@ -295,7 +305,24 @@
 #pragma mark People picker delegate
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
 
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+    
+    NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
+    ABRecordID recId = ABRecordGetRecordID(person);
+    
+    NSLog(@"readName:%@",readName);
+    NSLog(@"recId:%d",recId);
+  self.UserId=[NSString stringWithFormat:@"%d",recId];
+   // NSLog(@"ID:%@",Id);
+    UserName=readName;
+  // NSLog(@"UserID%@",UserId);
+  //  NSLog(@"Uname%@",UserName);
+    //UserName=[NSString stringWithFormat:@"%@",readName];
+   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:Id,@"UserId",readName,@"UserName",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
+                                                     object:self 
+                                                     userInfo:dic1];*/
+   [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+    [self dismissModalViewControllerAnimated:YES];
     return NO;
 }
 
@@ -438,6 +465,8 @@
     [urlsArray release];
     [selectUrls release];
     [dateArry release];
+    [UserId release];
+    [UserName release];
     [super dealloc];    
 }
 

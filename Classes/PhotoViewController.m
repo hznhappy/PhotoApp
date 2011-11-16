@@ -79,17 +79,12 @@
 		[self.view addSubview:_scrollView];
         
 	}
-    
-    
-	//  load photoviews lazily
+   	//  load photoviews lazily
 	NSMutableArray *views = [[NSMutableArray alloc] init];
 	for (unsigned i = 0; i < [self.photoSource count]; i++) {
 		[views addObject:[NSNull null]];
 	}
 	self.photoViews = views;
-    
-    
-    
     editing=NO;
     self.listid=[[NSMutableArray arrayWithCapacity:100]retain];
     edit=[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
@@ -99,14 +94,10 @@
     ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
     ppv.url = [[asset defaultRepresentation]url];
     [ppv Buttons];
- 
+    [self.view addSubview:ppv];
     db = [[DBOperation alloc]init];
     ppv.hidden=YES;
-   // ppv.isOpen=YES;
-    [self doView];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(change:) name:@"change" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tiao:) name:@"tiao" object:nil];
-	[views release];
+   	[views release];
     
 }
 
@@ -173,18 +164,6 @@
     _rotating = NO;
     
 }
-
--(void)tiao:(NSNotification *)note
-{
-    tagManagementController *d=[[tagManagementController alloc]init];
-    [self.navigationController pushViewController:d animated:YES];
-    [d release];
-    
-}
-
--(void)change:(NSNotification *)note{
-    [self doView];
-}
 -(void)edit
 {if (editing)
 {  ppv.hidden=NO;
@@ -205,51 +184,6 @@ else{
 }
     editing = !editing;
 }
-
-
--(void)doView
-{
-    for(UILabel *name in self.view.subviews)
-    {
-        [name removeFromSuperview];
-    }
-    [self.view addSubview:_scrollView];
-    self.navigationItem.rightBarButtonItem=edit;
-    [self.view addSubview:ppv];
-    bty=0;
-    ppv.isOpen=NO;
-    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
-    NSURL *url = [[asset defaultRepresentation]url];
-    [db openDB];
-    NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
-    [db createTable:createTag];  
-    NSString *selectTag= [NSString stringWithFormat:@"select * from tag where url='%@'",url];
-    [db selectFromTAG:selectTag];
-    
-    self.listid=db.tagIdAry;
-    for(int i=0;i<[self.listid count];i++){
-        User *user1 = [db getUserFromUserTable:[[self.listid objectAtIndex:i]intValue]];
-        nameTitle = [[UILabel alloc]initWithFrame:CGRectMake(300, 70+bty, 20, 20)];
-        if([user1.color isEqualToString:@"greenColor"])
-            [nameTitle setBackgroundColor:[UIColor greenColor]];
-        else if([user1.color isEqualToString:@"redColor"])
-            [nameTitle setBackgroundColor:[UIColor redColor]];
-        else if([user1.color isEqualToString:@"yellowColor"])
-            [nameTitle setBackgroundColor:[UIColor yellowColor]];
-        else if([user1.color isEqualToString:@"grayColor"])
-            [nameTitle setBackgroundColor:[UIColor grayColor]];
-        else if([user1.color isEqualToString:@"blueColor"])
-            [nameTitle setBackgroundColor:[UIColor blueColor]];
-        else if([user1.color isEqualToString:@"whiteColor"])
-            [nameTitle setBackgroundColor:[UIColor whiteColor]];     
-        [self.view addSubview:nameTitle];
-        bty=bty+22;
-    }
-    [db closeDB];
-}
-
-
-
 - (void)done:(id)sender {
 	[self dismissModalViewControllerAnimated:YES];
 }
@@ -421,7 +355,7 @@ else{
 	if (index - 1 >= 0 && (NSNull*)[self.photoViews objectAtIndex:index-1] != [NSNull null]) {
 		[((PhotoImageView*)[self.photoViews objectAtIndex:index-1]) killScrollViewZoom];
 	} 	
-    [self doView];
+   // [self doView];
 	
 }
 

@@ -84,7 +84,7 @@ int j=1,count=0;
     }
 -(void)nobody
 {
-    da=[[DBOperation alloc]init];
+ 
     [da openDB];
     NSString *selectIdOrder1=[NSString stringWithFormat:@"select id from idOrder where id=0"];
     [da selectOrderId:selectIdOrder1];
@@ -126,7 +126,7 @@ int j=1,count=0;
     
    } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
-{ da=[[DBOperation alloc]init];
+{
     [da openDB];
 
        NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
@@ -253,7 +253,6 @@ int j=1,count=0;
         
 		
 	}
-    da=[[DBOperation alloc]init];
     [da openDB];
     User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
     if([user1.id intValue]==0)
@@ -274,7 +273,6 @@ int j=1,count=0;
 {	
     id1=[NSString stringWithFormat:@"%d",indexPath.row]; 
     [id1 retain];
-    da=[[DBOperation alloc]init];
     [da openDB];
      NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag];
@@ -314,11 +312,12 @@ int j=1,count=0;
     
 }
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //AssetTablePicker *U=[[AssetTablePicker alloc]init];
-   // U.UserId= [NSString stringWithFormat:@"%@",[self.list objectAtIndex:indexPath.row]];
-   // NSLog(@"UESRid %@",U.UserId);
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUserId" 
+    [da openDB];
+    User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
+    NSLog(@" UserName : %@",user1.name);
+    [da closeDB];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",user1.name,@"UserName",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
                                                        object:self 
                                                      userInfo:dic];
 
@@ -331,7 +330,6 @@ int j=1,count=0;
     switch (buttonIndex) {
         case 1:
             NSLog(@"OB");
-            da=[[DBOperation alloc]init];
             [da openDB];
             NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
             NSLog(@"%@",deleteIdTable);
@@ -368,7 +366,6 @@ int j=1,count=0;
 	[list removeObjectAtIndex:fromRow];
 	[list insertObject:object atIndex:toRow];
 	[object release];
-    da=[[DBOperation alloc]init];
     [da openDB];
     NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder"];	
 	NSLog(@"%@",deleteIdTable);

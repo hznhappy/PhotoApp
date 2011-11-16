@@ -9,6 +9,7 @@
 #import "User.h"
 @implementation DBOperation
 @synthesize orderIdList,orderList,tagIdAry,playNameAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId,playlist_UserRules,photos;
+@synthesize tagUserName;
 -(NSString *)filePath{
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *directory = [paths objectAtIndex:0];
@@ -49,7 +50,6 @@
     NSMutableArray *playArray = [[NSMutableArray alloc]init];
     self.photos= playArray;
     [playArray release];
-    //photos = [[NSMutableArray arrayWithCapacity:40]retain];
     sqlite3_stmt *stmt;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &stmt, nil) == SQLITE_OK) {
 		while (sqlite3_step(stmt)==SQLITE_ROW) {
@@ -69,8 +69,6 @@
     self. playIdAry= playArray1;
     [playArray release];
     [playArray1 release];
-   // playIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
-    //playNameAry=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newid;
     NSString *newname;
 	sqlite3_stmt *statement;
@@ -89,30 +87,29 @@
 }
 -(void)selectFromTAG:(NSString *)sql
 { NSMutableArray *playArray = [[NSMutableArray alloc]init];
-    NSMutableSet *playArray1 = [[NSMutableSet alloc]init];
+  NSMutableSet *playArray1 = [[NSMutableSet alloc]init];
+  NSMutableArray *playArray2 = [[NSMutableArray alloc]init];
     self.tagIdAry= playArray;
     self.tagUrl= playArray1;
+    self.tagUserName=playArray2;
     [playArray release];
-     [playArray1 release];
-    
-   // tagIdAry=[[NSMutableArray arrayWithCapacity:40]retain];
- //tagUrl=[[[NSMutableSet alloc]init]retain];
+    [playArray1 release];
+    [playArray2 release];
     NSString *newid;
     NSString *newUrl;
+    NSString *newName;
     sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
             newUrl=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 1)];
-            
+            newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement, 2)];
             [tagIdAry addObject:newid];
             [tagUrl addObject:newUrl];
+            [tagUserName addObject:newName];
             NSLog(@"TAGURL%@",tagUrl);
-            
-            
         }
-		
     }	
     sqlite3_finalize(statement);  
 }
@@ -121,9 +118,6 @@
     NSMutableArray *playArray = [[NSMutableArray alloc]init];
     self.orderIdList = playArray;
     [playArray release];
-
-   // orderIdList=[[NSMutableArray arrayWithCapacity:40]retain];
-    //orderList=[NSMutableArray arrayWithCapacity:40];
     NSString *newid;
     
 	sqlite3_stmt *statement;
@@ -150,10 +144,7 @@
     [playArray release];
     [playArray1 release];
     [playArray2 release];
-   // playlist_UserId=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newId;
-   // playlist_UserName=[[NSMutableArray arrayWithCapacity:40]retain];
-  //  playlist_UserRules=[[NSMutableArray arrayWithCapacity:40]retain];
     NSString *newname;
     NSString *newRule;
 	sqlite3_stmt *statement;
@@ -248,13 +239,10 @@
     [playIdAry release];
     [playlist_UserName release];
     [playlist_UserId release];
-    // NSMutableArray *playlist_name;
+    [tagUserName release];
     [tagUrl release];
     [photos release];
     [playlist_UserRules release];
-
-   
-   
     [super dealloc];
 }
 
