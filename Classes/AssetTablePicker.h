@@ -17,6 +17,7 @@
 
 @interface AssetTablePicker : UIViewController<UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource>
 {
+    UIActivityIndicatorView *_activityView;
     UITableView *table;
     UIToolbar *viewBar;
     UIToolbar *tagBar;
@@ -32,10 +33,12 @@
 	NSMutableArray *urlsArray;
     NSMutableArray *selectUrls;
     NSMutableArray *dateArray;
-	
+    NSMutableArray *images;
+
     DBOperation *dataBase;
 	Thumbnail *thuView;
     BOOL mode;
+    BOOL load;
     NSString *UserId;
     NSString *UserName;
     NSMutableArray *UrlList;
@@ -51,6 +54,7 @@
 
 @property (nonatomic,retain) DBOperation *dataBase;
 
+@property (nonatomic,retain) NSMutableArray *images;
 @property (nonatomic,retain) NSMutableArray *crwAssets;
 @property (nonatomic,retain) NSMutableArray *assetArrays;
 @property (nonatomic,retain) NSMutableArray *urlsArray;
@@ -70,4 +74,5 @@
 -(void)RemoveUrl:(NSNotification *)note;
 -(void)AddUser:(NSNotification *)note;
 -(void)creatTable;
+-(void)getImage;
 @end

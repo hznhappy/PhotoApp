@@ -9,7 +9,7 @@
 #import "User.h"
 @implementation DBOperation
 @synthesize orderIdList,orderList,tagIdAry,playNameAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId,playlist_UserRules,photos;
-@synthesize tagUserName;
+@synthesize tagUserName,tagName;
 -(NSString *)filePath{
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *directory = [paths objectAtIndex:0];
@@ -54,6 +54,7 @@
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &stmt, nil) == SQLITE_OK) {
 		while (sqlite3_step(stmt)==SQLITE_ROW) {
 			char *value = (char *)sqlite3_column_text(stmt, 0);
+            //NSString *o=[NSString stringWithUTF8String:(char*) sqlite3_column_text(stmt,0)];
             [photos addObject:[NSString stringWithFormat:@"%s",value]];
 		}
 	}
@@ -113,6 +114,30 @@
     }	
     sqlite3_finalize(statement);  
 }
+
+
+
+-(void)selectUserNameFromTag:(NSString *)sql;
+{
+     NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    self.tagName=playArray;
+    [playArray release];
+       NSString *newName;
+    sqlite3_stmt *statement;
+	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+		
+		while (sqlite3_step(statement)==SQLITE_ROW) {
+            newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,0)];
+            NSLog(@"%@",newName);
+            [tagName addObject:newName];
+              NSLog(@"%@",tagName);
+        }
+    }
+    sqlite3_finalize(statement);  
+}
+
+
+
 -(void)selectOrderId:(NSString *)sql
 {
     NSMutableArray *playArray = [[NSMutableArray alloc]init];
@@ -232,7 +257,7 @@
 }
 
 -(void)dealloc
-{
+{   [tagName release];
     [orderIdList release];
     [orderList release];
     [tagIdAry release];

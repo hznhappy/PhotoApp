@@ -11,7 +11,7 @@
 @implementation ThumbnailCell
 
 @synthesize rowAssets;
-@synthesize tagOverlay;
+@synthesize tagOverlay,loadSign;
 
 -(id)initWithAssets:(NSArray*)_assets reuseIdentifier:(NSString*)_identifier {
     
@@ -40,6 +40,7 @@
 	
 	for(Thumbnail *thum in self.rowAssets) {
         thum.overlay = tagOverlay;
+        thum.load = self.loadSign;
 		[thum setFrame:frame];
 		[thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
 		[self addSubview:thum];

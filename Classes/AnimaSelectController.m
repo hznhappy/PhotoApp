@@ -32,8 +32,18 @@
 
 - (void)viewDidLoad
 {
-    NSMutableArray *tempArray = [[NSMutableArray alloc]initWithObjects:@"Fade",@"Cube",@"Reveal",@"Push",@"MoveIn",@"suckEffect", @"oglFlip",@"rippleEffect",@"pageCurl",
-                                 @"pageUnCurl",nil];
+    NSString *a=NSLocalizedString(@"Fade", @"title");
+    NSString *b=NSLocalizedString(@"Cube", @"title");
+    NSString *c=NSLocalizedString(@"Reveal", @"title");
+    NSString *d=NSLocalizedString(@"Push", @"title");
+    NSString *e=NSLocalizedString(@"MoveIn", @"title");
+    NSString *f=NSLocalizedString(@"suckEffect", @"title");
+    NSString *g=NSLocalizedString(@"oglFlip", @"title");
+    NSString *h=NSLocalizedString(@"rippleEffect", @"title");
+    NSString *i=NSLocalizedString(@"pageCurl", @"title");
+     NSString *j=NSLocalizedString(@"pageUnCurl", @"title");
+    NSMutableArray *tempArray = [[NSMutableArray alloc]initWithObjects:a,b,c,d,e,f, g,h,i,
+                                 j,nil];
     self.animaArray = tempArray;
     [tempArray release];
     [super viewDidLoad];

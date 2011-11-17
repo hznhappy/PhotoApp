@@ -39,10 +39,12 @@ int j=1,count=0;
     tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
     tools.barStyle = UIBarStyleBlack;
     NSLog(@"ooollll");
-    UIBarButtonItem *BackButton=[[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleback)];
+    NSString *a=NSLocalizedString(@"Back", @"button");
+    NSString *b=NSLocalizedString(@"Edit", @"button");
+    UIBarButtonItem *BackButton=[[UIBarButtonItem alloc]initWithTitle:a style:UIBarButtonItemStyleBordered target:self action:@selector(toggleback)];
     self.navigationItem.leftBarButtonItem=BackButton;
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
-    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
+    editButton = [[UIBarButtonItem alloc] initWithTitle:b style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
     addButon.style = UIBarButtonItemStyleBordered;
     editButton.style = UIBarButtonItemStyleBordered;
     [buttons addObject:editButton];
@@ -59,8 +61,9 @@ int j=1,count=0;
 }
 -(void)creatButton1
 {
+    NSString *b=NSLocalizedString(@"Edit", @"button");
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
-    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
+    editButton = [[UIBarButtonItem alloc] initWithTitle:b style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
     addButon.style = UIBarButtonItemStyleBordered;
     editButton.style = UIBarButtonItemStyleBordered;
     self.navigationItem.rightBarButtonItem = addButon;
@@ -138,19 +141,19 @@ int j=1,count=0;
     fname=[NSString stringWithFormat:@"%@",readName];
     if([list containsObject:fid])
     {
-        NSString *message=[[NSString alloc] initWithFormat:
-                           @"已经存在"];
-        
+        NSString *b=NSLocalizedString(@"Already exists", @"button");
+        NSString *a=NSLocalizedString(@"note", @"button");
+         NSString *c=NSLocalizedString(@"ok", @"button");
+            
         
         UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"提示"
-                              message:message
+                              initWithTitle:a
+                              message:b
                               delegate:self
                               cancelButtonTitle:nil
-                              otherButtonTitles:@"确定!",nil];
+                              otherButtonTitles:c,nil];
         [alert show];
         [alert release];
-        [message release];
     }
     else
     {
@@ -178,11 +181,12 @@ int j=1,count=0;
 }
 
 -(IBAction)toggleEdit:(id)sender
-{
+{ NSString *a=NSLocalizedString(@"Edit", @"title");
+     NSString *b=NSLocalizedString(@"Done", @"title");
     if (self.tableView.editing) {
-        editButton.title = @"Edit";
+        editButton.title = a;
     }else{
-        editButton.title = @"Done";
+        editButton.title = b;
     }
     [self.tableView setEditing:!self.tableView.editing animated:YES];
     
@@ -281,16 +285,24 @@ int j=1,count=0;
     NSMutableArray *listid1=da.tagIdAry;
     if([[self.list objectAtIndex:indexPath.row]intValue]==0)
     {
-        UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:@"你好" message:@"固有成员,无法删除" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alert1 show];
-        [alert1 release];
+        NSString *a=NSLocalizedString(@"hello", @"title");
+        NSString *b=NSLocalizedString(@"Inherent members, can not be deleted", @"title");
+        NSString *c=NSLocalizedString(@"ok", @"title");
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
+        [alert show];
+        [alert release];
     }
     else
     {
     if([listid1 containsObject:[list objectAtIndex:indexPath.row]])
     {
-        UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:@"你好" message:@"此人已作为照片标记使用,是否确定要删除" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:nil];
-        [alert1 addButtonWithTitle:@"YES"];
+        NSString *a=NSLocalizedString(@"hello", @"title");
+        NSString *b=NSLocalizedString(@"This person has been used as a photo tag, you sure you want to delete it", @"title");
+        NSString *c=NSLocalizedString(@"NO", @"title");
+        NSString *d=NSLocalizedString(@"YES", @"title");
+
+        UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
+        [alert1 addButtonWithTitle:d];
         [alert1 show];
         [alert1 release];
         

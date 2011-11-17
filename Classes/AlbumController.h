@@ -57,5 +57,5 @@
 -(void)playlistUrl:(int)row_id;
 -(void)loadPhotos:(NSMutableArray *)url;
 -(void)Special;
--(void)getDate:(ALAsset*)rule;
+//-(void)getDate:(ALAsset*)rule;
 @end

@@ -52,7 +52,6 @@
 				<int key="NSvFlags">292</int>
 				<string key="NSFrameSize">{320, 480}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSNextKeyView"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -72,12 +71,12 @@
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<bool key="IBUIHorizontal">NO</bool>
-				<object class="IBUINavigationController" key="IBUISelectedViewController" id="515290962">
-					<object class="IBUITabBarItem" key="IBUITabBarItem" id="605261531">
-						<string key="IBUITitle">Album</string>
+				<object class="IBUINavigationController" key="IBUISelectedViewController" id="774610927">
+					<object class="IBUITabBarItem" key="IBUITabBarItem" id="38005321">
+						<string key="IBUITitle">Person</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">albums.png</string>
+							<string key="NSResourceName">person.png</string>
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
@@ -89,7 +88,7 @@
 					</object>
 					<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					<bool key="IBUIHorizontal">NO</bool>
-					<object class="IBUINavigationBar" key="IBUINavigationBar" id="106136440">
+					<object class="IBUINavigationBar" key="IBUINavigationBar" id="113932411">
 						<nil key="NSNextResponder"/>
 						<int key="NSvFlags">256</int>
 						<string key="NSFrameSize">{0, 0}</string>
@@ -100,12 +99,12 @@
 					</object>
 					<object class="NSMutableArray" key="IBUIViewControllers">
 						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="IBUIViewController" id="136113940">
-							<object class="IBUINavigationItem" key="IBUINavigationItem" id="1062404993">
-								<string key="IBUITitle">PlayList</string>
+						<object class="IBUIViewController" id="598399772">
+							<object class="IBUINavigationItem" key="IBUINavigationItem" id="241591876">
+								<string key="IBUITitle">Person</string>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
-							<reference key="IBUIParentViewController" ref="515290962"/>
+							<reference key="IBUIParentViewController" ref="774610927"/>
 							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 								<int key="IBUIInterfaceOrientation">1</int>
 								<int key="interfaceOrientation">1</int>
@@ -117,13 +116,12 @@
 				</object>
 				<object class="NSMutableArray" key="IBUIViewControllers">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<reference ref="515290962"/>
-					<object class="IBUINavigationController" id="774610927">
-						<object class="IBUITabBarItem" key="IBUITabBarItem" id="38005321">
-							<string key="IBUITitle">Person</string>
+					<object class="IBUINavigationController" id="515290962">
+						<object class="IBUITabBarItem" key="IBUITabBarItem" id="605261531">
+							<string key="IBUITitle">Album</string>
 							<object class="NSCustomResource" key="IBUIImage">
 								<string key="NSClassName">NSImage</string>
-								<string key="NSResourceName">person.png</string>
+								<string key="NSResourceName">albums.png</string>
 							</object>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
@@ -135,7 +133,7 @@
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIHorizontal">NO</bool>
-						<object class="IBUINavigationBar" key="IBUINavigationBar" id="113932411">
+						<object class="IBUINavigationBar" key="IBUINavigationBar" id="106136440">
 							<nil key="NSNextResponder"/>
 							<int key="NSvFlags">256</int>
 							<string key="NSFrameSize">{0, 0}</string>
@@ -146,12 +144,12 @@
 						</object>
 						<object class="NSMutableArray" key="IBUIViewControllers">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBUIViewController" id="598399772">
-								<object class="IBUINavigationItem" key="IBUINavigationItem" id="241591876">
-									<string key="IBUITitle">Person</string>
+							<object class="IBUIViewController" id="136113940">
+								<object class="IBUINavigationItem" key="IBUINavigationItem" id="1062404993">
+									<string key="IBUITitle">PlayList</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
-								<reference key="IBUIParentViewController" ref="774610927"/>
+								<reference key="IBUIParentViewController" ref="515290962"/>
 								<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 									<int key="IBUIInterfaceOrientation">1</int>
 									<int key="interfaceOrientation">1</int>
@@ -161,13 +159,13 @@
 							</object>
 						</object>
 					</object>
+					<reference ref="774610927"/>
 				</object>
 				<object class="IBUITabBar" key="IBUITabBar" id="778130750">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">266</int>
 					<string key="NSFrame">{{0, 431}, {320, 49}}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSNextKeyView"/>
 					<object class="NSColor" key="IBUIBackgroundColor">
 						<int key="NSColorSpace">3</int>
 						<bytes key="NSWhite">MCAwAA</bytes>

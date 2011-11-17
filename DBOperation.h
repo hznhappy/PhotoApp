@@ -30,6 +30,7 @@
     NSMutableArray *playlist_UserRules;
     NSMutableSet *tagUrl;
     NSMutableArray *tagUserName;
+    NSMutableArray *tagName;
 }
 @property(nonatomic,retain)NSMutableArray *orderIdList;
 @property(nonatomic,retain)NSMutableArray *orderList;
@@ -42,6 +43,7 @@
 @property(nonatomic,retain)NSMutableArray *photos;
 @property(nonatomic,retain)NSMutableSet *tagUrl;
 @property(nonatomic,retain)NSMutableArray *tagUserName;
+@property(nonatomic,retain)NSMutableArray *tagName;
 // apply to all views
 -(void)openDB;
 -(void)createTable:(NSString *)sql;
@@ -63,6 +65,7 @@
 - (User*)getUserFromPlayTable:(int)id;
 //apply to AssetTablePickerController for retreiving url from TAG
 -(NSMutableArray *)selectPhotos:(NSString *)sql;
+-(void)selectUserNameFromTag:(NSString *)sql;
 -(NSString *)filePath;
 -(BOOL)exitInDatabase:(NSString *)sql;
 

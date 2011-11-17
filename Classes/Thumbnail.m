@@ -10,9 +10,9 @@
 
 @synthesize asset;
 @synthesize parent;
-@synthesize overlay;
+@synthesize overlay,load;
 @synthesize fatherController;
-@synthesize assetArray;
+@synthesize assetArray,photos;
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         // Initialization code
@@ -74,7 +74,6 @@
         [tagCount addSubview:count];
         [tagBg addSubview:tagCount];
         [self addSubview:tagBg];
-        [UIApplication sharedApplication].applicationIconBadgeNumber = 999;
         tagBg.hidden=YES; 
         [tagCount release];
     }
@@ -132,17 +131,22 @@
         }
         
     }else{
-        NSInteger currenPage = 0;
-        for (id aAsset in self.assetArray) {
-            if ([[[self.asset defaultRepresentation]url] isEqual:[[aAsset defaultRepresentation]url]]) {
-                currenPage = [assetArray indexOfObject:aAsset];
+        if (load) {
+            return;
+        }else{
+            NSInteger currenPage = 0;
+            for (id aAsset in self.assetArray) {
+                if ([[[self.asset defaultRepresentation]url] isEqual:[[aAsset defaultRepresentation]url]]) {
+                    currenPage = [assetArray indexOfObject:aAsset];
+                }
             }
+            PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
+            photoController._pageIndex = currenPage;
+            selectOverlay.hidden = NO;
+            photoController.photos = self.photos;
+            [self.fatherController.navigationController pushViewController:photoController animated:YES];
+            [photoController release];
         }
-        PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
-        photoController._pageIndex = currenPage;
-        selectOverlay.hidden = NO;
-        [self.fatherController.navigationController pushViewController:photoController animated:YES];
-        [photoController release];
     }
 }
 
@@ -157,6 +161,7 @@
 }
 - (void)dealloc 
 {    
+    [photos release];
     [overlayView release];
     [asset release];
 	[fatherController release];

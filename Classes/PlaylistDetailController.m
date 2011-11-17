@@ -81,13 +81,13 @@
         [userNames addObject:userName.name];
     }
     [self creatTable];
-    NSString *selectSql = @"SELECT DISTINCT NAME FROM TAG";
-    self.photos = [dataBase selectPhotos:selectSql];
-    NSLog(@"%@",photos);
+    NSString *selectTagName= @"SELECT DISTINCT NAME FROM TAG";
+    [dataBase selectUserNameFromTag:selectTagName];
+   // self.photos = [dataBase selectPhotos:selectSql];
+    NSLog(@"tagname:%@",dataBase.tagName);
  
 
     [dataBase closeDB];
-    //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(playListedit:) name:@"playListedit" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
     [super viewDidLoad];
 }
@@ -95,6 +95,10 @@
 #pragma mark UITableView  method
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
+}
+-(void)international
+{
+    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     switch (section) {
@@ -107,7 +111,7 @@
             }
             break;
         case 1:
-            return [userNames count];
+            return [dataBase.tagName count];
             break;
         default:
             break;
@@ -163,10 +167,10 @@
            
             UILabel *name = [[UILabel alloc]initWithFrame:CGRectMake(45, 11, 126, 20)];
             name.tag = indexPath.row;
-            if([self.photos count]!=0)
-            {
-            name.text = [self.photos objectAtIndex:indexPath.row];
-            }
+            
+            
+            name.text = [dataBase.tagName objectAtIndex:indexPath.row];
+            
             [cell.contentView addSubview:name];
             [name release];
 
@@ -175,7 +179,7 @@
             [selectButton addTarget:self action:@selector(setSelectState:) forControlEvents:UIControlEventTouchUpInside];
             selectButton.frame = CGRectMake(10, 11, 30, 30);
             [selectButton setImage:unselectImg forState:UIControlStateNormal];
-            if([playrules_idList containsObject:[orderList objectAtIndex:indexPath.row]])
+            if([playrules_idList containsObject:[dataBase.tagName objectAtIndex:indexPath.row]])
             {[dataBase openDB];
                 NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name,playlist_rules from rules where user_id=%d and playlist_id=%d",[[orderList objectAtIndex:indexPath.row]intValue],[a intValue]];
                 [dataBase selectFromRules:selectRules];
@@ -233,19 +237,22 @@
     }
     if (indexPath.section == 1) {
         if(textField.text==nil||textField.text.length==0)
-        { NSString *message=[[NSString alloc] initWithFormat:
-                             @"请先填写规则名!"];
+        { NSString *c=NSLocalizedString(@"note", @"title");
+            NSString *b=NSLocalizedString(@"ok", @"title");
+             NSString *d=NSLocalizedString(@"Please fill out the rule name", @"title");
+            //NSString *message=[[NSString alloc] initWithFormat:
+                            // d];
             
             
             UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:@"提示"
-                                  message:message
+                                  initWithTitle:c
+                                  message:d
                                   delegate:self
                                   cancelButtonTitle:nil
-                                  otherButtonTitles:@"确定!",nil];
+                                  otherButtonTitles:b,nil];
             [alert show];
             [alert release];
-            [message release];
+           // [message release];
             
 
         }
@@ -491,17 +498,19 @@
     [dataBase openDB];
     if(textField.text==nil||textField.text.length==0)
     {
-        
+        NSString *c=NSLocalizedString(@"note", @"title");
+        NSString *b=NSLocalizedString(@"ok", @"title");
+        NSString *d=NSLocalizedString(@"Rule name can not be empty!", @"title");
         NSString *message=[[NSString alloc] initWithFormat:
                            @"规则名不能为空!"];
         
         
         UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"提示"
-                              message:message
+                              initWithTitle:c
+                              message:d
                               delegate:self
                               cancelButtonTitle:nil
-                              otherButtonTitles:@"确定!",nil];
+                              otherButtonTitles:b,nil];
         [alert show];
         [alert release];
         [message release];

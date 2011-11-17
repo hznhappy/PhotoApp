@@ -12,6 +12,7 @@
 {
 	NSArray *rowAssets;
     BOOL tagOverlay;
+    BOOL loadSign;
 }
 
 -(id)initWithAssets:(NSArray*)_assets reuseIdentifier:(NSString*)_identifier;
@@ -19,5 +20,6 @@
 
 @property (nonatomic,retain) NSArray *rowAssets;
 @property (nonatomic,assign) BOOL tagOverlay;
+@property (nonatomic,assign) BOOL loadSign;
 
 @end

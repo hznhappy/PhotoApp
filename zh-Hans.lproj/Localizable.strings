@@ -1,0 +1,38 @@
+/* 
+  Localizable.strings
+  PhotoApp
+
+  Created by apple on 11-11-17.
+  Copyright 2011年 chinarewards. All rights reserved.
+*/
+"Edit"="编辑";
+"Albums"="相簿";
+"Done"="完成";
+"ALL"="所有";
+"UNTAG"="未标记";
+"hello"="你好";
+"Inherent members, can not be edited"="固有成员,无法编辑";
+"Inherent members, can not be deleted"="固有成员,无法删除";
+"ok"="确定";
+"Back"="返回";
+"Already exists"="已经存在";
+"note"="提示";
+"This person has been used as a photo tag, you sure you want to delete it"="此人已作为照片标记使用,确定要删除吗?";
+"NO"="否";
+"YES"="是";
+"Cancel"="取消";
+"Mark"="标记";
+"Copy"="复制";
+"Email"="邮件";
+"Please fill out the rule name"="请先填写规则名!";
+"Rule name can not be empty!"="规则名不能为空";
+"Fade"="淡化";
+"Cube"="立方体";
+"Reveal"="揭开";
+"Push"="推挤";
+"MoveIn"="覆盖";
+"suckEffect"="吸收";
+"oglFlip"="翻转";
+"rippleEffect"="波纹";
+"pageCurl"="翻页";
+"pageUnCurl"="反翻页";

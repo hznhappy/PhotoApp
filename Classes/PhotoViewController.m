@@ -33,6 +33,7 @@
 @synthesize photoSource; 
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
+@synthesize photos;
 
 - (id)initWithPhotoSource:(NSMutableArray *)aSource{
 	if ((self = [super init])) {
@@ -87,7 +88,8 @@
 	self.photoViews = views;
     editing=NO;
     self.listid=[[NSMutableArray arrayWithCapacity:100]retain];
-    edit=[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
+     NSString *u=NSLocalizedString(@"Edit", @"title");
+    edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;
   
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
@@ -165,7 +167,11 @@
     
 }
 -(void)edit
-{if (editing)
+{
+      NSString *a=NSLocalizedString(@"Edit", @"title");
+      NSString *b=NSLocalizedString(@"Done", @"title");
+    
+    if (editing)
 {  ppv.hidden=NO;
     
     ppv.alpha=0.4;
@@ -173,13 +179,13 @@
                                                   //     object:self];
      [self.view addSubview:ppv];
     edit.style = UIBarButtonItemStyleBordered;
-    edit.title = @"Edit";
+    edit.title = a;
     [ppv viewClose];
 }
 else{
     ppv.hidden=NO;
     edit.style = UIBarButtonItemStyleDone;
-    edit.title = @"Done";
+    edit.title = b;
     [ppv viewOpen];
 }
     editing = !editing;
@@ -466,9 +472,8 @@ else{
 		[photoView release];
 		
 	} 
-    ALAsset *asset = [self.photoSource objectAtIndex:page];
-	UIImage *img = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullResolutionImage]];
-	[photoView setPhoto:img];
+    
+    [photoView setPhoto:[self.photos objectAtIndex:page]];
 	
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
@@ -584,13 +589,16 @@ else{
 - (IBAction)actionButtonHit:(id)sender{
 	
 	UIActionSheet *actionSheet;
-	
+	NSString *a=NSLocalizedString(@"Cancel", @"title");
+    NSString *b=NSLocalizedString(@"Mark", @"title");
+    NSString *c=NSLocalizedString(@"Copy", @"title");
+    NSString *d=NSLocalizedString(@"Email", @"title");
 	if ([MFMailComposeViewController canSendMail]) {		
-        actionSheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Mark", @"Copy", @"Email", nil];
+        actionSheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:a destructiveButtonTitle:nil otherButtonTitles:b,c, d, nil];
 		
 	} else {
 		
-		actionSheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Mark", @"Copy", nil];
+		actionSheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:b, c, nil];
 		
 	}
 	

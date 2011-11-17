@@ -73,4 +73,5 @@
 -(void)deletes:(NSInteger)Row playId:(int)playId;
 -(void)creatTable;
 -(void)update:(NSInteger)Row rule:(int)rule playId:(int)playId;
+-(void)international;
 @end

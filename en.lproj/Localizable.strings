@@ -1,0 +1,38 @@
+/* 
+  Localizable.strings
+  PhotoApp
+
+  Created by apple on 11-11-17.
+  Copyright 2011年 chinarewards. All rights reserved.
+*/
+"Edit"="Edit";
+"Albums"="Albums";
+"Done"="Done";
+"ALL"="ALL";
+"UNTAG"="UNTAG";
+"hello"="hello";
+"Inherent members, can not be edited"="Inherent members, can not be edited";
+"Inherent members, can not be deleted"="Inherent members, can not be deleted";
+"ok"="ok";
+"Back"="Back";
+"Already exists"="Already exists";
+"note"="note";
+"This person has been used as a photo tag, you sure you want to delete it"="This person has been used as a photo tag, you sure you want to delete it";
+"NO"="NO";
+"YES"="YES";
+"Cancel"="Cancel";
+"Mark"="Mark";
+"Copy"="Copy";
+"Email"="Email";
+"Please fill out the rule name"="Please fill out the rule name";
+"Rule name can not be empty!"="Rule name can not be empty!";
+"Fade"="Fade";
+"Cube"="Cube";
+"Reveal"="Reveal";
+"Push"="Push";
+"MoveIn"="MoveIn";
+"suckEffect"="suckEffect";
+"oglFlip"="oglFlip";
+"rippleEffect"="rippleEffect";
+"pageCurl"="pageCurl";
+"pageUnCurl"="pageUnCurl";

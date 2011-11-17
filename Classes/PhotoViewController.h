@@ -18,6 +18,8 @@
 @private
 	NSMutableArray *photoSource;
 	NSMutableArray *_photoViews;
+    NSMutableArray *photos;
+
 	UIScrollView *_scrollView;	
 	
 	NSInteger _pageIndex;
@@ -39,7 +41,7 @@
 @property(nonatomic,retain)PopupPanelView *ppv;
 @property(nonatomic,retain)NSMutableArray *listid;
 
-
+@property(nonatomic,retain)NSMutableArray *photos;
 @property(nonatomic,retain) NSMutableArray *photoSource;
 @property(nonatomic,retain) NSMutableArray *photoViews;
 @property(nonatomic,retain) UIScrollView *scrollView;

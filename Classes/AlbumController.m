@@ -9,6 +9,7 @@
 #import "AlbumController.h"
 #import "AssetTablePicker.h"
 #import "PlaylistDetailController.h"
+//#import "nicshanController.h"
 @implementation AlbumController
 @synthesize tableView,list,tools,withlist,withoutlist;
 @synthesize assetGroups;
@@ -17,6 +18,7 @@
 @synthesize playListUrl;
 @synthesize tagUrl;
 @synthesize SUM,img;
+
 #pragma mark -
 #pragma mark UIViewController method
 -(void)viewWillAppear:(BOOL)animated
@@ -95,8 +97,8 @@
 
 }
 -(void)Special
-{
-    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,@"ALL"];
+{NSString *u=NSLocalizedString(@"ALL", @"title");
+    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,u];
     NSLog(@"%@",insertPlayTable);
     [da insertToTable:insertPlayTable];
     NSString *insertPlayTable1= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,@"UNTAG"];
@@ -166,7 +168,7 @@
                 return;
             }
             [self.allUrl addObject:[[result defaultRepresentation]url]];
-             [self getDate:result];
+            // [self getDate:result];
         }];
     }
 }
@@ -204,13 +206,13 @@
     }    
 }
 -(void)reloadTableView {
-	
+	NSString *a=NSLocalizedString(@"Albums", @"title");
 	[self.tableView reloadData];
-	[self.navigationItem setTitle:@"Albums"];
+	[self.navigationItem setTitle:a];
 }
 
 
--(void)getDate:(ALAsset*)rule
+/*-(void)getDate:(ALAsset*)rule
 {   
     NSDictionary *dic = [[rule defaultRepresentation]metadata];
     id dateTime = [[dic objectForKey:@"{TIFF}"]objectForKey:@"DateTime"];
@@ -223,7 +225,7 @@
     }
 
 }
-
+*/
 #pragma mark -
 #pragma Button Action
 -(void)table1
@@ -232,13 +234,14 @@
     [self.tableView reloadData];
 }
 -(IBAction)toggleEdit:(id)sender
-{
+{NSString *c=NSLocalizedString(@"Done", @"button");
+    NSString *d=NSLocalizedString(@"Edit", @"button");
     if (self.tableView.editing) {
-        editButton.title = @"Edit";
+        editButton.title = d;
         }
     else{
        
-        editButton.title = @"Done";
+        editButton.title = c;
     }
     
     [self.tableView setEditing:!self.tableView.editing animated:YES];
@@ -248,6 +251,7 @@
 -(IBAction)toggleAdd:(id)sender
 {
      PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
+   // nicshanController *detailController=[[nicshanController alloc]init];
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
 }
@@ -319,7 +323,8 @@
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
          NSInteger gCount = [group numberOfAssets];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
-        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",user3.name,gCount];
+        NSString *u=NSLocalizedString(@"ALL", @"title");
+        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,gCount];
         [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:0] posterImage]]];
 
     }
@@ -330,7 +335,8 @@
         [self loadPhotos:unTagUrl];
         [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
-         cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",user3.name,[unTagUrl count]];
+        NSString *u=NSLocalizedString(@"UNTAG", @"title");
+         cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,[unTagUrl count]];
     }
     else
     {
@@ -365,12 +371,14 @@
         [self getTagUrls];
         [self getUnTagUrls];
         assetPicker.urlsArray = unTagUrl;
-        assetPicker.navigationItem.title = @"UNTAG";
+          NSString *u=NSLocalizedString(@"UNTAG", @"title");
+        assetPicker.navigationItem.title = u;
     }
     else if ([[list objectAtIndex:indexPath.row]intValue]==1) {
         assetPicker.urlsArray = allUrl;
-        assetPicker.navigationItem.title = @"ALL";
-        assetPicker.dateArry=date;
+          NSString *u=NSLocalizedString(@"ALL", @"title");
+        assetPicker.navigationItem.title = u;
+       // assetPicker.dateArry=date;
        
     }
     else
@@ -476,7 +484,10 @@
    // [da selectFromPlayTable:selectPlayIdOrder];
     if([[list objectAtIndex:indexPath.row]intValue]<=2)
     {
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"你好" message:@"固有成员,无法编辑" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+          NSString *a=NSLocalizedString(@"hello", @"title");
+        NSString *b=NSLocalizedString(@"Inherent members, can not be edited", @"title");
+        NSString *c=NSLocalizedString(@"ok", @"title");
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
         [alert show];
         [alert release];
 
@@ -508,7 +519,10 @@
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {   if ([[list objectAtIndex:indexPath.row]intValue]==1||[[list objectAtIndex:indexPath.row]intValue]==2)
     {
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"你好" message:@"固有成员,无法删除" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        NSString *a=NSLocalizedString(@"hello", @"title");
+        NSString *b=NSLocalizedString(@"Inherent members, can not be deleted", @"title");
+        NSString *c=NSLocalizedString(@"ok", @"title");
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
         [alert show];
         [alert release];
 

@@ -17,10 +17,19 @@
 @synthesize table;
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
+@synthesize images;
 
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityView.frame = CGRectMake(0, 0, 37.0f, 37.0f);
+    activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+    self.navigationItem.titleView = activityView;
+    _activityView = [activityView retain];
+    [activityView release];
+    [_activityView startAnimating];
+
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
     [tempArray release];
@@ -29,6 +38,7 @@
     self.table.minimumZoomScale = 1;
     self.table.contentSize = CGSizeMake(self.table.frame.size.width, self.table.frame.size.height);
     mode = NO;
+    load = YES;
     tagBar.hidden = YES;
     save.enabled = NO;
     reset.enabled = NO;
@@ -42,14 +52,17 @@
     self.dataBase = db;
     [db release];
     
+    NSMutableArray *temp = [[NSMutableArray alloc]init];
+    self.images = temp;
+    [temp release];
     NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
     NSMutableArray *temArray = [[NSMutableArray alloc] init] ;
     self.crwAssets = thumbNailArray;
     self.assetArrays = temArray;
     [thumbNailArray release];
     [temArray release];
-
-    cancel = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancelTag)];
+     NSString *a=NSLocalizedString(@"Cancel", @"title");
+    cancel = [[UIBarButtonItem alloc]initWithTitle:a style:UIBarButtonItemStyleDone target:self action:@selector(cancelTag)];
     
     [[NSNotificationCenter defaultCenter]addObserver:self 
                                             selector:@selector(setEditOverlay:) 
@@ -67,6 +80,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
 }
 -(void)creatTable
 {
@@ -160,10 +174,30 @@
             [thumbnail.assetArray addObject:asset];
         }
     }
+    [self getImage];
 	[self.table reloadData];           
     [pool release];
 
 	
+}
+-(void)getImage{
+    dispatch_async(dispatch_get_current_queue(), ^
+                   {
+                       NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+                       for (ALAsset *asset in self.assetArrays) {
+                           UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];
+                           [self.images addObject:image];
+                           if ([images count]==[self.assetArrays count]) {
+                               [_activityView stopAnimating];
+                               load = NO;
+                               [self.table reloadData];
+                           }
+                       }
+                       for (Thumbnail *thumbnail in self.crwAssets) {
+                           thumbnail.photos = self.images;
+                       }
+                       [pool release];
+                   });
 }
 
 -(void)setPhotoTag{
@@ -175,10 +209,8 @@
         for (Thumbnail *thumbnail in self.crwAssets) {
             NSURL *thumStr = [[thumbnail.asset defaultRepresentation]url];
             if ([dbStr isEqual:thumStr]) {
-                NSLog(@"FD");
                 NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
                 [dataBase selectFromTAG:selectTag];
-                NSLog(@"KOKO%@",dataBase.tagIdAry);
                 NSString *num=[NSString stringWithFormat:@"%d",[dataBase.tagIdAry count]];
                 [thumbnail setOverlayHidden:num];
                 
@@ -290,9 +322,9 @@
 #pragma mark notification method
 
 -(void)setEditOverlay:(NSNotification *)notification{
-    for (Thumbnail *thumbnail in self.crwAssets) {
-        [thumbnail setOverlayHidden:YES];
-    }
+    //for (Thumbnail *thumbnail in self.crwAssets) {
+      //  [thumbnail setOverlayHidden:YES];
+    //}
     
     [self setPhotoTag];
     
@@ -409,6 +441,7 @@
     static NSString *CellIdentifier = @"Cell";
     ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell.tagOverlay = mode;
+    cell.loadSign = load;
     if (cell == nil) 
     {		        
         cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] 
@@ -445,6 +478,7 @@
     self.reset = nil;
     self.selectUrls = nil;
     self.dateArry = nil;
+    self.images = nil;
     [super viewDidUnload];
 }
 
@@ -467,6 +501,8 @@
     [dateArry release];
     [UserId release];
     [UserName release];
+    [_activityView release], _activityView=nil;
+    [images release];
     [super dealloc];    
 }
 
