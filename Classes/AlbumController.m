@@ -252,6 +252,7 @@
 {
      PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
    // nicshanController *detailController=[[nicshanController alloc]init];
+    detailController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
 }

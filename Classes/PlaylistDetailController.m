@@ -111,7 +111,7 @@
             }
             break;
         case 1:
-            return [dataBase.tagName count];
+            return [userNames count];
             break;
         default:
             break;
@@ -169,7 +169,7 @@
             name.tag = indexPath.row;
             
             
-            name.text = [dataBase.tagName objectAtIndex:indexPath.row];
+            name.text = [userNames objectAtIndex:indexPath.row];
             
             [cell.contentView addSubview:name];
             [name release];
@@ -179,7 +179,7 @@
             [selectButton addTarget:self action:@selector(setSelectState:) forControlEvents:UIControlEventTouchUpInside];
             selectButton.frame = CGRectMake(10, 11, 30, 30);
             [selectButton setImage:unselectImg forState:UIControlStateNormal];
-            if([playrules_idList containsObject:[dataBase.tagName objectAtIndex:indexPath.row]])
+            if([playrules_idList containsObject:[orderList objectAtIndex:indexPath.row]])
             {[dataBase openDB];
                 NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name,playlist_rules from rules where user_id=%d and playlist_id=%d",[[orderList objectAtIndex:indexPath.row]intValue],[a intValue]];
                 [dataBase selectFromRules:selectRules];
