@@ -35,7 +35,7 @@
 
 
 -(void)layoutSubviews {
-    NSLog(@"%@",self.loadSign?@"yes":@"no");
+    //NSLog(@"%@",self.loadSign?@"yes":@"no");
 	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
 	for(Thumbnail *thum in self.rowAssets) {

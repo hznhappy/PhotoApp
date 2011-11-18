@@ -94,10 +94,8 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NSLog(@"JEE");
     [database openDB];
-    PlaylistDetailController *playDetail=[[PlaylistDetailController alloc]init];
     if(play_id!=nil)
     {
-        NSLog(@"huhu%@",playDetail.a);
         NSString *updatePlayTable= [NSString stringWithFormat:@"UPDATE %@ SET Transtion='%@' WHERE playlist_id=%d",PlayTable,[Trans_list objectAtIndex:indexPath.row],[play_id intValue]];
         NSLog(@"%@",updatePlayTable);
         [database updateTable:updatePlayTable];

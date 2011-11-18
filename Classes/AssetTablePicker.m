@@ -28,7 +28,7 @@
     self.navigationItem.titleView = activityView;
     _activityView = [activityView retain];
     [activityView release];
-    [_activityView startAnimating];
+    //[_activityView startAnimating];
 
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
