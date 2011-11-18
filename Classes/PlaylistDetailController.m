@@ -19,7 +19,7 @@
 @synthesize mySwitch;
 @synthesize listName,photos;
 @synthesize userNames;
-@synthesize selectedIndexPaths;
+@synthesize selectedIndexPaths,Transtion;
 @synthesize mySwc,a,playrules_idList,playIdList,orderList;
 
 - (void)dealloc
@@ -57,7 +57,10 @@
 
 #pragma mark - View lifecycle
 - (void)viewDidLoad
-{ 
+{ if(Transtion!=nil)
+  {
+      self.tranLabel.text=Transtion;
+  }
     key=0;
     mySwc = YES;
     selectImg = [UIImage imageNamed:@"Selected.png"];
@@ -224,6 +227,9 @@
     if (indexPath.section ==0 && indexPath.row == 1) {
         AnimaSelectController *animateController = [[AnimaSelectController alloc]init];
         animateController.tranStyle = self.tranLabel.text;
+        animateController.play_id=a;
+        animateController.Text=textField.text;
+        NSLog(@"anima%@",animateController.play_id);
         [self.navigationController pushViewController:animateController animated:YES];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [animateController release];
@@ -335,7 +341,7 @@
 }
 -(void)creatTable
 {
-    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [dataBase createTable:createPlayTable];
     NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
     [dataBase createTable:createPlayIdOrder];
@@ -504,10 +510,6 @@
         NSString *c=NSLocalizedString(@"note", @"title");
         NSString *b=NSLocalizedString(@"ok", @"title");
         NSString *d=NSLocalizedString(@"Rule name can not be empty!", @"title");
-        NSString *message=[[NSString alloc] initWithFormat:
-                           @"规则名不能为空!"];
-        
-        
         UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle:c
                               message:d
@@ -516,8 +518,6 @@
                               otherButtonTitles:b,nil];
         [alert show];
         [alert release];
-        [message release];
-        
     }
     else
     {

@@ -11,17 +11,9 @@
 	
 	NSString *id;
 	NSString *name;
-	NSString *color;
-    NSString *with;
-    NSString *without;
-    NSString *name1;
-    
+    NSString *Transtion;
 	}
 @property (nonatomic,retain)NSString *id;
 @property (nonatomic,retain)NSString *name;
-@property (nonatomic,retain)NSString *name1;
-@property (nonatomic,retain)NSString *color;
-@property (nonatomic,retain)NSString *with;
-@property (nonatomic,retain)NSString *without;
-
+@property (nonatomic,retain)NSString *Transtion;
 @end

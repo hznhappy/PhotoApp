@@ -17,7 +17,7 @@
 @synthesize table;
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
-@synthesize images;
+@synthesize images,PLAYID;
 
 #pragma mark -
 #pragma mark UIViewController Methods
@@ -88,10 +88,12 @@
     [dataBase openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [dataBase createTable:createTag];  
-    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
     [dataBase createTable:createUserTable];
     NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
     [dataBase createTable:createIdOrder];
+    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
+    [dataBase createTable:createPlayTable];
 
     [dataBase closeDB];
 }
@@ -311,12 +313,16 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
+    [dataBase openDB];
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.assetArrays];
     playPhotoController._pageIndex = 0;
     playPhotoController.photos = self.images;
-    [playPhotoController fireTimer:@"rippleEffect"];
+    User *user3 = [dataBase getUserFromPlayTable:[PLAYID intValue]];
+    NSLog(@"UUUU%@",user3.Transtion);
+    [playPhotoController fireTimer:user3.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
+    [dataBase closeDB];
 }
 
 #pragma mark - 
@@ -509,6 +515,8 @@
     [UserName release];
     [_activityView release], _activityView=nil;
     [images release];
+    [UrlList release];
+    [PLAYID release];
     [super dealloc];    
 }
 

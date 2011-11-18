@@ -31,6 +31,7 @@
     UILabel *state;
     BOOL mySwc;
     NSString *listName;
+    NSString *Transtion;
     NSString *a;
     DBOperation *dataBase;
     NSMutableArray *playrules_idList;
@@ -55,6 +56,7 @@
 @property(nonatomic,retain)NSMutableArray *userNames;
 @property(nonatomic,assign)BOOL mySwc;
 @property(nonatomic,retain)NSString *listName;
+@property(nonatomic,retain)NSString *Transtion;
 @property(nonatomic,retain)NSString *a;
 @property(nonatomic,retain)NSMutableArray *playrules_idList;
 @property(nonatomic,retain)NSMutableArray *playIdList;

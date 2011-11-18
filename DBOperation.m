@@ -216,6 +216,7 @@
 		while (sqlite3_step(statement)==SQLITE_ROW) {
 			
 			user3.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
+            user3.Transtion=[NSString stringWithFormat:@"%s", sqlite3_column_text(statement,2)];
 			
 		}
 		sqlite3_finalize(statement);

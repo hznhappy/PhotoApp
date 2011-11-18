@@ -631,7 +631,9 @@ else{
 #pragma mark timer method
 
 -(void)fireTimer:(NSString *)animateStyle{
+    NSLog(@"FRRR%@",animateStyle);
     timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
+    
     
 }
 -(void)playPhoto{

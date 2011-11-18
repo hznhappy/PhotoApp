@@ -42,6 +42,7 @@
     NSString *UserId;
     NSString *UserName;
     NSMutableArray *UrlList;
+    NSString *PLAYID;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;
@@ -53,7 +54,7 @@
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
 
 @property (nonatomic,retain) DBOperation *dataBase;
-
+@property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain) NSMutableArray *images;
 @property (nonatomic,retain) NSMutableArray *crwAssets;
 @property (nonatomic,retain) NSMutableArray *assetArrays;
