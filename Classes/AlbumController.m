@@ -11,7 +11,7 @@
 #import "PlaylistDetailController.h"
 //#import "nicshanController.h"
 @implementation AlbumController
-@synthesize tableView,list,tools,withlist,withoutlist;
+@synthesize tableView,list;
 @synthesize assetGroups;
 @synthesize allUrl;
 @synthesize unTagUrl,dbUrl;
@@ -590,10 +590,9 @@
     [playListUrl release];
     [tableView release];
     [list release];
-    [withlist release];
-    [withoutlist release];
     [SUM release];
     [dbUrl release];
+    [img release];
     [super dealloc];
 }
 @end

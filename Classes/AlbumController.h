@@ -18,9 +18,6 @@
     IBOutlet UITableView *tableView;
     NSMutableArray *list;
     DBOperation *da;
-    
-    NSMutableArray *withlist;
-    NSMutableArray *withoutlist;
     UIBarButtonItem *editButton;
     NSMutableArray *allUrl;
     NSMutableArray *unTagUrl;
@@ -43,9 +40,6 @@
 @property(nonatomic,retain)NSMutableArray *tagUrl;
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property(nonatomic,retain)NSMutableArray *list;
-@property(nonatomic,retain)NSMutableArray *withlist;
-@property(nonatomic,retain)NSMutableArray *withoutlist;
-@property(nonatomic,retain) UIToolbar* tools;
 @property(nonatomic,retain)ALAsset *img;
 
 -(void)getAssetGroup;

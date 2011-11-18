@@ -20,7 +20,7 @@
 @synthesize listName,photos;
 @synthesize userNames;
 @synthesize selectedIndexPaths;
-@synthesize mySwc,a,playrules_idList,playrules_nameList,playrules_ruleList,playIdList,orderList;
+@synthesize mySwc,a,playrules_idList,playIdList,orderList;
 
 - (void)dealloc
 {
@@ -41,6 +41,9 @@
     [state release];
     [a release];
     [photos release];
+    [playrules_idList release];
+    [playIdList release];
+    [orderList release];
     [super dealloc];
 }
 
@@ -528,7 +531,7 @@
         
         NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
         [dataBase selectFromPlayTable:selectPlayTable];
-        playIdList=dataBase.playIdAry;
+        self.playIdList=dataBase.playIdAry;
         NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
         NSLog(@"%@",insertPlayIdOrder);
         [dataBase insertToTable:insertPlayIdOrder];

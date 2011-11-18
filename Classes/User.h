@@ -7,11 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
-
-
-
-
 @interface User : NSObject{
 	
 	NSString *id;

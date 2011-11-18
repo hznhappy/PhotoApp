@@ -34,8 +34,6 @@
     NSString *a;
     DBOperation *dataBase;
     NSMutableArray *playrules_idList;
-    NSMutableArray *playrules_nameList;
-    NSMutableArray *playrules_ruleList;
     NSMutableArray *playIdList;
     NSMutableArray *orderList;
     UIButton *stateButton;
@@ -59,8 +57,6 @@
 @property(nonatomic,retain)NSString *listName;
 @property(nonatomic,retain)NSString *a;
 @property(nonatomic,retain)NSMutableArray *playrules_idList;
-@property(nonatomic,retain)NSMutableArray *playrules_nameList;
-@property(nonatomic,retain)NSMutableArray *playrules_ruleList;
 @property(nonatomic,retain)NSMutableArray *playIdList;
 @property(nonatomic,retain)NSMutableArray *orderList;
 @property(nonatomic,retain)UIButton *stateButton;

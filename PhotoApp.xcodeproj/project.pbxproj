@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		183E4E78146926EA0090BE7B /* ContactsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183E4E77146926EA0090BE7B /* ContactsController.m */; };
 		184F8D87146B9B81004A87DE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184F8D86146B9B81004A87DE /* MediaPlayer.framework */; };
 		184FCFBF1471F7D50082B51D /* AssetTablePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFBE1471F7D50082B51D /* AssetTablePicker.m */; };
 		184FCFC31471F7EB0082B51D /* Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFC21471F7EB0082B51D /* Thumbnail.m */; };
@@ -59,8 +58,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		183E4E76146926EA0090BE7B /* ContactsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsController.h; sourceTree = "<group>"; };
-		183E4E77146926EA0090BE7B /* ContactsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsController.m; sourceTree = "<group>"; };
 		184F8D86146B9B81004A87DE /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		184FCFBE1471F7D50082B51D /* AssetTablePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetTablePicker.m; sourceTree = "<group>"; };
 		184FCFC01471F7DC0082B51D /* AssetTablePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetTablePicker.h; sourceTree = "<group>"; };
@@ -76,7 +73,6 @@
 		184FD002147208E90082B51D /* AnimaSelectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimaSelectController.h; sourceTree = "<group>"; };
 		184FD003147208F20082B51D /* AnimaSelectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimaSelectController.m; sourceTree = "<group>"; };
 		184FD005147208F90082B51D /* AnimaSelectController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimaSelectController.xib; path = Classes/AnimaSelectController.xib; sourceTree = "<group>"; };
-		186A4F391468C54E0074042A /* ContactsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactsController.xib; sourceTree = "<group>"; };
 		186BF9C01470AEB500961C67 /* AlbumController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumController.xib; path = Classes/AlbumController.xib; sourceTree = "<group>"; };
 		18D402831474E50000389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		18D402851474E50800389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -212,7 +208,6 @@
 				184FCFF5147202A70082B51D /* selectOverlay@2x.png */,
 				18D403231474FCDA00389097 /* PlaylistDetailController.xib */,
 				18D403391474FF5900389097 /* tagManagementController.xib */,
-				186A4F391468C54E0074042A /* ContactsController.xib */,
 				18D4029B1474E6B700389097 /* MainWindow.xib */,
 				184FD005147208F90082B51D /* AnimaSelectController.xib */,
 				186BF9C01470AEB500961C67 /* AlbumController.xib */,
@@ -304,8 +299,6 @@
 				184FCFC91471FDBB0082B51D /* AlbumController.m */,
 				A1F82E831462909100BED207 /* PlaylistDetailController.h */,
 				A1F82E841462909100BED207 /* PlaylistDetailController.m */,
-				183E4E76146926EA0090BE7B /* ContactsController.h */,
-				183E4E77146926EA0090BE7B /* ContactsController.m */,
 				184FD002147208E90082B51D /* AnimaSelectController.h */,
 				184FD003147208F20082B51D /* AnimaSelectController.m */,
 			);
@@ -411,7 +404,6 @@
 				A1F1FFAB146007F9005FAB2F /* User.m in Sources */,
 				A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */,
 				A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */,
-				183E4E78146926EA0090BE7B /* ContactsController.m in Sources */,
 				184FCFBF1471F7D50082B51D /* AssetTablePicker.m in Sources */,
 				184FCFC31471F7EB0082B51D /* Thumbnail.m in Sources */,
 				184FCFCA1471FDBB0082B51D /* AlbumController.m in Sources */,

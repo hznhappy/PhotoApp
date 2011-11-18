@@ -84,10 +84,15 @@
 }
 -(void)creatTable
 {
-    dataBase=[[DBOperation alloc]init];
+   // dataBase=[[DBOperation alloc]init];
     [dataBase openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [dataBase createTable:createTag];  
+    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    [dataBase createTable:createUserTable];
+    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
+    [dataBase createTable:createIdOrder];
+
     [dataBase closeDB];
 }
 -(void)AddUrl:(NSNotification *)note{
@@ -346,13 +351,20 @@
   self.UserId=[NSString stringWithFormat:@"%d",recId];
    // NSLog(@"ID:%@",Id);
     UserName=readName;
-  // NSLog(@"UserID%@",UserId);
-  //  NSLog(@"Uname%@",UserName);
-    //UserName=[NSString stringWithFormat:@"%@",readName];
-   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:Id,@"UserId",readName,@"UserName",nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
-                                                     object:self 
-                                                     userInfo:dic1];*/
+    [dataBase openDB];
+    NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,self.UserId,readName];
+    NSLog(@"%@",insertUserTable);
+    [dataBase insertToTable:insertUserTable];
+    
+    
+    NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES('%@')",idOrder,self.UserId];
+    NSLog(@"%@",insertIdOrder);
+    [dataBase insertToTable:insertIdOrder];   
+    [dataBase openDB];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:self.UserId,@"UserId",readName,@"UserName",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"AddContact" 
+                                                       object:self 
+                                                     userInfo:dic];
    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     [self dismissModalViewControllerAnimated:YES];
     return NO;
