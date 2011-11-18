@@ -125,13 +125,10 @@
                    [self.allUrl removeAllObjects];
                    [self performSelectorOnMainThread:@selector(getAllUrls) withObject:nil waitUntilDone:YES];
                    [self deleteUnExitUrls];
-                    NSLog(@"this is the get AssetGroup method %d",[assetGroups count]);
                    return;
                }               
                [self.assetGroups addObject:group];
                [group numberOfAssets];
-               NSLog(@"this is the get AssetGroup method %d",[assetGroups count]);
-
                [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
            };
            

@@ -639,7 +639,7 @@ else{
     NSString *animateStyle = [timer userInfo];
     CATransition *animation = [CATransition animation];
     animation.delegate = self;
-    animation.duration = 0.7;
+    animation.duration = 2.5;
     animation.timingFunction = UIViewAnimationCurveEaseInOut;
     animation.subtype = kCATransitionFromRight;
     if ([animateStyle isEqualToString:@"Fade"]) {
@@ -661,7 +661,8 @@ else{
     _pageIndex+=1;
     NSInteger _index = self._pageIndex;
 	if (_index >= [self.photoSource count] || _index < 0) {
-        [timer invalidate];
+        //[timer invalidate];
+        _pageIndex = 0;
     }else{
         [self moveToPhotoAtIndex:_index animated:NO];
     }
