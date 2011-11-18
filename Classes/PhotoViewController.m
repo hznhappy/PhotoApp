@@ -654,7 +654,9 @@ else{
 #pragma mark timer method
 
 -(void)fireTimer:(NSString *)animateStyle{
+    NSLog(@"FRRR%@",animateStyle);
     timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
+    
     
 }
 -(void)playPhoto{
@@ -662,7 +664,7 @@ else{
     NSString *animateStyle = [timer userInfo];
     CATransition *animation = [CATransition animation];
     animation.delegate = self;
-    animation.duration = 2.5;
+    animation.duration = 1.5;
     animation.timingFunction = UIViewAnimationCurveEaseInOut;
     animation.subtype = kCATransitionFromRight;
     if ([animateStyle isEqualToString:@"Fade"]) {

@@ -40,5 +40,6 @@
 -(void)nobody;
 -(void)creatButton;
 -(void)creatButton1;
+-(void)table;
 
 @end

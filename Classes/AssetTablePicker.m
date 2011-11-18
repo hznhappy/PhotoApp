@@ -17,7 +17,7 @@
 @synthesize table;
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
-@synthesize images;
+@synthesize images,PLAYID;
 
 #pragma mark -
 #pragma mark UIViewController Methods
@@ -28,7 +28,8 @@
     self.navigationItem.titleView = activityView;
     _activityView = [activityView retain];
     [activityView release];
-    
+    [_activityView startAnimating];
+
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
     [tempArray release];
@@ -82,10 +83,17 @@
 }
 -(void)creatTable
 {
-    dataBase=[[DBOperation alloc]init];
+   // dataBase=[[DBOperation alloc]init];
     [dataBase openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [dataBase createTable:createTag];  
+    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
+    [dataBase createTable:createUserTable];
+    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
+    [dataBase createTable:createIdOrder];
+    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
+    [dataBase createTable:createPlayTable];
+
     [dataBase closeDB];
 }
 -(void)AddUrl:(NSNotification *)note{
@@ -171,44 +179,11 @@
             [thumbnail.assetArray addObject:url];
         }
     }
-    [self getImage];
 	[self.table reloadData];           
     [pool release];
     
 	
 }
--(void)getImage{
-    if (![self.urlsArray count] == 0) {
-        [_activityView startAnimating];
-    }
-    dispatch_async(dispatch_get_current_queue(), ^
-                   {
-                       NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-//                       for (ALAsset *asset in self.assetArrays) {
-//                           UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];
-//                           [self.images addObject:image];
-//                           if ([images count]==[self.assetArrays count]) {
-//                               [_activityView stopAnimating];
-//                               load = NO;
-//                               [self.table reloadData];
-//                           }
-//                       }
-                       for (unsigned i = 0; i<[self.urlsArray count]; i++) {
-                           [self.images addObject:[NSNull null]];
-                           if ([images count]==[self.urlsArray count]) {
-                               [_activityView stopAnimating];
-                               //load = NO;
-                               [self.table reloadData];
-                           }
-                           
-                       }
-                       for (Thumbnail *thumbnail in self.crwAssets) {
-                           thumbnail.photos = self.images;
-                       }
-                       [pool release];
-                   });
-}
-
 -(void)setPhotoTag{
     [dataBase openDB];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
@@ -316,12 +291,15 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
+    [dataBase openDB];
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray];
     playPhotoController._pageIndex = 0;
-    playPhotoController.photos = self.images;
-    [playPhotoController fireTimer:@"rippleEffect"];
+    //playPhotoController.photos = self.images;
+    User *user3 = [dataBase getUserFromPlayTable:[PLAYID intValue]];
+    [playPhotoController fireTimer:user3.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
+    [dataBase closeDB];
 }
 
 #pragma mark - 
@@ -349,7 +327,21 @@
     
     self.UserId=[NSString stringWithFormat:@"%d",recId];
     UserName=readName;
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+    [dataBase openDB];
+    NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,self.UserId,readName];
+    NSLog(@"%@",insertUserTable);
+    [dataBase insertToTable:insertUserTable];
+    
+    
+    NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES('%@')",idOrder,self.UserId];
+    NSLog(@"%@",insertIdOrder);
+    [dataBase insertToTable:insertIdOrder];   
+    [dataBase openDB];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:self.UserId,@"UserId",readName,@"UserName",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"AddContact" 
+                                                       object:self 
+                                                     userInfo:dic];
+   [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     [self dismissModalViewControllerAnimated:YES];
     return NO;
 }
@@ -476,6 +468,8 @@
     [UserName release];
     [_activityView release], _activityView=nil;
     [images release];
+    [UrlList release];
+    [PLAYID release];
     [super dealloc];    
 }
 

@@ -26,11 +26,11 @@
 "Email"="Email";
 "Please fill out the rule name"="Please fill out the rule name";
 "Rule name can not be empty!"="Rule name can not be empty!";
-"Fade"="Fade";
-"Cube"="Cube";
-"Reveal"="Reveal";
-"Push"="Push";
-"MoveIn"="MoveIn";
+"fade"="fade";
+"cube"="cube";
+"reveal"="reveal";
+"push"="push";
+"moveIn"="moveIn";
 "suckEffect"="suckEffect";
 "oglFlip"="oglFlip";
 "rippleEffect"="rippleEffect";

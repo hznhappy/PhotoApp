@@ -15,7 +15,7 @@ int j=1,count=0;
 {       
     bool1 = NO;
     
-   	NSLog(@"GGEG%@",bo);
+   	NSLog(@"tonzghi");
     
     if(bo!=nil)
     {  
@@ -29,9 +29,32 @@ int j=1,count=0;
     [self nobody];
     count = [list count];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table) name:@"add" object:nil];
+    //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddContact:) name:@"AddContact" object:nil];
 	[super viewDidLoad];
    	
 }
+//-(void)AddContact:(NSNotification *)note
+//{   NSLog(@"haoa");
+   /* NSDictionary *dic = [note userInfo];
+    [da openDB];
+    NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,[dic objectForKey:@"UserId"],[dic objectForKey:@"UserName"]];
+    NSLog(@"%@",insertUserTable);
+    [da insertToTable:insertUserTable];
+    
+    
+    NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES('%@')",idOrder,[dic objectForKey:@"UserId"]];
+    NSLog(@"%@",insertIdOrder);
+    [da insertToTable:insertIdOrder];   
+    [da closeDB];
+    [self table];*/
+    //self.UserId=[dic objectForKey:@"UserId"];
+    //UserName=[dic objectForKey:@"UserName"];
+    //NSLog(@"JJJ%@",UserId);
+    // NSLog(@"JJJ%@",UserName);
+    
+//}
+
+
 -(void)creatButton
 {
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
@@ -74,7 +97,7 @@ int j=1,count=0;
 {
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
+    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
     [da createTable:createUserTable];
     NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
     [da createTable:createIdOrder];
@@ -156,7 +179,7 @@ int j=1,count=0;
     }
     else
     {
-        NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME,COLOR) VALUES(%d,'%@','%@')",UserTable,[fid intValue],fname,@"whiteColor"];
+        NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES(%d,'%@')",UserTable,[fid intValue],fname];
         NSLog(@"%@",insertUserTable);
         [da insertToTable:insertUserTable];
         

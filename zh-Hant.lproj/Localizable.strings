@@ -26,11 +26,11 @@
 "Email"="郵件";
 "Please fill out the rule name"="請先填寫規則名!";
 "Rule name can not be empty!"="規則名不能為空";
-"Fade"="淡化";
-"Cube"="立方體";
-"Reveal"="揭開";
-"Push"="推擠";
-"MoveIn"="覆蓋";
+"fade"="淡化";
+"cube"="立方體";
+"reveal"="揭開";
+"push"="推擠";
+"moveIn"="覆蓋";
 "suckEffect"="吸收";
 "oglFlip"="翻轉";
 "rippleEffect"="波紋";

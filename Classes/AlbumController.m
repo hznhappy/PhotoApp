@@ -11,7 +11,7 @@
 #import "PlaylistDetailController.h"
 //#import "nicshanController.h"
 @implementation AlbumController
-@synthesize tableView,list,tools,withlist,withoutlist;
+@synthesize tableView,list;
 @synthesize assetGroups;
 @synthesize allUrl;
 @synthesize unTagUrl,dbUrl;
@@ -54,8 +54,6 @@
 	[self.navigationItem setTitle:@"Loading..."];
     [self getAssetGroup];
     NSString *bu=NSLocalizedString(@"Edit", @"button");
-   //  NSString *u=NSLocalizedString(@"ok", @"button");
-    //NSString *a=NSLocalizedString(@"no", @"button");
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
     editButton = [[UIBarButtonItem alloc] initWithTitle:bu style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
@@ -73,7 +71,7 @@
 {
     da=[[DBOperation alloc]init];
     [da openDB];
-    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name)",PlayTable];
+    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [da createTable:createPlayTable];
     NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
     [da createTable:createPlayIdOrder];
@@ -387,6 +385,7 @@
           [da closeDB];
          assetPicker.urlsArray =dbUrl;
     } 
+    assetPicker.PLAYID=[list objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:assetPicker animated:YES];
     [assetPicker release];
     [table deselectRowAtIndexPath:indexPath animated:YES];
@@ -461,7 +460,7 @@
             {
                 if([self.SUM containsObject:data]) 
                 {
-                    NSLog(@"GGGGG");
+
                     [self.SUM removeObject:data];
                 }
             }
@@ -500,12 +499,13 @@
                                                          userInfo:dic1];
 
     User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
-    [da closeDB];
+   
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
     detailController.listName =[NSString stringWithFormat:@"%@",user3.name];
+    detailController.Transtion=[NSString stringWithFormat:@"%@",user3.Transtion];    
     detailController.a=[NSString stringWithFormat:@"%@",[list objectAtIndex:indexPath.row]];
     detailController.hidesBottomBarWhenPushed = YES;
-        
+     [da closeDB];    
 
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
@@ -587,10 +587,9 @@
     [playListUrl release];
     [tableView release];
     [list release];
-    [withlist release];
-    [withoutlist release];
     [SUM release];
     [dbUrl release];
+    [img release];
     [super dealloc];
 }
 @end

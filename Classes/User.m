@@ -9,9 +9,6 @@
 #import "User.h"
 @implementation User
 @synthesize name;
-@synthesize color;
+@synthesize Transtion;
 @synthesize id;
-@synthesize with;
-@synthesize without;
-@synthesize name1;
 @end
