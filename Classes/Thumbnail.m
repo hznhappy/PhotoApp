@@ -13,6 +13,7 @@
 @synthesize overlay,load;
 @synthesize fatherController;
 @synthesize assetArray,photos;
+@synthesize index;
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         // Initialization code
@@ -105,7 +106,6 @@
         overlayView.hidden = [self tagOverlay];
         if ([self tagOverlay]) {
             NSURL *url = [[self.asset defaultRepresentation]url];
-            NSLog(@"url %@",url);
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:url,@"url",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUrl" 
                                                                object:self 
@@ -117,7 +117,6 @@
         else
         {
             NSURL *url = [[self.asset defaultRepresentation]url];
-            NSLog(@"url %@",url);
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:url,@"Removeurl",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"RemoveUrl" 
                                                                object:self 
@@ -134,14 +133,8 @@
         if (load) {
             return;
         }else{
-            NSInteger currenPage = 0;
-            for (id aAsset in self.assetArray) {
-                if ([[[self.asset defaultRepresentation]url] isEqual:[[aAsset defaultRepresentation]url]]) {
-                    currenPage = [assetArray indexOfObject:aAsset];
-                }
-            }
             PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
-            photoController._pageIndex = currenPage;
+            photoController._pageIndex = self.index;
             selectOverlay.hidden = NO;
             photoController.photos = self.photos;
             [self.fatherController.navigationController pushViewController:photoController animated:YES];

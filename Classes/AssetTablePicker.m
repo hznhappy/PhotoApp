@@ -61,7 +61,7 @@
     self.assetArrays = temArray;
     [thumbNailArray release];
     [temArray release];
-     NSString *a=NSLocalizedString(@"Cancel", @"title");
+    NSString *a=NSLocalizedString(@"Cancel", @"title");
     cancel = [[UIBarButtonItem alloc]initWithTitle:a style:UIBarButtonItemStyleDone target:self action:@selector(cancelTag)];
     
     [[NSNotificationCenter defaultCenter]addObserver:self 
@@ -98,7 +98,6 @@
 -(void)AddUrl:(NSNotification *)note{
     NSDictionary *dic = [note userInfo];
     [UrlList addObject:[dic objectForKey:@"url"]];
-    NSLog(@"JJJ%@",UrlList);
     if([UrlList count]!=0)
     {
         save.enabled = YES;
@@ -109,27 +108,24 @@
 {
     NSDictionary *dic = [note userInfo];
     [UrlList removeObject:[dic objectForKey:@"Removeurl"]];
-    NSLog(@"JJJ%@",UrlList);
     if([UrlList count]==0)
     {
         save.enabled = NO;
         reset.enabled = NO;
     }
-
-
+    
+    
 }
 -(void)AddUser:(NSNotification *)note
 {
     NSDictionary *dic = [note userInfo];
     self.UserId=[dic objectForKey:@"UserId"];
     UserName=[dic objectForKey:@"UserName"];
-    NSLog(@"JJJ%@",UserId);
-    NSLog(@"JJJ%@",UserName);
     
 }
 -(void)viewDidAppear:(BOOL)animated{
     self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
-
+    
 }
 -(void)viewDidDisappear:(BOOL)animated{
     for (Thumbnail *thub in crwAssets) {
@@ -149,8 +145,9 @@
             }
             thuView = [[Thumbnail alloc] initWithAsset:result];
             thuView.fatherController = self;
-            thuView.overlay = mode;
             [self.crwAssets addObject:thuView];
+            NSUInteger thumIndex = [self.crwAssets indexOfObject:thuView];
+            thuView.index = thumIndex;
             [thuView release];
             [self.assetArrays addObject:result];
         };
@@ -182,10 +179,13 @@
     [self getImage];
 	[self.table reloadData];           
     [pool release];
-
+    
 	
 }
 -(void)getImage{
+    if (![assetArrays count] == 0) {
+        [_activityView startAnimating];
+    }
     dispatch_async(dispatch_get_current_queue(), ^
                    {
                        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -268,29 +268,24 @@
         [alert show];
         [alert release];
         [message release];
-
+        
     }
     else
-    {NSLog(@"JEJE");
-         
-        NSLog(@"nm%@",UserName);
-       NSLog(@"nid%@",self.UserId);
-       
-
-    [dataBase openDB];
-    for(int i=0;i<[UrlList count];i++)
-    {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[UrlList objectAtIndex:i],UserName];
-    [dataBase insertToTable:insertTag];
-    }
-    [dataBase closeDB];
-    [self cancelTag];
-    [self setPhotoTag];
+    {
+        [dataBase openDB];
+        for(int i=0;i<[UrlList count];i++)
+        {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[UrlList objectAtIndex:i],UserName];
+            [dataBase insertToTable:insertTag];
+        }
+        [dataBase closeDB];
+        [self cancelTag];
+        [self setPhotoTag];
         NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                            object:self 
                                                          userInfo:dic1];
         
-
+        
     }
 }
 -(IBAction)resetTags{
@@ -318,7 +313,8 @@
 -(IBAction)playPhotos{
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.assetArrays];
     playPhotoController._pageIndex = 0;
-    [playPhotoController fireTimer:@"cube"];
+    playPhotoController.photos = self.images;
+    [playPhotoController fireTimer:@"rippleEffect"];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
 }
@@ -328,7 +324,7 @@
 
 -(void)setEditOverlay:(NSNotification *)notification{
     //for (Thumbnail *thumbnail in self.crwAssets) {
-      //  [thumbnail setOverlayHidden:YES];
+    //  [thumbnail setOverlayHidden:YES];
     //}
     
     [self setPhotoTag];
@@ -341,15 +337,13 @@
 #pragma mark -
 #pragma mark People picker delegate
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
-
+    
     
     NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
     ABRecordID recId = ABRecordGetRecordID(person);
     
-    NSLog(@"readName:%@",readName);
-    NSLog(@"recId:%d",recId);
-  self.UserId=[NSString stringWithFormat:@"%d",recId];
-   // NSLog(@"ID:%@",Id);
+    self.UserId=[NSString stringWithFormat:@"%d",recId];
+    // NSLog(@"ID:%@",Id);
     UserName=readName;
     [dataBase openDB];
     NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,self.UserId,readName];
@@ -395,9 +389,9 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-		return ceil([crwAssets count] / 4.0);
-
+    
+    return ceil([crwAssets count] / 4.0);
+    
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
@@ -415,7 +409,7 @@
     
 	int index = (_indexPath.row*4);
 	int maxIndex = (_indexPath.row*4+3);
-
+    
     if(maxIndex < [self.crwAssets count]) {
         
         return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
@@ -457,8 +451,8 @@
     if (cell == nil) 
     {		        
         cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] 
-									 reuseIdentifier:CellIdentifier] autorelease];
-
+                                      reuseIdentifier:CellIdentifier] autorelease];
+        
     }	
 	else 
     {		

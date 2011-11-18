@@ -18,6 +18,7 @@
     NSMutableArray *assetArray;
     NSMutableArray *photos;
 
+    NSUInteger index;
     BOOL overlay;
     BOOL load;
 	id parent;
@@ -26,6 +27,7 @@
 }
 
 @property (nonatomic, retain) ALAsset *asset;
+@property (nonatomic, assign) NSUInteger index;
 @property (nonatomic, assign) id parent;
 @property (nonatomic,assign)BOOL overlay;
 @property (nonatomic,assign)BOOL load;
