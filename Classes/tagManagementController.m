@@ -4,7 +4,6 @@
 #import "DBOperation.h"
 #import "User.h"
 #import "AssetTablePicker.h"
-#import "ContactsController.h"
 @implementation tagManagementController
 @synthesize list;
 @synthesize button;

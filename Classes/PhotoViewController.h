@@ -29,7 +29,8 @@
 	UIBarButtonItem *_leftButton;
 	UIBarButtonItem *_rightButton;
 	UIBarButtonItem *_actionButton;
-	
+    UIImage *img;
+
 	
     UIBarButtonItem *edit;
     BOOL editing;
@@ -40,6 +41,7 @@
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
 @property(nonatomic,retain)NSMutableArray *listid;
+@property(nonatomic,retain)UIImage *img;
 
 @property(nonatomic,retain)NSMutableArray *photos;
 @property(nonatomic,retain) NSMutableArray *photoSource;

@@ -41,7 +41,7 @@
 -(void)setSelectOvlay;
 -(void)setTagOverlayHidden:(BOOL)hide;
 -(BOOL)tagOverlay;
-
+//-(void)getImage;
 
 
 @end

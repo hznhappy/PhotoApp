@@ -82,7 +82,7 @@
 }
 -(void)setOverlayHidden:(NSString *)hide{
     count.text = hide;
-      tagBg.hidden=NO; 
+    tagBg.hidden=NO; 
 
 }
 
@@ -105,19 +105,19 @@
     if (overlay) {
         overlayView.hidden = [self tagOverlay];
         if ([self tagOverlay]) {
-            NSURL *url = [[self.asset defaultRepresentation]url];
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:url,@"url",nil];
+            NSString *indexString = [NSString stringWithFormat:@"%d",self.index];
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:indexString,@"index",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUrl" 
                                                                object:self 
                                                              userInfo:dic];
            
-             count.text = [NSString stringWithFormat:@"%d",[count.text intValue]+1];
+            count.text = [NSString stringWithFormat:@"%d",[count.text intValue]+1];
             tagBg.hidden=NO;
         }
         else
         {
-            NSURL *url = [[self.asset defaultRepresentation]url];
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:url,@"Removeurl",nil];
+            NSString *indexString = [NSString stringWithFormat:@"%d",self.index];
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:indexString,@"Removeurl",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"RemoveUrl" 
                                                                object:self 
                                                              userInfo:dic];
@@ -130,16 +130,20 @@
         }
         
     }else{
-        if (load) {
-            return;
-        }else{
+        //if (load) {
+            //return;
+        //}else{
+            //NSLog(@"come here");
+            //[self getImage];
             PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
             photoController._pageIndex = self.index;
             selectOverlay.hidden = NO;
             photoController.photos = self.photos;
+           // [photoController loadImages];
+            //NSLog(@"photo count %d",[photoController.photos count]);
             [self.fatherController.navigationController pushViewController:photoController animated:YES];
             [photoController release];
-        }
+        //}
     }
 }
 
