@@ -109,7 +109,6 @@
             [tagIdAry addObject:newid];
             [tagUrl addObject:newUrl];
             [tagUserName addObject:newName];
-            NSLog(@"TAGURL%@",tagUrl);
         }
     }	
     sqlite3_finalize(statement);  
@@ -128,9 +127,7 @@
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,0)];
-            NSLog(@"%@",newName);
             [tagName addObject:newName];
-              NSLog(@"%@",tagName);
         }
     }
     sqlite3_finalize(statement);  
@@ -181,7 +178,6 @@
             [playlist_UserName addObject:newname];
              newRule=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement,2)];
             [playlist_UserRules addObject:newRule];
-             NSLog(@"FSD%@",playlist_UserRules);
         }
     }	
     sqlite3_finalize(statement);  
@@ -197,7 +193,6 @@
 			
 			user1.id = [NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
 			user1.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
-			//user1.color = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement,2)];
 		}
 		sqlite3_finalize(statement);
 		return user1;

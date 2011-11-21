@@ -17,28 +17,18 @@
 @synthesize table;
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
-@synthesize images,PLAYID,lock;
+@synthesize images;
 
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
-    UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
-    [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    UIBarButtonItem *backItem=[[UIBarButtonItem alloc]initWithCustomView:backButton];
-    self.navigationItem.leftBarButtonItem =backItem;
-       
-    //UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithTitle:@"back" style:UIButtonTypeCustom  target:self action:@selector(huyou)]; 
-   // self.navigationItem.leftBarButtonItem = backItem;
- //   [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:@selector(huyou)]];
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityView.frame = CGRectMake(0, 0, 37.0f, 37.0f);
     activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
     self.navigationItem.titleView = activityView;
     _activityView = [activityView retain];
     [activityView release];
-    [_activityView startAnimating];
-
+    
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
     [tempArray release];
@@ -60,7 +50,7 @@
     DBOperation *db = [[DBOperation alloc]init];
     self.dataBase = db;
     [db release];
-   // [self.lock setTitle:@"Lock"];
+    
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
     [temp release];
@@ -85,67 +75,22 @@
     [self creatTable];
     [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
     [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.5];
-    alert1 = [[UIAlertView alloc]initWithTitle:@"请输入密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
-    passWord = [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
-    passWord.backgroundColor = [UIColor whiteColor];  
-    [alert1 addSubview:passWord];  
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
 }
--(void)huyou
-{
- if([self.lock.title isEqualToString:@"Lock"])
- {
-     [self.navigationController popViewControllerAnimated:YES];
- }
- else
- {  
-     //CGAffineTransform transfrom = CGAffineTransformMakeTranslation(0, 30);  //实现对控件位置的控制  
-     //[alert1 setTransform:transfrom];  
-     [alert1 show];  
-    // [alert1 release];  
-    
-   
- }
-}
-/*- (void)willPresentAlertView:(UIAlertView *)alertView {
-    alert1.frame = CGRectMake(14,90,280,150);
-}
-*/
--(void)alertView:(UIAlertView *)alert1 didDismissWithButtonIndex:(NSInteger)buttonIndex{
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
-    NSNumber *val=[defaults objectForKey:@"name_preference"];
-    NSString *pa=[NSString stringWithFormat:@"%@",val];
-    switch (buttonIndex) {
-        case 0:
-            //NSLog(@"KKKK%@",val);
-            
-           // NSLog(@"%@",pa);
-           // NSLog(@"JDIEJI%@",passWord);
-            if([passWord.text isEqualToString:pa])
-            {
-                self.lock.title=@"Lock";
-            }
-            
-    }
-    passWord.text=nil;
-}
-
 -(void)creatTable
 {
    // dataBase=[[DBOperation alloc]init];
     [dataBase openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [dataBase createTable:createTag];  
-    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
+    NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME,COLOR)",UserTable];
     [dataBase createTable:createUserTable];
     NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
     [dataBase createTable:createIdOrder];
-    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
-    [dataBase createTable:createPlayTable];
 
     [dataBase closeDB];
 }
@@ -303,14 +248,6 @@
     [self.table reloadData];
 }
 -(IBAction)lockButtonPressed{
-    if([self.lock.title isEqualToString:@"Lock"])
-    {
-        [lock setTitle:@"UnLock"];
-    }
-     else
-    {
-        [alert1 show];
-    }
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 -(IBAction)saveTags{
@@ -373,16 +310,12 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
-    [dataBase openDB];
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.assetArrays];
     playPhotoController._pageIndex = 0;
     playPhotoController.photos = self.images;
-    User *user3 = [dataBase getUserFromPlayTable:[PLAYID intValue]];
-    NSLog(@"UUUU%@",user3.Transtion);
-    [playPhotoController fireTimer:user3.Transtion];
+    [playPhotoController fireTimer:@"rippleEffect"];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
-    [dataBase closeDB];
 }
 
 #pragma mark - 
@@ -411,6 +344,7 @@
     self.UserId=[NSString stringWithFormat:@"%d",recId];
     // NSLog(@"ID:%@",Id);
     UserName=readName;
+<<<<<<< HEAD
     [dataBase openDB];
     NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,self.UserId,readName];
     NSLog(@"%@",insertUserTable);
@@ -426,6 +360,16 @@
                                                        object:self 
                                                      userInfo:dic];
    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+=======
+    // NSLog(@"UserID%@",UserId);
+    //  NSLog(@"Uname%@",UserName);
+    //UserName=[NSString stringWithFormat:@"%@",readName];
+    /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:Id,@"UserId",readName,@"UserName",nil];
+     [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
+     object:self 
+     userInfo:dic1];*/
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+>>>>>>> origin/master
     [self dismissModalViewControllerAnimated:YES];
     return NO;
 }
@@ -536,14 +480,6 @@
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
 	return (UIInterfaceOrientationIsPortrait(toInterfaceOrientation) || toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
--(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
-{NSLog(@"JJJJJ");
-    return YES;
-}
--(void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item
-{
-    NSLog(@"jkjk");
-}
 #pragma  mark -
 #pragma  mark Memory management
 -(void)viewDidUnload{
@@ -583,9 +519,6 @@
     [UserName release];
     [_activityView release], _activityView=nil;
     [images release];
-    [UrlList release];
-    [PLAYID release];
-    [alert1 release];
     [super dealloc];    
 }
 

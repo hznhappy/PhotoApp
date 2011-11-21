@@ -7,6 +7,7 @@
 //
 
 #import "PhotoAppDelegate.h"
+
 @implementation PhotoAppDelegate
 
 @synthesize window;
@@ -17,9 +18,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-    
     // Override point for customization after application launch.
-
     // Add the view controller's view to the window and display.
     [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     [window addSubview:rootViewController.view];
@@ -27,6 +26,45 @@
 
     return YES;
 }
+//- (BOOL)getSortAppPref {
+   // NSLog(@"KOE");
+	/* As this application provides a Settings.bundle for application
+     preferences, the following is a simple example that retrieves the
+     current user-set preferences. */
+   // NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	/* Similar to the AppPrefs sample, we first test to see if the preferences
+     settings exist, and create if needed. */
+	/*NSData *testValue = [defaults dataForKey:kSettingKey]; /* setting exists? */
+	/*if (testValue == nil) {
+        NSLog(@"NIL");
+		NSString *pathStr = [[NSBundle mainBundle] bundlePath];
+		NSString *settingsBundlePath = [pathStr stringByAppendingPathComponent:@"PhotoSettings.bundle"];
+		NSString *finalPath = [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
+		NSDictionary *settingsDict = [NSDictionary dictionaryWithContentsOfFile:finalPath];
+		NSArray *prefSpecifierArray = [settingsDict objectForKey:@"PreferenceSpecifiers"];
+		NSNumber *settingDefault = nil;
+		NSDictionary *prefItem;
+		
+		for (prefItem in prefSpecifierArray) {
+            NSLog(@"LO");
+			NSString *keyValueStr = [prefItem objectForKey:@"Key"];
+			id defaultValue = [prefItem objectForKey:@"DefaultValue"];
+			
+			if ([keyValueStr isEqualToString:kSettingKey]) {
+				settingDefault = defaultValue;
+			}
+		}
+		
+		if (settingDefault != nil) {
+            NSLog(@"ARE");
+			NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         settingDefault, kSettingKey, nil];		
+			[defaults registerDefaults:appDefaults];
+			[defaults synchronize];
+		}
+	}
+	return [defaults boolForKey:kSettingKey];
+}*/
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
