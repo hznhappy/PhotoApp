@@ -13,7 +13,7 @@
 #import "PhotoImageView.h"
 
 @interface PhotoViewController (Private)
-- (void)loadScrollViewWithPage:(NSInteger)page;
+- (void)loadScrollViewWithPage:(NSInteger)page image:(UIImage *)image;
 - (void)layoutScrollViewSubviews;
 - (void)setupScrollViewContentSize;
 - (void)enqueuePhotoViewAtIndex:(NSInteger)theIndex;
@@ -101,20 +101,128 @@
     db = [[DBOperation alloc]init];
     ppv.hidden=YES;
    	[views release];
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    self.photos = array;
+    [array release];
 }
-
+-(void)viewDidAppear:(BOOL)animated{
+    [self moveToPhotoAtIndex:_pageIndex animated:NO];
+}
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
     [self.navigationController setToolbarHidden:NO animated:YES];
 	[self setupToolbar];
 	[self setupScrollViewContentSize];
-	[self moveToPhotoAtIndex:_pageIndex animated:NO];
+    [self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [timer invalidate];
 	[super viewWillDisappear:animated];
     [self.navigationController setToolbarHidden:YES animated:YES];		
+}
+
+-(void)loadPhoto//(NSInteger)page
+{
+    NSLog(@"load five photos");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
+    {
+        if (result == nil) 
+        {
+            return;
+        }
+        //self.img=[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]];
+        //            if ([self.photos objectAtIndex:i]!=nil||[self.photos objectAtIndex:i]!=[NSNull null]) {
+        //                [self.photos replaceObjectAtIndex:i withObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
+        //            }
+        [self.photos addObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
+    };
+    
+    void (^failureBlock)(NSError *) = ^(NSError *error) {
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+                                                        delegate:nil 
+                                               cancelButtonTitle:@"Ok" 
+                                               otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        NSLog(@"A problem occured %@", [error description]);	                                 
+    };	
+    NSInteger j = _pageIndex+2;
+    
+    if (j>=[self.photoSource count]) {
+        j = [self.photoSource count]-1;
+    }
+    for (NSInteger i = _pageIndex-2;i <= j;i++) {
+        if (i<0) {
+            i = 0;
+        }
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+        [library assetForURL:[self.photoSource objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
+        [library release];
+    }
+    [pool release];
+    NSLog(@"prepare %@",self.photos);
+}
+-(void)anotherLoad
+{
+   // NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    //for (NSInteger i = _pageIndex-2;i<=_pageIndex+2;i++) {
+    // NSInteger _index = [self centerPhotoIndex];
+    NSInteger page = [self centerPhotoIndex];
+    if (_pageIndex<page) {
+        //[self performSelector:@selector(loadPhotos:)];
+        [self loadPhotos:[self.photoSource objectAtIndex:page+2]];
+        for (NSUInteger i = 0; i<5; i++) {
+            if (i == 4) {
+                [self.photos replaceObjectAtIndex:i withObject:self.img];
+            }else
+            [self.photos exchangeObjectAtIndex:i withObjectAtIndex:i+1];
+        }    
+    }else if(_pageIndex>page){
+        [self loadPhotos:[self.photoSource objectAtIndex:page+2]];
+        for (NSUInteger i = 4; i>0; i--) {
+            if (i == 0) {
+                [self.photos replaceObjectAtIndex:i withObject:self.img];
+            }else
+            [self.photos exchangeObjectAtIndex:i withObjectAtIndex:i-1];
+        }        
+    }
+       //NSLog(@"load one Photo in %d",i);
+//    void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
+//    {
+//        if (result == nil) 
+//        {
+//            return;
+//        }
+//        //self.img=[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]];
+//        [self.photos replaceObjectAtIndex:i withObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
+//    };
+//    
+//    void (^failureBlock)(NSError *) = ^(NSError *error) {
+//        
+//        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+//                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+//                                                        delegate:nil 
+//                                               cancelButtonTitle:@"Ok" 
+//                                               otherButtonTitles:nil];
+//        [alert show];
+//        [alert release];
+//        
+//        NSLog(@"A problem occured %@", [error description]);	                                 
+//    };	
+//    if ([self.photos objectAtIndex:i]==nil||[self.photos objectAtIndex:i]==[NSNull null]) {
+//        
+//        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+//        [library assetForURL:[self.photoSource objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
+//        [library release];
+//    }
+    //}
+    //[pool release];
+    // NSLog(@" another%@",self.photos);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -282,7 +390,7 @@ else{
 
 - (void)photoViewDidFinishLoading:(NSNotification*)notification{
 	if (notification == nil) return;
-	UIImage *image = [self.photos objectAtIndex:[self centerPhotoIndex]];
+	UIImage *image = [self.photos objectAtIndex:2];//[self centerPhotoIndex]];
 	if ([[[notification object] objectForKey:@"photo"] isEqual:image]) {
 		if ([[[notification object] objectForKey:@"failed"] boolValue]) {
 			if (_barsHidden) {
@@ -341,9 +449,9 @@ else{
     
 	[self enqueuePhotoViewAtIndex:index];
 	
-	[self loadScrollViewWithPage:index-1];
-	[self loadScrollViewWithPage:index];
-	[self loadScrollViewWithPage:index+1];
+	[self loadScrollViewWithPage:index-1 image:[self.photos objectAtIndex:1]];
+	[self loadScrollViewWithPage:index image:[self.photos objectAtIndex:2]];
+	[self loadScrollViewWithPage:index+1 image:[self.photos objectAtIndex:3]];
 	
 	
 	[self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:index]).frame animated:animated];
@@ -391,8 +499,8 @@ else{
 	
 	NSInteger _index = [self currentPhotoIndex];
 	
-	for (NSInteger page = _index -1; page < _index+3; page++) {
-		
+	for (NSInteger page = _index -1; page < _index+2; page++) {
+		//NSLog(@"%d",page);
 		if (page >= 0 && page < [self.photoSource count]){
 			
 			CGFloat originX = self.scrollView.bounds.size.width * page;
@@ -405,7 +513,17 @@ else{
 			}
 			
 			if ([self.photoViews objectAtIndex:page] == [NSNull null] || !((UIView*)[self.photoViews objectAtIndex:page]).superview){
-				[self loadScrollViewWithPage:page];
+				if (page == _index -1) {
+                    [self loadScrollViewWithPage:page image:[self.photos objectAtIndex:1]];
+                    
+                }else if (page == _index) {
+                    [self loadScrollViewWithPage:page image:[self.photos objectAtIndex:2]];
+                    
+                }else if (page == _index +1) {
+                    [self loadScrollViewWithPage:page image:[self.photos objectAtIndex:3]];
+                    
+                }
+                
 			}
 			
 			PhotoImageView *_photoView = (PhotoImageView*)[self.photoViews objectAtIndex:page];
@@ -471,7 +589,7 @@ else{
 	
 }
 
-- (void)loadScrollViewWithPage:(NSInteger)page {
+- (void)loadScrollViewWithPage:(NSInteger)page image:(UIImage *)image{
 	
     if (page < 0) return;
     if (page >= [self.photoSource count]) return;
@@ -494,10 +612,11 @@ else{
 		[photoView release];
 		
 	} 
-    NSURL *url = [self.photoSource objectAtIndex:page];
-    [self  loadPhotos:url];
-    [photoView setPhoto:self.img];//[self.photos objectAtIndex:page]];
-	
+    //NSURL *url = [self.photoSource objectAtIndex:page];
+    //[self  loadPhotos:url];
+   // [photoView setPhoto:self.img];//[self.photos objectAtIndex:page]];
+    [photoView setPhoto:image];//[self.photos objectAtIndex:page]];
+
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
 	}
@@ -524,6 +643,7 @@ else{
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	
 	NSInteger _index = [self centerPhotoIndex];
+    [self anotherLoad];
 	if (_index >= [self.photoSource count] || _index < 0) {
 		return;
 	}
