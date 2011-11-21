@@ -37,7 +37,7 @@
     self.navigationItem.titleView = activityView;
     _activityView = [activityView retain];
     [activityView release];
-    [_activityView startAnimating];
+    //[_activityView startAnimating];
 
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
@@ -47,7 +47,6 @@
     self.table.minimumZoomScale = 1;
     self.table.contentSize = CGSizeMake(self.table.frame.size.width, self.table.frame.size.height);
     mode = NO;
-    load = YES;
     tagBar.hidden = YES;
     save.enabled = NO;
     reset.enabled = NO;
@@ -65,7 +64,7 @@
     self.images = temp;
     [temp release];
     NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
-    NSMutableArray *temArray = [[NSMutableArray alloc] init] ;
+    NSMutableArray *temArray = [[NSMutableArray alloc] init];
     self.crwAssets = thumbNailArray;
     self.assetArrays = temArray;
     [thumbNailArray release];
@@ -151,7 +150,8 @@
 }
 -(void)AddUrl:(NSNotification *)note{
     NSDictionary *dic = [note userInfo];
-    [UrlList addObject:[dic objectForKey:@"url"]];
+    NSString *str = [dic objectForKey:@"index"];
+    [UrlList addObject:[self.urlsArray objectAtIndex:[str integerValue]]];
     if([UrlList count]!=0)
     {
         save.enabled = YES;
@@ -161,7 +161,8 @@
 -(void)RemoveUrl:(NSNotification *)note
 {
     NSDictionary *dic = [note userInfo];
-    [UrlList removeObject:[dic objectForKey:@"Removeurl"]];
+    NSString *str = [dic objectForKey:@"Removeurl"];
+    [UrlList removeObject:[self.urlsArray objectAtIndex:[str integerValue]]];
     if([UrlList count]==0)
     {
         save.enabled = NO;
@@ -203,7 +204,7 @@
             NSUInteger thumIndex = [self.crwAssets indexOfObject:thuView];
             thuView.index = thumIndex;
             [thuView release];
-            [self.assetArrays addObject:result];
+            //[self.assetArrays addObject:result];
         };
         
         void (^failureBlock)(NSError *) = ^(NSError *error) {
@@ -226,39 +227,15 @@
     [self setPhotoTag];
     //prepare ALAsset for ThumbnailView to init PhotoViewController to display Photo;
     for (Thumbnail *thumbnail in self.crwAssets) {
-        for (id asset in self.assetArrays) {
-            [thumbnail.assetArray addObject:asset];
+        for (NSURL *url in self.urlsArray) {
+            [thumbnail.assetArray addObject:url];
         }
     }
-    [self getImage];
 	[self.table reloadData];           
     [pool release];
     
 	
 }
--(void)getImage{
-    if (![assetArrays count] == 0) {
-        [_activityView startAnimating];
-    }
-    dispatch_async(dispatch_get_current_queue(), ^
-                   {
-                       NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-                       for (ALAsset *asset in self.assetArrays) {
-                           UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];
-                           [self.images addObject:image];
-                           if ([images count]==[self.assetArrays count]) {
-                               [_activityView stopAnimating];
-                               load = NO;
-                               [self.table reloadData];
-                           }
-                       }
-                       for (Thumbnail *thumbnail in self.crwAssets) {
-                           thumbnail.photos = self.images;
-                       }
-                       [pool release];
-                   });
-}
-
 -(void)setPhotoTag{
     [dataBase openDB];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
@@ -266,7 +243,8 @@
     for (NSString *dataStr in photos) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         for (Thumbnail *thumbnail in self.crwAssets) {
-            NSURL *thumStr = [[thumbnail.asset defaultRepresentation]url];
+            NSUInteger index = [self.crwAssets indexOfObject:thumbnail];
+            NSURL *thumStr = [self.urlsArray objectAtIndex:index];
             if ([dbStr isEqual:thumStr]) {
                 NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
                 [dataBase selectFromTAG:selectTag];
@@ -374,11 +352,10 @@
 }
 -(IBAction)playPhotos{
     [dataBase openDB];
-    PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.assetArrays];
+    PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray];
     playPhotoController._pageIndex = 0;
-    playPhotoController.photos = self.images;
+    //playPhotoController.photos = self.images;
     User *user3 = [dataBase getUserFromPlayTable:[PLAYID intValue]];
-    NSLog(@"UUUU%@",user3.Transtion);
     [playPhotoController fireTimer:user3.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
@@ -409,7 +386,6 @@
     ABRecordID recId = ABRecordGetRecordID(person);
     
     self.UserId=[NSString stringWithFormat:@"%d",recId];
-    // NSLog(@"ID:%@",Id);
     UserName=readName;
     [dataBase openDB];
     NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,self.UserId,readName];
@@ -441,18 +417,6 @@
 }
 #pragma mark -
 #pragma mark UITableViewDataSource and Delegate Methods
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    if([dateArry count]==0)
-    {
-        return 1;
-    }
-    else
-    {
-        return [dateArry count];
-    }
-}
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -460,17 +424,6 @@
     
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    if ([dateArry count] == 0) {
-        return nil;
-    }else{
-        return [dateArry objectAtIndex:section];
-    }
-}
-
--(NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView{
-    return dateArry;
-}
 -(NSArray*)assetsForIndexPath:(NSIndexPath*)_indexPath {
     
 	int index = (_indexPath.row*4);

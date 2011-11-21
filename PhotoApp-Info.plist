@@ -4,16 +4,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string></string>
-	</array>
-	<key>CFBundleIconFiles</key>
-	<array>
-		<string></string>
-	</array>
-	<key>NSHumanReadableCopyright</key>
-	<string></string>
 	<key>CFBundleDisplayName</key>
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundleExecutable</key>
@@ -22,6 +12,8 @@
 	<string></string>
 	<key>CFBundleIconFile</key>
 	<string>logo.jpg</string>
+	<key>UIApplicationExitsOnSuspend</key>
+	<false/>
 	<key>CFBundleIdentifier</key>
 	<string>com.chinarewards.photopicker</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -40,7 +32,13 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string></string>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string></string>
+	</array>
 </dict>
 </plist>

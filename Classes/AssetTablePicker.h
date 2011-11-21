@@ -80,5 +80,4 @@
 -(void)RemoveUrl:(NSNotification *)note;
 -(void)AddUser:(NSNotification *)note;
 -(void)creatTable;
--(void)getImage;
 @end

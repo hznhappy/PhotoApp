@@ -34,6 +34,7 @@
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
 @synthesize photos;
+@synthesize img;
 
 - (id)initWithPhotoSource:(NSMutableArray *)aSource{
 	if ((self = [super init])) {
@@ -93,14 +94,13 @@
    	self.navigationItem.rightBarButtonItem=edit;
   
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
-    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
-    ppv.url = [[asset defaultRepresentation]url];
+    NSURL *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
+    ppv.url = currentPageUrl;
     [ppv Buttons];
     [self.view addSubview:ppv];
     db = [[DBOperation alloc]init];
     ppv.hidden=YES;
    	[views release];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -109,9 +109,6 @@
 	[self setupToolbar];
 	[self setupScrollViewContentSize];
 	[self moveToPhotoAtIndex:_pageIndex animated:NO];
-	
-	
-	
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -285,8 +282,7 @@ else{
 
 - (void)photoViewDidFinishLoading:(NSNotification*)notification{
 	if (notification == nil) return;
-    ALAsset *asset = [self.photoSource objectAtIndex:[self centerPhotoIndex]];
-	UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullResolutionImage]];
+	UIImage *image = [self.photos objectAtIndex:[self centerPhotoIndex]];
 	if ([[[notification object] objectForKey:@"photo"] isEqual:image]) {
 		if ([[[notification object] objectForKey:@"failed"] boolValue]) {
 			if (_barsHidden) {
@@ -335,13 +331,11 @@ else{
 	
 	
 }
-
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
-	
-	_pageIndex = index;
-    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
-    ppv.url = [[asset defaultRepresentation]url];
+   	_pageIndex = index;
+    NSURL *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
+    ppv.url = currentPageUrl;
     [ppv Buttons];
 	[self setViewState];
     
@@ -361,8 +355,36 @@ else{
 	if (index - 1 >= 0 && (NSNull*)[self.photoViews objectAtIndex:index-1] != [NSNull null]) {
 		[((PhotoImageView*)[self.photoViews objectAtIndex:index-1]) killScrollViewZoom];
 	} 	
-   // [self doView];
-	
+   // [self doView];	
+}
+
+-(void)loadPhotos:(NSURL *)url 
+{
+    void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
+    {
+        if (result == nil) 
+        {
+            return;
+        }
+        self.img=[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]];
+    };
+    
+    void (^failureBlock)(NSError *) = ^(NSError *error) {
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+                                                        delegate:nil 
+                                               cancelButtonTitle:@"Ok" 
+                                               otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        NSLog(@"A problem occured %@", [error description]);	                                 
+    };	
+    
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+    [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
+    [library release];
 }
 
 - (void)layoutScrollViewSubviews{
@@ -472,8 +494,9 @@ else{
 		[photoView release];
 		
 	} 
-    
-    [photoView setPhoto:[self.photos objectAtIndex:page]];
+    NSURL *url = [self.photoSource objectAtIndex:page];
+    [self  loadPhotos:url];
+    [photoView setPhoto:self.img];//[self.photos objectAtIndex:page]];
 	
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
@@ -641,7 +664,7 @@ else{
     NSString *animateStyle = [timer userInfo];
     CATransition *animation = [CATransition animation];
     animation.delegate = self;
-    animation.duration = 2.5;
+    animation.duration = 1.5;
     animation.timingFunction = UIViewAnimationCurveEaseInOut;
     animation.subtype = kCATransitionFromRight;
     if ([animateStyle isEqualToString:@"Fade"]) {
@@ -692,6 +715,7 @@ else{
 	[photoSource release];
 	[_scrollView release];
 	[listid release];
+    [img release];
     [super dealloc];
 }
 
