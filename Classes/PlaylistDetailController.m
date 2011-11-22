@@ -62,7 +62,7 @@
       self.tranLabel.text=Transtion;
   }
     key=0;
-    mySwc = YES;
+    mySwc = NO;
     selectImg = [UIImage imageNamed:@"Selected.png"];
     unselectImg = [UIImage imageNamed:@"Unselected.png"];
     dataBase=[[DBOperation alloc]init];
@@ -224,6 +224,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self.textField resignFirstResponder];
     if (indexPath.section ==0 && indexPath.row == 1) {
         AnimaSelectController *animateController = [[AnimaSelectController alloc]init];
         animateController.tranStyle = self.tranLabel.text;
@@ -319,8 +320,6 @@
         }
     }
     }
-    NSLog(@"KKOOO");
-    
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 

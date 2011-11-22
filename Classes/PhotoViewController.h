@@ -19,7 +19,7 @@
 	NSMutableArray *photoSource;
 	NSMutableArray *_photoViews;
     NSMutableArray *photos;
-
+    NSMutableArray *bgPhotos;
 	UIScrollView *_scrollView;	
 	
 	NSInteger _pageIndex;
@@ -42,6 +42,7 @@
 @property(nonatomic,retain)PopupPanelView *ppv;
 @property(nonatomic,retain)NSMutableArray *listid;
 @property(nonatomic,retain)UIImage *img;
+@property(nonatomic,retain)NSMutableArray *bgPhotos;
 
 @property(nonatomic,retain)NSMutableArray *photos;
 @property(nonatomic,retain) NSMutableArray *photoSource;

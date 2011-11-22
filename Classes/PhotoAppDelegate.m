@@ -20,6 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     // Override point for customization after application launch.
     // Add the view controller's view to the window and display.
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     [window addSubview:rootViewController.view];
     [window makeKeyAndVisible];
