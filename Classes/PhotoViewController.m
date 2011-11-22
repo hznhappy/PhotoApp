@@ -33,7 +33,7 @@
 @synthesize photoSource; 
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
-@synthesize photos;
+@synthesize photos,bgPhotos;
 @synthesize img;
 
 - (id)initWithPhotoSource:(NSMutableArray *)aSource{
@@ -104,6 +104,10 @@
     NSMutableArray *array = [[NSMutableArray alloc]init];
     self.photos = array;
     [array release];
+    
+    NSMutableArray *temp = [[NSMutableArray alloc]init];
+    self.bgPhotos = temp;
+    [temp release];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [self moveToPhotoAtIndex:_pageIndex animated:NO];
@@ -113,7 +117,7 @@
     [self.navigationController setToolbarHidden:NO animated:YES];
 	[self setupToolbar];
 	[self setupScrollViewContentSize];
-    [self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -136,7 +140,7 @@
         //            if ([self.photos objectAtIndex:i]!=nil||[self.photos objectAtIndex:i]!=[NSNull null]) {
         //                [self.photos replaceObjectAtIndex:i withObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
         //            }
-        [self.photos addObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
+        [self.bgPhotos addObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
     };
     
     void (^failureBlock)(NSError *) = ^(NSError *error) {
@@ -151,6 +155,12 @@
         
         NSLog(@"A problem occured %@", [error description]);	                                 
     };	
+    if (_pageIndex ==0) {
+        [self.bgPhotos addObject:[NSNull null]];
+        [self.bgPhotos addObject:[NSNull null]];
+    }else if (_pageIndex ==1) {
+        [self.bgPhotos addObject:[NSNull null]];
+    }
     NSInteger j = _pageIndex+2;
     
     if (j>=[self.photoSource count]) {
@@ -164,65 +174,49 @@
         [library assetForURL:[self.photoSource objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
         [library release];
     }
+    if (_pageIndex == [self.photoSource count]-1) {
+        [self.bgPhotos addObject:[NSNull null]];
+        [self.bgPhotos addObject:[NSNull null]];
+    }else if (_pageIndex == [self.photoSource count]-2) {
+        [self.bgPhotos addObject:[NSNull null]];
+    }     
     [pool release];
-    NSLog(@"prepare %@",self.photos);
+    self.photos = self.bgPhotos;
+   // NSLog(@"prepare %@",self.photos);
 }
 -(void)anotherLoad
 {
-   // NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    //for (NSInteger i = _pageIndex-2;i<=_pageIndex+2;i++) {
-    // NSInteger _index = [self centerPhotoIndex];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     NSInteger page = [self centerPhotoIndex];
     if (_pageIndex<page) {
-        //[self performSelector:@selector(loadPhotos:)];
-        [self loadPhotos:[self.photoSource objectAtIndex:page+2]];
+        if (page+2<[self.photoSource count]) {
+            [self loadPhotos:[self.photoSource objectAtIndex:page+2]];
+        }
         for (NSUInteger i = 0; i<5; i++) {
             if (i == 4) {
-                [self.photos replaceObjectAtIndex:i withObject:self.img];
+                if (page+2>[self.photoSource count]-1)
+                    [self.bgPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
+                else{
+                    [self.bgPhotos replaceObjectAtIndex:i withObject:self.img];
+                }
             }else
-            [self.photos exchangeObjectAtIndex:i withObjectAtIndex:i+1];
+            [self.bgPhotos exchangeObjectAtIndex:i withObjectAtIndex:i+1];
         }    
     }else if(_pageIndex>page){
-        [self loadPhotos:[self.photoSource objectAtIndex:page+2]];
-        for (NSUInteger i = 4; i>0; i--) {
+        if (page-2>=0) {
+            [self loadPhotos:[self.photoSource objectAtIndex:page-2]];
+        }
+        for (NSInteger i = 4; i>=0; i--) {
             if (i == 0) {
-                [self.photos replaceObjectAtIndex:i withObject:self.img];
+                if (page-2<0)
+                    [self.bgPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
+                else 
+                    [self.bgPhotos replaceObjectAtIndex:i withObject:self.img];
             }else
-            [self.photos exchangeObjectAtIndex:i withObjectAtIndex:i-1];
-        }        
+            [self.bgPhotos exchangeObjectAtIndex:i withObjectAtIndex:i-1];
+        } 
     }
-       //NSLog(@"load one Photo in %d",i);
-//    void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
-//    {
-//        if (result == nil) 
-//        {
-//            return;
-//        }
-//        //self.img=[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]];
-//        [self.photos replaceObjectAtIndex:i withObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
-//    };
-//    
-//    void (^failureBlock)(NSError *) = ^(NSError *error) {
-//        
-//        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-//                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-//                                                        delegate:nil 
-//                                               cancelButtonTitle:@"Ok" 
-//                                               otherButtonTitles:nil];
-//        [alert show];
-//        [alert release];
-//        
-//        NSLog(@"A problem occured %@", [error description]);	                                 
-//    };	
-//    if ([self.photos objectAtIndex:i]==nil||[self.photos objectAtIndex:i]==[NSNull null]) {
-//        
-//        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-//        [library assetForURL:[self.photoSource objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
-//        [library release];
-//    }
-    //}
-    //[pool release];
-    // NSLog(@" another%@",self.photos);
+          [pool release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -570,7 +564,6 @@ else{
 		} 
 		count++;
 	}	
-	
 }
 
 - (PhotoImageView*)dequeuePhotoView{
@@ -643,7 +636,8 @@ else{
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	
 	NSInteger _index = [self centerPhotoIndex];
-    [self anotherLoad];
+    [self performSelectorInBackground:@selector(anotherLoad) withObject:nil];
+    //[self anotherLoad];
 	if (_index >= [self.photoSource count] || _index < 0) {
 		return;
 	}
@@ -656,6 +650,7 @@ else{
 		
 		if (![scrollView isTracking]) {
 			[self layoutScrollViewSubviews];
+            NSLog(@"not tracking");
 		}
 		
 	}
@@ -667,14 +662,17 @@ else{
 	NSInteger _index = [self centerPhotoIndex];
 	if (_index >= [self.photoSource count] || _index < 0) {
 		return;
-	}
-	
+	}	
+   // [self performSelectorOnMainThread:@selector(anotherLoad) withObject:nil waitUntilDone:YES];
+    [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
 	[self moveToPhotoAtIndex:_index animated:YES];
+    NSLog(@"end");
     
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
 	[self layoutScrollViewSubviews];
+    NSLog(@"begin");
 }
 
 
@@ -831,6 +829,7 @@ else{
 - (void)dealloc {
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [bgPhotos release];
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];
