@@ -22,9 +22,10 @@
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
+     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setTitle:b forState:UIControlStateNormal];
     UIBarButtonItem *backItem=[[UIBarButtonItem alloc]initWithCustomView:backButton];
     self.navigationItem.leftBarButtonItem =backItem;
        
@@ -96,7 +97,8 @@
 }
 -(void)huyou
 {
- if([self.lock.title isEqualToString:@"Lock"])
+NSString *a=NSLocalizedString(@"Lock", @"title");
+ if([self.lock.title isEqualToString:a])
  {
      [self.navigationController popViewControllerAnimated:YES];
  }
@@ -118,6 +120,8 @@
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
     NSNumber *val=[defaults objectForKey:@"name_preference"];
     NSString *pa=[NSString stringWithFormat:@"%@",val];
+    NSString *a=NSLocalizedString(@"Lock", @"title");
+    
     switch (buttonIndex) {
         case 0:
             //NSLog(@"KKKK%@",val);
@@ -126,8 +130,28 @@
            // NSLog(@"JDIEJI%@",passWord);
             if([passWord.text isEqualToString:pa])
             {
-                self.lock.title=@"Lock";
+                self.lock.title=a;
+                break;
             }
+          /*  else
+            {
+                NSString *message=[[NSString alloc] initWithFormat:
+                                   @"please select tag name"];
+                
+                
+                UIAlertView *alert = [[UIAlertView alloc]
+                                      initWithTitle:@"note"
+                                      message:message
+                                      delegate:self
+                                      cancelButtonTitle:nil
+                                      otherButtonTitles:@"OK!",nil];
+                [alert show];
+                [alert release];
+                [message release];
+                return;
+               
+            }
+             */
             
     }
     passWord.text=nil;
@@ -281,15 +305,17 @@
     [self.table reloadData];
 }
 -(IBAction)lockButtonPressed{
-    if([self.lock.title isEqualToString:@"Lock"])
+     NSString *a=NSLocalizedString(@"Lock", @"button");
+    NSString *b=NSLocalizedString(@"UnLock", @"button");
+    if([self.lock.title isEqualToString:a])
     {
-        [lock setTitle:@"UnLock"];
+        [lock setTitle:b];
     }
      else
     {
         [alert1 show];
     }
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
+   // [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 -(IBAction)saveTags{
     if(UserId==nil)
