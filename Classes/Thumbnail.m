@@ -28,7 +28,7 @@
         self.assetArray = temArray;
         [temArray release];
         
-		self.asset = _asset;
+		self.asset =[_asset retain];
 		
 		CGRect viewFrames = CGRectMake(0, 0, 75, 75);
         
@@ -138,7 +138,7 @@
             PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
             photoController._pageIndex = self.index;
             selectOverlay.hidden = NO;
-            photoController.photos = self.photos;
+            //photoController.photos = self.photos;
            // [photoController loadImages];
             //NSLog(@"photo count %d",[photoController.photos count]);
             [self.fatherController.navigationController pushViewController:photoController animated:YES];
