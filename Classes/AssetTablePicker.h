@@ -46,6 +46,8 @@
     NSString *PLAYID;
     UIAlertView *alert1;
     UITextField *passWord;
+    BOOL ME;
+    NSNumber *val;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;

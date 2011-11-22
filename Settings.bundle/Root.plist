@@ -5,12 +5,6 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
-			<key>Title</key>
-			<string>Group</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
 			<key>AutocapitalizationType</key>
 			<string>None</string>
 			<key>AutocorrectionType</key>
@@ -18,7 +12,7 @@
 			<key>DefaultValue</key>
 			<string></string>
 			<key>IsSecure</key>
-			<true/>
+			<false/>
 			<key>Key</key>
 			<string>name_preference</string>
 			<key>KeyboardType</key>
@@ -37,22 +31,6 @@
 			<string>Enabled</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<real>0.5</real>
-			<key>Key</key>
-			<string>slider_preference</string>
-			<key>MaximumValue</key>
-			<integer>1</integer>
-			<key>MaximumValueImage</key>
-			<string></string>
-			<key>MinimumValue</key>
-			<integer>0</integer>
-			<key>MinimumValueImage</key>
-			<string></string>
-			<key>Type</key>
-			<string>PSSliderSpecifier</string>
 		</dict>
 	</array>
 	<key>StringsTable</key>

@@ -22,24 +22,21 @@
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
+    NSLog(@"KO");
+    
+    
      NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
     [backButton setTitle:b forState:UIControlStateNormal];
     UIBarButtonItem *backItem=[[UIBarButtonItem alloc]initWithCustomView:backButton];
     self.navigationItem.leftBarButtonItem =backItem;
-       
-    //UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithTitle:@"back" style:UIButtonTypeCustom  target:self action:@selector(huyou)]; 
-   // self.navigationItem.leftBarButtonItem = backItem;
- //   [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:@selector(huyou)]];
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityView.frame = CGRectMake(0, 0, 37.0f, 37.0f);
     activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
     self.navigationItem.titleView = activityView;
     _activityView = [activityView retain];
     [activityView release];
-    //[_activityView startAnimating];
-
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
     [tempArray release];
@@ -60,7 +57,6 @@
     DBOperation *db = [[DBOperation alloc]init];
     self.dataBase = db;
     [db release];
-   // [self.lock setTitle:@"Lock"];
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
     [temp release];
@@ -88,8 +84,9 @@
     alert1 = [[UIAlertView alloc]initWithTitle:@"请输入密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
     passWord = [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
     passWord.backgroundColor = [UIColor whiteColor];  
+    passWord.secureTextEntry = YES;
     [alert1 addSubview:passWord];  
-    
+    ME=NO;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
@@ -104,62 +101,48 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
  }
  else
  {  
-     //CGAffineTransform transfrom = CGAffineTransformMakeTranslation(0, 30);  //实现对控件位置的控制  
-     //[alert1 setTransform:transfrom];  
-     [alert1 show];  
-    // [alert1 release];  
-    
-   
+     [alert1 show];
+     ME=NO;
  }
 }
-/*- (void)willPresentAlertView:(UIAlertView *)alertView {
-    alert1.frame = CGRectMake(14,90,280,150);
-}
-*/
 -(void)alertView:(UIAlertView *)alert1 didDismissWithButtonIndex:(NSInteger)buttonIndex{
+    NSString *pass=[NSString stringWithFormat:@"%@",val];
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
-    NSNumber *val=[defaults objectForKey:@"name_preference"];
-    NSString *pa=[NSString stringWithFormat:@"%@",val];
+    [defaults setObject:pass forKey:@"name_preference"];
     NSString *a=NSLocalizedString(@"Lock", @"title");
-    
+    NSString *b=NSLocalizedString(@"note", @"title");
+    NSString *c=NSLocalizedString(@"ok", @"title");
+    NSString *d=NSLocalizedString(@"The password is wrong", @"title");
+    if(ME==NO)
+    {
     switch (buttonIndex) {
         case 0:
-            //NSLog(@"KKKK%@",val);
-            
-           // NSLog(@"%@",pa);
-           // NSLog(@"JDIEJI%@",passWord);
-            if([passWord.text isEqualToString:pa])
+            if([passWord.text isEqualToString:pass])
             {
                 self.lock.title=a;
-                break;
-            }
-          /*  else
-            {
-                NSString *message=[[NSString alloc] initWithFormat:
-                                   @"please select tag name"];
-                
-                
-                UIAlertView *alert = [[UIAlertView alloc]
-                                      initWithTitle:@"note"
-                                      message:message
-                                      delegate:self
-                                      cancelButtonTitle:nil
-                                      otherButtonTitles:@"OK!",nil];
-                [alert show];
-                [alert release];
-                [message release];
-                return;
+                //[val release];
                
             }
-             */
-            
+            else
+            {
+                UIAlertView *alert = [[UIAlertView alloc]
+                                      initWithTitle:b
+                                      message:d
+                                      delegate:self
+                                      cancelButtonTitle:nil
+                                      otherButtonTitles:c,nil];
+                [alert show];
+                [alert release];
+                ME=YES;
+               
+            }
     }
     passWord.text=nil;
+    }
 }
 
 -(void)creatTable
 {
-   // dataBase=[[DBOperation alloc]init];
     [dataBase openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [dataBase createTable:createTag];  
@@ -297,22 +280,33 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
 }
 
 -(IBAction)actionButtonPressed{
+    NSString *a=NSLocalizedString(@"Lock", @"title");
+    if([self.lock.title isEqualToString:a])
+    {
     mode = YES;
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = cancel;
     viewBar.hidden = YES;
     tagBar.hidden = NO;
     [self.table reloadData];
+    }
+    else
+    {
+        ME=NO;
+        [alert1 show];
+    }
 }
 -(IBAction)lockButtonPressed{
+   
      NSString *a=NSLocalizedString(@"Lock", @"button");
     NSString *b=NSLocalizedString(@"UnLock", @"button");
     if([self.lock.title isEqualToString:a])
-    {
+    { NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
+        val=[[defaults objectForKey:@"name_preference"]retain];
         [lock setTitle:b];
     }
      else
-    {
+     {   ME=NO;
         [alert1 show];
     }
    // [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -565,6 +559,7 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
     [UrlList release];
     [PLAYID release];
     [alert1 release];
+    [val release];
     [super dealloc];    
 }
 

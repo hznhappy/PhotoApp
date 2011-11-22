@@ -36,13 +36,10 @@
 }
 
 -(void)viewDidLoad
-{NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
-    NSNumber *val=[defaults objectForKey:@"name_preference"];
+{/*NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
+    NSNumber *val=[defaults objectForKey:@"pa"];
     NSLog(@"KKKK%@",val);
-
-   
-
-    
+    [defaults setObject:@"shan" forKey:@"pa"];*/
     date = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];

@@ -234,6 +234,10 @@
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [animateController release];
     }
+    if (indexPath.section ==0 && indexPath.row == 2)
+    {
+        [textField resignFirstResponder];
+    }
     if (indexPath.section ==0 && indexPath.row == 3) {
         MPMediaPickerController *mediaPicker = [[MPMediaPickerController alloc] initWithMediaTypes: MPMediaTypeMusic];
         
@@ -315,12 +319,22 @@
         }
     }
     }
-    [self.textField resignFirstResponder];
+    NSLog(@"KKOOO");
+    
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
                                                      userInfo:dic1];
 }
+
+
+-(BOOL)IsKeyboardVisible:(id)sender{
+    // Operates on the assumption that the keyboard is visible if and only if there is a first
+    // responder; i.e. a control responding to key events
+   // UIWindow* window = [UIApplication sharedApplication].keyWindow;
+   // return [sender findFirstResponder];
+}
+
 
 #pragma mark -
 #pragma mark media picker delegate method
@@ -625,7 +639,9 @@
     self.tranLabel.text = labelText;
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    [textField resignFirstResponder];
+     NSLog(@"LOOOOO");
+   // [textField resignFirstResponder];
+   
 }
 
 - (void)viewDidUnload
