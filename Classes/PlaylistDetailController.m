@@ -235,6 +235,10 @@
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [animateController release];
     }
+    if (indexPath.section ==0 && indexPath.row == 2)
+    {
+        [textField resignFirstResponder];
+    }
     if (indexPath.section ==0 && indexPath.row == 3) {
         MPMediaPickerController *mediaPicker = [[MPMediaPickerController alloc] initWithMediaTypes: MPMediaTypeMusic];
         
@@ -321,7 +325,6 @@
                                                        object:self 
                                                      userInfo:dic1];
 }
-
 #pragma mark -
 #pragma mark media picker delegate method
 - (void) mediaPicker: (MPMediaPickerController *) mediaPicker didPickMediaItems: (MPMediaItemCollection *) mediaItemCollection
@@ -625,7 +628,9 @@
     self.tranLabel.text = labelText;
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    [textField resignFirstResponder];
+     NSLog(@"LOOOOO");
+   // [textField resignFirstResponder];
+   
 }
 
 - (void)viewDidUnload

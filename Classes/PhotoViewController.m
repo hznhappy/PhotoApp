@@ -33,7 +33,7 @@
 @synthesize photoSource; 
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
-@synthesize photos,bgPhotos;
+@synthesize photos;
 @synthesize img;
 
 - (id)initWithPhotoSource:(NSMutableArray *)aSource{
@@ -823,7 +823,6 @@ else{
 - (void)dealloc {
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-    [bgPhotos release];
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];
