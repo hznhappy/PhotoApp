@@ -31,7 +31,8 @@
 		[self setClipsToBounds:YES];   
 		myscroll=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 347)];
         [self addSubview:myscroll]; 
-        [myscroll setBackgroundColor:[UIColor clearColor]]; 
+        [myscroll setBackgroundColor:[UIColor clearColor]];
+        da=[[DBOperation alloc]init];
         [self selectTable];
         [myscroll setContentSize:CGSizeMake(320, 45*[self.list count])];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Buttons) name:@"edit" object:nil];
@@ -41,7 +42,6 @@
 }
 -(void)selectTable
 {
-    da=[[DBOperation alloc]init];
     [da openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag]; 

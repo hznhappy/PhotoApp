@@ -31,6 +31,7 @@
     [backButton setTitle:b forState:UIControlStateNormal];
     UIBarButtonItem *backItem=[[UIBarButtonItem alloc]initWithCustomView:backButton];
     self.navigationItem.leftBarButtonItem =backItem;
+    [backItem release];
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityView.frame = CGRectMake(0, 0, 37.0f, 37.0f);
     activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
@@ -94,7 +95,7 @@
 }
 -(void)huyou
 {
-NSString *a=NSLocalizedString(@"Lock", @"title");
+    NSString *a=NSLocalizedString(@"Lock", @"title");
  if([self.lock.title isEqualToString:a])
  {
      [self.navigationController popViewControllerAnimated:YES];
@@ -198,8 +199,7 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
 -(void)loadPhotos {
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    for (NSURL *assetUrl in self.urlsArray) {
-        void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
+        ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
         {
             if (result == nil) 
             {
@@ -210,11 +210,12 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
             [self.crwAssets addObject:thuView];
             NSUInteger thumIndex = [self.crwAssets indexOfObject:thuView];
             thuView.index = thumIndex;
+            thuView.assetArray = self.urlsArray;
             [thuView release];
             //[self.assetArrays addObject:result];
         };
         
-        void (^failureBlock)(NSError *) = ^(NSError *error) {
+        ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error) {
             
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
                                                              message:[NSString stringWithFormat:@"Error: %@", [error description]] 
@@ -226,22 +227,14 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
             
             NSLog(@"A problem occured %@", [error description]);	                                 
         };	
-        
+    for (NSURL *assetUrl in self.urlsArray) {
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
         [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
         [library release];
     }
     [self setPhotoTag];
-    //prepare ALAsset for ThumbnailView to init PhotoViewController to display Photo;
-    for (Thumbnail *thumbnail in self.crwAssets) {
-        for (NSURL *url in self.urlsArray) {
-            [thumbnail.assetArray addObject:url];
-        }
-    }
 	[self.table reloadData];           
     [pool release];
-    
-	
 }
 -(void)setPhotoTag{
     [dataBase openDB];
@@ -509,14 +502,7 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
 	return (UIInterfaceOrientationIsPortrait(toInterfaceOrientation) || toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
--(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
-{NSLog(@"JJJJJ");
-    return YES;
-}
--(void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item
-{
-    NSLog(@"jkjk");
-}
+
 #pragma  mark -
 #pragma  mark Memory management
 -(void)viewDidUnload{

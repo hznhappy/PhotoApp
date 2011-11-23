@@ -287,7 +287,7 @@
 }
 
 
--(void)loadPhotos:(NSMutableArray *)url 
+-(void)loadPhotos:(NSURL *)url 
 {
         void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
         {
@@ -312,7 +312,7 @@
         };	
         
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-        [library assetForURL:[url objectAtIndex:0] resultBlock:assetRseult failureBlock:failureBlock];
+        [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
         [library release];
     }
 
@@ -347,7 +347,7 @@
     {
         [self getTagUrls];
         [self getUnTagUrls];
-        [self loadPhotos:unTagUrl];
+        [self loadPhotos:[self.unTagUrl objectAtIndex:0]];
         [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         NSString *u=NSLocalizedString(@"UNTAG", @"title");
@@ -365,7 +365,7 @@
         }
         else
         {
-            [self loadPhotos:dbUrl];
+            [self loadPhotos:[self.dbUrl objectAtIndex:0]];
             [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
             
         }

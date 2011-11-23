@@ -258,7 +258,7 @@ int j=1,count=0;
 	}
     [da openDB];
     User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
-    if([user1.id intValue]==0)
+    if([user1.Uid intValue]==0)
     {
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         

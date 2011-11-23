@@ -49,7 +49,7 @@
 -(void)deleteUnExitUrls;
 -(void)creatTable;
 -(void)playlistUrl:(int)row_id;
--(void)loadPhotos:(NSMutableArray *)url;
+-(void)loadPhotos:(NSURL *)url;
 -(void)Special;
 //-(void)getDate:(ALAsset*)rule;
 @end

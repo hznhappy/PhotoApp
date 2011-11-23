@@ -218,6 +218,39 @@
     }
           [pool release];
 }
+//-(NSMutableArray *)changePhotos:(NSMutableArray *)array{
+//    NSInteger page = [self centerPhotoIndex];
+//    if (_pageIndex<page) {
+////        if (page+2<[self.photoSource count]) {
+////            [self loadPhotos:[self.photoSource objectAtIndex:page+2]];
+////        }
+//        for (NSUInteger i = 0; i<5; i++) {
+////            if (i == 4) {
+////                if (page+2>[self.photoSource count]-1)
+////                    [array replaceObjectAtIndex:i withObject:[NSNull null]];
+////                else{
+////                    [array replaceObjectAtIndex:i withObject:self.img];
+////                }
+////            }else
+//                [array exchangeObjectAtIndex:i withObjectAtIndex:i+1];
+//        }    
+//    }else if(_pageIndex>page){
+////        if (page-2>=0) {
+////            [self loadPhotos:[self.photoSource objectAtIndex:page-2]];
+////        }
+//        for (NSInteger i = 4; i>=0; i--) {
+////            if (i == 0) {
+////                if (nextPage-2<0)
+////                    [self.bgPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
+////                else 
+////                    [self.bgPhotos replaceObjectAtIndex:i withObject:self.img];
+////            }else
+//                [array exchangeObjectAtIndex:i withObjectAtIndex:i-1];
+//        } 
+//    }
+//    return array;
+//
+//}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
@@ -403,10 +436,20 @@ else{
 }
 
 - (void)moveForward:(id)sender{
+    [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
+    NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
+    NSString *nextPage = [NSString stringWithFormat:@"%d",_pageIndex+1];
+    NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
+    [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];	
 }
 
 - (void)moveBack:(id)sender{
+    [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
+    NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
+    NSString *nextPage = [NSString stringWithFormat:@"%d",_pageIndex-1];
+    NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
+    [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
 }
 

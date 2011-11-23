@@ -56,4 +56,5 @@
 -(void)loadPhoto;//:(NSInteger)page; 
 -(void)anotherLoad:(id)object;
 -(void)loadPhotos:(NSURL *)url;
+//-(NSMutableArray *)changePhotos:(NSMutableArray *)array;
 @end
