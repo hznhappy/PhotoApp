@@ -193,7 +193,6 @@
 			
 			user1.id = [NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
 			user1.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
-			//user1.color = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement,2)];
 		}
 		sqlite3_finalize(statement);
 		return user1;

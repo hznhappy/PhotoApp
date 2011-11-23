@@ -29,32 +29,9 @@ int j=1,count=0;
     [self nobody];
     count = [list count];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table) name:@"add" object:nil];
-    //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddContact:) name:@"AddContact" object:nil];
 	[super viewDidLoad];
    	
 }
-//-(void)AddContact:(NSNotification *)note
-//{   NSLog(@"haoa");
-   /* NSDictionary *dic = [note userInfo];
-    [da openDB];
-    NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,[dic objectForKey:@"UserId"],[dic objectForKey:@"UserName"]];
-    NSLog(@"%@",insertUserTable);
-    [da insertToTable:insertUserTable];
-    
-    
-    NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES('%@')",idOrder,[dic objectForKey:@"UserId"]];
-    NSLog(@"%@",insertIdOrder);
-    [da insertToTable:insertIdOrder];   
-    [da closeDB];
-    [self table];*/
-    //self.UserId=[dic objectForKey:@"UserId"];
-    //UserName=[dic objectForKey:@"UserName"];
-    //NSLog(@"JJJ%@",UserId);
-    // NSLog(@"JJJ%@",UserName);
-    
-//}
-
-
 -(void)creatButton
 {
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];

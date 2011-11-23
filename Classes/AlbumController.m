@@ -9,7 +9,6 @@
 #import "AlbumController.h"
 #import "AssetTablePicker.h"
 #import "PlaylistDetailController.h"
-//#import "nicshanController.h"
 @implementation AlbumController
 @synthesize tableView,list;
 @synthesize assetGroups;
@@ -21,6 +20,10 @@
 
 #pragma mark -
 #pragma mark UIViewController method
+-(void)setLock
+{
+    NSLog(@"COCO");
+}
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
@@ -33,7 +36,10 @@
 }
 
 -(void)viewDidLoad
-{
+{/*NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
+    NSNumber *val=[defaults objectForKey:@"pa"];
+    NSLog(@"KKKK%@",val);
+    [defaults setObject:@"shan" forKey:@"pa"];*/
     date = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];
@@ -58,6 +64,10 @@
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
     editButton = [[UIBarButtonItem alloc] initWithTitle:bu style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
     addButon.style = UIBarButtonItemStyleBordered;
+    //UIImage *buttonUpImage = [UIImage imageNamed:@"empty1.png"];
+    
+    //[editButton setImage:buttonUpImage];
+    //[editButton setTitle:@"edit"];
     editButton.style = UIBarButtonItemStyleBordered;
     self.navigationItem.leftBarButtonItem = editButton;
     self.navigationItem.rightBarButtonItem = addButon;
@@ -67,6 +77,15 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
 	[super viewDidLoad];
 }
+-(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
+{NSLog(@"JJJJJ");
+    return YES;
+}
+-(void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item
+{
+    NSLog(@"jkjk");
+}
+
 -(void)creatTable
 {
     da=[[DBOperation alloc]init];

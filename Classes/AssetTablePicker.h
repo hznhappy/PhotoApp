@@ -15,7 +15,7 @@
 #define TAG @"TAG"
 
 
-@interface AssetTablePicker : UIViewController<UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface AssetTablePicker : UIViewController<UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>
 {
     UIActivityIndicatorView *_activityView;
     UITableView *table;
@@ -24,6 +24,7 @@
     UIBarButtonItem *save;
     UIBarButtonItem *reset;
     UIBarButtonItem *cancel;
+    UIBarButtonItem *lock;
     NSString *selectName;
 
 	ALAssetsGroup *assetGroup;
@@ -43,12 +44,18 @@
     NSString *UserName;
     NSMutableArray *UrlList;
     NSString *PLAYID;
+    UIAlertView *alert1;
+    UITextField *passWord;
+    BOOL ME;
+    NSNumber *val;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;
 @property (nonatomic,retain)IBOutlet UIToolbar *tagBar;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *save;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
+@property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
+
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;

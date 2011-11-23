@@ -36,3 +36,7 @@
 "rippleEffect"="rippleEffect";
 "pageCurl"="pageCurl";
 "pageUnCurl"="pageUnCurl";
+"UnLock"="UnLock";
+"Back"="Back";
+"Lock"="Lock";
+"The password is wrong"="The password is wrong";

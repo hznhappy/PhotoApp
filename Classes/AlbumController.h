@@ -13,7 +13,7 @@
 #define playIdTable @"playIdTable"
 #define playIdOrder @"PlayIdOrder"
 #define Rules @"Rules"
-@interface AlbumController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
+@interface AlbumController : UIViewController<UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>{
     
     IBOutlet UITableView *tableView;
     NSMutableArray *list;
@@ -41,7 +41,7 @@
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property(nonatomic,retain)NSMutableArray *list;
 @property(nonatomic,retain)ALAsset *img;
-
+-(void)setLock;
 -(void)getAssetGroup;
 -(void)getAllUrls;
 -(void)getTagUrls;
