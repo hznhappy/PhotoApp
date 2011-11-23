@@ -108,9 +108,7 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
 }
 -(void)alertView:(UIAlertView *)alert1 didDismissWithButtonIndex:(NSInteger)buttonIndex{
     NSString *pass=[NSString stringWithFormat:@"%@",val];
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
-    [defaults setObject:pass forKey:@"name_preference"];
-    NSString *a=NSLocalizedString(@"Lock", @"title");
+       NSString *a=NSLocalizedString(@"Lock", @"title");
     NSString *b=NSLocalizedString(@"note", @"title");
     NSString *c=NSLocalizedString(@"ok", @"title");
     NSString *d=NSLocalizedString(@"The password is wrong", @"title");
@@ -121,13 +119,24 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
             if(PASS==YES)
             {NSLog(@"FRF");
                 NSLog(@"KKK%@",passWord2.text);
+                if(passWord2.text==nil||passWord2.text.length==0)
+                {
+                    NSLog(@"KKK");
+                }
+                else
+                {
+                    NSLog(@"BULLL");
                 NSUserDefaults *defaults1=[NSUserDefaults standardUserDefaults]; 
                 [defaults1 setObject:passWord2.text forKey:@"name_preference"]; 
+                }
                 PASS=NO;
             }
             else if([passWord.text isEqualToString:pass])
-            {
-                self.lock.title=a;
+            { 
+            
+                NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
+                [defaults setObject:pass forKey:@"name_preference"];
+                 self.lock.title=a;
                 //[val release];
                
             }
@@ -206,7 +215,6 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
 -(void)loadPhotos {
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    for (NSURL *assetUrl in self.urlsArray) {
         void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
         {
             if (result == nil) 
@@ -234,7 +242,7 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
             
             NSLog(@"A problem occured %@", [error description]);	                                 
         };	
-        
+    for (NSURL *assetUrl in self.urlsArray) {
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
         [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
         [library release];

@@ -55,8 +55,9 @@
 		[tagOverlay setHidden:YES];
 		[self addSubview:tagOverlay];
       
-        
-        self.tagBg = [[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
+        UIView *BU=[[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
+        self.tagBg =BU;
+        [BU release];
         [self.tagBg setBackgroundColor:[UIColor whiteColor]];
         CGPoint tagBgCenter = tagBg.center;
         self.tagBg.layer.cornerRadius = 25 / 2.0;

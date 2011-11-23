@@ -347,7 +347,7 @@
     {
         [self getTagUrls];
         [self getUnTagUrls];
-        [self loadPhotos:unTagUrl];
+        [self loadPhotos:self.unTagUrl];
         [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         NSString *u=NSLocalizedString(@"UNTAG", @"title");
@@ -365,7 +365,7 @@
         }
         else
         {
-            [self loadPhotos:dbUrl];
+            [self loadPhotos:self.dbUrl];
             [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
             
         }
