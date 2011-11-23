@@ -35,7 +35,7 @@
    // NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	/* Similar to the AppPrefs sample, we first test to see if the preferences
      settings exist, and create if needed. */
-	/*NSData *testValue = [defaults dataForKey:kSettingKey]; /* setting exists? */
+	/*NSData *testValue = [defaults dataForKey:kSettingKey]; // setting exists? */
 	/*if (testValue == nil) {
         NSLog(@"NIL");
 		NSString *pathStr = [[NSBundle mainBundle] bundlePath];

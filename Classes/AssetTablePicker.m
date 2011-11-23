@@ -39,6 +39,7 @@
     [activityView release];
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
+    [backItem release];
     [tempArray release];
     self.table.delegate = self;
     self.table.maximumZoomScale = 2;
@@ -226,6 +227,7 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
             [self.crwAssets addObject:thuView];
             NSUInteger thumIndex = [self.crwAssets indexOfObject:thuView];
             thuView.index = thumIndex;
+            thuView.assetArray = self.urlsArray;
             [thuView release];
             //[self.assetArrays addObject:result];
         };
@@ -249,11 +251,11 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
     }
     [self setPhotoTag];
     //prepare ALAsset for ThumbnailView to init PhotoViewController to display Photo;
-    for (Thumbnail *thumbnail in self.crwAssets) {
-        for (NSURL *url in self.urlsArray) {
-            [thumbnail.assetArray addObject:url];
-        }
-    }
+//    for (Thumbnail *thumbnail in self.crwAssets) {
+//        for (NSURL *url in self.urlsArray) {
+//            [thumbnail.assetArray addObject:url];
+//        }
+//    }
 	[self.table reloadData];           
     [pool release];
     
@@ -398,6 +400,7 @@ NSString *a=NSLocalizedString(@"Lock", @"title");
     nameController.bo=[NSString stringWithFormat:@"yes"];
 	UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:nameController];
 	[self presentModalViewController:navController animated:YES];
+    [navController release];
     [nameController release];
 }
 -(IBAction)selectFromAllNames{
