@@ -13,7 +13,7 @@
 #define OPTIONAL @"Optional"
 #define Rules    @"Rules"
 @class DBOperation;
-@interface PlaylistDetailController : UIViewController<UITableViewDelegate,UITableViewDataSource,MPMediaPickerControllerDelegate> {
+@interface PlaylistDetailController : UIViewController<UITableViewDelegate,UITableViewDataSource,MPMediaPickerControllerDelegate,UITextFieldDelegate> {
     UITableView *listTable;
     UITableViewCell *textFieldCell;
     UITableViewCell *switchCell;
@@ -38,8 +38,8 @@
     NSMutableArray *playIdList;
     NSMutableArray *orderList;
     UIButton *stateButton;
-    int key;
     NSMutableArray *photos;
+    int key;
 }
 @property(nonatomic,retain)IBOutlet UITableView *listTable;
 @property(nonatomic,retain)IBOutlet UITableViewCell *textFieldCell;
@@ -72,4 +72,5 @@
 -(void)creatTable;
 -(void)update:(NSInteger)Row rule:(int)rule playId:(int)playId;
 -(void)international;
+-(void)addPlay;
 @end

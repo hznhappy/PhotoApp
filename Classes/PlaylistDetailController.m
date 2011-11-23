@@ -61,6 +61,14 @@
   {
       self.tranLabel.text=Transtion;
   }
+    NSString *b=NSLocalizedString(@"Back", @"title");
+    UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
+    [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setTitle:b forState:UIControlStateNormal];
+    UIBarButtonItem *backItem=[[UIBarButtonItem alloc]initWithCustomView:backButton];
+    self.navigationItem.leftBarButtonItem =backItem;
+    [backItem release];
+
     key=0;
     mySwc = NO;
     selectImg = [UIImage imageNamed:@"Selected.png"];
@@ -73,6 +81,7 @@
     NSMutableArray *temArray = [[NSMutableArray alloc]init];
     self.selectedIndexPaths = temArray;
     self.userNames = tempArray;
+    self.textField.delegate=self;
     [IdOrderArray release];
     [IdArray release];
     [tempArray release];
@@ -96,6 +105,32 @@
     [dataBase closeDB];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
     [super viewDidLoad];
+}
+-(void)huyou
+{
+if(textField.text==nil||textField.text.length==0)
+{
+ if(a==nil)
+{
+    [dataBase openDB];
+    NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
+    NSLog(@"%@",deletePlayTable );
+    [dataBase deleteDB:deletePlayTable ]; 
+    NSString *deleteplayIdOrder= [NSString stringWithFormat:@"DELETE FROM playIdOrder WHERE play_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
+    NSLog(@"%@",deleteplayIdOrder);
+    [dataBase deleteDB:deleteplayIdOrder]; 
+    [dataBase closeDB];
+
+    
+}
+else
+{}
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                       object:self 
+                                                     userInfo:dic1];
+}
+    [self.navigationController popViewControllerAnimated:YES]; 
 }
 #pragma mark -
 #pragma mark UITableView  method
@@ -225,6 +260,14 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.textField resignFirstResponder];
+     /*if(textField.text==nil||textField.text.length==0)
+     {
+     }
+    else
+    {
+    [self addPlay];    
+    }
+*/
     if (indexPath.section ==0 && indexPath.row == 1) {
         AnimaSelectController *animateController = [[AnimaSelectController alloc]init];
         animateController.tranStyle = self.tranLabel.text;
@@ -346,7 +389,7 @@
 {
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [dataBase createTable:createPlayTable];
-    NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT)",playIdOrder];
+    NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT PRIMARY KEY)",playIdOrder];
     [dataBase createTable:createPlayIdOrder];
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdOrder"];
     [dataBase selectOrderId:selectPlayIdOrder];
@@ -505,10 +548,10 @@
 #pragma mark IBAction method
 -(IBAction)hideKeyBoard:(id)sender{
     [sender resignFirstResponder];
-    key=key+1;
-    dataBase=[[DBOperation alloc]init];
-    [dataBase openDB];
-    if(textField.text==nil||textField.text.length==0)
+    key=1;
+   // dataBase=[[DBOperation alloc]init];
+    
+    /*if(textField.text==nil||textField.text.length==0)
     {
         NSString *c=NSLocalizedString(@"note", @"title");
         NSString *b=NSLocalizedString(@"ok", @"title");
@@ -524,52 +567,68 @@
     }
     else
     {
-        if(a==nil)
+        [self addPlay];
+    }   
+*/
+}
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSLog(@"wpro");
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField1
+{
+    NSLog(@"end");
+    if(textField.text==nil||textField.text.length==0)
     {
-    if(key==1)
-     {
-        NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,textField.text];
-        NSLog(@"%@",insertPlayTable);
-        [dataBase insertToTable:insertPlayTable];
-        
-        NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
-        [dataBase selectFromPlayTable:selectPlayTable];
-        self.playIdList=dataBase.playIdAry;
-        NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
-        NSLog(@"%@",insertPlayIdOrder);
-        [dataBase insertToTable:insertPlayIdOrder];
-        }
-        else
+        NSString *c=NSLocalizedString(@"note", @"title");
+        NSString *b=NSLocalizedString(@"ok", @"title");
+        NSString *d=NSLocalizedString(@"Rule name can not be empty!", @"title");
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:c
+                              message:d
+                              delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:b,nil];
+        [alert show];
+        [alert release];
+        if(a!=nil)
         {
-            NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playlist_name='%@' WHERE playlist_id=%d",PlayTable,textField.text,[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
-            NSLog(@"%@",updateRules);
-            [dataBase updateTable:updateRules];
- 
+            textField.text=listName;
         }
-        NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
-                                                           object:self 
-                                                         userInfo:dic1];
-        
     }
-   else{
-        
-       NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playlist_name='%@' WHERE playlist_id=%d",PlayTable,textField.text,[a intValue]];
-       NSLog(@"%@",updateRules);
-       [dataBase updateTable:updateRules];
-       NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
-       [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
-                                                          object:self 
-                                                        userInfo:dic1];
-
-
-
-       }
-    }
+    else
+    {
+        [self addPlay];
+    }   
     
 
 }
+-(void)addPlay
+{[dataBase openDB];
+    if(a==nil)
+    {
+        NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_name,playList_id) VALUES('%@',%d)",PlayTable,textField.text,[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
+        NSLog(@"%@",insertPlayTable);
+        [dataBase insertToTable:insertPlayTable];
+        NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(play_id) VALUES(%d)",playIdOrder,[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
+        NSLog(@"%@",insertPlayIdOrder);
+        [dataBase insertToTable:insertPlayIdOrder];
+    }
+    else{
+        key=1;
+        NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playlist_name='%@' WHERE playlist_id=%d",PlayTable,textField.text,[a intValue]];
+        NSLog(@"%@",updateRules);
+        [dataBase updateTable:updateRules];
+    }
+    [dataBase closeDB];
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                       object:self 
+                                                     userInfo:dic1];
+    
 
+
+}
 
 -(IBAction)updateTable:(id)sender{
     UISwitch *newSwitcn  = (UISwitch *)sender;
