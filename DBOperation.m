@@ -191,7 +191,7 @@
 	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		while (sqlite3_step(statement)==SQLITE_ROW) {
 			
-			user1.id = [NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
+			user1.Uid = [NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
 			user1.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
 		}
 		sqlite3_finalize(statement);

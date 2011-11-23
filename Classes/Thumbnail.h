@@ -34,6 +34,7 @@
 @property (nonatomic,retain)UIViewController *fatherController;
 @property (nonatomic,retain)NSMutableArray *assetArray;
 @property (nonatomic,retain)NSMutableArray *photos;
+@property (nonatomic,retain)UIView *tagBg;
 
 -(id)initWithAsset:(ALAsset*)_asset;
 -(BOOL)selected;
