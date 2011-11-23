@@ -43,7 +43,6 @@
 @property(nonatomic,retain)NSMutableArray *listid;
 @property(nonatomic,retain)UIImage *img;
 @property(nonatomic,retain)NSMutableArray *bgPhotos;
-
 @property(nonatomic,retain)NSMutableArray *photos;
 @property(nonatomic,retain) NSMutableArray *photoSource;
 @property(nonatomic,retain) NSMutableArray *photoViews;
@@ -55,6 +54,6 @@
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;
 -(void)loadPhoto;//:(NSInteger)page; 
--(void)anotherLoad;
+-(void)anotherLoad:(id)object;
 -(void)loadPhotos:(NSURL *)url;
 @end

@@ -325,16 +325,6 @@
                                                        object:self 
                                                      userInfo:dic1];
 }
-
-
--(BOOL)IsKeyboardVisible:(id)sender{
-    // Operates on the assumption that the keyboard is visible if and only if there is a first
-    // responder; i.e. a control responding to key events
-   // UIWindow* window = [UIApplication sharedApplication].keyWindow;
-   // return [sender findFirstResponder];
-}
-
-
 #pragma mark -
 #pragma mark media picker delegate method
 - (void) mediaPicker: (MPMediaPickerController *) mediaPicker didPickMediaItems: (MPMediaItemCollection *) mediaItemCollection

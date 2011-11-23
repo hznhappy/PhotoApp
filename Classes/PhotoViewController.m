@@ -128,7 +128,6 @@
 
 -(void)loadPhoto//(NSInteger)page
 {
-    NSLog(@"load five photos");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
     {
@@ -182,19 +181,20 @@
     }     
     [pool release];
     self.photos = self.bgPhotos;
-   // NSLog(@"prepare %@",self.photos);
 }
--(void)anotherLoad
+-(void)anotherLoad:(id)object
 {
+    NSArray *array = (NSArray *)object;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    NSInteger page = [self centerPhotoIndex];
-    if (_pageIndex<page) {
-        if (page+2<[self.photoSource count]) {
-            [self loadPhotos:[self.photoSource objectAtIndex:page+2]];
+    NSInteger currentPage = [[array objectAtIndex:0]integerValue];
+    NSInteger nextPage = [[array objectAtIndex:1]integerValue];
+    if (currentPage<nextPage) {
+        if (nextPage+2<[self.photoSource count]) {
+            [self loadPhotos:[self.photoSource objectAtIndex:nextPage+2]];
         }
         for (NSUInteger i = 0; i<5; i++) {
             if (i == 4) {
-                if (page+2>[self.photoSource count]-1)
+                if (nextPage+2>[self.photoSource count]-1)
                     [self.bgPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
                 else{
                     [self.bgPhotos replaceObjectAtIndex:i withObject:self.img];
@@ -202,13 +202,13 @@
             }else
             [self.bgPhotos exchangeObjectAtIndex:i withObjectAtIndex:i+1];
         }    
-    }else if(_pageIndex>page){
-        if (page-2>=0) {
-            [self loadPhotos:[self.photoSource objectAtIndex:page-2]];
+    }else if(currentPage>nextPage){
+        if (nextPage-2>=0) {
+            [self loadPhotos:[self.photoSource objectAtIndex:nextPage-2]];
         }
         for (NSInteger i = 4; i>=0; i--) {
             if (i == 0) {
-                if (page-2<0)
+                if (nextPage-2<0)
                     [self.bgPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
                 else 
                     [self.bgPhotos replaceObjectAtIndex:i withObject:self.img];
@@ -636,7 +636,6 @@ else{
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	
 	NSInteger _index = [self centerPhotoIndex];
-    [self performSelectorInBackground:@selector(anotherLoad) withObject:nil];
     //[self anotherLoad];
 	if (_index >= [self.photoSource count] || _index < 0) {
 		return;
@@ -645,12 +644,18 @@ else{
 	if (_pageIndex != _index && !_rotating) {
         
 		[self setBarsHidden:YES animated:YES];
+        [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
+        NSLog(@"%@ is ph:",self.photos);
+        NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
+        NSString *nextPage = [NSString stringWithFormat:@"%d",_index];
+        NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
+        [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
+
 		_pageIndex = _index;
 		[self setViewState];
 		
 		if (![scrollView isTracking]) {
 			[self layoutScrollViewSubviews];
-            NSLog(@"not tracking");
 		}
 		
 	}
@@ -664,15 +669,18 @@ else{
 		return;
 	}	
    // [self performSelectorOnMainThread:@selector(anotherLoad) withObject:nil waitUntilDone:YES];
-    [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
-	[self moveToPhotoAtIndex:_index animated:YES];
-    NSLog(@"end");
-    
+    //[self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
+//    [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
+//    NSLog(@"%@ is ph:",self.photos);
+//    NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
+//    NSString *nextPage = [NSString stringWithFormat:@"%d",_index];
+//    NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
+//    [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
+	[self moveToPhotoAtIndex:_index animated:YES];    
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
 	[self layoutScrollViewSubviews];
-    NSLog(@"begin");
 }
 
 
