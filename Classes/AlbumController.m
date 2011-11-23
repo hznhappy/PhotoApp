@@ -474,6 +474,7 @@
                 }
                 
             }
+            [t release];
         }
         else
         {
