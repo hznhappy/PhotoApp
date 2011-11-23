@@ -88,7 +88,7 @@
 	}
 	self.photoViews = views;
     editing=NO;
-    self.listid=[[NSMutableArray arrayWithCapacity:100]retain];
+    self.listid=[NSMutableArray arrayWithCapacity:100];
      NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;

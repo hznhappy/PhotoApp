@@ -101,7 +101,7 @@
 	UITouch *touch = [touches anyObject];
     
 	if (touch.tapCount == 1) {
-		[self performSelector:@selector(toggleBars) withObject:nil afterDelay:.2];
+		[self performSelector:@selector(toggleBars) withObject:nil afterDelay:.3];
 	} else if (touch.tapCount == 2) {
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(toggleBars) object:nil];
 		[self zoomRectWithCenter:[[touches anyObject] locationInView:self]];

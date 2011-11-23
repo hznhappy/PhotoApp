@@ -47,7 +47,9 @@
     UIAlertView *alert1;
     UITextField *passWord;
     BOOL ME;
+    BOOL PASS;
     NSNumber *val;
+    UITextField *passWord2;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;

@@ -22,10 +22,10 @@
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
-    NSLog(@"KO");
+   
     
     
-     NSString *b=NSLocalizedString(@"Back", @"title");
+    NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
     [backButton setTitle:b forState:UIControlStateNormal];
@@ -88,6 +88,7 @@
     passWord.secureTextEntry = YES;
     [alert1 addSubview:passWord];  
     ME=NO;
+    PASS=NO;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
@@ -108,9 +109,7 @@
 }
 -(void)alertView:(UIAlertView *)alert1 didDismissWithButtonIndex:(NSInteger)buttonIndex{
     NSString *pass=[NSString stringWithFormat:@"%@",val];
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
-    [defaults setObject:pass forKey:@"name_preference"];
-    NSString *a=NSLocalizedString(@"Lock", @"title");
+       NSString *a=NSLocalizedString(@"Lock", @"title");
     NSString *b=NSLocalizedString(@"note", @"title");
     NSString *c=NSLocalizedString(@"ok", @"title");
     NSString *d=NSLocalizedString(@"The password is wrong", @"title");
@@ -118,9 +117,27 @@
     {
     switch (buttonIndex) {
         case 0:
-            if([passWord.text isEqualToString:pass])
-            {
-                self.lock.title=a;
+            if(PASS==YES)
+            {NSLog(@"FRF");
+                NSLog(@"KKK%@",passWord2.text);
+                if(passWord2.text==nil||passWord2.text.length==0)
+                {
+                    NSLog(@"KKK");
+                }
+                else
+                {
+                    NSLog(@"BULLL");
+                NSUserDefaults *defaults1=[NSUserDefaults standardUserDefaults]; 
+                [defaults1 setObject:passWord2.text forKey:@"name_preference"]; 
+                }
+                PASS=NO;
+            }
+            else if([passWord.text isEqualToString:pass])
+            { 
+            
+                NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
+                [defaults setObject:pass forKey:@"name_preference"];
+                 self.lock.title=a;
                 //[val release];
                
             }
@@ -228,6 +245,7 @@
             NSLog(@"A problem occured %@", [error description]);	                                 
         };	
     for (NSURL *assetUrl in self.urlsArray) {
+        [assetUrl retain];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
         [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
         [library release];
@@ -296,13 +314,34 @@
     if([self.lock.title isEqualToString:a])
     { NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
         val=[[defaults objectForKey:@"name_preference"]retain];
+        if(val==nil)
+        { PASS=YES;
+            NSLog(@"KO");
+           UIAlertView *alert2 = [[UIAlertView alloc]initWithTitle:@"密码为空,请设置密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
+            passWord2= [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
+            passWord2.backgroundColor = [UIColor whiteColor];  
+            passWord2.secureTextEntry = YES;
+            [alert2 addSubview:passWord2];  
+            NSLog(@"UUUU%@",passWord2);
+           
+            [alert2 show];
+            [alert2 release];
+           
+           // ME=YES;
+        }
+        else{
         [lock setTitle:b];
+        }
     }
      else
      {   ME=NO;
         [alert1 show];
     }
    // [UIApplication sharedApplication].idleTimerDisabled = YES;
+}
+-(void)alert
+{
+    
 }
 -(IBAction)saveTags{
     if(UserId==nil)
@@ -354,6 +393,7 @@
     nameController.bo=[NSString stringWithFormat:@"yes"];
 	UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:nameController];
 	[self presentModalViewController:navController animated:YES];
+    [navController release];
     [nameController release];
 }
 -(IBAction)selectFromAllNames{

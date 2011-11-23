@@ -77,15 +77,6 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
 	[super viewDidLoad];
 }
--(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
-{NSLog(@"JJJJJ");
-    return YES;
-}
--(void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item
-{
-    NSLog(@"jkjk");
-}
-
 -(void)creatTable
 {
     da=[[DBOperation alloc]init];
@@ -314,7 +305,7 @@
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
         [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
         [library release];
-    }
+}
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -336,14 +327,14 @@
     {
         ALAssetsGroup *group = (ALAssetsGroup*)[assetGroups objectAtIndex:0];
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-         NSInteger gCount = [group numberOfAssets];
+        NSInteger gCount = [group numberOfAssets];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         NSString *u=NSLocalizedString(@"ALL", @"title");
         cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,gCount];
         [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:0] posterImage]]];
-
+        
     }
-     else if([[list objectAtIndex:indexPath.row]intValue]==2)
+    else if([[list objectAtIndex:indexPath.row]intValue]==2)
     {
         [self getTagUrls];
         [self getUnTagUrls];
@@ -351,17 +342,17 @@
         [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         NSString *u=NSLocalizedString(@"UNTAG", @"title");
-         cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,[unTagUrl count]];
+        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,[unTagUrl count]];
     }
     else
     {
-         
+        
         
         int row=[[list objectAtIndex:indexPath.row]intValue];
         [self playlistUrl:row];
         if([dbUrl count]==0)
         {
-      [cell.imageView setImage:[UIImage imageNamed:@"empty1.png"]];
+            [cell.imageView setImage:[UIImage imageNamed:@"empty1.png"]];
         }
         else
         {
@@ -370,10 +361,10 @@
             
         }
         cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",user3.name,[dbUrl count]];
-
-   }
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-
+        
+    }
+    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    
     [da closeDB];
     return cell;
 }
@@ -457,7 +448,7 @@
         if([self.SUM count]==0)
         {
             NSLog(@"0A");
-            NSMutableSet *t=[[NSMutableArray alloc]init];
+            NSMutableSet *t=[[NSMutableSet alloc]init];
             for (NSURL *url in allUrl) {
                 NSString *str= [NSString stringWithFormat:@"%@",url];
                 [t addObject:str];

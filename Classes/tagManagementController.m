@@ -51,6 +51,7 @@ int j=1,count=0;
     [tools setItems:buttons animated:NO];
     UIBarButtonItem *myBtn = [[UIBarButtonItem alloc] initWithCustomView:tools];
     self.navigationItem.rightBarButtonItem = myBtn;
+    [myBtn release];
     [editButton release];
     [BackButton release];
     [addButon release];

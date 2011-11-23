@@ -96,16 +96,16 @@
     [playArray release];
     [playArray1 release];
     [playArray2 release];
-    NSString *newid;
-    NSString *newUrl;
-    NSString *newName;
+    //newid;
+    //NSString *newUrl;
+    //NSString *newName;
     sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-            newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
-            newUrl=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 1)];
-            newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement, 2)];
+           NSString *newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
+            NSString *newUrl=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 1)];
+            NSString *newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement, 2)];
             [tagIdAry addObject:newid];
             [tagUrl addObject:newUrl];
             [tagUserName addObject:newName];

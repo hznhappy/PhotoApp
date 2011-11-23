@@ -13,7 +13,7 @@
 @synthesize overlay,load;
 @synthesize fatherController;
 @synthesize assetArray,photos;
-@synthesize index;
+@synthesize index,tagBg;
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         // Initialization code
@@ -48,19 +48,20 @@
 		[selectOverlay setHidden:YES];
         selectOverlay.alpha = 0.5f;
 		[self addSubview:selectOverlay];
-		[selectOverlay release];
+		
         
 		tagOverlay = [[UIImageView alloc] initWithFrame:viewFrames];
 		[tagOverlay setImage:[UIImage imageNamed:@"tagOverlay.png"]];
 		[tagOverlay setHidden:YES];
 		[self addSubview:tagOverlay];
-        [tagOverlay release];
-        
-        tagBg = [[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
-        [tagBg setBackgroundColor:[UIColor whiteColor]];
+      
+        UIView *BU=[[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
+        self.tagBg =BU;
+        [BU release];
+        [self.tagBg setBackgroundColor:[UIColor whiteColor]];
         CGPoint tagBgCenter = tagBg.center;
-        tagBg.layer.cornerRadius = 25 / 2.0;
-        tagBg.center = tagBgCenter;
+        self.tagBg.layer.cornerRadius = 25 / 2.0;
+        self.tagBg.center = tagBgCenter;
 
         UIView *tagCount = [[UIView alloc]initWithFrame:CGRectMake(2.6, 2.2, 20, 20)];
         tagCount.backgroundColor = [UIColor colorWithRed:182/255.0 green:0 blue:0 alpha:1];
@@ -73,16 +74,16 @@
         count.textAlignment = UITextAlignmentCenter;
         count.font = [UIFont boldSystemFontOfSize:11];
         [tagCount addSubview:count];
-        [tagBg addSubview:tagCount];
-        [self addSubview:tagBg];
-        tagBg.hidden=YES; 
+        [self.tagBg addSubview:tagCount];
+        [self addSubview:self.tagBg];
+        self.tagBg.hidden=YES; 
         [tagCount release];
     }
 	return self;	
 }
 -(void)setOverlayHidden:(NSString *)hide{
     count.text = hide;
-    tagBg.hidden=NO; 
+    self.tagBg.hidden=NO; 
 
 }
 
@@ -94,7 +95,7 @@
     overlayView.hidden = hide;
     if([count.text intValue]-1==0)
     {
-        tagBg.hidden=YES; 
+        self.tagBg.hidden=YES; 
     }
     count.text = [NSString stringWithFormat:@"%d",[count.text intValue]-1];
 
@@ -112,7 +113,7 @@
                                                              userInfo:dic];
            
             count.text = [NSString stringWithFormat:@"%d",[count.text intValue]+1];
-            tagBg.hidden=NO;
+            self.tagBg.hidden=NO;
         }
         else
         {
@@ -123,7 +124,7 @@
                                                              userInfo:dic];
             if([count.text intValue]-1==0)
             {
-                  tagBg.hidden=YES; 
+                  self.tagBg.hidden=YES; 
             }
             count.text = [NSString stringWithFormat:@"%d",[count.text intValue]-1];
             
@@ -163,6 +164,10 @@
     [asset release];
 	[fatherController release];
 	[assetArray release];
+    [tagBg release];
+    [count release];
+    [selectOverlay release];
+    [tagOverlay release];
     [super dealloc];
 }
 
