@@ -311,10 +311,12 @@
             NSLog(@"A problem occured %@", [error description]);	                                 
         };	
         
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-        [library assetForURL:[url objectAtIndex:0] resultBlock:assetRseult failureBlock:failureBlock];
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        if (url != nil && [url count] > 0) {
+            [library assetForURL:[url objectAtIndex:0] resultBlock:assetRseult failureBlock:failureBlock];
+        }
         [library release];
-    }
+}
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -457,7 +459,7 @@
         if([self.SUM count]==0)
         {
             NSLog(@"0A");
-            NSMutableSet *t=[[NSMutableArray alloc]init];
+            NSMutableSet *t=[[NSMutableSet alloc]init];
             for (NSURL *url in allUrl) {
                 NSString *str= [NSString stringWithFormat:@"%@",url];
                 [t addObject:str];
