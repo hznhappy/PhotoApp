@@ -274,9 +274,25 @@
     [pool release];
 }
 -(void)setPhotoTag{
-    
+    [dataBase openDB];
+    NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
+    NSMutableArray *photos = [dataBase selectPhotos:selectSql];
+    for (NSString *dataStr in photos) {
+        NSURL *dbStr = [NSURL URLWithString:dataStr];
+        for (Thumbnail *thumbnail in self.crwAssets) {
+            NSUInteger index = [self.crwAssets indexOfObject:thumbnail];
+            NSURL *thumStr = [self.urlsArray objectAtIndex:index];
+            if ([dbStr isEqual:thumStr]) {
+                NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
+                [dataBase selectFromTAG:selectTag];
+                NSString *num=[NSString stringWithFormat:@"%d",[dataBase.tagIdAry count]];
+                [thumbnail setOverlayHidden:num];
+                
+            }
+        }
+    } 
+    [dataBase closeDB];
 }
-
 
 #pragma mark -
 #pragma mark ButtonAction Methods
