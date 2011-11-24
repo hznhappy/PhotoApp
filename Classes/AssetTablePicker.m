@@ -224,10 +224,29 @@
             }
             thuView = [[Thumbnail alloc] initWithAsset:result];
             thuView.fatherController = self;
+            
             [self.crwAssets addObject:thuView];
             NSUInteger thumIndex = [self.crwAssets indexOfObject:thuView];
+            
             thuView.index = thumIndex;
             thuView.assetArray = self.urlsArray;
+            [dataBase openDB];
+            
+            NSString *resultUrl = [NSString stringWithFormat:@"%@",[[result defaultRepresentation]url]];
+
+            NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",resultUrl];
+            [dataBase selectFromTAG:selectTag];
+            
+            NSInteger count = [dataBase.tagIdAry count];
+            
+            NSString *num=[NSString stringWithFormat:@"%d", count];
+
+            if (count > 0) {
+                [thuView setOverlayHidden:num];
+
+            }
+            [dataBase closeDB];
+            
             [thuView release];
             //[self.assetArrays addObject:result];
         };
@@ -244,35 +263,18 @@
             
             NSLog(@"A problem occured %@", [error description]);	                                 
         };	
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
     for (NSURL *assetUrl in self.urlsArray) {
         [assetUrl retain];
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
         [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
-        [library release];
     }
-    [self setPhotoTag];
-	[self.table reloadData];           
+    [library release];
+    //[self setPhotoTag];
+	[self.table reloadData];     
     [pool release];
 }
 -(void)setPhotoTag{
-    [dataBase openDB];
-    NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
-    NSMutableArray *photos = [dataBase selectPhotos:selectSql];
-    for (NSString *dataStr in photos) {
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        for (Thumbnail *thumbnail in self.crwAssets) {
-            NSUInteger index = [self.crwAssets indexOfObject:thumbnail];
-            NSURL *thumStr = [self.urlsArray objectAtIndex:index];
-            if ([dbStr isEqual:thumStr]) {
-                NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
-                [dataBase selectFromTAG:selectTag];
-                NSString *num=[NSString stringWithFormat:@"%d",[dataBase.tagIdAry count]];
-                [thumbnail setOverlayHidden:num];
-                
-            }
-        }
-    } 
-    [dataBase closeDB];
+    
 }
 
 

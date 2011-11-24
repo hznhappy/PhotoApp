@@ -157,7 +157,6 @@
                                   usingBlock:assetGroupEnumerator 
                                 failureBlock:assetGroupEnumberatorFailure];
            
-           
            [library release];
            [pool release];
        });
@@ -281,31 +280,36 @@
 
 -(void)loadPhotos:(NSURL *)url 
 {
-        void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
+    {
+        if (result == nil) 
         {
-            if (result == nil) 
-            {
-                return;
-            }
-            self.img=result;
-            };
+            return;
+        }
+        self.img=result;
+    };
+    
+    void (^failureBlock)(NSError *) = ^(NSError *error) {
         
-        void (^failureBlock)(NSError *) = ^(NSError *error) {
-            
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                             message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-                                                            delegate:nil 
-                                                   cancelButtonTitle:@"Ok" 
-                                                   otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            
-            NSLog(@"A problem occured %@", [error description]);	                                 
-        };	
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+                                                        delegate:nil 
+                                               cancelButtonTitle:@"Ok" 
+                                               otherButtonTitles:nil];
+        [alert show];
+        [alert release];
         
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-        [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
-        [library release];
+        NSLog(@"A problem occured %@", [error description]);	                                 
+    };	
+    
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+    [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
+    [library release];
+    [pool release];
+    //NSLog(@"url count is:%d" ,[url retainCount]);
+
+
 }
 
 
@@ -456,6 +460,7 @@
             }
             
             self.SUM=t;
+            [t release];
             for (NSString *data in da.tagUrl)
             {
                 if([self.SUM containsObject:data]) 
