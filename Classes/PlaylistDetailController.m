@@ -34,7 +34,7 @@
     [tranCell release];
     [musicCell release];
     [listTable release];
-    [dataBase release];
+    //[dataBase release];
     [listName release];
     [userNames release];
     [state release];
@@ -352,7 +352,7 @@
 }
 -(void)creatTable
 {
-    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
+    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];//OrderID INTEGER PRIMARY KEY,
     [dataBase createTable:createIdOrder];
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [dataBase createTable:createPlayTable];
@@ -643,7 +643,7 @@
     musicCell = nil;
     musicLabel = nil;
     a = nil;
-    dataBase = nil;
+    //dataBase = nil;
     listTable =nil;
     listName = nil;
     userNames = nil;

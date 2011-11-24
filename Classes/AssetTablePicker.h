@@ -61,7 +61,7 @@
 @property(nonatomic,retain)NSString *UserName;
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
 
-@property (nonatomic,retain) DBOperation *dataBase;
+//@property (nonatomic,retain) DBOperation *dataBase;
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain) NSMutableArray *images;
 @property (nonatomic,retain) NSMutableArray *crwAssets;

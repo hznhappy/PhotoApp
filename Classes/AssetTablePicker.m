@@ -12,7 +12,7 @@
 #import "tagManagementController.h"
 @implementation AssetTablePicker
 @synthesize assetGroup;
-@synthesize dataBase;
+//@synthesize dataBase;
 @synthesize crwAssets,assetArrays,urlsArray,selectUrls,dateArry;
 @synthesize table;
 @synthesize viewBar,tagBar;
@@ -55,9 +55,9 @@
 	[self.table setAllowsSelection:NO];
     [self setWantsFullScreenLayout:YES];
     
-    DBOperation *db = [DBOperation getInstance];
-    self.dataBase = db;
-    [db release];
+    //DBOperation *db = [DBOperation getInstance];
+    dataBase =[DBOperation getInstance];
+    //[db release];
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
     [temp release];
@@ -374,8 +374,8 @@
     }
     else
     {
-        for(int i=0;i<[UrlList count];i++)
-        {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[UrlList objectAtIndex:i],self.UserName];
+        for(int i=0;i<[self.UrlList count];i++)
+        {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[self.UrlList objectAtIndex:i],self.UserName];
             [dataBase insertToTable:insertTag];
         }
         [self cancelTag];
@@ -553,7 +553,7 @@
     self.table = nil;
     self.crwAssets = nil;
     self.assetArrays = nil;
-    self.dataBase = nil;
+   // dataBase = nil;
     self.urlsArray = nil;
     self.viewBar = nil;
     self.tagBar = nil;
@@ -577,7 +577,7 @@
     [table release];
     [crwAssets release];
     [assetArrays release];
-    [dataBase release];
+    //[dataBase release];
     [urlsArray release];
     [selectUrls release];
     [dateArry release];

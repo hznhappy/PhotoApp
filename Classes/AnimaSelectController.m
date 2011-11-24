@@ -18,7 +18,7 @@
 {
     [tranStyle release];
     [animaArray release];
-    [database release];
+    //[database release];
     [Trans_list release];
     [play_id release];
     [Text release];
