@@ -37,7 +37,6 @@
     NSMutableArray *images;
 
     DBOperation *dataBase;
-	Thumbnail *thuView;
     BOOL mode;
     BOOL load;
     NSString *UserId;
