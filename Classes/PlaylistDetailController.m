@@ -324,15 +324,8 @@ else
         }
           NSInteger Row=indexPath.row;
         int playID=0;
-        if(textField.text==nil||textField.text.length==0)
-        {
-            playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
-        }
-        else
-        {
-         playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
-        }
-        for (UIButton *button in cell.contentView.subviews) {
+                   playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
+                for (UIButton *button in cell.contentView.subviews) {
             if ([button isKindOfClass:[UIButton class]]) {
                 if ([button.currentImage isEqual:unselectImg]) {
                     [button setImage:selectImg forState:UIControlStateNormal];
@@ -453,15 +446,9 @@ else
     NSInteger Row=index.row;
     NSLog(@"FFFFF%d",Row);
     int playID=0;
-    if(textField.text==nil||textField.text.length==0)
-    {
+    
         playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
-    }
-    else
-    {
-        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
-    }
-    [button.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
+        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
     if ([button.titleLabel.text isEqualToString:MUST]) {
         button.backgroundColor = [UIColor colorWithRed:44/255.0 green:100/255.0 blue:196/255.0 alpha:1.0];
         [button setTitle:EXCLUDE forState:UIControlStateNormal];
@@ -505,15 +492,9 @@ else
     NSIndexPath *index = [listTable indexPathForCell:cell];
      NSInteger Row=index.row;
     int playID=0;
-    if(textField.text==nil||textField.text.length==0)
-    {
+   
         playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
-    }
-    else
-    {
-        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
-    }
-
+   
     if ([button.currentImage isEqual:selectImg]) {
         if(a==nil)
         {

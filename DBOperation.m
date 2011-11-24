@@ -264,6 +264,7 @@
     [tagUrl release];
     [photos release];
     [playlist_UserRules release];
+    [playNameAry release];
     [super dealloc];
 }
 
