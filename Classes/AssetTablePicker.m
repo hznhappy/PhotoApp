@@ -220,14 +220,14 @@
             {
                 return;
             }
-            thuView = [[Thumbnail alloc] initWithAsset:result];
-            thuView.fatherController = self;
+            Thumbnail *view = [[Thumbnail alloc] initWithAsset:result];
+            view.fatherController = self;
             
-            [self.crwAssets addObject:thuView];
-            NSUInteger thumIndex = [self.crwAssets indexOfObject:thuView];
+            [self.crwAssets addObject:view];
+            NSUInteger thumIndex = [self.crwAssets indexOfObject:view];
             
-            thuView.index = thumIndex;
-            thuView.assetArray = self.urlsArray;
+            view.index = thumIndex;
+            view.assetArray = self.urlsArray;
             
             NSString *resultUrl = [NSString stringWithFormat:@"%@",[[result defaultRepresentation]url]];
 
@@ -239,11 +239,10 @@
             NSString *num=[NSString stringWithFormat:@"%d", count];
 
             if (count > 0) {
-                [thuView setOverlayHidden:num];
+                [view setOverlayHidden:num];
 
             }
-            
-            [thuView release];
+            [view release];
             //[self.assetArrays addObject:result];
         };
         
@@ -261,7 +260,6 @@
         };	
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
     for (NSURL *assetUrl in self.urlsArray) {
-        [assetUrl retain];
         [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
     }
     [library release];
