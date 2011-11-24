@@ -32,6 +32,7 @@
     NSMutableArray *tagName;
     NSString *name;
     NSString *Transtion;
+    
    // NSMutableArray *UserTablename;
 }
 @property(nonatomic,retain)NSMutableArray *orderIdList;
@@ -50,6 +51,8 @@
 @property (nonatomic,retain)NSString *Transtion;
 //@property (nonatomic,retain)NSMutableArray *UserTablename;
 // apply to all views
+
++(DBOperation*)getInstance;
 -(void)openDB;
 -(void)createTable:(NSString *)sql;
 -(void)insertToTable:(NSString *)sql;
