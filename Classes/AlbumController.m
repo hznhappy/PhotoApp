@@ -73,13 +73,14 @@
     self.navigationItem.rightBarButtonItem = addButon;
     [addButon release];
     [editButton release];
+    da=[[DBOperation alloc]init];
     [self creatTable];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
 	[super viewDidLoad];
 }
 -(void)creatTable
 {
-    da=[[DBOperation alloc]init];
+    
     [da openDB];
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [da createTable:createPlayTable];
@@ -322,7 +323,7 @@
 	}
     
     [da openDB];
-    User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
+    [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     if([[list objectAtIndex:indexPath.row]intValue]==1)
     {
         ALAssetsGroup *group = (ALAssetsGroup*)[assetGroups objectAtIndex:0];
@@ -360,7 +361,7 @@
             [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
             
         }
-        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",user3.name,[dbUrl count]];
+        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",da.name,[dbUrl count]];
         
     }
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
@@ -508,11 +509,11 @@
                                                            object:self 
                                                          userInfo:dic1];
 
-    User *user3 = [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
+    [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
    
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
-    detailController.listName =[NSString stringWithFormat:@"%@",user3.name];
-    detailController.Transtion=[NSString stringWithFormat:@"%@",user3.Transtion];    
+    detailController.listName =[NSString stringWithFormat:@"%@",da.name];
+    detailController.Transtion=[NSString stringWithFormat:@"%@",da.Transtion];    
     detailController.a=[NSString stringWithFormat:@"%@",[list objectAtIndex:indexPath.row]];
     detailController.hidesBottomBarWhenPushed = YES;
      [da closeDB];    

@@ -10,12 +10,12 @@
 @implementation User
 @synthesize name;
 @synthesize Transtion;
-@synthesize Uid;
+//@synthesize Uid;
 
 -(void)dealloc{
     [name release];
     [Transtion release];
-    [Uid release];
+   // [Uid release];
     [super dealloc];
 }
 @end

@@ -66,7 +66,6 @@
 -(IBAction)updateTable:(id)sender;
 -(IBAction)resetAll;
 -(UIButton *)getStateButton;
-//-(IBAction)save;
 -(void)insert:(NSInteger)Row playId:(int)playId;
 -(void)deletes:(NSInteger)Row playId:(int)playId;
 -(void)creatTable;

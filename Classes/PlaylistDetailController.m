@@ -7,7 +7,6 @@
 //
 
 #import "PlaylistDetailController.h"
-#import "User.h"
 #import "DBOperation.h"
 #import "AnimaSelectController.h"
 
@@ -88,15 +87,19 @@
     [temArray release];
     [playArray release];
     [dataBase openDB];
+    [self creatTable];
+
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     [dataBase selectOrderId:selectIdOrder];
     self.orderList=dataBase.orderIdList;
     for (id object in orderList) {
-        User *userName = [dataBase getUserFromUserTable:[object intValue]];
-        [userNames addObject:userName.name];
+        [dataBase getUserFromUserTable:[object intValue]];
+        [self.userNames addObject:dataBase.name];
     }
-    [self creatTable];
-    NSString *selectTagName= @"SELECT DISTINCT NAME FROM TAG";
+    //[dataBase selectFromUserTable];
+    //self.userNames=dataBase.UserTablename;
+    
+        NSString *selectTagName= @"SELECT DISTINCT NAME FROM TAG";
     [dataBase selectUserNameFromTag:selectTagName];
    // self.photos = [dataBase selectPhotos:selectSql];
     NSLog(@"tagname:%@",dataBase.tagName);
@@ -108,28 +111,12 @@
 }
 -(void)huyou
 {
-if(textField.text==nil||textField.text.length==0)
-{
- if(a==nil)
-{
-    [dataBase openDB];
-    NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
-    NSLog(@"%@",deletePlayTable );
-    [dataBase deleteDB:deletePlayTable ]; 
-    NSString *deleteplayIdOrder= [NSString stringWithFormat:@"DELETE FROM playIdOrder WHERE play_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
-    NSLog(@"%@",deleteplayIdOrder);
-    [dataBase deleteDB:deleteplayIdOrder]; 
-    [dataBase closeDB];
-
-    
-}
-else
-{}
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
                                                      userInfo:dic1];
-}
+    
+
     [self.navigationController popViewControllerAnimated:YES]; 
 }
 #pragma mark -
@@ -260,14 +247,6 @@ else
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.textField resignFirstResponder];
-     /*if(textField.text==nil||textField.text.length==0)
-     {
-     }
-    else
-    {
-    [self addPlay];    
-    }
-*/
     if (indexPath.section ==0 && indexPath.row == 1) {
         AnimaSelectController *animateController = [[AnimaSelectController alloc]init];
         animateController.tranStyle = self.tranLabel.text;
@@ -296,11 +275,7 @@ else
         if(textField.text==nil||textField.text.length==0)
         { NSString *c=NSLocalizedString(@"note", @"title");
             NSString *b=NSLocalizedString(@"ok", @"title");
-             NSString *d=NSLocalizedString(@"Please fill out the rule name", @"title");
-            //NSString *message=[[NSString alloc] initWithFormat:
-                            // d];
-            
-            
+            NSString *d=NSLocalizedString(@"Please fill out the rule name", @"title");
             UIAlertView *alert = [[UIAlertView alloc]
                                   initWithTitle:c
                                   message:d
@@ -324,15 +299,8 @@ else
         }
           NSInteger Row=indexPath.row;
         int playID=0;
-        if(textField.text==nil||textField.text.length==0)
-        {
             playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
-        }
-        else
-        {
-         playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
-        }
-        for (UIButton *button in cell.contentView.subviews) {
+            for (UIButton *button in cell.contentView.subviews) {
             if ([button isKindOfClass:[UIButton class]]) {
                 if ([button.currentImage isEqual:unselectImg]) {
                     [button setImage:selectImg forState:UIControlStateNormal];
@@ -387,6 +355,8 @@ else
 }
 -(void)creatTable
 {
+    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
+    [dataBase createTable:createIdOrder];
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [dataBase createTable:createPlayTable];
     NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT PRIMARY KEY)",playIdOrder];
@@ -453,15 +423,8 @@ else
     NSInteger Row=index.row;
     NSLog(@"FFFFF%d",Row);
     int playID=0;
-    if(textField.text==nil||textField.text.length==0)
-    {
         playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
-    }
-    else
-    {
-        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
-    }
-    [button.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
+       [button.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
     if ([button.titleLabel.text isEqualToString:MUST]) {
         button.backgroundColor = [UIColor colorWithRed:44/255.0 green:100/255.0 blue:196/255.0 alpha:1.0];
         [button setTitle:EXCLUDE forState:UIControlStateNormal];
@@ -505,16 +468,8 @@ else
     NSIndexPath *index = [listTable indexPathForCell:cell];
      NSInteger Row=index.row;
     int playID=0;
-    if(textField.text==nil||textField.text.length==0)
-    {
-        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
-    }
-    else
-    {
-        playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue];
-    }
-
-    if ([button.currentImage isEqual:selectImg]) {
+         playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
+     if ([button.currentImage isEqual:selectImg]) {
         if(a==nil)
         {
             [self deletes:Row playId:playID];
@@ -549,28 +504,7 @@ else
 -(IBAction)hideKeyBoard:(id)sender{
     [sender resignFirstResponder];
     key=1;
-   // dataBase=[[DBOperation alloc]init];
-    
-    /*if(textField.text==nil||textField.text.length==0)
-    {
-        NSString *c=NSLocalizedString(@"note", @"title");
-        NSString *b=NSLocalizedString(@"ok", @"title");
-        NSString *d=NSLocalizedString(@"Rule name can not be empty!", @"title");
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:c
-                              message:d
-                              delegate:self
-                              cancelButtonTitle:nil
-                              otherButtonTitles:b,nil];
-        [alert show];
-        [alert release];
-    }
-    else
-    {
-        [self addPlay];
-    }   
-*/
-}
+   }
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     NSLog(@"wpro");
@@ -595,6 +529,23 @@ else
         {
             textField.text=listName;
         }
+        else
+        {
+            [dataBase openDB];
+            NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
+            NSLog(@"%@",deletePlayTable );
+            [dataBase deleteDB:deletePlayTable ]; 
+            NSString *deleteplayIdOrder= [NSString stringWithFormat:@"DELETE FROM playIdOrder WHERE play_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
+            NSLog(@"%@",deleteplayIdOrder);
+            [dataBase deleteDB:deleteplayIdOrder]; 
+            [dataBase closeDB];
+            NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
+                                                               object:self 
+                                                             userInfo:dic1];
+            
+        }
+
     }
     else
     {

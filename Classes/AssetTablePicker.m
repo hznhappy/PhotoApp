@@ -200,7 +200,7 @@
 {
     NSDictionary *dic = [note userInfo];
     self.UserId=[dic objectForKey:@"UserId"];
-    UserName=[dic objectForKey:@"UserName"];
+    self.UserName=[dic objectForKey:@"UserName"];
     
 }
 -(void)viewDidAppear:(BOOL)animated{
@@ -366,7 +366,7 @@
     {
         [dataBase openDB];
         for(int i=0;i<[UrlList count];i++)
-        {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[UrlList objectAtIndex:i],UserName];
+        {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[UrlList objectAtIndex:i],self.UserName];
             [dataBase insertToTable:insertTag];
         }
         [dataBase closeDB];
@@ -408,8 +408,8 @@
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray];
     playPhotoController._pageIndex = 0;
     //playPhotoController.photos = self.images;
-    User *user3 = [dataBase getUserFromPlayTable:[PLAYID intValue]];
-    [playPhotoController fireTimer:user3.Transtion];
+     [dataBase getUserFromPlayTable:[PLAYID intValue]];
+    [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
     [dataBase closeDB];
@@ -439,7 +439,7 @@
     ABRecordID recId = ABRecordGetRecordID(person);
     
     self.UserId=[NSString stringWithFormat:@"%d",recId];
-    UserName=readName;
+    self.UserName=readName;
     [dataBase openDB];
     NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,self.UserId,readName];
     NSLog(@"%@",insertUserTable);

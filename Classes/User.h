@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 @interface User : NSObject{
 	
-	NSString *Uid;
+	//NSString *Uid;
 	NSString *name;
     NSString *Transtion;
 	}
-@property (nonatomic,retain)NSString *Uid;
+//@property (nonatomic,retain)NSString *Uid;
 @property (nonatomic,retain)NSString *name;
 @property (nonatomic,retain)NSString *Transtion;
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "PopupPanelView.h"
-#import "User.h"
 #import "tagManagementController.h"
 #import "PhotoViewController.h"
 @implementation PopupPanelView
