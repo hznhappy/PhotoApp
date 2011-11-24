@@ -7,7 +7,6 @@
 //
 
 #import "PhotoViewController.h"
-#import "User.h"
 #import "PopupPanelView.h"
 #import "tagManagementController.h"
 #import "PhotoImageView.h"
@@ -27,7 +26,7 @@
 
 
 @implementation PhotoViewController
-@synthesize listid;
+//@synthesize listid;
 @synthesize ppv;
 @synthesize scrollView=_scrollView;
 @synthesize photoSource; 
@@ -88,7 +87,7 @@
 	}
 	self.photoViews = views;
     editing=NO;
-    self.listid=[NSMutableArray arrayWithCapacity:100];
+   // self.listid=[NSMutableArray arrayWithCapacity:100];
      NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;
@@ -878,7 +877,7 @@ else{
 	_photoViews=nil;
 	photoSource=nil;
 	_scrollView=nil;
-    listid = nil;
+    //listid = nil;
 	
 }
 
@@ -889,7 +888,7 @@ else{
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];
-	[listid release];
+	//[listid release];
     [img release];
     [super dealloc];
 }

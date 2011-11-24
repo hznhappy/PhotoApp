@@ -2,7 +2,6 @@
 #import "AddressBook/AddressBook.h"
 #import "AddressBookUI/AddressBookUI.h"
 #import "DBOperation.h"
-#import "User.h"
 #import "AssetTablePicker.h"
 @implementation tagManagementController
 @synthesize list;
@@ -123,11 +122,7 @@ int j=1,count=0;
     picker.peoplePickerDelegate = self;
     [self presentModalViewController:picker animated:YES];
     [picker release]; 
-    /*ContactsController * c=[[ContactsController alloc]init];
-   [self.navigationController pushViewController:c animated:YES];
-    [self presentModalViewController:c animated:YES];*/
-    
-   } 
+} 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
 {
     [da openDB];
@@ -258,17 +253,17 @@ int j=1,count=0;
 		
 	}
     [da openDB];
-    User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
-    if([user1.Uid intValue]==0)
+    [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
+    if([[self.list objectAtIndex:indexPath.row]intValue]==0)
     {
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         
 
     }
-	cell.textLabel.text = [NSString stringWithFormat:@"%@",user1.name];
+	cell.textLabel.text = [NSString stringWithFormat:@"%@",da.name];
     [da closeDB];
     return cell; 
-    [user1 release];
+    //[user1 release];
     
 }
 #pragma mark -
@@ -325,10 +320,10 @@ int j=1,count=0;
 }
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [da openDB];
-    User *user1 = [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
-    NSLog(@" UserName : %@",user1.name);
+    [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
+    NSLog(@" UserName : %@",da.name);
     [da closeDB];
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",user1.name,@"UserName",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",da.name,@"UserName",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
                                                        object:self 
                                                      userInfo:dic];

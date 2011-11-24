@@ -36,11 +36,11 @@
     BOOL editing;
 	DBOperation *db;
     PopupPanelView *ppv;
-    NSMutableArray *listid;
+   // NSMutableArray *listid;
     NSTimer *timer;	
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
-@property(nonatomic,retain)NSMutableArray *listid;
+//@property(nonatomic,retain)NSMutableArray *listid;
 @property(nonatomic,retain)UIImage *img;
 @property(nonatomic,retain)NSMutableArray *bgPhotos;
 @property(nonatomic,retain)NSMutableArray *photos;

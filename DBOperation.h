@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import<sqlite3.h>
-#import "User.h"
 #define UserTable  @"UserTable"
 #define idOrder @"idOrder"
 #define playIdOrder @"PlayIdOrder"
@@ -31,6 +30,9 @@
     NSMutableSet *tagUrl;
     NSMutableArray *tagUserName;
     NSMutableArray *tagName;
+    NSString *name;
+    NSString *Transtion;
+   // NSMutableArray *UserTablename;
 }
 @property(nonatomic,retain)NSMutableArray *orderIdList;
 @property(nonatomic,retain)NSMutableArray *orderList;
@@ -44,6 +46,9 @@
 @property(nonatomic,retain)NSMutableSet *tagUrl;
 @property(nonatomic,retain)NSMutableArray *tagUserName;
 @property(nonatomic,retain)NSMutableArray *tagName;
+@property (nonatomic,retain)NSString *name;
+@property (nonatomic,retain)NSString *Transtion;
+//@property (nonatomic,retain)NSMutableArray *UserTablename;
 // apply to all views
 -(void)openDB;
 -(void)createTable:(NSString *)sql;
@@ -57,12 +62,13 @@
 -(void)selectFromRules:(NSString *)sql;
 // apply to PhotoViewController PopupPanelView , tagManagementController ,AlbumController for retreiving tag_id,tag_url from tag table
 -(void)selectFromTAG:(NSString *)sql;
+//-(void)selectFromUserTable;
 //apply to AlbumController for retreiving playlist_id,playlist_name from palytable
 -(void)selectFromPlayTable:(NSString *)sql;
 //apply to tagManagementController , PopupPanelView,for retreiving user_id,user_name,user_color from UserTable;
-- (User*)getUserFromUserTable:(int)id;
+- (void)getUserFromUserTable:(int)id;
 //apply to AlbumController for retreiving playlist_id,playlist_name from playTable
-- (User*)getUserFromPlayTable:(int)id;
+- (void)getUserFromPlayTable:(int)id;
 //apply to AssetTablePickerController for retreiving url from TAG
 -(NSMutableArray *)selectPhotos:(NSString *)sql;
 -(void)selectUserNameFromTag:(NSString *)sql;
