@@ -139,7 +139,9 @@
         //            if ([self.photos objectAtIndex:i]!=nil||[self.photos objectAtIndex:i]!=[NSNull null]) {
         //                [self.photos replaceObjectAtIndex:i withObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
         //            }
-        [self.bgPhotos addObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
+        CGImageRef ref = [[result defaultRepresentation] fullScreenImage];
+        UIImage *image = [UIImage imageWithCGImage:ref];
+        [self.bgPhotos addObject:image];
     };
     
     void (^failureBlock)(NSError *) = ^(NSError *error) {
@@ -505,13 +507,11 @@ else{
 
 -(void)loadPhotos:(NSURL *)url 
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
     {
-        if (result == nil) 
-        {
-            return;
-        }
-        self.img=[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]];
+        if (result != nil) 
+            self.img=[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]];
     };
     
     void (^failureBlock)(NSError *) = ^(NSError *error) {
@@ -530,6 +530,7 @@ else{
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
     [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     [library release];
+    [pool release];
 }
 
 - (void)layoutScrollViewSubviews{
@@ -677,7 +678,7 @@ else{
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	
+    NSLog(@"didScroll method");
 	NSInteger _index = [self centerPhotoIndex];
     //[self anotherLoad];
 	if (_index >= [self.photoSource count] || _index < 0) {
@@ -706,7 +707,6 @@ else{
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-	
 	NSInteger _index = [self centerPhotoIndex];
 	if (_index >= [self.photoSource count] || _index < 0) {
 		return;
@@ -823,10 +823,9 @@ else{
 #pragma mark timer method
 
 -(void)fireTimer:(NSString *)animateStyle{
-    NSLog(@"FRRR%@",animateStyle);
+    //[self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
     timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
-    
-    
+    NSLog(@"when the timer fire");
 }
 -(void)playPhoto{
     [self setBarsHidden:YES animated:YES];
@@ -858,6 +857,12 @@ else{
         //[timer invalidate];
         _pageIndex = 0;
     }else{
+        [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
+        NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex-1];
+        NSString *nextPage = [NSString stringWithFormat:@"%d",_pageIndex];
+        NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
+        NSLog(@"self photos%@",self.photos);
+        [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
         [self moveToPhotoAtIndex:_index animated:NO];
     }
 }

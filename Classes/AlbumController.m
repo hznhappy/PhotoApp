@@ -280,6 +280,7 @@
 
 -(void)loadPhotos:(NSURL *)url 
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
         void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
         {
             if (result == nil) 
@@ -305,6 +306,7 @@
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
         [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
         [library release];
+    [pool release];
 }
 
 
@@ -455,6 +457,7 @@
             }
             
             self.SUM=t;
+            [t release];
             for (NSString *data in da.tagUrl)
             {
                 if([self.SUM containsObject:data]) 

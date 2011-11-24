@@ -251,7 +251,7 @@
         [library release];
     }
     [self setPhotoTag];
-	[self.table reloadData];           
+	[self.table reloadData];     
     [pool release];
 }
 -(void)setPhotoTag{
