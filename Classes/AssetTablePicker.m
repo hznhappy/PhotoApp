@@ -575,7 +575,6 @@
     [save release];
     [reset release];
     [table release];
-	[thuView release];
     [crwAssets release];
     [assetArrays release];
     [dataBase release];
