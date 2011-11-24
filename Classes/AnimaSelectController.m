@@ -60,12 +60,9 @@
 }
 -(void)creatTable;
 {
-    database=[[DBOperation alloc]init];
-    [database openDB];
+    database=[DBOperation getInstance];
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [database createTable:createPlayTable];
-    
-    [database closeDB];
 }
 #pragma mark -
 #pragma mark TableView delegate method
@@ -93,7 +90,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NSLog(@"JEE");
-    [database openDB];
     if(play_id!=nil)
     {
         NSString *updatePlayTable= [NSString stringWithFormat:@"UPDATE %@ SET Transtion='%@' WHERE playlist_id=%d",PlayTable,[Trans_list objectAtIndex:indexPath.row],[play_id intValue]];
@@ -127,7 +123,6 @@
         }
 
     }
-    [database closeDB];
     NSDictionary *dictionary = [NSDictionary dictionaryWithObject:cell.textLabel.text forKey:@"tranStyle"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"changeTransitionLabel" object:nil userInfo:dictionary];
     [self.navigationController popViewControllerAnimated:YES];

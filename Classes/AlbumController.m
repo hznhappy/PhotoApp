@@ -73,7 +73,7 @@
     self.navigationItem.rightBarButtonItem = addButon;
     [addButon release];
     [editButton release];
-    da=[[DBOperation alloc]init];
+    da=[DBOperation getInstance];
     [self creatTable];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
 	[super viewDidLoad];
@@ -81,7 +81,6 @@
 -(void)creatTable
 {
     
-    [da openDB];
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [da createTable:createPlayTable];
     NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT PRIMARY KEY)",playIdOrder];
@@ -101,8 +100,6 @@
     
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag];
-    [da closeDB];
-   
 
 }
 -(void)Special
@@ -189,10 +186,8 @@
 
 -(void)getTagUrls{
     [tagUrl removeAllObjects];
-    [da openDB];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
     NSMutableArray *photos = [da selectPhotos:selectSql];
-    [da closeDB];
     for (NSString *dataStr in photos) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [self.tagUrl addObject:dbStr];
@@ -203,10 +198,8 @@
     [self getTagUrls];
     for (NSURL *tagurl in tagUrl){
         if (![allUrl containsObject:tagurl]) {
-            [da openDB];
             NSString *sql = [NSString stringWithFormat:@"DELETE FROM TAG WHERE URL='%@'",tagurl];
             [da updateTable:sql];
-            [da closeDB];
         }
     }    
 }
@@ -326,7 +319,6 @@
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
     
-    [da openDB];
     [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     if([[list objectAtIndex:indexPath.row]intValue]==1)
     {
@@ -370,7 +362,6 @@
     }
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     
-    [da closeDB];
     return cell;
 }
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -395,9 +386,7 @@
     else
     {
         int row_id=[[list objectAtIndex:indexPath.row]intValue];
-        [da openDB];
         [self playlistUrl:row_id];
-          [da closeDB];
          assetPicker.urlsArray =dbUrl;
     } 
     assetPicker.PLAYID=[list objectAtIndex:indexPath.row];
@@ -492,7 +481,6 @@
     //[SUM release];
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-      [da openDB];
     //NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select playList_id from playTable"];
    // [da selectFromPlayTable:selectPlayIdOrder];
     if([[list objectAtIndex:indexPath.row]intValue]<=2)
@@ -521,7 +509,6 @@
     detailController.Transtion=[NSString stringWithFormat:@"%@",da.Transtion];    
     detailController.a=[NSString stringWithFormat:@"%@",[list objectAtIndex:indexPath.row]];
     detailController.hidesBottomBarWhenPushed = YES;
-     [da closeDB];    
 
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
@@ -543,7 +530,6 @@
     }
     else
     {
-    [da openDB];
     NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@"%@",deletePlayTable );
     [da deleteDB:deletePlayTable ]; 
@@ -559,7 +545,6 @@
         return;
     }
 
-    [da closeDB];
     [self creatTable];
     [self.tableView reloadData];
     
@@ -577,8 +562,7 @@
 	[list removeObjectAtIndex:fromRow];
 	[list insertObject:object atIndex:toRow];
 	[object release];
-    da=[[DBOperation alloc]init];
-    [da openDB];
+    da=[DBOperation getInstance];
     NSString *deleteIdOrder= [NSString stringWithFormat:@"DELETE FROM playIdOrder"];	
 	NSLog(@"%@",deleteIdOrder);
     [da deleteDB:deleteIdOrder];
@@ -587,7 +571,6 @@
         NSLog(@"%@",insertIdOrder);
         [da insertToTable:insertIdOrder];    
 	}
-    [da closeDB];
 } 
 
 

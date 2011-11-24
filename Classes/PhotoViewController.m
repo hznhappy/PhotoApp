@@ -97,7 +97,7 @@
     ppv.url = currentPageUrl;
     [ppv Buttons];
     [self.view addSubview:ppv];
-    db = [[DBOperation alloc]init];
+    db = [DBOperation getInstance];
     ppv.hidden=YES;
    	[views release];
     NSMutableArray *array = [[NSMutableArray alloc]init];

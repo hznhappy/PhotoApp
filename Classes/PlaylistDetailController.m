@@ -86,7 +86,6 @@
     [tempArray release];
     [temArray release];
     [playArray release];
-    [dataBase openDB];
     [self creatTable];
 
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
@@ -105,7 +104,6 @@
     NSLog(@"tagname:%@",dataBase.tagName);
  
 
-    [dataBase closeDB];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
     [super viewDidLoad];
 }
@@ -208,7 +206,7 @@
             selectButton.frame = CGRectMake(10, 11, 30, 30);
             [selectButton setImage:unselectImg forState:UIControlStateNormal];
             if([playrules_idList containsObject:[orderList objectAtIndex:indexPath.row]])
-            {[dataBase openDB];
+            {
                 NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name,playlist_rules from rules where user_id=%d and playlist_id=%d",[[orderList objectAtIndex:indexPath.row]intValue],[a intValue]];
                 [dataBase selectFromRules:selectRules];
                  cell.accessoryView = [self getStateButton];
@@ -234,7 +232,6 @@
                 }
                
 
-                [dataBase closeDB];
             }
 
             [cell.contentView addSubview:selectButton];
@@ -379,30 +376,25 @@
 
 -(void)insert:(NSInteger)Row playId:(int)playId
 {
-    [dataBase openDB];
     NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%d','%d','%@','%@')",Rules,playId,1,[orderList objectAtIndex:Row],[userNames objectAtIndex:Row]];
     NSLog(@"%@",insertRules);
     [dataBase insertToTable:insertRules];  
-    [dataBase closeDB];
-
 }
 
 
 -(void)deletes:(NSInteger)Row playId:(int)playId
-{[dataBase openDB];
+{
     NSString *deleteRules= [NSString stringWithFormat:@"DELETE FROM Rules WHERE playlist_id=%d and user_id='%@'",playId,[orderList objectAtIndex:Row]];
     NSLog(@"%@",deleteRules);
     [dataBase deleteDB:deleteRules];
-    [dataBase closeDB];
 }
 
 
 -(void)update:(NSInteger)Row rule:(int)rule playId:(int)playId
-{[dataBase openDB];
+{
     NSString *updateRules= [NSString stringWithFormat:@"UPDATE %@ SET playList_rules=%d WHERE playlist_id=%d and user_id='%@'",Rules,rule,playId,[orderList objectAtIndex:Row]];
 	NSLog(@"%@",updateRules);
 	[dataBase updateTable:updateRules];
-    [dataBase closeDB];
 }
 #pragma mark -
 #pragma mark Coustom method
@@ -531,14 +523,12 @@
         }
         else
         {
-            [dataBase openDB];
             NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
             NSLog(@"%@",deletePlayTable );
             [dataBase deleteDB:deletePlayTable ]; 
             NSString *deleteplayIdOrder= [NSString stringWithFormat:@"DELETE FROM playIdOrder WHERE play_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
             NSLog(@"%@",deleteplayIdOrder);
             [dataBase deleteDB:deleteplayIdOrder]; 
-            [dataBase closeDB];
             NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                                object:self 
@@ -555,7 +545,7 @@
 
 }
 -(void)addPlay
-{[dataBase openDB];
+{
     if(a==nil)
     {
         NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_name,playList_id) VALUES('%@',%d)",PlayTable,textField.text,[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
@@ -571,7 +561,6 @@
         NSLog(@"%@",updateRules);
         [dataBase updateTable:updateRules];
     }
-    [dataBase closeDB];
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
@@ -609,7 +598,6 @@
             }
         }
     }
-    [dataBase openDB];
     if(a==nil)
     {
     NSString *deleteRules=[NSString stringWithFormat:@"delete from Rules where playList_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]];
@@ -622,7 +610,6 @@
         NSLog(@"%@",deleteRules1);
         [dataBase deleteDB:deleteRules1];
     }
-    [dataBase closeDB];
     [selectedIndexPaths removeAllObjects];
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 

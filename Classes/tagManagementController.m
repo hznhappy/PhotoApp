@@ -72,8 +72,7 @@ int j=1,count=0;
     
 }-(void)creatTable
 {
-    da=[[DBOperation alloc]init];
-    [da openDB];
+    da=[DBOperation getInstance];
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
     [da createTable:createUserTable];
     NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
@@ -81,13 +80,10 @@ int j=1,count=0;
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     [da selectOrderId:selectIdOrder];
     self.list=da.orderIdList;
-
-    [da closeDB];
     }
 -(void)nobody
 {
  
-    [da openDB];
     NSString *selectIdOrder1=[NSString stringWithFormat:@"select id from idOrder where id=0"];
     [da selectOrderId:selectIdOrder1];
     if([da.orderIdList count]!=0)
@@ -106,8 +102,6 @@ int j=1,count=0;
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     [da selectOrderId:selectIdOrder];
     self.list=da.orderIdList;
-    
-    [da closeDB];
 
 }
 -(NSString*)databasePath
@@ -125,7 +119,6 @@ int j=1,count=0;
 } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
 {
-    [da openDB];
 
        NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
     ABRecordID recId = ABRecordGetRecordID(person);
@@ -168,7 +161,6 @@ int j=1,count=0;
     }
     [readName release];
     
-    [da closeDB];
     [self dismissModalViewControllerAnimated:YES];
     return NO;
     
@@ -252,7 +244,6 @@ int j=1,count=0;
         
 		
 	}
-    [da openDB];
     [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
     if([[self.list objectAtIndex:indexPath.row]intValue]==0)
     {
@@ -261,7 +252,6 @@ int j=1,count=0;
 
     }
 	cell.textLabel.text = [NSString stringWithFormat:@"%@",da.name];
-    [da closeDB];
     return cell; 
     //[user1 release];
     
@@ -272,7 +262,6 @@ int j=1,count=0;
 {	
     id1=[NSString stringWithFormat:@"%d",indexPath.row]; 
     [id1 retain];
-    [da openDB];
      NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag];
     NSString *selectTag= [NSString stringWithFormat:@"select * from tag"];
@@ -314,15 +303,12 @@ int j=1,count=0;
     }
     }
     //[listid1 release];
-    [da closeDB];
     
     
 }
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [da openDB];
     [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
     NSLog(@" UserName : %@",da.name);
-    [da closeDB];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",da.name,@"UserName",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
                                                        object:self 
@@ -337,7 +323,6 @@ int j=1,count=0;
     switch (buttonIndex) {
         case 1:
             NSLog(@"OB");
-            [da openDB];
             NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
             NSLog(@"%@",deleteIdTable);
             [da deleteDB:deleteIdTable];  
@@ -345,7 +330,6 @@ int j=1,count=0;
             [da deleteDB:deleteUserTable];
             NSString *deleteTag= [NSString stringWithFormat:@"DELETE FROM TAG WHERE ID='%@'",[list objectAtIndex:[id1 intValue]]];
             [da deleteDB:deleteTag];
-            [da closeDB];
             [self viewDidLoad];
             [self.tableView reloadData];            
             break;
@@ -373,7 +357,6 @@ int j=1,count=0;
 	[list removeObjectAtIndex:fromRow];
 	[list insertObject:object atIndex:toRow];
 	[object release];
-    [da openDB];
     NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder"];	
 	NSLog(@"%@",deleteIdTable);
     [da deleteDB:deleteIdTable];
@@ -382,7 +365,6 @@ int j=1,count=0;
         NSLog(@"%@",insertIdTable);
         [da insertToTable:insertIdTable];    
 	}
-    [da closeDB];
 } 
 
 - (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifier

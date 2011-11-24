@@ -31,7 +31,7 @@
 		myscroll=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 347)];
         [self addSubview:myscroll]; 
         [myscroll setBackgroundColor:[UIColor clearColor]];
-        da=[[DBOperation alloc]init];
+        da=[DBOperation getInstance];
         [self selectTable];
         [myscroll setContentSize:CGSizeMake(320, 45*[self.list count])];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Buttons) name:@"edit" object:nil];
@@ -41,14 +41,11 @@
 }
 -(void)selectTable
 {
-    [da openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag]; 
     NSString *selectTag= [NSString stringWithFormat:@"select * from tag where url='%@'",self.url];
     [da selectFromTAG:selectTag];
     self.list=da.tagIdAry;
-    [da closeDB];
-
 }
 CGFloat btx = 20;
 CGFloat bty = 20;
@@ -80,10 +77,8 @@ CGFloat byheight = 30;
 -(void)buttonPressed:(UIButton *)button{
 	int tag = button.tag;
     [self selectTable];
-    [da openDB];
     NSString *deleteTag= [NSString stringWithFormat:@"DELETE FROM TAG WHERE ID='%@' and url='%@'",[self.list objectAtIndex:tag],self.url];
     [da deleteDB:deleteTag];
-    [da closeDB];
     [self Buttons];
     
    }
