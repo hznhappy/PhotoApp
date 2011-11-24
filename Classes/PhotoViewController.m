@@ -677,7 +677,6 @@ else{
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"didScroll method");
 	NSInteger _index = [self centerPhotoIndex];
     //[self anotherLoad];
 	if (_index >= [self.photoSource count] || _index < 0) {
