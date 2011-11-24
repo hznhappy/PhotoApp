@@ -55,7 +55,7 @@
 	[self.table setAllowsSelection:NO];
     [self setWantsFullScreenLayout:YES];
     
-    DBOperation *db = [[DBOperation alloc]init];
+    DBOperation *db = [DBOperation getInstance];
     self.dataBase = db;
     [db release];
     NSMutableArray *temp = [[NSMutableArray alloc]init];
@@ -161,7 +161,6 @@
 
 -(void)creatTable
 {
-    [dataBase openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [dataBase createTable:createTag];  
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
@@ -171,7 +170,6 @@
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [dataBase createTable:createPlayTable];
 
-    [dataBase closeDB];
 }
 -(void)AddUrl:(NSNotification *)note{
     NSDictionary *dic = [note userInfo];
@@ -230,7 +228,6 @@
             
             thuView.index = thumIndex;
             thuView.assetArray = self.urlsArray;
-            [dataBase openDB];
             
             NSString *resultUrl = [NSString stringWithFormat:@"%@",[[result defaultRepresentation]url]];
 
@@ -245,7 +242,6 @@
                 [thuView setOverlayHidden:num];
 
             }
-            [dataBase closeDB];
             
             [thuView release];
             //[self.assetArrays addObject:result];
@@ -274,7 +270,6 @@
     [pool release];
 }
 -(void)setPhotoTag{
-    [dataBase openDB];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
     NSMutableArray *photos = [dataBase selectPhotos:selectSql];
     for (NSString *dataStr in photos) {
@@ -291,7 +286,6 @@
             }
         }
     } 
-    [dataBase closeDB];
 }
 
 #pragma mark -
@@ -382,12 +376,10 @@
     }
     else
     {
-        [dataBase openDB];
         for(int i=0;i<[UrlList count];i++)
         {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[UrlList objectAtIndex:i],self.UserName];
             [dataBase insertToTable:insertTag];
         }
-        [dataBase closeDB];
         [self cancelTag];
         [self setPhotoTag];
         NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
@@ -422,7 +414,6 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
-    [dataBase openDB];
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray];
     playPhotoController._pageIndex = 0;
     //playPhotoController.photos = self.images;
@@ -430,7 +421,6 @@
     [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
-    [dataBase closeDB];
 }
 
 #pragma mark - 
@@ -458,7 +448,6 @@
     
     self.UserId=[NSString stringWithFormat:@"%d",recId];
     self.UserName=readName;
-    [dataBase openDB];
     NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,self.UserId,readName];
     NSLog(@"%@",insertUserTable);
     [dataBase insertToTable:insertUserTable];
@@ -467,7 +456,6 @@
     NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES('%@')",idOrder,self.UserId];
     NSLog(@"%@",insertIdOrder);
     [dataBase insertToTable:insertIdOrder];   
-    [dataBase openDB];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:self.UserId,@"UserId",readName,@"UserName",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"AddContact" 
                                                        object:self 
