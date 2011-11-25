@@ -15,43 +15,28 @@
 #define PlayTable @"PlayTable"
 #define rules @"rules"
 @interface DBOperation : NSObject {
-    NSMutableArray *photos;
     NSDictionary *dic;
     int tagValue;
     sqlite3 *db;
     NSMutableArray *orderIdList;
-    NSMutableArray *orderList;
-    NSMutableArray *tagIdAry;
-    NSMutableArray *playIdAry;
-    NSMutableArray *playNameAry;
-    NSMutableArray *playlist_UserName;
-    NSMutableArray *playlist_UserId;
-    NSMutableArray *playlist_UserRules;
-    NSMutableSet *tagUrl;
-    NSMutableArray *tagUserName;
+    NSMutableArray *tagList;
+    NSMutableArray *playTableList;
+    NSMutableArray *RulesList;
+    NSMutableSet *tag1List;
     NSMutableArray *tagName;
+    NSMutableArray *photos;
     NSString *name;
     NSString *Transtion;
-    
-   // NSMutableArray *UserTablename;
 }
 @property(nonatomic,retain)NSMutableArray *orderIdList;
-@property(nonatomic,retain)NSMutableArray *orderList;
-@property(nonatomic,retain)NSMutableArray *tagIdAry;
-@property(nonatomic,retain)NSMutableArray *playIdAry;
-@property(nonatomic,retain)NSMutableArray *playNameAry;
-@property(nonatomic,retain)NSMutableArray *playlist_UserName;
-@property(nonatomic,retain)NSMutableArray *playlist_UserId;
-@property(nonatomic,retain)NSMutableArray *playlist_UserRules;
-@property(nonatomic,retain)NSMutableArray *photos;
-@property(nonatomic,retain)NSMutableSet *tagUrl;
-@property(nonatomic,retain)NSMutableArray *tagUserName;
+@property(nonatomic,retain)NSMutableArray *tagList;
+@property(nonatomic,retain)NSMutableArray *playTableList;
+@property(nonatomic,retain)NSMutableArray *RulesList;
+@property(nonatomic,retain)NSMutableSet *tag1List;
 @property(nonatomic,retain)NSMutableArray *tagName;
+@property(nonatomic,retain)NSMutableArray *photos;
 @property (nonatomic,retain)NSString *name;
 @property (nonatomic,retain)NSString *Transtion;
-//@property (nonatomic,retain)NSMutableArray *UserTablename;
-// apply to all views
-
 +(DBOperation*)getInstance;
 -(void)openDB;
 -(void)createTable:(NSString *)sql;
@@ -60,21 +45,22 @@
 -(void)closeDB;
 -(void)deleteDB:(NSString *)sql; 
 // apply to tagManagementController , PopupPanelView for retreiving user_id  order by idOrder or playIdOrder
--(void)selectOrderId:(NSString *)sql;
+-(NSMutableArray *)selectOrderId:(NSString *)sql;
 //apply to AlbumController for retreiving user_id user_name from Rules
--(void)selectFromRules:(NSString *)sql;
+-(NSMutableArray *)selectFromRules:(NSString *)sql;
 // apply to PhotoViewController PopupPanelView , tagManagementController ,AlbumController for retreiving tag_id,tag_url from tag table
--(void)selectFromTAG:(NSString *)sql;
+-(NSMutableArray *)selectFromTAG:(NSString *)sql;
+-(NSMutableSet *)selectFromTAG1:(NSString *)sql;
 //-(void)selectFromUserTable;
 //apply to AlbumController for retreiving playlist_id,playlist_name from palytable
--(void)selectFromPlayTable:(NSString *)sql;
+-(NSMutableArray *)selectFromPlayTable:(NSString *)sql;
 //apply to tagManagementController , PopupPanelView,for retreiving user_id,user_name,user_color from UserTable;
-- (void)getUserFromUserTable:(int)id;
+- (NSString *)getUserFromUserTable:(int)id;
 //apply to AlbumController for retreiving playlist_id,playlist_name from playTable
 - (void)getUserFromPlayTable:(int)id;
 //apply to AssetTablePickerController for retreiving url from TAG
 -(NSMutableArray *)selectPhotos:(NSString *)sql;
--(void)selectUserNameFromTag:(NSString *)sql;
+//-(void)selectUserNameFromTag:(NSString *)sql;
 -(NSString *)filePath;
 -(BOOL)exitInDatabase:(NSString *)sql;
 

@@ -7,9 +7,9 @@
 //
 #import "DBOperation.h"
 @implementation DBOperation
-@synthesize orderIdList,orderList,tagIdAry,playNameAry,playIdAry,playlist_UserName,tagUrl,playlist_UserId,playlist_UserRules,photos;
-@synthesize tagUserName,tagName;
-@synthesize name;//UserTablename;
+@synthesize orderIdList,tagList,playTableList,RulesList;
+@synthesize tag1List,tagName,photos;
+@synthesize name;
 @synthesize Transtion;
 -(NSString *)filePath{
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -68,63 +68,64 @@ static DBOperation* singleton;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &stmt, nil) == SQLITE_OK) {
 		while (sqlite3_step(stmt)==SQLITE_ROW) {
 			char *value = (char *)sqlite3_column_text(stmt, 0);
-            //NSString *o=[NSString stringWithUTF8String:(char*) sqlite3_column_text(stmt,0)];
             [photos addObject:[NSString stringWithFormat:@"%s",value]];
 		}
 	}
 	sqlite3_finalize(stmt);
     return photos;
 }
--(void)selectFromPlayTable:(NSString *)sql
+-(NSMutableArray *)selectFromPlayTable:(NSString *)sql
 {NSMutableArray *playArray = [[NSMutableArray alloc]init];
-     NSMutableArray *playArray1 = [[NSMutableArray alloc]init];
-        
-    self.playNameAry= playArray;
-    self. playIdAry= playArray1;
+    self.playTableList= playArray;
     [playArray release];
-    [playArray1 release];
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             NSString *newid=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
-            NSString *newname=[NSString stringWithFormat:@"%d",sqlite3_column_int(statement,1)];
-            [playIdAry addObject:newid];
-            [playNameAry addObject:newname];
+            [playTableList addObject:newid];
         }
     }	
     sqlite3_finalize(statement);  
+    return playTableList;
     
     
 }
--(void)selectFromTAG:(NSString *)sql
+-(NSMutableArray *)selectFromTAG:(NSString *)sql
 { NSMutableArray *playArray = [[NSMutableArray alloc]init];
-  NSMutableSet *playArray1 = [[NSMutableSet alloc]init];
-  NSMutableArray *playArray2 = [[NSMutableArray alloc]init];
-    self.tagIdAry= playArray;
-    self.tagUrl= playArray1;
-    self.tagUserName=playArray2;
+     self.tagList= playArray;
     [playArray release];
-    [playArray1 release];
-    [playArray2 release];
     sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-           NSString *newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
-            NSString *newUrl=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 1)];
-            NSString *newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement, 2)];
-            [tagIdAry addObject:newid];
-            [tagUrl addObject:newUrl];
-            [tagUserName addObject:newName];
+            NSString *newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement, 0)];
+            [tagList addObject:newName];
         }
     }	
-    sqlite3_finalize(statement);  
+    sqlite3_finalize(statement); 
+    return tagList;
 }
 
+-(NSMutableSet *)selectFromTAG1:(NSString *)sql
+{NSMutableSet *playArray = [[NSMutableSet alloc]init];
+    self.tag1List= playArray;
+    [playArray release];
+    sqlite3_stmt *statement;
+	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+		
+		while (sqlite3_step(statement)==SQLITE_ROW) {
+            NSString *newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement, 0)];
+            [tag1List addObject:newName];
+        }
+    }	
+    sqlite3_finalize(statement); 
+    return tag1List;
 
+    
+}
 
--(void)selectUserNameFromTag:(NSString *)sql;
+/*-(void)selectUserNameFromTag:(NSString *)sql;
 {
      NSMutableArray *playArray = [[NSMutableArray alloc]init];
     self.tagName=playArray;
@@ -139,10 +140,10 @@ static DBOperation* singleton;
     }
     sqlite3_finalize(statement);  
 }
+*/
 
 
-
--(void)selectOrderId:(NSString *)sql
+-(NSMutableArray *)selectOrderId:(NSString *)sql
 {
     NSMutableArray *playArray = [[NSMutableArray alloc]init];
     self.orderIdList = playArray;
@@ -151,82 +152,47 @@ static DBOperation* singleton;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             NSString *newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
-            
             [orderIdList addObject:newid];
-           
-            
-        }
+            }
     }	
     sqlite3_finalize(statement);  
+    return orderIdList;
+
     
 }
--(void)selectFromRules:(NSString *)sql
+-(NSMutableArray *)selectFromRules:(NSString *)sql
 {
     NSMutableArray *playArray = [[NSMutableArray alloc]init];
-    NSMutableArray *playArray1 = [[NSMutableArray alloc]init];
-     NSMutableArray *playArray2 = [[NSMutableArray alloc]init];
-    self.playlist_UserId= playArray;
-    self.playlist_UserName= playArray1;
-    self.playlist_UserRules= playArray2;
+    self.RulesList= playArray;
     [playArray release];
-    [playArray1 release];
-    [playArray2 release];
-	sqlite3_stmt *statement;
+   	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-            NSString *newId=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement,0)];
-            [playlist_UserId addObject:newId];
-            NSString *newname=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
-            [playlist_UserName addObject:newname];
-             NSString *newRule=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement,2)];
-            [playlist_UserRules addObject:newRule];
-        }
+            NSString *newId=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,0)];
+            [RulesList addObject:newId];
+    }
     }	
     sqlite3_finalize(statement);  
+    return RulesList;
     
 }
-/*-(void)selectFromUserTable
+- (NSString *)getUserFromUserTable:(int)id
 {
-    NSMutableArray *playArray = [[NSMutableArray alloc]init];
-    self.UserTablename=playArray;
-    [playArray release];
-    NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM UserTable"];
-	sqlite3_stmt *statement;
-	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
-		while (sqlite3_step(statement)==SQLITE_ROW) {
-			
-			//user1.Uid = [NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
-			NSString *newname = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
-            [UserTablename addObject:newname];
-		}
-		sqlite3_finalize(statement);
-		//return user1;
-		
-	}
-
-}*/
-- (void)getUserFromUserTable:(int)id
-{
-	//User *user1 = [[[User alloc] init] autorelease];
 	NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM UserTable WHERE ID= %d",id];
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-			
-			//user1.Uid = [NSString stringWithFormat:@"%d",sqlite3_column_int(statement,0)];
-			self.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
+        self.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
 		}
 		sqlite3_finalize(statement);
-		//return user1;
-		
+        return name;
 	}
    
-	//return nil;
+	return nil;
     
 }
 - (void)getUserFromPlayTable:(int)id
 {
-	//User *user3 = [[[User alloc] init]autorelease];
 	NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM PlayTable WHERE playList_id=%d",id];
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
@@ -237,14 +203,8 @@ static DBOperation* singleton;
 			
 		}
 		sqlite3_finalize(statement);
-		
-       // return user3;
-		
+        }
 	}
-	//return nil;
-    
-    
-}
 -(BOOL)exitInDatabase:(NSString *)sql{
     sqlite3_stmt *stmt;
     int value=0;
@@ -277,20 +237,14 @@ static DBOperation* singleton;
 -(void)dealloc
 {   [tagName release];
     [orderIdList release];
-    [orderList release];
-    [tagIdAry release];
-    [playIdAry release];
-    [playlist_UserName release];
-    [playlist_UserId release];
-    [tagUserName release];
-    [tagUrl release];
     [photos release];
-    [playlist_UserRules release];
     [name release];
     [Transtion release];
-    [playNameAry release];
     [singleton release];
-    //[UserTablename release];
+    [tagList release];
+    [playTableList release];
+    [RulesList release];
+    [tag1List release];
     [super dealloc];
 }
 

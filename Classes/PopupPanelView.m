@@ -43,9 +43,10 @@
 {
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag]; 
-    NSString *selectTag= [NSString stringWithFormat:@"select * from tag where url='%@'",self.url];
-    [da selectFromTAG:selectTag];
-    self.list=da.tagIdAry;
+    NSString *selectTag= [NSString stringWithFormat:@"select ID from tag where url='%@'",self.url];
+    self.list=[da selectFromTAG:selectTag];
+    NSLog(@"OOO%@",self.list);
+    
 }
 CGFloat btx = 20;
 CGFloat bty = 20;
@@ -60,11 +61,13 @@ CGFloat byheight = 30;
        [myscroll setContentSize:CGSizeMake(320, 45*[self.list count])];
     NSString *buttonName = nil;
 	UIButton *button = nil;
-    [self selectTable];
-    for(int i=0; i<[da.tagUserName count]; i++){
+    //[self selectTable];
+    NSString *selectTag= [NSString stringWithFormat:@"select NAME from tag where url='%@'",self.url];
+   NSMutableArray *tagUserName=[da selectFromTAG:selectTag];
+    for(int i=0; i<[tagUserName count]; i++){
          button = [UIButton buttonWithType:UIButtonTypeCustom]; 
         [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-        buttonName =[da.tagUserName objectAtIndex:i];
+        buttonName =[tagUserName objectAtIndex:i];
 		button.frame = CGRectMake(btx, bty, btwidth, byheight);
 		[button setTitle:buttonName forState:UIControlStateNormal];
 		button.tag = i;

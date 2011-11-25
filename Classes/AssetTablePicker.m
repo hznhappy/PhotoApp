@@ -231,10 +231,10 @@
             
             NSString *resultUrl = [NSString stringWithFormat:@"%@",[[result defaultRepresentation]url]];
 
-            NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",resultUrl];
-            [dataBase selectFromTAG:selectTag];
+            NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",resultUrl];
+           // NSLog(@"JJ%@",[dataBase selectFromTAG:selectTag]);
             
-            NSInteger count = [dataBase.tagIdAry count];
+            NSInteger count = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];
             
             NSString *num=[NSString stringWithFormat:@"%d", count];
 
@@ -276,9 +276,10 @@
             NSUInteger index = [self.crwAssets indexOfObject:thumbnail];
             NSURL *thumStr = [self.urlsArray objectAtIndex:index];
             if ([dbStr isEqual:thumStr]) {
-                NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
-                [dataBase selectFromTAG:selectTag];
-                NSString *num=[NSString stringWithFormat:@"%d",[dataBase.tagIdAry count]];
+                NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",dbStr];
+               // NSLog(@"JJ%@",[dataBase selectFromTAG:selectTag]);
+                NSInteger count = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];               
+                NSString *num=[NSString stringWithFormat:@"%d",count];
                 [thumbnail setOverlayHidden:num];
                 
             }
@@ -577,7 +578,6 @@
     [table release];
     [crwAssets release];
     [assetArrays release];
-    //[dataBase release];
     [urlsArray release];
     [selectUrls release];
     [dateArry release];

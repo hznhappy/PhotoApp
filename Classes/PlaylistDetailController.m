@@ -34,7 +34,6 @@
     [tranCell release];
     [musicCell release];
     [listTable release];
-    //[dataBase release];
     [listName release];
     [userNames release];
     [state release];
@@ -72,7 +71,7 @@
     mySwc = NO;
     selectImg = [UIImage imageNamed:@"Selected.png"];
     unselectImg = [UIImage imageNamed:@"Unselected.png"];
-    dataBase=[[DBOperation alloc]init];
+    dataBase=[DBOperation getInstance];
     NSMutableArray *tempArray = [[NSMutableArray alloc]init];
     NSMutableArray *playArray = [[NSMutableArray alloc]init];
     NSMutableArray *IdOrderArray = [[NSMutableArray alloc]init];
@@ -89,21 +88,11 @@
     [self creatTable];
 
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
-    [dataBase selectOrderId:selectIdOrder];
-    self.orderList=dataBase.orderIdList;
+    self.orderList=[dataBase selectOrderId:selectIdOrder];
     for (id object in orderList) {
-        [dataBase getUserFromUserTable:[object intValue]];
-        [self.userNames addObject:dataBase.name];
+        
+        [self.userNames addObject:[dataBase getUserFromUserTable:[object intValue]]];
     }
-    //[dataBase selectFromUserTable];
-    //self.userNames=dataBase.UserTablename;
-    
-        NSString *selectTagName= @"SELECT DISTINCT NAME FROM TAG";
-    [dataBase selectUserNameFromTag:selectTagName];
-   // self.photos = [dataBase selectPhotos:selectSql];
-    NSLog(@"tagname:%@",dataBase.tagName);
- 
-
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTransitionAccessoryLabel:) name:@"changeTransitionLabel" object:nil];
     [super viewDidLoad];
 }
@@ -207,12 +196,13 @@
             [selectButton setImage:unselectImg forState:UIControlStateNormal];
             if([playrules_idList containsObject:[orderList objectAtIndex:indexPath.row]])
             {
-                NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name,playlist_rules from rules where user_id=%d and playlist_id=%d",[[orderList objectAtIndex:indexPath.row]intValue],[a intValue]];
-                [dataBase selectFromRules:selectRules];
+                NSString *selectRules= [NSString stringWithFormat:@"select playlist_rules from rules where user_id=%d and playlist_id=%d",[[orderList objectAtIndex:indexPath.row]intValue],[a intValue]];
+                
                  cell.accessoryView = [self getStateButton];
                 [selectedIndexPaths addObject:indexPath];
                 [selectButton setImage:selectImg forState:UIControlStateNormal];
-                for(NSString * rule in dataBase.playlist_UserRules)
+                NSMutableArray *PlayRules=[dataBase selectFromRules:selectRules];
+                for(NSString * rule in PlayRules)
                 {NSLog(@"ew%d",[rule intValue]);
                     if([rule intValue]==1)
                     {
@@ -358,19 +348,13 @@
     [dataBase createTable:createPlayTable];
     NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT PRIMARY KEY)",playIdOrder];
     [dataBase createTable:createPlayIdOrder];
-    NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select id from playIdOrder"];
-    [dataBase selectOrderId:selectPlayIdOrder];
-    
-    NSString *selectPlayTable = [NSString stringWithFormat:@"select playlist_id from PlayTable"];
-    [dataBase selectFromPlayTable:selectPlayTable];
-     self.playIdList=dataBase.playIdAry;
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [dataBase createTable:createRules];
-    NSString *selectRules= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d",[a intValue]];
-    [dataBase selectFromRules:selectRules];
-    self.playrules_idList=dataBase.playlist_UserId;
-    NSLog(@"YYYY%@",playrules_idList);
-
+    NSString *selectPlayTable = [NSString stringWithFormat:@"select playlist_id from PlayTable"];
+    self.playIdList=[dataBase selectFromPlayTable:selectPlayTable];
+    NSString *selectRules= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d",[a intValue]];
+    self.playrules_idList=[dataBase selectFromRules:selectRules];
+   
 }
 
 
