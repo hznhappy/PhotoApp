@@ -38,6 +38,7 @@
     DBOperation *dataBase;
     BOOL mode;
     BOOL load;
+    BOOL done;
     NSUInteger beginIndex;
     NSUInteger endIndex;
     NSString *UserId;

@@ -23,7 +23,7 @@
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
-   
+    done = YES;
     beginIndex = 0;
     endIndex = 60;
     NSString *b=NSLocalizedString(@"Back", @"title");
@@ -251,14 +251,21 @@
             
             NSLog(@"A problem occured %@", [error description]);	                                 
         };	
-    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-    for (NSUInteger i = beginIndex;i<endIndex;i++) {
-        NSURL *assetUrl = [self.urlsArray objectAtIndex:i];
-        [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
+    if (done) {
+        done = NO;
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+        for (NSUInteger i = beginIndex;i<endIndex;i++) {
+            if (i<[self.urlsArray count]) {
+                NSURL *assetUrl = [self.urlsArray objectAtIndex:i];
+                [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
+            }
+        }
+        beginIndex = endIndex;
+        done = YES;
+        [library release];
+        [self.table reloadData];  
     }
-    beginIndex = endIndex;
-    [library release];
-	[self.table reloadData];     
+       
     [pool release];
 }
 -(void)setPhotoTag{
@@ -426,15 +433,10 @@
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    NSLog(@"%.1f",scrollView.contentOffset.y);
-    if (![scrollView isTracking]) {
-        endIndex+=20;
-        [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    }
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+    endIndex+=50;
+    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
 }
-
-
 #pragma mark -
 #pragma mark People picker delegate
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
