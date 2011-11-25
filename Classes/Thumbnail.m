@@ -58,7 +58,6 @@
         UIView *BU=[[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
         self.tagBg =BU;
         [BU release];
-        [self.tagBg setBackgroundColor:[UIColor whiteColor]];
         CGPoint tagBgCenter = tagBg.center;
         self.tagBg.layer.cornerRadius = 25 / 2.0;
         self.tagBg.center = tagBgCenter;
@@ -131,19 +130,15 @@
         }
         
     }else{
-        //if (load) {
-            //return;
-        //}else{
-            //NSLog(@"come here");
-            //[self getImage];
-            PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
-            photoController._pageIndex = self.index;
-            selectOverlay.hidden = NO;
-            //photoController.photos = self.photos;
-           // [photoController loadImages];
-            //NSLog(@"photo count %d",[photoController.photos count]);
-            [self.fatherController.navigationController pushViewController:photoController animated:YES];
-            [photoController release];
+       
+        PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
+        NSURL *url = [[self.asset defaultRepresentation]url];
+        self.index = [self.assetArray indexOfObject:url];
+        NSLog(@"%d is self.index and %d",self.index,[self.assetArray count]);
+        photoController._pageIndex = self.index;
+        selectOverlay.hidden = NO;
+        [self.fatherController.navigationController pushViewController:photoController animated:YES];
+        [photoController release];
         //}
     }
 }

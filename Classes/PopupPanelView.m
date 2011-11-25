@@ -85,28 +85,6 @@ CGFloat byheight = 30;
     [self Buttons];
     
    }
-/*-(void)setPhotoTag{
-    [dataBase openDB];
-    NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
-    NSMutableArray *photos = [dataBase selectPhotos:selectSql];
-    for (NSString *dataStr in photos) {
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        for (Thumbnail *thumbnail in self.crwAssets) {
-            NSURL *thumStr = [[thumbnail.asset defaultRepresentation]url];
-            if ([dbStr isEqual:thumStr]) {
-                NSLog(@"FD");
-                NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
-                [dataBase selectFromTAG:selectTag];
-                NSLog(@"KOKO%@",dataBase.tagIdAry);
-                NSString *num=[NSString stringWithFormat:@"%d",[dataBase.tagIdAry count]];
-                [thumbnail setOverlayHidden:num];
-                
-            }
-        }
-    } 
-    [dataBase closeDB];
-}
-*/
 -(void)viewOpen{
 	isOpen = YES;
     [UIView beginAnimations:nil context:nil];

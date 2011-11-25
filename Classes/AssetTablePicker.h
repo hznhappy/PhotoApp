@@ -12,12 +12,13 @@
 #import "Thumbnail.h"
 #import "sqlite3.h"
 #import "DBOperation.h"
+#import "prepareThumbnail.h"
+
 #define TAG @"TAG"
 
 
 @interface AssetTablePicker : UIViewController<UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>
 {
-    UIActivityIndicatorView *_activityView;
     UITableView *table;
     UIToolbar *viewBar;
     UIToolbar *tagBar;
@@ -30,15 +31,21 @@
 	ALAssetsGroup *assetGroup;
 	
 	NSMutableArray *crwAssets;
-    NSMutableArray *assetArrays;
 	NSMutableArray *urlsArray;
     NSMutableArray *selectUrls;
     NSMutableArray *dateArray;
     NSMutableArray *images;
+    ALAssetsLibrary *liabrary;
 
+    PrepareThumbnail *pool;
+    
+    
     DBOperation *dataBase;
     BOOL mode;
     BOOL load;
+    BOOL done;
+    NSUInteger beginIndex;
+    NSUInteger endIndex;
     NSString *UserId;
     NSString *UserName;
     NSMutableArray *UrlList;
@@ -56,7 +63,11 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *save;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
+@property (nonatomic,retain)ALAssetsLibrary *library;
+@property (nonatomic,retain)PrepareThumbnail *pool;
 
+@property (nonatomic,assign)NSUInteger beginIndex;
+@property (nonatomic,assign)NSUInteger endIndex;
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
@@ -65,7 +76,6 @@
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain) NSMutableArray *images;
 @property (nonatomic,retain) NSMutableArray *crwAssets;
-@property (nonatomic,retain) NSMutableArray *assetArrays;
 @property (nonatomic,retain) NSMutableArray *urlsArray;
 @property (nonatomic,retain) NSMutableArray *selectUrls;
 @property (nonatomic,retain) NSMutableArray *dateArry;
@@ -77,7 +87,7 @@
 -(IBAction)resetTags;
 -(IBAction)selectFromFavoriteNames;
 -(IBAction)selectFromAllNames;
--(void)loadPhotos;
+//-(void)loadPhotos;
 -(void)setPhotoTag;
 -(void)AddUrl:(NSNotification *)note;
 -(void)RemoveUrl:(NSNotification *)note;

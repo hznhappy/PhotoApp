@@ -44,6 +44,7 @@
 		A10FFFFF14593E3F00D007F3 /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = A10FFFFE14593E3F00D007F3 /* person.png */; };
 		A1111478147515F900AD57D0 /* empty1.png in Resources */ = {isa = PBXBuildFile; fileRef = A1111477147515F900AD57D0 /* empty1.png */; };
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
+		A1397ED5147F7C7100531FBF /* prepareThumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = A1397ED4147F7C7100531FBF /* prepareThumbnail.m */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
 		A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAA14441A640087972B /* PhotoImageView.m */; };
@@ -51,7 +52,6 @@
 		A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DB214441A840087972B /* PhotoViewController.m */; };
 		A1EF3DC314441E900087972B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EF3DC214441E900087972B /* QuartzCore.framework */; };
 		A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */; };
-		A1F1FFAB146007F9005FAB2F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA3146007F9005FAB2F /* User.m */; };
 		A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFAF14600813005FAB2F /* DBOperation.m */; };
 		A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F82E841462909100BED207 /* PlaylistDetailController.m */; };
 		A1F9E5961428671E00A69E49 /* tagOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A1F9E5951428671E00A69E49 /* tagOverlay.png */; };
@@ -117,6 +117,8 @@
 		A10FFFFE14593E3F00D007F3 /* person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = person.png; sourceTree = "<group>"; };
 		A1111477147515F900AD57D0 /* empty1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty1.png; sourceTree = "<group>"; };
 		A11401C41440016F007B4B95 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
+		A1397ED3147F7C7100531FBF /* prepareThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prepareThumbnail.h; sourceTree = "<group>"; };
+		A1397ED4147F7C7100531FBF /* prepareThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = prepareThumbnail.m; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A1EF3DA914441A640087972B /* PhotoImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -128,8 +130,6 @@
 		A1EF3DC214441E900087972B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupPanelView.h; sourceTree = "<group>"; };
 		A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupPanelView.m; sourceTree = "<group>"; };
-		A1F1FFA3146007F9005FAB2F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		A1F1FFA4146007F9005FAB2F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		A1F1FFA5146007F9005FAB2F /* AlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumController.h; sourceTree = "<group>"; };
 		A1F1FFAE14600813005FAB2F /* DBOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOperation.h; sourceTree = "<group>"; };
 		A1F1FFAF14600813005FAB2F /* DBOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBOperation.m; sourceTree = "<group>"; };
@@ -163,6 +163,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A1397ED1147F7C0C00531FBF /* AssetModel */,
 				1D3623240D0F684500981E51 /* PhotoAppDelegate.h */,
 				1D3623250D0F684500981E51 /* PhotoAppDelegate.m */,
 				A1F1FF9E146007ED005FAB2F /* TableView */,
@@ -276,6 +277,15 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		A1397ED1147F7C0C00531FBF /* AssetModel */ = {
+			isa = PBXGroup;
+			children = (
+				A1397ED3147F7C7100531FBF /* prepareThumbnail.h */,
+				A1397ED4147F7C7100531FBF /* prepareThumbnail.m */,
+			);
+			name = AssetModel;
+			sourceTree = "<group>";
+		};
 		A1EF3DA3144419710087972B /* OnePhotoController */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,8 +306,6 @@
 				184FCFCB1471FE410082B51D /* tagManagementController.m */,
 				A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */,
 				A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */,
-				A1F1FFA3146007F9005FAB2F /* User.m */,
-				A1F1FFA4146007F9005FAB2F /* User.h */,
 				A1F1FFA5146007F9005FAB2F /* AlbumController.h */,
 				184FCFC91471FDBB0082B51D /* AlbumController.m */,
 				A1F82E831462909100BED207 /* PlaylistDetailController.h */,
@@ -405,7 +413,6 @@
 				A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */,
 				A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */,
 				A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */,
-				A1F1FFAB146007F9005FAB2F /* User.m in Sources */,
 				A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */,
 				A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */,
 				184FCFBF1471F7D50082B51D /* AssetTablePicker.m in Sources */,
@@ -414,6 +421,7 @@
 				184FCFCC1471FE410082B51D /* tagManagementController.m in Sources */,
 				184FCFF9147202D70082B51D /* ThumbnailCell.m in Sources */,
 				184FD004147208F20082B51D /* AnimaSelectController.m in Sources */,
+				A1397ED5147F7C7100531FBF /* prepareThumbnail.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

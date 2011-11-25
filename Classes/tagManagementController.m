@@ -229,11 +229,15 @@ int j=1,count=0;
 	if (cell == nil) {
 		cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
+      
         if([[self.list objectAtIndex:indexPath.row]intValue]==0)
     {
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
     }
-	cell.textLabel.text =[da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]]; //[NSString stringWithFormat:@"%@",da.name];
+    cell.textLabel.text =[da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
+       //[NSString stringWithFormat:@"%@",da.name];
+
+    
     return cell; 
 }
 #pragma mark -

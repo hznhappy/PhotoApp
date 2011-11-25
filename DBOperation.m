@@ -124,25 +124,6 @@ static DBOperation* singleton;
 
     
 }
-
-/*-(void)selectUserNameFromTag:(NSString *)sql;
-{
-     NSMutableArray *playArray = [[NSMutableArray alloc]init];
-    self.tagName=playArray;
-    [playArray release];
-    sqlite3_stmt *statement;
-	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
-		
-		while (sqlite3_step(statement)==SQLITE_ROW) {
-            NSString *newName=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,0)];
-            [tagName addObject:newName];
-        }
-    }
-    sqlite3_finalize(statement);  
-}
-*/
-
-
 -(NSMutableArray *)selectOrderId:(NSString *)sql
 {
     NSMutableArray *playArray = [[NSMutableArray alloc]init];

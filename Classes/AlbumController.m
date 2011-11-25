@@ -152,7 +152,7 @@
 -(void)getAllUrls{
     [self.allUrl removeAllObjects];
     for (ALAssetsGroup *group in self.assetGroups) {
-        [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+        [group setAssetsFilter:[ALAssetsFilter allAssets]];
         [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
         {         
             if(result == nil) 
@@ -197,22 +197,6 @@
 	[self.tableView reloadData];
 	[self.navigationItem setTitle:a];
 }
-
-
-/*-(void)getDate:(ALAsset*)rule
-{   
-    NSDictionary *dic = [[rule defaultRepresentation]metadata];
-    id dateTime = [[dic objectForKey:@"{TIFF}"]objectForKey:@"DateTime"];
-    if (dateTime!=nil) {
-        NSArray *time = [dateTime componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *dataStr = [time objectAtIndex:0];
-        if (![date containsObject:dataStr]) {
-            [date addObject:[time objectAtIndex:0]];
-        }
-    }
-
-}
-*/
 #pragma mark -
 #pragma Button Action
 -(void)table1
@@ -308,10 +292,10 @@
     {NSLog(@"OO11");
         ALAssetsGroup *group = (ALAssetsGroup*)[assetGroups objectAtIndex:0];
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-        NSInteger gCount = [group numberOfAssets];
+        //NSInteger gCount = [group numberOfAssets];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         NSString *u=NSLocalizedString(@"ALL", @"title");
-        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,gCount];
+        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,[allUrl count]];
         [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:0] posterImage]]];
         
     }
