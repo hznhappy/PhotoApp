@@ -13,12 +13,13 @@
 @implementation AssetTablePicker
 @synthesize assetGroup;
 //@synthesize dataBase;
-@synthesize crwAssets,assetArrays,urlsArray,selectUrls,dateArry;
+@synthesize crwAssets,urlsArray,selectUrls,dateArry;
 @synthesize table;
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
 @synthesize images,PLAYID,lock;
 @synthesize beginIndex,endIndex;
+@synthesize library;
 
 #pragma mark -
 #pragma mark UIViewController Methods
@@ -26,6 +27,10 @@
     done = YES;
     beginIndex = 0;
     endIndex = 60;
+    
+    ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
+    self.library = temLibrary;
+    [temLibrary release];
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
@@ -58,11 +63,8 @@
     self.images = temp;
     [temp release];
     NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
-    NSMutableArray *temArray = [[NSMutableArray alloc] init];
     self.crwAssets = thumbNailArray;
-    self.assetArrays = temArray;
     [thumbNailArray release];
-    [temArray release];
     NSString *a=NSLocalizedString(@"Cancel", @"title");
     cancel = [[UIBarButtonItem alloc]initWithTitle:a style:UIBarButtonItemStyleDone target:self action:@selector(cancelTag)];
     
@@ -76,8 +78,8 @@
                                                 name:@"selectedUrls" 
                                               object:nil];
     [self creatTable];
-    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.5];
+    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
+    //[self.table performSelector:@selector(reloadData) withObject:nil afterDelay:1];
     alert1 = [[UIAlertView alloc]initWithTitle:@"请输入密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
     passWord = [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
     passWord.backgroundColor = [UIColor whiteColor];  
@@ -204,7 +206,7 @@
         [thub setSelectOvlay];
     }
 }
-
+/*
 -(void)loadPhotos {
     NSLog(@"%d is begin %d is end ",beginIndex, endIndex);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -260,17 +262,16 @@
                 [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
             }
             if(i == endIndex -1){
-                [self.table reloadData];  
-
+                beginIndex = endIndex;
+                done = YES;
             }
         }
-        beginIndex = endIndex;
-        done = YES;
-        [library release];
+        
     }
        
     [pool release];
 }
+ */
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
     NSMutableArray *photos = [dataBase selectPhotos:selectSql];
@@ -436,10 +437,11 @@
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-    endIndex+=50;
-    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-}
+//- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+//    endIndex+=50;
+//    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
+//    [self.table reloadData];
+//}
 #pragma mark -
 #pragma mark People picker delegate
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
@@ -481,7 +483,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([crwAssets count] / 4.0);
+    return ceil([self.urlsArray count] / 4.0);
     
 }
 
@@ -490,33 +492,33 @@
 	int index = (_indexPath.row*4);
 	int maxIndex = (_indexPath.row*4+3);
     
-    if(maxIndex < [self.crwAssets count]) {
+    if(maxIndex < [self.urlsArray count]) {
         
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
-                [self.crwAssets objectAtIndex:index+2],
-                [self.crwAssets objectAtIndex:index+3],
+        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
+                [self.urlsArray objectAtIndex:index+1],
+                [self.urlsArray objectAtIndex:index+2],
+                [self.urlsArray objectAtIndex:index+3],
                 nil];
     }
     
-    else if(maxIndex-1 < [self.crwAssets count]) {
+    else if(maxIndex-1 < [self.urlsArray count]) {
         
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
-                [self.crwAssets objectAtIndex:index+2],
+        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
+                [self.urlsArray objectAtIndex:index+1],
+                [self.urlsArray objectAtIndex:index+2],
                 nil];
     }
     
-    else if(maxIndex-2 < [self.crwAssets count]) {
+    else if(maxIndex-2 < [self.urlsArray count]) {
         
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
+        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
+                [self.urlsArray objectAtIndex:index+1],
                 nil];
     }
     
-    else if(maxIndex-3 < [self.crwAssets count]) {
+    else if(maxIndex-3 < [self.urlsArray count]) {
         
-        return [NSArray arrayWithObject:[self.crwAssets objectAtIndex:index]];
+        return [NSArray arrayWithObject:[self.urlsArray objectAtIndex:index]];
     }
     
 	return nil;
@@ -530,7 +532,7 @@
     cell.loadSign = load;
     if (cell == nil) 
     {		        
-        cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] 
+        cell = [[[ThumbnailCell alloc] initWithUrls:[self assetsForIndexPath:indexPath] andAssetLibrary:self.library 
                                       reuseIdentifier:CellIdentifier] autorelease];
         
     }	
@@ -556,7 +558,6 @@
 -(void)viewDidUnload{
     self.table = nil;
     self.crwAssets = nil;
-    self.assetArrays = nil;
    // dataBase = nil;
     self.urlsArray = nil;
     self.viewBar = nil;
@@ -580,7 +581,6 @@
     [reset release];
     [table release];
     [crwAssets release];
-    [assetArrays release];
     //[dataBase release];
     [urlsArray release];
     [selectUrls release];
@@ -592,6 +592,7 @@
     [PLAYID release];
     [alert1 release];
     [val release];
+    [library release];
     [super dealloc];    
 }
 

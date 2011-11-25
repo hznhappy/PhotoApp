@@ -29,11 +29,11 @@
 	ALAssetsGroup *assetGroup;
 	
 	NSMutableArray *crwAssets;
-    NSMutableArray *assetArrays;
 	NSMutableArray *urlsArray;
     NSMutableArray *selectUrls;
     NSMutableArray *dateArray;
     NSMutableArray *images;
+    ALAssetsLibrary *liabrary;
 
     DBOperation *dataBase;
     BOOL mode;
@@ -58,6 +58,7 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *save;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
+@property (nonatomic,retain)ALAssetsLibrary *library;
 
 @property (nonatomic,assign)NSUInteger beginIndex;
 @property (nonatomic,assign)NSUInteger endIndex;
@@ -69,7 +70,6 @@
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain) NSMutableArray *images;
 @property (nonatomic,retain) NSMutableArray *crwAssets;
-@property (nonatomic,retain) NSMutableArray *assetArrays;
 @property (nonatomic,retain) NSMutableArray *urlsArray;
 @property (nonatomic,retain) NSMutableArray *selectUrls;
 @property (nonatomic,retain) NSMutableArray *dateArry;
@@ -81,7 +81,7 @@
 -(IBAction)resetTags;
 -(IBAction)selectFromFavoriteNames;
 -(IBAction)selectFromAllNames;
--(void)loadPhotos;
+//-(void)loadPhotos;
 -(void)setPhotoTag;
 -(void)AddUrl:(NSNotification *)note;
 -(void)RemoveUrl:(NSNotification *)note;
