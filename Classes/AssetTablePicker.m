@@ -259,11 +259,14 @@
                 NSURL *assetUrl = [self.urlsArray objectAtIndex:i];
                 [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
             }
+            if(i == endIndex -1){
+                [self.table reloadData];  
+
+            }
         }
         beginIndex = endIndex;
         done = YES;
         [library release];
-        [self.table reloadData];  
     }
        
     [pool release];
