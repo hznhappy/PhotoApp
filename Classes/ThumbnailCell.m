@@ -12,6 +12,7 @@
 @implementation ThumbnailCell
 
 @synthesize rowAssets;
+@synthesize allUrls;
 @synthesize tagOverlay,loadSign;
 @synthesize rowThumbnails;
 @synthesize imagesReady;
@@ -71,6 +72,7 @@
             return;
         }
         Thumbnail *view = [[Thumbnail alloc] initWithAsset:result];
+        view.assetArray = self.allUrls;
         [rowThumbnails addObject:view];
         
         NSURL *url = [[result defaultRepresentation] url];
@@ -78,6 +80,7 @@
         
         if ([loadedurls count] == [self.rowAssets count]) {
             imagesReady = YES;
+            [self setNeedsLayout];
         }
         
         [view release];
@@ -105,16 +108,15 @@
 
 -(void)layoutSubviews {
     //NSLog(@"%@",self.loadSign?@"yes":@"no");
-    
+    NSLog(@"cell count %d",[self.allUrls count]);
 
 	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
     if (imagesReady) {
-        NSLog(@"%@",self.imagesReady?@"yes":@"no");
-        NSLog(@"%@ is rowThumbnails",self.rowThumbnails);
 	for(Thumbnail *thum in self.rowThumbnails) {
         thum.overlay = tagOverlay;
         thum.load = self.loadSign;
+        thum.assetArray = self.allUrls;
 		[thum setFrame:frame];
 		[thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
 		[self addSubview:thum];
@@ -125,6 +127,7 @@
 
 -(void)dealloc 
 {
+    [allUrls release];
     [loadedurls release];
     [cellLibrary release];
     [rowThumbnails release];

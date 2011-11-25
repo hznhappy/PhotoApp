@@ -131,19 +131,15 @@
         }
         
     }else{
-        //if (load) {
-            //return;
-        //}else{
-            //NSLog(@"come here");
-            //[self getImage];
-            PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
-            photoController._pageIndex = self.index;
-            selectOverlay.hidden = NO;
-            //photoController.photos = self.photos;
-           // [photoController loadImages];
-            //NSLog(@"photo count %d",[photoController.photos count]);
-            [self.fatherController.navigationController pushViewController:photoController animated:YES];
-            [photoController release];
+       
+        PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
+        NSURL *url = [[self.asset defaultRepresentation]url];
+        self.index = [self.assetArray indexOfObject:url];
+        NSLog(@"%d is self.index and %d",self.index,[self.assetArray count]);
+        photoController._pageIndex = self.index;
+        selectOverlay.hidden = NO;
+        [self.fatherController.navigationController pushViewController:photoController animated:YES];
+        [photoController release];
         //}
     }
 }

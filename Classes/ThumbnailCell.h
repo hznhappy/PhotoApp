@@ -15,6 +15,8 @@
 	NSMutableArray *rowThumbnails;
 	NSMutableArray *loadedurls;
     ALAssetsLibrary *cellLibrary;
+    NSMutableArray *allUrls;
+    
     BOOL tagOverlay;
     BOOL loadSign;
     BOOL imagesReady;
@@ -27,6 +29,7 @@
 @property (nonatomic,retain) NSArray *rowAssets;
 @property (nonatomic,retain) NSMutableArray *rowThumbnails;
 @property (nonatomic,retain) NSMutableArray *loadedurls;
+@property (nonatomic,retain) NSMutableArray *allUrls;
 @property (nonatomic,retain) ALAssetsLibrary *cellLibrary;
 @property (nonatomic,assign) BOOL tagOverlay;
 @property (nonatomic,assign) BOOL loadSign;

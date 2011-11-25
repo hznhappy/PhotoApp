@@ -540,6 +540,7 @@
     {		
 		[cell setAssets:[self assetsForIndexPath:indexPath]];
 	}
+    cell.allUrls = self.urlsArray;
     return cell;
 }
 
