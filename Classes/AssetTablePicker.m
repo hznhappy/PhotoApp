@@ -97,6 +97,10 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
 }
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [[NSThread currentThread] cancel];
+}
 -(void)huyou
 {
     NSString *a=NSLocalizedString(@"Lock", @"title");
@@ -537,8 +541,7 @@
     cell.loadSign = load;
     if (cell == nil) 
     {		        
-//        cell = [[[ThumbnailCell alloc] initWithUrls:[self assetsForIndexPath:indexPath] andAssetLibrary:self.library 
-//                                      reuseIdentifier:CellIdentifier] autorelease];
+
         cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
         
     }
@@ -564,7 +567,6 @@
 -(void)viewDidUnload{
     self.table = nil;
     self.crwAssets = nil;
-   // dataBase = nil;
     self.urlsArray = nil;
     self.viewBar = nil;
     self.tagBar = nil;

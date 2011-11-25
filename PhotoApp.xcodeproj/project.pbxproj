@@ -52,7 +52,6 @@
 		A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DB214441A840087972B /* PhotoViewController.m */; };
 		A1EF3DC314441E900087972B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EF3DC214441E900087972B /* QuartzCore.framework */; };
 		A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */; };
-		A1F1FFAB146007F9005FAB2F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA3146007F9005FAB2F /* User.m */; };
 		A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFAF14600813005FAB2F /* DBOperation.m */; };
 		A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F82E841462909100BED207 /* PlaylistDetailController.m */; };
 		A1F9E5961428671E00A69E49 /* tagOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A1F9E5951428671E00A69E49 /* tagOverlay.png */; };
@@ -131,8 +130,6 @@
 		A1EF3DC214441E900087972B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupPanelView.h; sourceTree = "<group>"; };
 		A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupPanelView.m; sourceTree = "<group>"; };
-		A1F1FFA3146007F9005FAB2F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		A1F1FFA4146007F9005FAB2F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		A1F1FFA5146007F9005FAB2F /* AlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumController.h; sourceTree = "<group>"; };
 		A1F1FFAE14600813005FAB2F /* DBOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOperation.h; sourceTree = "<group>"; };
 		A1F1FFAF14600813005FAB2F /* DBOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBOperation.m; sourceTree = "<group>"; };
@@ -309,8 +306,6 @@
 				184FCFCB1471FE410082B51D /* tagManagementController.m */,
 				A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */,
 				A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */,
-				A1F1FFA3146007F9005FAB2F /* User.m */,
-				A1F1FFA4146007F9005FAB2F /* User.h */,
 				A1F1FFA5146007F9005FAB2F /* AlbumController.h */,
 				184FCFC91471FDBB0082B51D /* AlbumController.m */,
 				A1F82E831462909100BED207 /* PlaylistDetailController.h */,
@@ -418,7 +413,6 @@
 				A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */,
 				A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */,
 				A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */,
-				A1F1FFAB146007F9005FAB2F /* User.m in Sources */,
 				A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */,
 				A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */,
 				184FCFBF1471F7D50082B51D /* AssetTablePicker.m in Sources */,

@@ -26,8 +26,6 @@
 
 @interface PhotoImageView (Private)
 - (void)layoutScrollViewAnimated:(BOOL)animated;
-- (void)setupImageViewWithImage:(UIImage *)aImage;
-- (CABasicAnimation*)fadeAnimation;
 @end
 
 
@@ -112,21 +110,6 @@
 	
 	[self layoutScrollViewAnimated:NO];
 }
-/*
-- (void)setupImageViewWithImage:(UIImage*)aImage {	
-	if (!aImage) return; 
-
-	_loading = NO;
-	[_activityView stopAnimating];
-	self.imageView.image = aImage; 
-	[self layoutScrollViewAnimated:NO];
-	
-	[[self layer] addAnimation:[self fadeAnimation] forKey:@"opacity"];
-	self.userInteractionEnabled = YES;
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"PhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:NO], @"failed", nil]];
-	
-}
-*/
 - (void)prepareForReusue{
 	
 	//  reset view
@@ -136,24 +119,6 @@
 
 #pragma mark -
 #pragma mark Parent Controller Fading
-
-- (void)fadeView{
-	
-	self.backgroundColor = [UIColor clearColor];
-	self.superview.backgroundColor = self.backgroundColor;
-	self.superview.superview.backgroundColor = self.backgroundColor;
-	
-	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
-	[animation setValue:[NSNumber numberWithInt:101] forKey:@"AnimationType"];
-	animation.delegate = self;
-	animation.fromValue = (id)[UIColor clearColor].CGColor;
-	animation.toValue = (id)[UIColor blackColor].CGColor;
-	animation.duration = 0.4f;
-	[self.layer addAnimation:animation forKey:@"FadeAnimation"];
-	
-	
-}
-
 - (void)resetBackgroundColors{
 	
 	self.backgroundColor = [UIColor blackColor];
@@ -213,22 +178,6 @@
 }
 
 
-
-#pragma mark -
-#pragma mark Animation
-
-- (CABasicAnimation*)fadeAnimation{
-	
-	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-	animation.fromValue = [NSNumber numberWithFloat:0.0f];
-	animation.toValue = [NSNumber numberWithFloat:1.0f];
-	animation.duration = .3f;
-	animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-	
-	return animation;
-}
-
-
 #pragma mark -
 #pragma mark UIScrollView Delegate Methods
 
@@ -273,57 +222,28 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
 	return [self.scrollView viewWithTag:ZOOM_VIEW_TAG];
 }
-/*
-- (CGRect)frameToFitCurrentView{
-	
-	CGFloat heightFactor = self.imageView.image.size.height / self.frame.size.height;
-	CGFloat widthFactor = self.imageView.image.size.width / self.frame.size.width;
-	
-	CGFloat scaleFactor = MAX(heightFactor, widthFactor);
-	
-	CGFloat newHeight = self.imageView.image.size.height / scaleFactor;
-	CGFloat newWidth = self.imageView.image.size.width / scaleFactor;
-	
-	
-	CGRect rect = CGRectMake((self.frame.size.width - newWidth)/2, (self.frame.size.height-newHeight)/2, newWidth, newHeight);
-	
-	return rect;
-	
-}
-*/
+
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
 			
 	if (scrollView.zoomScale > 1.0f) {		
 		
 		
-		CGFloat height, width; //originX, originY;
-		//height = MIN(CGRectGetHeight(self.imageView.frame) + self.imageView.frame.origin.x, CGRectGetHeight(self.bounds));
-		//width = MIN(CGRectGetWidth(self.imageView.frame) + self.imageView.frame.origin.y, CGRectGetWidth(self.bounds));
-
+		CGFloat height, width;	
 		
 		if (CGRectGetMaxX(self.imageView.frame) > self.bounds.size.width) {
 			width = CGRectGetWidth(self.bounds);
-			//originX = 0.0f;
 		} else {
 			width = CGRectGetMaxX(self.imageView.frame);
 			
-			/*if (self.imageView.frame.origin.x < 0.0f) {
-				originX = 0.0f;
-			} else {
-				originX = self.imageView.frame.origin.x;
-			}*/	
-		}
+        }
 		
 		if (CGRectGetMaxY(self.imageView.frame) > self.bounds.size.height) {
 			height = CGRectGetHeight(self.bounds);
-			//originY = 0.0f;
 		} else {
 			height = CGRectGetMaxY(self.imageView.frame);
 			
 			if (self.imageView.frame.origin.y < 0.0f) {
-				//originY = 0.0f;
 			} else {
-				//originY = self.imageView.frame.origin.y;
 			}
 		}
 
@@ -388,24 +308,6 @@
 
 	
 }
-
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
-	
-	if (flag) {
-		
-		if ([[anim valueForKey:@"AnimationType"] integerValue] == 101) {
-			
-			[self resetBackgroundColors];
-			
-		} else if ([[anim valueForKey:@"AnimationType"] integerValue] == 202) {
-			
-			self.layer.transform = CATransform3DIdentity;
-			
-		}
-	}
-	
-}
-
 
 #pragma mark -
 #pragma mark Dealloc
