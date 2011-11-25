@@ -18,13 +18,14 @@
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
 @synthesize images,PLAYID,lock;
+@synthesize beginIndex,endIndex;
 
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
    
-    
-    
+    beginIndex = 0;
+    endIndex = 60;
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
@@ -32,12 +33,7 @@
     UIBarButtonItem *backItem=[[UIBarButtonItem alloc]initWithCustomView:backButton];
     self.navigationItem.leftBarButtonItem =backItem;
     [backItem release];
-    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityView.frame = CGRectMake(0, 0, 37.0f, 37.0f);
-    activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-    self.navigationItem.titleView = activityView;
-    _activityView = [activityView retain];
-    [activityView release];
+    
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
     [tempArray release];
@@ -137,9 +133,7 @@
             
                 NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
                 [defaults setObject:pass forKey:@"name_preference"];
-                 self.lock.title=a;
-                //[val release];
-               
+                 self.lock.title=a;               
             }
             else
             {
@@ -212,7 +206,7 @@
 }
 
 -(void)loadPhotos {
-    
+    NSLog(@"%d is begin %d is end ",beginIndex, endIndex);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
         {
@@ -243,7 +237,6 @@
 
             }
             [view release];
-            //[self.assetArrays addObject:result];
         };
         
         ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error) {
@@ -259,11 +252,12 @@
             NSLog(@"A problem occured %@", [error description]);	                                 
         };	
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-    for (NSURL *assetUrl in self.urlsArray) {
+    for (NSUInteger i = beginIndex;i<endIndex;i++) {
+        NSURL *assetUrl = [self.urlsArray objectAtIndex:i];
         [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
     }
+    beginIndex = endIndex;
     [library release];
-    //[self setPhotoTag];
 	[self.table reloadData];     
     [pool release];
 }
@@ -425,17 +419,22 @@
 #pragma mark notification method
 
 -(void)setEditOverlay:(NSNotification *)notification{
-    //for (Thumbnail *thumbnail in self.crwAssets) {
-    //  [thumbnail setOverlayHidden:YES];
-    //}
     
     [self setPhotoTag];
     
 }
 
--(void)getSelectedUrls:(NSNotification *)note{
-    
+#pragma mark -
+#pragma mark UIScrollViewDelegate
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSLog(@"%.1f",scrollView.contentOffset.y);
+    if (![scrollView isTracking]) {
+        endIndex+=20;
+        [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
+    }
 }
+
+
 #pragma mark -
 #pragma mark People picker delegate
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
@@ -583,7 +582,6 @@
     [dateArry release];
     [UserId release];
     [UserName release];
-    [_activityView release], _activityView=nil;
     [images release];
     [UrlList release];
     [PLAYID release];

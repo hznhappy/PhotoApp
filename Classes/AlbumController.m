@@ -36,10 +36,7 @@
 }
 
 -(void)viewDidLoad
-{/*NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
-    NSNumber *val=[defaults objectForKey:@"pa"];
-    NSLog(@"KKKK%@",val);
-    [defaults setObject:@"shan" forKey:@"pa"];*/
+{
     date = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];
@@ -64,10 +61,7 @@
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
     editButton = [[UIBarButtonItem alloc] initWithTitle:bu style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
     addButon.style = UIBarButtonItemStyleBordered;
-    //UIImage *buttonUpImage = [UIImage imageNamed:@"empty1.png"];
-    
-    //[editButton setImage:buttonUpImage];
-    //[editButton setTitle:@"edit"];
+   
     editButton.style = UIBarButtonItemStyleBordered;
     self.navigationItem.leftBarButtonItem = editButton;
     self.navigationItem.rightBarButtonItem = addButon;

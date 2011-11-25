@@ -17,7 +17,6 @@
 
 @interface AssetTablePicker : UIViewController<UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>
 {
-    UIActivityIndicatorView *_activityView;
     UITableView *table;
     UIToolbar *viewBar;
     UIToolbar *tagBar;
@@ -39,6 +38,8 @@
     DBOperation *dataBase;
     BOOL mode;
     BOOL load;
+    NSUInteger beginIndex;
+    NSUInteger endIndex;
     NSString *UserId;
     NSString *UserName;
     NSMutableArray *UrlList;
@@ -57,6 +58,8 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
 
+@property (nonatomic,assign)NSUInteger beginIndex;
+@property (nonatomic,assign)NSUInteger endIndex;
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
