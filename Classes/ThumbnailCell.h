@@ -16,6 +16,7 @@
 	NSMutableArray *loadedurls;
     ALAssetsLibrary *cellLibrary;
     NSMutableArray *allUrls;
+    UIViewController *passViewController;
     
     BOOL tagOverlay;
     BOOL loadSign;
@@ -26,6 +27,7 @@
 -(id)initWithAssets:(NSArray*)_assets reuseIdentifier:(NSString*)_identifier;
 -(void)setAssets:(NSArray*)_assets;
 -(void)prepareThumail;
+@property (nonatomic,retain) UIViewController *passViewController;
 @property (nonatomic,retain) NSArray *rowAssets;
 @property (nonatomic,retain) NSMutableArray *rowThumbnails;
 @property (nonatomic,retain) NSMutableArray *loadedurls;

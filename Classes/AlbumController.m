@@ -156,7 +156,7 @@
 -(void)getAllUrls{
     [self.allUrl removeAllObjects];
     for (ALAssetsGroup *group in self.assetGroups) {
-        [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+        [group setAssetsFilter:[ALAssetsFilter allAssets]];
         [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
         {         
             if(result == nil) 

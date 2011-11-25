@@ -541,6 +541,7 @@
 		[cell setAssets:[self assetsForIndexPath:indexPath]];
 	}
     cell.allUrls = self.urlsArray;
+    cell.passViewController = self;
     return cell;
 }
 

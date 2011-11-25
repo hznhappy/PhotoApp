@@ -18,6 +18,7 @@
 @synthesize imagesReady;
 @synthesize loadedurls;
 @synthesize cellLibrary;
+@synthesize passViewController;
 
 
 
@@ -109,24 +110,26 @@
 -(void)layoutSubviews {
     //NSLog(@"%@",self.loadSign?@"yes":@"no");
     NSLog(@"cell count %d",[self.allUrls count]);
-
+    
 	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
     if (imagesReady) {
-	for(Thumbnail *thum in self.rowThumbnails) {
-        thum.overlay = tagOverlay;
-        thum.load = self.loadSign;
-        thum.assetArray = self.allUrls;
-		[thum setFrame:frame];
-		[thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
-		[self addSubview:thum];
-		frame.origin.x = frame.origin.x + frame.size.width + 4;
-	}
+        for(Thumbnail *thum in self.rowThumbnails) {
+            thum.overlay = tagOverlay;
+            thum.load = self.loadSign;
+            thum.assetArray = self.allUrls;
+            thum.fatherController = self.passViewController;
+            [thum setFrame:frame];
+            [thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
+            [self addSubview:thum];
+            frame.origin.x = frame.origin.x + frame.size.width + 4;
+        }
     }
 }
 
 -(void)dealloc 
 {
+    [passViewController release];
     [allUrls release];
     [loadedurls release];
     [cellLibrary release];
