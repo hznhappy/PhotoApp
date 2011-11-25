@@ -32,7 +32,6 @@
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
     
-    NSLog(@"URLS: %@",self.urlsArray);
     self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
     [temLibrary release];
@@ -60,10 +59,7 @@
     [self.table setSeparatorColor:[UIColor clearColor]];
 	[self.table setAllowsSelection:NO];
     [self setWantsFullScreenLayout:YES];
-    
-    //DBOperation *db = [DBOperation getInstance];
     dataBase =[DBOperation getInstance];
-    //[db release];
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
     [temp release];
@@ -83,8 +79,6 @@
                                                 name:@"selectedUrls" 
                                               object:nil];
     [self creatTable];
-    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    //[self.table performSelector:@selector(reloadData) withObject:nil afterDelay:1];
     alert1 = [[UIAlertView alloc]initWithTitle:@"请输入密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
     passWord = [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
     passWord.backgroundColor = [UIColor whiteColor];  
@@ -96,10 +90,6 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [[NSThread currentThread] cancel];
 }
 -(void)huyou
 {
@@ -215,72 +205,6 @@
         [thub setSelectOvlay];
     }
 }
-/*
--(void)loadPhotos {
-    NSLog(@"%d is begin %d is end ",beginIndex, endIndex);
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
-        {
-            if (result == nil) 
-            {
-                return;
-            }
-            Thumbnail *view = [[Thumbnail alloc] initWithAsset:result];
-            view.fatherController = self;
-            
-            [self.crwAssets addObject:view];
-            NSUInteger thumIndex = [self.crwAssets indexOfObject:view];
-            
-            view.index = thumIndex;
-            view.assetArray = self.urlsArray;
-            
-            NSString *resultUrl = [NSString stringWithFormat:@"%@",[[result defaultRepresentation]url]];
-
-            NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",resultUrl];
-            [dataBase selectFromTAG:selectTag];
-            
-            NSInteger count = [dataBase.tagIdAry count];
-            
-            NSString *num=[NSString stringWithFormat:@"%d", count];
-
-            if (count > 0) {
-                [view setOverlayHidden:num];
-
-            }
-            [view release];
-        };
-        
-        ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error) {
-            
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                             message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-                                                            delegate:nil 
-                                                   cancelButtonTitle:@"Ok" 
-                                                   otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            
-            NSLog(@"A problem occured %@", [error description]);	                                 
-        };	
-    if (done) {
-        done = NO;
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-        for (NSUInteger i = beginIndex;i<endIndex;i++) {
-            if (i<[self.urlsArray count]) {
-                NSURL *assetUrl = [self.urlsArray objectAtIndex:i];
-                [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
-            }
-            if(i == endIndex -1){
-                beginIndex = endIndex;
-                done = YES;
-            }
-        }
-        
-    }
-       
-    [pool release];
-}
- */
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
     NSMutableArray *photos = [dataBase selectPhotos:selectSql];
@@ -290,9 +214,10 @@
             NSUInteger index = [self.crwAssets indexOfObject:thumbnail];
             NSURL *thumStr = [self.urlsArray objectAtIndex:index];
             if ([dbStr isEqual:thumStr]) {
-                NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
-                [dataBase selectFromTAG:selectTag];
-                NSString *num=[NSString stringWithFormat:@"%d",[dataBase.tagIdAry count]];
+                NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",dbStr];
+               // NSLog(@"JJ%@",[dataBase selectFromTAG:selectTag]);
+                NSInteger count = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];               
+                NSString *num=[NSString stringWithFormat:@"%d",count];
                 [thumbnail setOverlayHidden:num];
                 
             }
@@ -361,7 +286,6 @@
      {   ME=NO;
         [alert1 show];
     }
-   // [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 -(void)alert
 {
@@ -428,8 +352,7 @@
 -(IBAction)playPhotos{
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray];
     playPhotoController._pageIndex = 0;
-    //playPhotoController.photos = self.images;
-     [dataBase getUserFromPlayTable:[PLAYID intValue]];
+    [dataBase getUserFromPlayTable:[PLAYID intValue]];
     [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
@@ -446,11 +369,6 @@
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate
-//- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-//    endIndex+=50;
-//    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-//    [self.table reloadData];
-//}
 #pragma mark -
 #pragma mark People picker delegate
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
@@ -541,7 +459,6 @@
     cell.loadSign = load;
     if (cell == nil) 
     {		        
-
         cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
         
     }
@@ -589,7 +506,6 @@
     [reset release];
     [table release];
     [crwAssets release];
-    //[dataBase release];
     [urlsArray release];
     [selectUrls release];
     [dateArry release];

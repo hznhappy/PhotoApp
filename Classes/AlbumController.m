@@ -20,10 +20,6 @@
 
 #pragma mark -
 #pragma mark UIViewController method
--(void)setLock
-{
-    NSLog(@"COCO");
-}
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
@@ -61,7 +57,6 @@
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
     editButton = [[UIBarButtonItem alloc] initWithTitle:bu style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEdit:)];
     addButon.style = UIBarButtonItemStyleBordered;
-   
     editButton.style = UIBarButtonItemStyleBordered;
     self.navigationItem.leftBarButtonItem = editButton;
     self.navigationItem.rightBarButtonItem = addButon;
@@ -79,22 +74,19 @@
     [da createTable:createPlayTable];
     NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT PRIMARY KEY)",playIdOrder];
     [da createTable:createPlayIdOrder];
-   
-    NSString *selectPlayTable = [NSString stringWithFormat:@"select * from PlayTable"];
-    [da selectFromPlayTable:selectPlayTable];
-  if([da.playIdAry count]==0)
-    {   
-        [self Special];
-    }
-    NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select * from playIdOrder"];
-    [da selectOrderId:selectPlayIdOrder];
-    self.list=da.orderIdList;
     NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
     [da createTable:createRules];
-    
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag];
-
+    NSString *selectPlayTable = [NSString stringWithFormat:@"select count(*) from PlayTable"];
+     NSInteger count=[[[da selectFromPlayTable:selectPlayTable]objectAtIndex:0]intValue];
+  if(count==0)
+  {   NSLog(@"OK");
+        [self Special];
+    }
+    NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select play_id from playIdOrder"];
+    self.list=[da selectOrderId:selectPlayIdOrder];
+   
 }
 -(void)Special
 {NSString *u=NSLocalizedString(@"ALL", @"title");
@@ -164,7 +156,6 @@
                 return;
             }
             [self.allUrl addObject:[[result defaultRepresentation]url]];
-            // [self getDate:result];
         }];
     }
 }
@@ -202,22 +193,6 @@
 	[self.tableView reloadData];
 	[self.navigationItem setTitle:a];
 }
-
-
-/*-(void)getDate:(ALAsset*)rule
-{   
-    NSDictionary *dic = [[rule defaultRepresentation]metadata];
-    id dateTime = [[dic objectForKey:@"{TIFF}"]objectForKey:@"DateTime"];
-    if (dateTime!=nil) {
-        NSArray *time = [dateTime componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *dataStr = [time objectAtIndex:0];
-        if (![date containsObject:dataStr]) {
-            [date addObject:[time objectAtIndex:0]];
-        }
-    }
-
-}
-*/
 #pragma mark -
 #pragma Button Action
 -(void)table1
@@ -243,7 +218,6 @@
 -(IBAction)toggleAdd:(id)sender
 {
      PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
-   // nicshanController *detailController=[[nicshanController alloc]init];
     detailController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:detailController animated:YES];
     [detailController release];
@@ -253,7 +227,6 @@
 #pragma mark TableView delegate method
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 { 
-   //return [list count];
    if([assetGroups count]==0)
    {
         return[assetGroups count];
@@ -294,9 +267,6 @@
     [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     [library release];
     [pool release];
-    //NSLog(@"url count is:%d" ,[url retainCount]);
-
-
 }
 
 
@@ -314,18 +284,18 @@
 	}
     
     [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
-    if([[list objectAtIndex:indexPath.row]intValue]==1)
+    if([[self.list objectAtIndex:indexPath.row]intValue]==1)
     {
         ALAssetsGroup *group = (ALAssetsGroup*)[assetGroups objectAtIndex:0];
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-        NSInteger gCount = [group numberOfAssets];
+        //NSInteger gCount = [group numberOfAssets];
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
         NSString *u=NSLocalizedString(@"ALL", @"title");
-        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,gCount];
+        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,[allUrl count]];
         [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:0] posterImage]]];
         
     }
-    else if([[list objectAtIndex:indexPath.row]intValue]==2)
+    else if([[self.list objectAtIndex:indexPath.row]intValue]==2)
     {
         [self getTagUrls];
         [self getUnTagUrls];
@@ -339,7 +309,7 @@
     {
         
         
-        int row=[[list objectAtIndex:indexPath.row]intValue];
+        int row=[[self.list objectAtIndex:indexPath.row]intValue];
         [self playlistUrl:row];
         if([dbUrl count]==0)
         {
@@ -374,8 +344,6 @@
         assetPicker.urlsArray = allUrl;
           NSString *u=NSLocalizedString(@"ALL", @"title");
         assetPicker.navigationItem.title = u;
-       // assetPicker.dateArry=date;
-       
     }
     else
     {
@@ -392,12 +360,12 @@
 {    
     [SUM removeAllObjects];
     [dbUrl removeAllObjects];
-    NSString *selectRules0= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
-    [da selectFromRules:selectRules0];
-    for(int i=0;i<[da.playlist_UserId count];i++)
+    NSString *selectRules0= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
+    NSMutableArray *playlist_UserId0=[da selectFromRules:selectRules0];
+    for(int i=0;i<[playlist_UserId0 count];i++)
     {
-        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
-        [da selectFromTAG:selectTag];
+        NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId0 objectAtIndex:i]intValue]];
+        NSMutableSet *play_url0=[da selectFromTAG1:selectTag];
         if([self.SUM count]==0)
         {
             NSLog(@"0A");
@@ -409,7 +377,7 @@
             
             self.SUM=t;
             [t release];
-            for (NSString *data in da.tagUrl)
+            for (NSString *data in play_url0)
             {
                 if([self.SUM containsObject:data]) 
                 {
@@ -420,7 +388,7 @@
         }
         else
         {
-            for (NSString *data in da.tagUrl)
+            for (NSString *data in play_url0)
             {
                 if([self.SUM containsObject:data]) 
                 {
@@ -431,13 +399,13 @@
         }
     }
     
-    NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
-    [da selectFromRules:selectRules1];
-    for(int i=0;i<[da.playlist_UserId count];i++)
+    NSString *selectRules1= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
+     NSMutableArray *playlist_UserId1=[da selectFromRules:selectRules1];
+    for(int i=0;i<[playlist_UserId1 count];i++)
     {
-        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
-        [da selectFromTAG:selectTag];
-        if([da.tagUrl count]==0)
+        NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId1 objectAtIndex:i]intValue]];
+        NSMutableSet *play_url1=[da selectFromTAG1:selectTag];
+        if([play_url1 count]==0)
         {
             [SUM removeAllObjects];
             break;
@@ -446,31 +414,31 @@
         {
             if([self.SUM count]==0)
             {
-                self.SUM=da.tagUrl;
+                self.SUM=play_url1;
                 
             }
             else
             {
-                [self.SUM intersectSet:da.tagUrl];
+                [self.SUM intersectSet:play_url1];
             }
         }
     }
-    NSString *selectRules2= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
-    [da selectFromRules:selectRules2];
-    for(int i=0;i<[da.playlist_UserId count];i++)
+    NSString *selectRules2= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
+    NSMutableArray *playlist_UserId2=[da selectFromRules:selectRules2];
+    for(int i=0;i<[playlist_UserId2 count];i++)
     {
-        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
-        [da selectFromTAG:selectTag];
+        NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId2 objectAtIndex:i]intValue]];
+         NSMutableSet *play_url2=[da selectFromTAG1:selectTag];
         
-        NSLog(@"WE%@",da.playlist_UserId);
+        NSLog(@"WE%@",playlist_UserId2);
         if([self.SUM count]==0)
             
         {
-            self.SUM=da.tagUrl;
+            self.SUM=play_url2;
         }
         else
         {
-            [SUM unionSet:da.tagUrl];
+            [SUM unionSet:play_url2];
         }
     }
     
@@ -480,8 +448,6 @@
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [dbUrl addObject:dbStr];
     }
-    
-    //[SUM release];
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     //NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select playList_id from playTable"];

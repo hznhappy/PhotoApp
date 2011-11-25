@@ -80,55 +80,11 @@
     self.index = from;
     self.count = cnt;
 
-//    imagesReady = NO;
-//    [self.loadedurls removeAllObjects];
-//    [self.rowThumbnails removeAllObjects];
-//    ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
-//    {
-//        if (result == nil) 
-//        {
-//            return;
-//        }
-//        Thumbnail *view = [[Thumbnail alloc] initWithAsset:result];
-//        view.assetArray = self.allUrls;
-//        [rowThumbnails addObject:view];
-//        
-//        NSURL *url = [[result defaultRepresentation] url];
-//        [loadedurls addObject:url];
-//        
-//        if ([loadedurls count] == [self.rowAssets count]) {
-//            imagesReady = YES;
-//            [self setNeedsLayout];
-//        }
-//        
-//        [view release];
-//    };
-//    
-//    
-//    ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error)
-//    {
-//        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-//                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-//                                                        delegate:nil 
-//                                               cancelButtonTitle:@"Ok" 
-//                                               otherButtonTitles:nil];
-//        [alert show];
-//        [alert release];
-//        NSLog(@"A problem occured %@", [error description]);	                                 
-//    };	
-//    
-//    
-//    for (NSURL* url in rowAssets) {
-//        [self.cellLibrary assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
-//    }
 }
 
 
 -(void)layoutSubviews {
-    //NSLog(@"%@",self.loadSign?@"yes":@"no");
-    NSLog(@"cell count %d",[self.allUrls count]);
-    
-	CGRect frame = CGRectMake(4, 2, 75, 75);
+ 	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
     if (cellLibrary != nil) {
     if (imagesReady) {

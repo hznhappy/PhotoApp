@@ -97,7 +97,7 @@
     ppv.url = currentPageUrl;
     [ppv Buttons];
     [self.view addSubview:ppv];
-    db = [DBOperation getInstance];
+    //db = [DBOperation getInstance];
     ppv.hidden=YES;
    	[views release];
     NSMutableArray *array = [[NSMutableArray alloc]init];
@@ -134,10 +134,6 @@
         {
             return;
         }
-        //self.img=[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]];
-        //            if ([self.photos objectAtIndex:i]!=nil||[self.photos objectAtIndex:i]!=[NSNull null]) {
-        //                [self.photos replaceObjectAtIndex:i withObject:[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]]];
-        //            }
         CGImageRef ref = [[result defaultRepresentation] fullScreenImage];
         UIImage *image = [UIImage imageWithCGImage:ref];
         [self.bgPhotos addObject:image];
@@ -222,40 +218,6 @@
     [self moveToPhotoAtIndex:nextPage animated:YES];
           [pool release];
 }
-//-(NSMutableArray *)changePhotos:(NSMutableArray *)array{
-//    NSInteger page = [self centerPhotoIndex];
-//    if (_pageIndex<page) {
-////        if (page+2<[self.photoSource count]) {
-////            [self loadPhotos:[self.photoSource objectAtIndex:page+2]];
-////        }
-//        for (NSUInteger i = 0; i<5; i++) {
-////            if (i == 4) {
-////                if (page+2>[self.photoSource count]-1)
-////                    [array replaceObjectAtIndex:i withObject:[NSNull null]];
-////                else{
-////                    [array replaceObjectAtIndex:i withObject:self.img];
-////                }
-////            }else
-//                [array exchangeObjectAtIndex:i withObjectAtIndex:i+1];
-//        }    
-//    }else if(_pageIndex>page){
-////        if (page-2>=0) {
-////            [self loadPhotos:[self.photoSource objectAtIndex:page-2]];
-////        }
-//        for (NSInteger i = 4; i>=0; i--) {
-////            if (i == 0) {
-////                if (nextPage-2<0)
-////                    [self.bgPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
-////                else 
-////                    [self.bgPhotos replaceObjectAtIndex:i withObject:self.img];
-////            }else
-//                [array exchangeObjectAtIndex:i withObjectAtIndex:i-1];
-//        } 
-//    }
-//    return array;
-//
-//}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
 	
@@ -311,8 +273,7 @@
 {  ppv.hidden=NO;
     
     ppv.alpha=0.4;
-   // [[NSNotificationCenter defaultCenter]postNotificationName:@"Set Overlay" 
-                                                  //     object:self];
+    
      [self.view addSubview:ppv];
     edit.style = UIBarButtonItemStyleBordered;
     edit.title = a;
@@ -540,7 +501,6 @@ else{
 	NSInteger _index = [self currentPhotoIndex];
 	
 	for (NSInteger page = _index -1; page < _index+2; page++) {
-		//NSLog(@"%d",page);
 		if (page >= 0 && page < [self.photoSource count]){
 			
 			CGFloat originX = self.scrollView.bounds.size.width * page;
@@ -564,7 +524,6 @@ else{
                     
                 }
      
-                //[self loadScrollViewWithPage:page];
 			}
 			
 			PhotoImageView *_photoView = (PhotoImageView*)[self.photoViews objectAtIndex:page];
@@ -652,11 +611,7 @@ else{
 		[photoView release];
 		
 	} 
-    NSLog(@"%@",self.img);
-    //NSURL *url = [self.photoSource objectAtIndex:page];
-    //[self  loadPhotos:url];
-   // [photoView setPhoto:self.img];//[self.photos objectAtIndex:page]];
-    [photoView setPhoto:image];
+       [photoView setPhoto:image];
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
 	}
@@ -682,7 +637,6 @@ else{
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	NSInteger _index = [self centerPhotoIndex];
-    //[self anotherLoad];
 	if (_index >= [self.photoSource count] || _index < 0) {
 		return;
 	}
@@ -690,15 +644,13 @@ else{
 	if (_pageIndex != _index && !_rotating) {
         
 		[self setBarsHidden:YES animated:YES];
-//        [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
-//        NSLog(@"%@ is ph:",self.photos);
+
         NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
         NSString *nextPage = [NSString stringWithFormat:@"%d",_index];
         NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
         [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
 
 		_pageIndex = _index;
-        //[self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
 		[self setViewState];
 		
 		if (![scrollView isTracking]) {
@@ -714,15 +666,7 @@ else{
 	if (_index >= [self.photoSource count] || _index < 0) {
 		return;
 	}	
-   // [self performSelectorOnMainThread:@selector(anotherLoad) withObject:nil waitUntilDone:YES];
-    //[self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
-//    [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
-//    NSLog(@"%@ is ph:",self.photos);
-//    NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
-//    NSString *nextPage = [NSString stringWithFormat:@"%d",_index];
-//    NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
-//    [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
-	//[self moveToPhotoAtIndex:_index animated:YES];    
+  
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
@@ -881,7 +825,6 @@ else{
 	_photoViews=nil;
 	photoSource=nil;
 	_scrollView=nil;
-    //listid = nil;
 	
 }
 
@@ -892,7 +835,6 @@ else{
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];
-	//[listid release];
     [img release];
     [super dealloc];
 }

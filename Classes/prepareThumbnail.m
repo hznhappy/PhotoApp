@@ -60,7 +60,7 @@
     
     ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
     {
-        NSLog(@"Asset Returned: %@", result);
+//        NSLog(@"Asset Returned: %@", result);
         if (result == nil) 
         {
             return;

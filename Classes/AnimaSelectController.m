@@ -36,7 +36,7 @@
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
-{NSLog(@"YUYUYU%@",play_id);
+{
     NSString *a=NSLocalizedString(@"fade", @"title");
     NSString *b=NSLocalizedString(@"cube", @"title");
     NSString *c=NSLocalizedString(@"reveal", @"title");
@@ -89,23 +89,20 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    NSLog(@"JEE");
     if(play_id!=nil)
     {
         NSString *updatePlayTable= [NSString stringWithFormat:@"UPDATE %@ SET Transtion='%@' WHERE playlist_id=%d",PlayTable,[Trans_list objectAtIndex:indexPath.row],[play_id intValue]];
-        NSLog(@"%@",updatePlayTable);
         [database updateTable:updatePlayTable];
 
     }
     else
     {  
         NSString *selectPlayTable = [NSString stringWithFormat:@"select playlist_id from PlayTable"];
-        [database selectFromPlayTable:selectPlayTable];
+        NSMutableArray *PlayIdList=[database selectFromPlayTable:selectPlayTable];
       //database.playIdAry
-        NSLog(@"KU");
         if(Text==nil||Text.length==0)
         {
-          int  playID=[[database.playIdAry objectAtIndex:[database.playIdAry count]-1]intValue]+1;
+          int  playID=[[PlayIdList objectAtIndex:[PlayIdList count]-1]intValue]+1;
             NSLog(@"HAHA%d",playID);
             NSString *updatePlayTable= [NSString stringWithFormat:@"UPDATE %@ SET Transtion='%@' WHERE playlist_id=%d",PlayTable,[Trans_list objectAtIndex:indexPath.row],playID];
             NSLog(@"%@",updatePlayTable);
@@ -114,7 +111,7 @@
         }
         else
         {
-          int playID=[[database.playIdAry objectAtIndex:[database.playIdAry count]-1]intValue];
+          int playID=[[PlayIdList objectAtIndex:[PlayIdList count]-1]intValue];
              NSLog(@"HeHe%d",playID);
             NSString *updatePlayTable= [NSString stringWithFormat:@"UPDATE %@ SET Transtion='%@' WHERE playlist_id=%d",PlayTable,[Trans_list objectAtIndex:indexPath.row],playID];
             NSLog(@"%@",updatePlayTable);

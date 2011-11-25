@@ -37,7 +37,6 @@ int j=1,count=0;
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
     tools = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 100,45)];
     tools.barStyle = UIBarStyleBlack;
-    NSLog(@"ooollll");
     NSString *a=NSLocalizedString(@"Back", @"button");
     NSString *b=NSLocalizedString(@"Edit", @"button");
     UIBarButtonItem *BackButton=[[UIBarButtonItem alloc]initWithTitle:a style:UIBarButtonItemStyleBordered target:self action:@selector(toggleback)];
@@ -78,19 +77,17 @@ int j=1,count=0;
     [da createTable:createUserTable];
     NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];//OrderID INTEGER PRIMARY KEY,
     [da createTable:createIdOrder];
+    NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
+    [da createTable:createTag];
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
-    [da selectOrderId:selectIdOrder];
-    self.list=da.orderIdList;
+    self.list=[da selectOrderId:selectIdOrder];
     }
 -(void)nobody
 {
- 
+    
     NSString *selectIdOrder1=[NSString stringWithFormat:@"select id from idOrder where id=0"];
-    [da selectOrderId:selectIdOrder1];
-    if([da.orderIdList count]!=0)
-    {
-    }
-    else
+   NSMutableArray *IDList=[da selectOrderId:selectIdOrder1];
+    if([IDList count]==0)
     {
         NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES(%d,'%@')",UserTable,0,@"NoBody"];
         NSLog(@"%@",insertUserTable);
@@ -98,18 +95,11 @@ int j=1,count=0;
         NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,0];
         NSLog(@"%@",insertIdOrder);
         [da insertToTable:insertIdOrder];
-        
+
     }
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
-    [da selectOrderId:selectIdOrder];
-    self.list=da.orderIdList;
+    self.list=[da selectOrderId:selectIdOrder];
 
-}
--(NSString*)databasePath
-{
-	NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *pathname = [path objectAtIndex:0];
-	return [pathname stringByAppendingPathComponent:@"data.db"];
 }
 -(IBAction)toggleAdd:(id)sender
 {  bool1=YES;
@@ -154,10 +144,7 @@ int j=1,count=0;
         NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,[fid intValue]];
         NSLog(@"%@",insertIdOrder);
         [da insertToTable:insertIdOrder];   
-        NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"add" 
-                                                           object:self 
-                                                         userInfo:dic1];
+        [self table];
         
     }
     [readName release];
@@ -219,7 +206,6 @@ int j=1,count=0;
     [bo release];
     [button release];
     [tableView release];
-    //[da release];
 	[list release];
 	[super dealloc];
 	
@@ -242,20 +228,17 @@ int j=1,count=0;
 	UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        
-		
 	}
-    [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
-    if([[self.list objectAtIndex:indexPath.row]intValue]==0)
+      
+        if([[self.list objectAtIndex:indexPath.row]intValue]==0)
     {
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
-        
-
     }
-	cell.textLabel.text = [NSString stringWithFormat:@"%@",da.name];
-    return cell; 
-    //[user1 release];
+    cell.textLabel.text =[da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
+       //[NSString stringWithFormat:@"%@",da.name];
+
     
+    return cell; 
 }
 #pragma mark -
 #pragma mark Table View Data Source Methods
@@ -263,11 +246,10 @@ int j=1,count=0;
 {	
     id1=[NSString stringWithFormat:@"%d",indexPath.row]; 
     [id1 retain];
-     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
-    [da createTable:createTag];
-    NSString *selectTag= [NSString stringWithFormat:@"select * from tag"];
-    [da selectFromTAG:selectTag];
-    NSMutableArray *listid1=da.tagIdAry;
+     
+    NSString *selectTag= [NSString stringWithFormat:@"select ID from tag"];
+    
+    NSMutableArray *listid1=[da selectFromTAG:selectTag];
     if([[self.list objectAtIndex:indexPath.row]intValue]==0)
     {
         NSString *a=NSLocalizedString(@"hello", @"title");
@@ -303,14 +285,11 @@ int j=1,count=0;
         [self.tableView reloadData];
     }
     }
-    //[listid1 release];
-    
-    
-}
+  }
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
-    NSLog(@" UserName : %@",da.name);
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",da.name,@"UserName",nil];
+   NSString *name=[da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
+    NSLog(@" UserName : %@",name);
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",name,@"UserName",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
                                                        object:self 
                                                      userInfo:dic];
