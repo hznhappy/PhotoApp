@@ -392,41 +392,6 @@
 {    
     [SUM removeAllObjects];
     [dbUrl removeAllObjects];
-    NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
-    [da selectFromRules:selectRules1];
-     for(int i=0;i<[da.playlist_UserId count];i++)
-    {
-        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
-        [da selectFromTAG:selectTag];
-        if([self.SUM count]==0)
-        {
-           self.SUM=da.tagUrl;
-        
-        }
-        else
-        {
-            [self.SUM intersectSet:da.tagUrl];
-        }
-    }
-    NSString *selectRules2= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
-    [da selectFromRules:selectRules2];
-    for(int i=0;i<[da.playlist_UserId count];i++)
-    {
-        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
-        [da selectFromTAG:selectTag];
-
-        NSLog(@"WE%@",da.playlist_UserId);
-        if([self.SUM count]==0)
-
-        {
-            self.SUM=da.tagUrl;
-        }
-        else
-        {
-            [SUM unionSet:da.tagUrl];
-        }
-    }
-    
     NSString *selectRules0= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
     [da selectFromRules:selectRules0];
     for(int i=0;i<[da.playlist_UserId count];i++)
@@ -459,19 +424,63 @@
             {
                 if([self.SUM containsObject:data]) 
                 {
-
+                    
                     [self.SUM removeObject:data];
                 }
             }
         }
     }
-  
-  
+    
+    NSString *selectRules1= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
+    [da selectFromRules:selectRules1];
+    for(int i=0;i<[da.playlist_UserId count];i++)
+    {
+        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
+        [da selectFromTAG:selectTag];
+        if([da.tagUrl count]==0)
+        {
+            [SUM removeAllObjects];
+            break;
+        }
+        else
+        {
+            if([self.SUM count]==0)
+            {
+                self.SUM=da.tagUrl;
+                
+            }
+            else
+            {
+                [self.SUM intersectSet:da.tagUrl];
+            }
+        }
+    }
+    NSString *selectRules2= [NSString stringWithFormat:@"select user_id,user_name from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
+    [da selectFromRules:selectRules2];
+    for(int i=0;i<[da.playlist_UserId count];i++)
+    {
+        NSString *selectTag= [NSString stringWithFormat:@"select * from tag where ID=%d",[[da.playlist_UserId objectAtIndex:i]intValue]];
+        [da selectFromTAG:selectTag];
+        
+        NSLog(@"WE%@",da.playlist_UserId);
+        if([self.SUM count]==0)
+            
+        {
+            self.SUM=da.tagUrl;
+        }
+        else
+        {
+            [SUM unionSet:da.tagUrl];
+        }
+    }
+    
+    
+    
     for (NSString *dataStr in self.SUM) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [dbUrl addObject:dbStr];
     }
-   
+    
     //[SUM release];
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{

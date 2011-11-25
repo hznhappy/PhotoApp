@@ -24,6 +24,7 @@ int j=1,count=0;
     {
         [self creatButton1];
     }
+    da=[DBOperation getInstance];
     [self creatTable];
     [self nobody];
     count = [list count];
@@ -72,10 +73,10 @@ int j=1,count=0;
     
 }-(void)creatTable
 {
-    da=[DBOperation getInstance];
+   
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
     [da createTable:createUserTable];
-    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
+    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];//OrderID INTEGER PRIMARY KEY,
     [da createTable:createIdOrder];
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     [da selectOrderId:selectIdOrder];
@@ -218,7 +219,7 @@ int j=1,count=0;
     [bo release];
     [button release];
     [tableView release];
-    [da release];
+    //[da release];
 	[list release];
 	[super dealloc];
 	

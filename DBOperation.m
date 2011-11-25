@@ -30,7 +30,6 @@ static DBOperation* singleton;
     [self openDB];
     return self;
 }
-
 -(void)openDB{
     if (sqlite3_open([[self filePath]UTF8String],&db)!=SQLITE_OK) {
         sqlite3_close(db);
@@ -290,6 +289,7 @@ static DBOperation* singleton;
     [name release];
     [Transtion release];
     [playNameAry release];
+    [singleton release];
     //[UserTablename release];
     [super dealloc];
 }
