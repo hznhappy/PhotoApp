@@ -20,7 +20,7 @@
     self.library = asLibrary;
     self.thumbNails = [[NSMutableDictionary alloc]init];
     // use a separate thread to read the asset library
-    NSLog(@"Inside: %@", self.urls);
+//    NSLog(@"Inside: %@", self.urls);
     [self performSelectorInBackground:@selector(initLoadThumbnails) withObject:nil];
 
     return self;
@@ -35,7 +35,6 @@
 
     NSRange theRange;
 
-    NSLog(@"Getting Index: %d", index);
     theRange.location = index;
     theRange.length = count;
     
@@ -44,7 +43,9 @@
         Thumbnail *t = nil;
         do {
             t = [thumbNails objectForKey:i];
-            NSLog(@"Thumbnail loaded: %@", t);
+            if (t == nil) {
+                usleep(1000);
+            }
         } while (t == nil);
         [temp addObject: t];
     }
@@ -61,7 +62,7 @@
     
     ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
     {
-        NSLog(@"Asset Returned: %@", result);
+//        NSLog(@"Asset Returned: %@", result);
         if (result == nil) 
         {
             return;

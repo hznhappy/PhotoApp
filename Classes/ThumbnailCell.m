@@ -126,7 +126,7 @@
 
 -(void)layoutSubviews {
     //NSLog(@"%@",self.loadSign?@"yes":@"no");
-    NSLog(@"cell count %d",[self.allUrls count]);
+//    NSLog(@"cell count %d",[self.allUrls count]);
     
 	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
