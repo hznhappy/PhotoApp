@@ -7,6 +7,7 @@
 
 #import "ThumbnailCell.h"
 #import "Thumbnail.h"
+#import "prepareThumbnail.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
 @implementation ThumbnailCell
@@ -19,10 +20,26 @@
 @synthesize loadedurls;
 @synthesize cellLibrary;
 @synthesize passViewController;
+@synthesize thumbnailPool;
+@synthesize index;
+@synthesize count;
 
 
-
-
+-(id)initWithThumbnailPool:(PrepareThumbnail*)pool reuseIdentifier:(NSString*)_identifier {
+    
+	if((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:_identifier])) {
+        self.thumbnailPool = pool;
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        self.loadedurls = array;
+        [array release];
+        
+        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
+        self.rowThumbnails = tempArray;
+        [tempArray release];        
+	}
+    
+    return self;
+}
 
 -(id)initWithUrls:(NSArray*)_url andAssetLibrary:(ALAssetsLibrary*)assetLibrary reuseIdentifier:(NSString*)_identifier {
     
@@ -36,8 +53,6 @@
         NSMutableArray *tempArray = [[NSMutableArray alloc]init];
         self.rowThumbnails = tempArray;
         [tempArray release];
-        [self prepareThumail];
-
 	}
     return self;
 }
@@ -58,52 +73,54 @@
     {		
 		[view removeFromSuperview];
 	}
-	
-	self.rowAssets = _assets;
-    [self prepareThumail];
+    self.rowAssets = _assets;
 }
--(void)prepareThumail{
-    imagesReady = NO;
-    [self.loadedurls removeAllObjects];
-    [self.rowThumbnails removeAllObjects];
-    ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
-    {
-        if (result == nil) 
-        {
-            return;
-        }
-        Thumbnail *view = [[Thumbnail alloc] initWithAsset:result];
-        view.assetArray = self.allUrls;
-        [rowThumbnails addObject:view];
-        
-        NSURL *url = [[result defaultRepresentation] url];
-        [loadedurls addObject:url];
-        
-        if ([loadedurls count] == [self.rowAssets count]) {
-            imagesReady = YES;
-            [self setNeedsLayout];
-        }
-        
-        [view release];
-    };
-    
-    
-    ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error)
-    {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-                                                        delegate:nil 
-                                               cancelButtonTitle:@"Ok" 
-                                               otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        NSLog(@"A problem occured %@", [error description]);	                                 
-    };	
-    
-    
-    for (NSURL* url in rowAssets) {
-        [self.cellLibrary assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
-    }
+
+-(void)prepareThumailIndex:(NSInteger)from count:(NSInteger)cnt{
+    self.index = from;
+    self.count = cnt;
+
+//    imagesReady = NO;
+//    [self.loadedurls removeAllObjects];
+//    [self.rowThumbnails removeAllObjects];
+//    ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
+//    {
+//        if (result == nil) 
+//        {
+//            return;
+//        }
+//        Thumbnail *view = [[Thumbnail alloc] initWithAsset:result];
+//        view.assetArray = self.allUrls;
+//        [rowThumbnails addObject:view];
+//        
+//        NSURL *url = [[result defaultRepresentation] url];
+//        [loadedurls addObject:url];
+//        
+//        if ([loadedurls count] == [self.rowAssets count]) {
+//            imagesReady = YES;
+//            [self setNeedsLayout];
+//        }
+//        
+//        [view release];
+//    };
+//    
+//    
+//    ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error)
+//    {
+//        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+//                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+//                                                        delegate:nil 
+//                                               cancelButtonTitle:@"Ok" 
+//                                               otherButtonTitles:nil];
+//        [alert show];
+//        [alert release];
+//        NSLog(@"A problem occured %@", [error description]);	                                 
+//    };	
+//    
+//    
+//    for (NSURL* url in rowAssets) {
+//        [self.cellLibrary assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
+//    }
 }
 
 
@@ -113,8 +130,21 @@
     
 	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
+    if (cellLibrary != nil) {
     if (imagesReady) {
         for(Thumbnail *thum in self.rowThumbnails) {
+            thum.overlay = tagOverlay;
+            thum.load = self.loadSign;
+            thum.assetArray = self.allUrls;
+            thum.fatherController = self.passViewController;
+            [thum setFrame:frame];
+            [thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
+            [self addSubview:thum];
+            frame.origin.x = frame.origin.x + frame.size.width + 4;
+        }
+    }
+    } else if (thumbnailPool != nil) {
+        for(Thumbnail *thum in [thumbnailPool getThumbnailSubViewsFrom:index to:count]) {
             thum.overlay = tagOverlay;
             thum.load = self.loadSign;
             thum.assetArray = self.allUrls;

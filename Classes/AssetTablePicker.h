@@ -12,6 +12,8 @@
 #import "Thumbnail.h"
 #import "sqlite3.h"
 #import "DBOperation.h"
+#import "prepareThumbnail.h"
+
 #define TAG @"TAG"
 
 
@@ -35,6 +37,9 @@
     NSMutableArray *images;
     ALAssetsLibrary *liabrary;
 
+    PrepareThumbnail *pool;
+    
+    
     DBOperation *dataBase;
     BOOL mode;
     BOOL load;
@@ -59,6 +64,7 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
 @property (nonatomic,retain)ALAssetsLibrary *library;
+@property (nonatomic,retain)PrepareThumbnail *pool;
 
 @property (nonatomic,assign)NSUInteger beginIndex;
 @property (nonatomic,assign)NSUInteger endIndex;

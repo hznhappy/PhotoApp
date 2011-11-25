@@ -20,6 +20,7 @@
 @synthesize images,PLAYID,lock;
 @synthesize beginIndex,endIndex;
 @synthesize library;
+@synthesize pool;
 
 #pragma mark -
 #pragma mark UIViewController Methods
@@ -30,6 +31,10 @@
     
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
+    
+    NSLog(@"URLS: %@",self.urlsArray);
+    self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
+    
     [temLibrary release];
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
@@ -532,14 +537,13 @@
     cell.loadSign = load;
     if (cell == nil) 
     {		        
-        cell = [[[ThumbnailCell alloc] initWithUrls:[self assetsForIndexPath:indexPath] andAssetLibrary:self.library 
-                                      reuseIdentifier:CellIdentifier] autorelease];
+//        cell = [[[ThumbnailCell alloc] initWithUrls:[self assetsForIndexPath:indexPath] andAssetLibrary:self.library 
+//                                      reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
         
-    }	
-	else 
-    {		
-		[cell setAssets:[self assetsForIndexPath:indexPath]];
-	}
+    }
+    [cell prepareThumailIndex:indexPath.row*4 count:4];
+
     cell.allUrls = self.urlsArray;
     cell.passViewController = self;
     return cell;
