@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DBOperation.h"
 @interface PhotoAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
     UITabBarController *rootViewController;
+    DBOperation *da;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UITabBarController *rootViewController;

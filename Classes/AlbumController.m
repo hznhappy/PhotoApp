@@ -69,6 +69,15 @@
     da=[DBOperation getInstance];
     [self creatTable];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
+    NSString *selectPassTable = [NSString stringWithFormat:@"select LOCK from PassTable where ID=1"];
+    NSMutableArray *PA=[da selectFromPassTable:selectPassTable];
+    if([PA count]>0)
+    {
+    if([[PA objectAtIndex:0] isEqualToString:@"UnLock"])
+    {
+    [self performSelector:@selector(play) withObject:nil afterDelay:0.1];
+    }
+    }
 	[super viewDidLoad];
 }
 -(void)creatTable
@@ -82,6 +91,8 @@
     [da createTable:createRules];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag];
+    NSString *createPassTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INTEGER PRIMARY KEY,LOCK,PASSWORD,URL)",PassTable];
+    [da createTable:createPassTable];
     NSString *selectPlayTable = [NSString stringWithFormat:@"select count(*) from PlayTable"];
      NSInteger count=[[[da selectFromPlayTable:selectPlayTable]objectAtIndex:0]intValue];
   if(count==0)
@@ -119,6 +130,7 @@
                if (group == nil) 
                {
                    [self.allUrl removeAllObjects];
+                   NSLog(@"KO");
                    [self performSelectorOnMainThread:@selector(getAllUrls) withObject:nil waitUntilDone:YES];
                    [self deleteUnExitUrls];
                    return;
@@ -162,6 +174,7 @@
             [self.allUrl addObject:[[result defaultRepresentation]url]];
         }];
     }
+   // NSLog(@"LLL%@",allUrl);
 }
 
 -(void)getUnTagUrls{
@@ -252,8 +265,9 @@
             return;
         }
         self.img=result;
+           [self getDate:result];
     };
-    
+ 
     void (^failureBlock)(NSError *) = ^(NSError *error) {
         
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
@@ -271,6 +285,20 @@
     [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     [library release];
     [pool release];
+    
+}
+-(void)getDate:(ALAsset*)rule
+{   
+    NSDictionary *dic = [[rule defaultRepresentation]metadata];
+    id dateTime = [[dic objectForKey:@"{TIFF}"]objectForKey:@"DateTime"];
+    if (dateTime!=nil) {
+        NSArray *time = [dateTime componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSString *dataStr = [time objectAtIndex:0];
+        if (![date containsObject:dataStr]) {
+            [date addObject:[time objectAtIndex:0]];
+        }
+    }
+    
 }
 
 
@@ -289,7 +317,7 @@
     
     [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
     if([[self.list objectAtIndex:indexPath.row]intValue]==1)
-    {NSLog(@"OO11");
+    {
         ALAssetsGroup *group = (ALAssetsGroup*)[assetGroups objectAtIndex:0];
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
         //NSInteger gCount = [group numberOfAssets];
@@ -300,7 +328,7 @@
         
     }
     else if([[self.list objectAtIndex:indexPath.row]intValue]==2)
-    {NSLog(@"OO22");
+    {
         [self getTagUrls];
         [self getUnTagUrls];
         [self loadPhotos:[self.unTagUrl objectAtIndex:0]];
@@ -360,6 +388,29 @@
     [self.navigationController pushViewController:assetPicker animated:YES];
     [assetPicker release];
     [table deselectRowAtIndexPath:indexPath animated:YES];
+}
+-(void)play
+{
+    AssetTablePicker *assetPicker = [[AssetTablePicker alloc]init];
+      assetPicker.hidesBottomBarWhenPushed = YES;
+    NSString *selectPassTable = [NSString stringWithFormat:@"select URL from PassTable"];
+   NSMutableArray *url=[da selectFromPassTable:selectPassTable];
+    NSMutableArray *ok=[[NSMutableArray alloc]init];
+    for (NSString *dataStr in url) {
+        NSURL *dbStr = [NSURL URLWithString:dataStr];
+        [ok addObject:dbStr];
+    }
+    assetPicker.urlsArray=ok;
+    [ok release];
+    NSString *selectPassTable1 = [NSString stringWithFormat:@"select PASSWORD from PassTable where ID=1"];
+    NSMutableArray *password=[da selectFromPassTable:selectPassTable1];
+    assetPicker.val=[password objectAtIndex:0];
+    NSLog(@"VAL:%@",assetPicker.val);
+     [self.navigationController pushViewController:assetPicker animated:YES];
+    NSString *b=NSLocalizedString(@"UnLock", @"button");
+    assetPicker.lock.title=b;
+    [assetPicker release];
+    
 }
 -(void)playlistUrl:(int)row_id
 {    
@@ -455,8 +506,6 @@
     }
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-    //NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select playList_id from playTable"];
-   // [da selectFromPlayTable:selectPlayIdOrder];
     if([[list objectAtIndex:indexPath.row]intValue]<=2)
     {
           NSString *a=NSLocalizedString(@"hello", @"title");

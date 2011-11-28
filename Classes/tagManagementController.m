@@ -70,7 +70,8 @@ int j=1,count=0;
     [addButon release];
     [editButton release];
     
-}-(void)creatTable
+}
+-(void)creatTable
 {
    
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
@@ -81,7 +82,7 @@ int j=1,count=0;
     [da createTable:createTag];
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     self.list=[da selectOrderId:selectIdOrder];
-    }
+}
 -(void)nobody
 {
     

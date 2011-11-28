@@ -14,7 +14,7 @@
 @synthesize assetGroup;
 //@synthesize dataBase;
 @synthesize crwAssets,urlsArray,selectUrls,dateArry;
-@synthesize table;
+@synthesize table,val;
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
 @synthesize images,PLAYID,lock;
@@ -24,7 +24,10 @@
 
 #pragma mark -
 #pragma mark UIViewController Methods
+
 -(void)viewDidLoad {
+    
+    
     done = YES;
     beginIndex = 0;
     endIndex = 60;
@@ -60,6 +63,11 @@
 	[self.table setAllowsSelection:NO];
     [self setWantsFullScreenLayout:YES];
     dataBase =[DBOperation getInstance];
+    
+       
+
+    
+    
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
     [temp release];
@@ -90,6 +98,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
+   
 }
 -(void)huyou
 {
@@ -115,22 +124,22 @@
     switch (buttonIndex) {
         case 0:
             if(PASS==YES)
-            {NSLog(@"FRF");
-                NSLog(@"KKK%@",passWord2.text);
+            {
                 if(passWord2.text==nil||passWord2.text.length==0)
                 {
                     NSLog(@"KKK");
                 }
                 else
                 {
-                    NSLog(@"BULLL");
                 NSUserDefaults *defaults1=[NSUserDefaults standardUserDefaults]; 
                 [defaults1 setObject:passWord2.text forKey:@"name_preference"]; 
                 }
                 PASS=NO;
             }
             else if([passWord.text isEqualToString:pass])
-            { 
+            { NSString *deletePassTable= [NSString stringWithFormat:@"DELETE FROM PassTable"];	
+                NSLog(@"%@",deletePassTable);
+                [dataBase deleteDB:deletePassTable];
             
                 NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
                 [defaults setObject:pass forKey:@"name_preference"];
@@ -157,7 +166,9 @@
 -(void)creatTable
 {
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
-    [dataBase createTable:createTag];  
+    [dataBase createTable:createTag]; 
+    NSString *createPassTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INTEGER PRIMARY KEY,LOCK,PASSWORD,URL)",PassTable];
+    [dataBase createTable:createPassTable];
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
     [dataBase createTable:createUserTable];
     NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];//OrderID INTEGER PRIMARY KEY,
@@ -169,6 +180,7 @@
 -(void)AddUrl:(NSNotification *)note{
     NSDictionary *dic = [note userInfo];
     NSString *str = [dic objectForKey:@"index"];
+    NSLog(@"index:%@",str);
     [UrlList addObject:[self.urlsArray objectAtIndex:[str integerValue]]];
     if([UrlList count]!=0)
     {
@@ -215,7 +227,6 @@
             NSURL *thumStr = [self.urlsArray objectAtIndex:index];
             if ([dbStr isEqual:thumStr]) {
                 NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",dbStr];
-               // NSLog(@"JJ%@",[dataBase selectFromTAG:selectTag]);
                 NSInteger count = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];               
                 NSString *num=[NSString stringWithFormat:@"%d",count];
                 [thumbnail setOverlayHidden:num];
@@ -257,26 +268,27 @@
     }
 }
 -(IBAction)lockButtonPressed{
-   
+    NSString *deletePassTable= [NSString stringWithFormat:@"DELETE FROM PassTable"];	
+    [dataBase deleteDB:deletePassTable];
      NSString *a=NSLocalizedString(@"Lock", @"button");
     NSString *b=NSLocalizedString(@"UnLock", @"button");
     if([self.lock.title isEqualToString:a])
     { NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
         val=[[defaults objectForKey:@"name_preference"]retain];
+        for(int i=0;i<[self.urlsArray count];i++)
+        {
+            NSString *insertPassTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(LOCK,PASSWORD,URL) VALUES('%@','%@','%@')",PassTable,@"UnLock",val,[self.urlsArray objectAtIndex:i]];
+            [dataBase insertToTable:insertPassTable];
+        }
         if(val==nil)
         { PASS=YES;
-            NSLog(@"KO");
            UIAlertView *alert2 = [[UIAlertView alloc]initWithTitle:@"密码为空,请设置密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
             passWord2= [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
             passWord2.backgroundColor = [UIColor whiteColor];  
             passWord2.secureTextEntry = YES;
             [alert2 addSubview:passWord2];  
-            NSLog(@"UUUU%@",passWord2);
-           
             [alert2 show];
             [alert2 release];
-           
-           // ME=YES;
         }
         else{
         [lock setTitle:b];
@@ -294,7 +306,7 @@
 -(IBAction)saveTags{
     if(UserId==nil)
     {
-        
+        ME=YES;
         NSString *message=[[NSString alloc] initWithFormat:
                            @"please select tag name"];
         
@@ -310,10 +322,12 @@
         [message release];
         
     }
+    
     else
-    {
+    {NSLog(@"JIDSJ%d",[self.UrlList count]);
         for(int i=0;i<[self.UrlList count];i++)
         {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[self.UrlList objectAtIndex:i],self.UserName];
+            NSLog(@"JJJJ%@",insertTag);
             [dataBase insertToTable:insertTag];
         }
         [self cancelTag];

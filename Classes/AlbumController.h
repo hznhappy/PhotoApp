@@ -41,6 +41,10 @@
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property(nonatomic,retain)NSMutableArray *list;
 @property(nonatomic,retain)ALAsset *img;
+
+
+-(void)getDate:(ALAsset*)rule;
+-(void)play;
 -(void)setLock;
 -(void)getAssetGroup;
 -(void)getAllUrls;
