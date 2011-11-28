@@ -18,7 +18,9 @@
     self = [super init];
     self.urls = _urls;
     self.library = asLibrary;
-    self.thumbNails = [[NSMutableDictionary alloc]init];
+     NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+    self.thumbNails = dic;
+    [dic release];
     // use a separate thread to read the asset library
     [self performSelectorInBackground:@selector(initLoadThumbnails) withObject:nil];
 
@@ -60,7 +62,8 @@
  */
 -(void)initLoadThumbnails {
 //    [self.thumbNails removeAllObjects];
-    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    NSDate *star = [NSDate date];
     ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
     {
 //        NSLog(@"Asset Returned: %@", result);
@@ -89,6 +92,11 @@
     for (NSURL* url in self.urls) {
         [self.library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     }
+    NSDate *finish = [NSDate date];
+    NSTimeInterval excuteTime = [finish timeIntervalSinceDate:star];
+    NSLog(@"backgound method excute time is %f",excuteTime);
+    [pool release];
+
 }
 
 -(void)dealloc{

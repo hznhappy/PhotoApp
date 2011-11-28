@@ -85,7 +85,8 @@
 
 -(void)layoutSubviews {
  	CGRect frame = CGRectMake(4, 2, 75, 75);
-	
+    NSDate *methodStart = [NSDate date];
+
 //    if (cellLibrary != nil) {
 //    if (imagesReady) {
 //        for(Thumbnail *thum in self.rowThumbnails) {
@@ -100,7 +101,6 @@
 //        }
 //    }
 //    } else 
-    if (self.index<=20) {
         if (thumbnailPool != nil) {
             for(UIButton *thum in [thumbnailPool getThumbnailSubViewsFrom:index*4 to:count]) {
                 //            thum.overlay = tagOverlay;
@@ -114,13 +114,16 @@
             }
         }
 
-    }else{
-        for (UIButton *bt in self.rowAssets) {
-            [bt setFrame:frame];
-            [self addSubview:bt];
-            frame.origin.x = frame.origin.x + frame.size.width + 4;
-        }
-    }
+//    }else{
+//        for (UIButton *bt in self.rowAssets) {
+//            [bt setFrame:frame];
+//            [self addSubview:bt];
+//            frame.origin.x = frame.origin.x + frame.size.width + 4;
+//        }
+//    }
+    NSDate *methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+	NSLog(@"UITableViewCell layoutSubView time %f",executionTime);
    }
 
 -(void)dealloc 

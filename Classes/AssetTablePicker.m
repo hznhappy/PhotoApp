@@ -82,8 +82,8 @@
     [alert1 addSubview:passWord];  
     ME=NO;
     PASS=NO;
-    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
+    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
+    //[self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
@@ -101,6 +101,7 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];
         [self.crwAssets addObject:button];
+        NSLog(@"self.crwAssets count is %d ",[self.crwAssets count]);
         
     };
     
@@ -480,29 +481,33 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDate *methodStart = [NSDate date];
     static NSString *CellIdentifier = @"Cell";
     ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell.tagOverlay = mode;
     cell.loadSign = load;
     if (cell == nil) 
     {	
-        if (indexPath.row<=20) {
             cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
 
-        }else{
-            cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
-        }
+//        }else{
+//            cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
+//        }
         
     }
-    else{
-        [cell setAssets:[self assetsForIndexPath:indexPath]];
-    }
+//    else{
+//        [cell setAssets:[self assetsForIndexPath:indexPath]];
+//    }
         [cell prepareThumailIndex:indexPath.row count:4];
 
    
 
     cell.allUrls = self.urlsArray;
     cell.passViewController = self;
+    NSDate *methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    NSLog(@"CellForRow return UITableViewCell time is %f",executionTime);
+    NSLog(@"-----------------------------------------------------------");
     return cell;
 }
 
