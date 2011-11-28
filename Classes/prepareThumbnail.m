@@ -44,8 +44,11 @@
             t = [[thumbNails objectForKey:i]retain];
         } while (t == nil);
         
-        Thumbnail *thumbnail = [[[Thumbnail alloc]initWithAsset:t]autorelease];
-        [temp addObject: thumbnail];
+        //Thumbnail *thumbnail = [[[Thumbnail alloc]initWithAsset:t]autorelease];
+        //thumbnail.index = [self.urls indexOfObject:i];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageWithCGImage:[t thumbnail]] forState:UIControlStateNormal];
+        [temp addObject: button];
     }
     
     return temp;

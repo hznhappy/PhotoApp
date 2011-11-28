@@ -44,8 +44,6 @@
     BOOL mode;
     BOOL load;
     BOOL done;
-    NSUInteger beginIndex;
-    NSUInteger endIndex;
     NSString *UserId;
     NSString *UserName;
     NSMutableArray *UrlList;
@@ -66,8 +64,6 @@
 @property (nonatomic,retain)ALAssetsLibrary *library;
 @property (nonatomic,retain)PrepareThumbnail *pool;
 
-@property (nonatomic,assign)NSUInteger beginIndex;
-@property (nonatomic,assign)NSUInteger endIndex;
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
@@ -87,7 +83,7 @@
 -(IBAction)resetTags;
 -(IBAction)selectFromFavoriteNames;
 -(IBAction)selectFromAllNames;
-//-(void)loadPhotos;
+-(void)loadPhotos;
 -(void)setPhotoTag;
 -(void)AddUrl:(NSNotification *)note;
 -(void)RemoveUrl:(NSNotification *)note;

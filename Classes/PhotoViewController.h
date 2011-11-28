@@ -47,7 +47,7 @@
 @property(nonatomic,retain) UIScrollView *scrollView;
 @property(nonatomic,assign) NSInteger _pageIndex;
 
-- (id)initWithPhotoSource:(NSMutableArray *)aSource;
+- (id)initWithPhotoSource:(NSMutableArray *)aSource currentPage:(NSInteger)page;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;

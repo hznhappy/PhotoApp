@@ -40,7 +40,7 @@
     
     return self;
 }
-
+/*
 -(id)initWithUrls:(NSArray*)_url andAssetLibrary:(ALAssetsLibrary*)assetLibrary reuseIdentifier:(NSString*)_identifier {
     
 	if((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:_identifier])) {
@@ -56,7 +56,7 @@
 	}
     return self;
 }
-
+*/
 -(id)initWithAssets:(NSArray*)_assets reuseIdentifier:(NSString*)_identifier {
     
 	if((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:_identifier])) {
@@ -86,32 +86,42 @@
 -(void)layoutSubviews {
  	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
-    if (cellLibrary != nil) {
-    if (imagesReady) {
-        for(Thumbnail *thum in self.rowThumbnails) {
-            thum.overlay = tagOverlay;
-            thum.load = self.loadSign;
-            thum.assetArray = self.allUrls;
-            thum.fatherController = self.passViewController;
-            [thum setFrame:frame];
-            [thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
-            [self addSubview:thum];
+//    if (cellLibrary != nil) {
+//    if (imagesReady) {
+//        for(Thumbnail *thum in self.rowThumbnails) {
+//            thum.overlay = tagOverlay;
+//            thum.load = self.loadSign;
+//            thum.assetArray = self.allUrls;
+//            thum.fatherController = self.passViewController;
+//            [thum setFrame:frame];
+//            [thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
+//            [self addSubview:thum];
+//            frame.origin.x = frame.origin.x + frame.size.width + 4;
+//        }
+//    }
+//    } else 
+    if (self.index<=20) {
+        if (thumbnailPool != nil) {
+            for(UIButton *thum in [thumbnailPool getThumbnailSubViewsFrom:index*4 to:count]) {
+                //            thum.overlay = tagOverlay;
+                //            thum.load = self.loadSign;
+                //            thum.assetArray = self.allUrls;
+                //            thum.fatherController = self.passViewController;
+                [thum setFrame:frame];
+                //[thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
+                [self addSubview:thum];
+                frame.origin.x = frame.origin.x + frame.size.width + 4;
+            }
+        }
+
+    }else{
+        for (UIButton *bt in self.rowAssets) {
+            [bt setFrame:frame];
+            [self addSubview:bt];
             frame.origin.x = frame.origin.x + frame.size.width + 4;
         }
     }
-    } else if (thumbnailPool != nil) {
-        for(Thumbnail *thum in [thumbnailPool getThumbnailSubViewsFrom:index to:count]) {
-            thum.overlay = tagOverlay;
-            thum.load = self.loadSign;
-            thum.assetArray = self.allUrls;
-            thum.fatherController = self.passViewController;
-            [thum setFrame:frame];
-            [thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
-            [self addSubview:thum];
-            frame.origin.x = frame.origin.x + frame.size.width + 4;
-        }
-    }
-}
+   }
 
 -(void)dealloc 
 {

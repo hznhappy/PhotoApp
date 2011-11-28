@@ -18,16 +18,12 @@
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
 @synthesize images,PLAYID,lock;
-@synthesize beginIndex,endIndex;
 @synthesize library;
 @synthesize pool;
 
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
-    done = YES;
-    beginIndex = 0;
-    endIndex = 60;
     
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
@@ -86,10 +82,47 @@
     [alert1 addSubview:passWord];  
     ME=NO;
     PASS=NO;
+    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
+    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
+}
+-(void)loadPhotos{
+    NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
+    ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
+    {
+        //        NSLog(@"Asset Returned: %@", result);
+        if (result == nil) 
+        {
+            return;
+        }
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];
+        [self.crwAssets addObject:button];
+        
+    };
+    
+    
+    ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error)
+    {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+                                                        delegate:nil 
+                                               cancelButtonTitle:@"Ok" 
+                                               otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        NSLog(@"A problem occured %@", [error description]);                                     
+    };    
+    
+    
+    for (NSURL* url in self.urlsArray) {
+        [self.library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
+    }
+    [self.table performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    [pools release];
 }
 -(void)huyou
 {
@@ -115,15 +148,12 @@
     switch (buttonIndex) {
         case 0:
             if(PASS==YES)
-            {NSLog(@"FRF");
-                NSLog(@"KKK%@",passWord2.text);
+            {
                 if(passWord2.text==nil||passWord2.text.length==0)
                 {
-                    NSLog(@"KKK");
                 }
                 else
                 {
-                    NSLog(@"BULLL");
                 NSUserDefaults *defaults1=[NSUserDefaults standardUserDefaults]; 
                 [defaults1 setObject:passWord2.text forKey:@"name_preference"]; 
                 }
@@ -201,9 +231,9 @@
     
 }
 -(void)viewDidDisappear:(BOOL)animated{
-    for (Thumbnail *thub in crwAssets) {
-        [thub setSelectOvlay];
-    }
+//    for (Thumbnail *thub in crwAssets) {
+//        [thub setSelectOvlay];
+//    }
 }
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
@@ -350,8 +380,7 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
-    PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray];
-    playPhotoController._pageIndex = 0;
+    PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray currentPage:0];
     [dataBase getUserFromPlayTable:[PLAYID intValue]];
     [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
@@ -367,8 +396,6 @@
     
 }
 
-#pragma mark -
-#pragma mark UIScrollViewDelegate
 #pragma mark -
 #pragma mark People picker delegate
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
@@ -419,33 +446,33 @@
 	int index = (_indexPath.row*4);
 	int maxIndex = (_indexPath.row*4+3);
     
-    if(maxIndex < [self.urlsArray count]) {
+    if(maxIndex < [self.crwAssets count]) {
         
-        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
-                [self.urlsArray objectAtIndex:index+1],
-                [self.urlsArray objectAtIndex:index+2],
-                [self.urlsArray objectAtIndex:index+3],
+        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
+                [self.crwAssets objectAtIndex:index+1],
+                [self.crwAssets objectAtIndex:index+2],
+                [self.crwAssets objectAtIndex:index+3],
                 nil];
     }
     
-    else if(maxIndex-1 < [self.urlsArray count]) {
+    else if(maxIndex-1 < [self.crwAssets count]) {
         
-        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
-                [self.urlsArray objectAtIndex:index+1],
-                [self.urlsArray objectAtIndex:index+2],
+        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
+                [self.crwAssets objectAtIndex:index+1],
+                [self.crwAssets objectAtIndex:index+2],
                 nil];
     }
     
-    else if(maxIndex-2 < [self.urlsArray count]) {
+    else if(maxIndex-2 < [self.crwAssets count]) {
         
-        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
-                [self.urlsArray objectAtIndex:index+1],
+        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
+                [self.crwAssets objectAtIndex:index+1],
                 nil];
     }
     
-    else if(maxIndex-3 < [self.urlsArray count]) {
+    else if(maxIndex-3 < [self.crwAssets count]) {
         
-        return [NSArray arrayWithObject:[self.urlsArray objectAtIndex:index]];
+        return [NSArray arrayWithObject:[self.crwAssets objectAtIndex:index]];
     }
     
 	return nil;
@@ -458,11 +485,21 @@
     cell.tagOverlay = mode;
     cell.loadSign = load;
     if (cell == nil) 
-    {		        
-        cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
+    {	
+        if (indexPath.row<=20) {
+            cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
+
+        }else{
+            cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
+        }
         
     }
-    [cell prepareThumailIndex:indexPath.row*4 count:4];
+    else{
+        [cell setAssets:[self assetsForIndexPath:indexPath]];
+    }
+        [cell prepareThumailIndex:indexPath.row count:4];
+
+   
 
     cell.allUrls = self.urlsArray;
     cell.passViewController = self;
@@ -494,7 +531,14 @@
     self.images = nil;
     [super viewDidUnload];
 }
-
+- (oneway void)release
+{
+    if (![NSThread isMainThread]) {
+        [self performSelectorOnMainThread:@selector(release) withObject:nil waitUntilDone:NO];
+    } else {
+        [super release];
+    }
+}
 - (void)dealloc
 {   
     [[NSNotificationCenter defaultCenter]removeObserver:self];

@@ -35,7 +35,7 @@
 @synthesize photos,bgPhotos;
 @synthesize img;
 
-- (id)initWithPhotoSource:(NSMutableArray *)aSource{
+- (id)initWithPhotoSource:(NSMutableArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleBarsNotification:) name:@"PhotoViewToggleBars" object:nil];
@@ -44,7 +44,8 @@
 		self.hidesBottomBarWhenPushed = YES;
 		self.wantsFullScreenLayout = YES;		
 		photoSource = [aSource retain];
-		
+        self._pageIndex = page;
+        [self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
 	}
 	
 	return self;
@@ -86,8 +87,13 @@
 		[views addObject:[NSNull null]];
 	}
 	self.photoViews = views;
+    NSMutableArray *initPhotos = [[NSMutableArray alloc] init];
+	for (unsigned i = 0; i < [self.photoSource count]; i++) {
+		[initPhotos addObject:[NSNull null]];
+	}
+	self.photos = initPhotos;
+    NSLog(@"%d ",[self.photos count]);
     editing=NO;
-   // self.listid=[NSMutableArray arrayWithCapacity:100];
      NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;
@@ -107,7 +113,6 @@
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.bgPhotos = temp;
     [temp release];
-    [self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [self moveToPhotoAtIndex:_pageIndex animated:NO];
