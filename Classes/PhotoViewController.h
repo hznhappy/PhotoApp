@@ -36,11 +36,9 @@
     BOOL editing;
 	//DBOperation *db;
     PopupPanelView *ppv;
-   // NSMutableArray *listid;
     NSTimer *timer;	
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
-//@property(nonatomic,retain)NSMutableArray *listid;
 @property(nonatomic,retain)UIImage *img;
 @property(nonatomic,retain)NSMutableArray *bgPhotos;
 @property(nonatomic,retain)NSMutableArray *photos;
@@ -49,12 +47,11 @@
 @property(nonatomic,retain) UIScrollView *scrollView;
 @property(nonatomic,assign) NSInteger _pageIndex;
 
-- (id)initWithPhotoSource:(NSMutableArray *)aSource;
+- (id)initWithPhotoSource:(NSMutableArray *)aSource currentPage:(NSInteger)page;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;
--(void)loadPhoto;//:(NSInteger)page; 
+-(void)loadPhoto;
 -(void)anotherLoad:(id)object;
 -(void)loadPhotos:(NSURL *)url;
-//-(NSMutableArray *)changePhotos:(NSMutableArray *)array;
 @end

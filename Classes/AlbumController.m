@@ -20,10 +20,6 @@
 
 #pragma mark -
 #pragma mark UIViewController method
--(void)setLock
-{
-    NSLog(@"COCO");
-}
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.barStyle=UIBarStyleBlack;
@@ -265,7 +261,7 @@
             return;
         }
         self.img=result;
-           [self getDate:result];
+           
     };
  
     void (^failureBlock)(NSError *) = ^(NSError *error) {
@@ -287,21 +283,6 @@
     [pool release];
     
 }
--(void)getDate:(ALAsset*)rule
-{   
-    NSDictionary *dic = [[rule defaultRepresentation]metadata];
-    id dateTime = [[dic objectForKey:@"{TIFF}"]objectForKey:@"DateTime"];
-    if (dateTime!=nil) {
-        NSArray *time = [dateTime componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *dataStr = [time objectAtIndex:0];
-        if (![date containsObject:dataStr]) {
-            [date addObject:[time objectAtIndex:0]];
-        }
-    }
-    
-}
-
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	return 50;
@@ -361,7 +342,6 @@
     return cell;
 }
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"UUU%d",indexPath.row);
     NSDictionary *dic = [NSDictionary dictionaryWithObject:[tableView cellForRowAtIndexPath:indexPath].textLabel.text forKey:@"listTitle"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"SetTitle" object:self userInfo:dic];
      AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];

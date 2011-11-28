@@ -135,15 +135,10 @@
         
     }else{
        
-        PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
-        NSURL *url = [[self.asset defaultRepresentation]url];
-        self.index = [self.assetArray indexOfObject:url];
-        NSLog(@"%d is self.index and %d",self.index,[self.assetArray count]);
-        photoController._pageIndex = self.index;
+        PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray currentPage:self.index];
         selectOverlay.hidden = NO;
         [self.fatherController.navigationController pushViewController:photoController animated:YES];
         [photoController release];
-        //}
     }
 }
 

@@ -29,8 +29,7 @@
     int r;
     ALAsset *img;
     NSMutableArray *date;
-   
-   }
+    }
 @property(nonatomic,retain)NSMutableArray *assetGroups;
 @property(nonatomic,retain)NSMutableSet *SUM;
 @property(nonatomic,retain)NSMutableArray *allUrl;
@@ -41,11 +40,7 @@
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 @property(nonatomic,retain)NSMutableArray *list;
 @property(nonatomic,retain)ALAsset *img;
-
-
--(void)getDate:(ALAsset*)rule;
 -(void)play;
--(void)setLock;
 -(void)getAssetGroup;
 -(void)getAllUrls;
 -(void)getTagUrls;
@@ -55,5 +50,4 @@
 -(void)playlistUrl:(int)row_id;
 -(void)loadPhotos:(NSURL *)url;
 -(void)Special;
-//-(void)getDate:(ALAsset*)rule;
 @end

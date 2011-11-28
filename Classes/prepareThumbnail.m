@@ -18,9 +18,10 @@
     self = [super init];
     self.urls = _urls;
     self.library = asLibrary;
-    self.thumbNails = [[NSMutableDictionary alloc]init];
+     NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+    self.thumbNails = dic;
+    [dic release];
     // use a separate thread to read the asset library
-//    NSLog(@"Inside: %@", self.urls);
     [self performSelectorInBackground:@selector(initLoadThumbnails) withObject:nil];
 
     return self;
@@ -40,14 +41,16 @@
     
     NSMutableArray* temp = [[NSMutableArray alloc]initWithCapacity:count];
     for (NSURL*i in [self.urls subarrayWithRange:theRange]) {
-        Thumbnail *t = nil;
+        ALAsset *t = nil;
         do {
-            t = [thumbNails objectForKey:i];
-            if (t == nil) {
-                usleep(1000);
-            }
+            t = [[thumbNails objectForKey:i]retain];
         } while (t == nil);
-        [temp addObject: t];
+        
+        //Thumbnail *thumbnail = [[[Thumbnail alloc]initWithAsset:t]autorelease];
+        //thumbnail.index = [self.urls indexOfObject:i];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageWithCGImage:[t thumbnail]] forState:UIControlStateNormal];
+        [temp addObject: button];
     }
     
     return temp;
@@ -59,7 +62,8 @@
  */
 -(void)initLoadThumbnails {
 //    [self.thumbNails removeAllObjects];
-    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    NSDate *star = [NSDate date];
     ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
     {
 //        NSLog(@"Asset Returned: %@", result);
@@ -67,12 +71,8 @@
         {
             return;
         }
-        Thumbnail *view = [[Thumbnail alloc] initWithAsset:result];
-        NSURL *url = [[result defaultRepresentation] url];
+        [thumbNails setObject:result forKey:[[result defaultRepresentation]url]];
 
-        [thumbNails setObject:view forKey:url];
-
-        [view release];
     };
     
     
@@ -92,6 +92,11 @@
     for (NSURL* url in self.urls) {
         [self.library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     }
+    NSDate *finish = [NSDate date];
+    NSTimeInterval excuteTime = [finish timeIntervalSinceDate:star];
+    NSLog(@"backgound method excute time is %f",excuteTime);
+    [pool release];
+
 }
 
 -(void)dealloc{

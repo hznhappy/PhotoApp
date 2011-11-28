@@ -29,7 +29,7 @@
 }
 
 -(id)initWithThumbnailPool:(PrepareThumbnail*)pool reuseIdentifier:(NSString*)_identifier;
--(id)initWithUrls:(NSArray*)_url andAssetLibrary:(ALAssetsLibrary*)assetLibrary reuseIdentifier:(NSString*)_identifier;
+//-(id)initWithUrls:(NSArray*)_url andAssetLibrary:(ALAssetsLibrary*)assetLibrary reuseIdentifier:(NSString*)_identifier;
 -(id)initWithAssets:(NSArray*)_assets reuseIdentifier:(NSString*)_identifier;
 -(void)setAssets:(NSArray*)_assets;
 -(void)prepareThumailIndex:(NSInteger)from count:(NSInteger)cnt;

@@ -271,7 +271,6 @@
                                   otherButtonTitles:b,nil];
             [alert show];
             [alert release];
-           // [message release];
             
 
         }

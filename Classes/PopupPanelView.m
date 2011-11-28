@@ -108,7 +108,6 @@ CGFloat byheight = 30;
 
 
 - (void)dealloc {
-    //[da release];
    [list release];
     [url release];
     [super dealloc];

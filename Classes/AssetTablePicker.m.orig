@@ -12,19 +12,29 @@
 #import "tagManagementController.h"
 @implementation AssetTablePicker
 @synthesize assetGroup;
-@synthesize dataBase;
-@synthesize crwAssets,assetArrays,urlsArray,selectUrls,dateArry;
+//@synthesize dataBase;
+@synthesize crwAssets,urlsArray,selectUrls,dateArry;
 @synthesize table;
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
 @synthesize images,PLAYID,lock;
+@synthesize beginIndex,endIndex;
+@synthesize library;
+@synthesize pool;
 
 #pragma mark -
 #pragma mark UIViewController Methods
 -(void)viewDidLoad {
-   
+    done = YES;
+    beginIndex = 0;
+    endIndex = 60;
     
+    ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
+    self.library = temLibrary;
     
+    self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
+    
+    [temLibrary release];
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
@@ -32,15 +42,9 @@
     UIBarButtonItem *backItem=[[UIBarButtonItem alloc]initWithCustomView:backButton];
     self.navigationItem.leftBarButtonItem =backItem;
     [backItem release];
-    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityView.frame = CGRectMake(0, 0, 37.0f, 37.0f);
-    activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-    self.navigationItem.titleView = activityView;
-    _activityView = [activityView retain];
-    [activityView release];
+    
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.UrlList=tempArray;
-    [backItem release];
     [tempArray release];
     self.table.delegate = self;
     self.table.maximumZoomScale = 2;
@@ -55,19 +59,13 @@
     [self.table setSeparatorColor:[UIColor clearColor]];
 	[self.table setAllowsSelection:NO];
     [self setWantsFullScreenLayout:YES];
-    
-    DBOperation *db = [[DBOperation alloc]init];
-    self.dataBase = db;
-    [db release];
+    dataBase =[DBOperation getInstance];
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
     [temp release];
     NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
-    NSMutableArray *temArray = [[NSMutableArray alloc] init];
     self.crwAssets = thumbNailArray;
-    self.assetArrays = temArray;
     [thumbNailArray release];
-    [temArray release];
     NSString *a=NSLocalizedString(@"Cancel", @"title");
     cancel = [[UIBarButtonItem alloc]initWithTitle:a style:UIBarButtonItemStyleDone target:self action:@selector(cancelTag)];
     
@@ -81,8 +79,6 @@
                                                 name:@"selectedUrls" 
                                               object:nil];
     [self creatTable];
-    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.5];
     alert1 = [[UIAlertView alloc]initWithTitle:@"请输入密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
     passWord = [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
     passWord.backgroundColor = [UIColor whiteColor];  
@@ -94,6 +90,10 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [[NSThread currentThread] cancel];
 }
 -(void)huyou
 {
@@ -138,9 +138,7 @@
             
                 NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
                 [defaults setObject:pass forKey:@"name_preference"];
-                 self.lock.title=a;
-                //[val release];
-               
+                 self.lock.title=a;               
             }
             else
             {
@@ -162,17 +160,15 @@
 
 -(void)creatTable
 {
-    [dataBase openDB];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [dataBase createTable:createTag];  
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
     [dataBase createTable:createUserTable];
-    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT)",idOrder];//OrderID INTEGER PRIMARY KEY,
+    NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];//OrderID INTEGER PRIMARY KEY,
     [dataBase createTable:createIdOrder];
     NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
     [dataBase createTable:createPlayTable];
 
-    [dataBase closeDB];
 }
 -(void)AddUrl:(NSNotification *)note{
     NSDictionary *dic = [note userInfo];
@@ -201,7 +197,7 @@
 {
     NSDictionary *dic = [note userInfo];
     self.UserId=[dic objectForKey:@"UserId"];
-    UserName=[dic objectForKey:@"UserName"];
+    self.UserName=[dic objectForKey:@"UserName"];
     
 }
 -(void)viewDidAppear:(BOOL)animated{
@@ -213,62 +209,7 @@
         [thub setSelectOvlay];
     }
 }
-
--(void)loadPhotos {
-    
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-<<<<<<< HEAD
-        ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
-=======
-        void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
->>>>>>> origin/master
-        {
-            if (result == nil) 
-            {
-                return;
-            }
-            thuView = [[Thumbnail alloc] initWithAsset:result];
-            thuView.fatherController = self;
-            [self.crwAssets addObject:thuView];
-            NSUInteger thumIndex = [self.crwAssets indexOfObject:thuView];
-            thuView.index = thumIndex;
-            thuView.assetArray = self.urlsArray;
-            [thuView release];
-            //[self.assetArrays addObject:result];
-        };
-        
-        ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error) {
-            
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                             message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-                                                            delegate:nil 
-                                                   cancelButtonTitle:@"Ok" 
-                                                   otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            
-            NSLog(@"A problem occured %@", [error description]);	                                 
-        };	
-    for (NSURL *assetUrl in self.urlsArray) {
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-        [library assetForURL:assetUrl resultBlock:assetRseult failureBlock:failureBlock];
-        [library release];
-    }
-    [self setPhotoTag];
-<<<<<<< HEAD
-=======
-    //prepare ALAsset for ThumbnailView to init PhotoViewController to display Photo;
-//    for (Thumbnail *thumbnail in self.crwAssets) {
-//        for (NSURL *url in self.urlsArray) {
-//            [thumbnail.assetArray addObject:url];
-//        }
-//    }
->>>>>>> origin/master
-	[self.table reloadData];           
-    [pool release];
-}
 -(void)setPhotoTag{
-    [dataBase openDB];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
     NSMutableArray *photos = [dataBase selectPhotos:selectSql];
     for (NSString *dataStr in photos) {
@@ -277,17 +218,16 @@
             NSUInteger index = [self.crwAssets indexOfObject:thumbnail];
             NSURL *thumStr = [self.urlsArray objectAtIndex:index];
             if ([dbStr isEqual:thumStr]) {
-                NSString *selectTag= [NSString stringWithFormat:@"select * from tag where URL='%@'",dataStr];
-                [dataBase selectFromTAG:selectTag];
-                NSString *num=[NSString stringWithFormat:@"%d",[dataBase.tagIdAry count]];
+                NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",dbStr];
+               // NSLog(@"JJ%@",[dataBase selectFromTAG:selectTag]);
+                NSInteger count = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];               
+                NSString *num=[NSString stringWithFormat:@"%d",count];
                 [thumbnail setOverlayHidden:num];
                 
             }
         }
     } 
-    [dataBase closeDB];
 }
-
 
 #pragma mark -
 #pragma mark ButtonAction Methods
@@ -350,7 +290,6 @@
      {   ME=NO;
         [alert1 show];
     }
-   // [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 -(void)alert
 {
@@ -377,12 +316,10 @@
     }
     else
     {
-        [dataBase openDB];
-        for(int i=0;i<[UrlList count];i++)
-        {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[UrlList objectAtIndex:i],UserName];
+        for(int i=0;i<[self.UrlList count];i++)
+        {     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%@','%@','%@')",TAG,UserId,[self.UrlList objectAtIndex:i],self.UserName];
             [dataBase insertToTable:insertTag];
         }
-        [dataBase closeDB];
         [self cancelTag];
         [self setPhotoTag];
         NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
@@ -417,32 +354,25 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
-    [dataBase openDB];
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray];
     playPhotoController._pageIndex = 0;
-    //playPhotoController.photos = self.images;
-    User *user3 = [dataBase getUserFromPlayTable:[PLAYID intValue]];
-    [playPhotoController fireTimer:user3.Transtion];
+    [dataBase getUserFromPlayTable:[PLAYID intValue]];
+    [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
-    [dataBase closeDB];
 }
 
 #pragma mark - 
 #pragma mark notification method
 
 -(void)setEditOverlay:(NSNotification *)notification{
-    //for (Thumbnail *thumbnail in self.crwAssets) {
-    //  [thumbnail setOverlayHidden:YES];
-    //}
     
     [self setPhotoTag];
     
 }
 
--(void)getSelectedUrls:(NSNotification *)note{
-    
-}
+#pragma mark -
+#pragma mark UIScrollViewDelegate
 #pragma mark -
 #pragma mark People picker delegate
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
@@ -452,8 +382,7 @@
     ABRecordID recId = ABRecordGetRecordID(person);
     
     self.UserId=[NSString stringWithFormat:@"%d",recId];
-    UserName=readName;
-    [dataBase openDB];
+    self.UserName=readName;
     NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES('%@','%@')",UserTable,self.UserId,readName];
     NSLog(@"%@",insertUserTable);
     [dataBase insertToTable:insertUserTable];
@@ -462,7 +391,6 @@
     NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES('%@')",idOrder,self.UserId];
     NSLog(@"%@",insertIdOrder);
     [dataBase insertToTable:insertIdOrder];   
-    [dataBase openDB];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:self.UserId,@"UserId",readName,@"UserName",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"AddContact" 
                                                        object:self 
@@ -486,7 +414,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([crwAssets count] / 4.0);
+    return ceil([self.urlsArray count] / 4.0);
     
 }
 
@@ -495,33 +423,33 @@
 	int index = (_indexPath.row*4);
 	int maxIndex = (_indexPath.row*4+3);
     
-    if(maxIndex < [self.crwAssets count]) {
+    if(maxIndex < [self.urlsArray count]) {
         
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
-                [self.crwAssets objectAtIndex:index+2],
-                [self.crwAssets objectAtIndex:index+3],
+        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
+                [self.urlsArray objectAtIndex:index+1],
+                [self.urlsArray objectAtIndex:index+2],
+                [self.urlsArray objectAtIndex:index+3],
                 nil];
     }
     
-    else if(maxIndex-1 < [self.crwAssets count]) {
+    else if(maxIndex-1 < [self.urlsArray count]) {
         
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
-                [self.crwAssets objectAtIndex:index+2],
+        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
+                [self.urlsArray objectAtIndex:index+1],
+                [self.urlsArray objectAtIndex:index+2],
                 nil];
     }
     
-    else if(maxIndex-2 < [self.crwAssets count]) {
+    else if(maxIndex-2 < [self.urlsArray count]) {
         
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
+        return [NSArray arrayWithObjects:[self.urlsArray objectAtIndex:index],
+                [self.urlsArray objectAtIndex:index+1],
                 nil];
     }
     
-    else if(maxIndex-3 < [self.crwAssets count]) {
+    else if(maxIndex-3 < [self.urlsArray count]) {
         
-        return [NSArray arrayWithObject:[self.crwAssets objectAtIndex:index]];
+        return [NSArray arrayWithObject:[self.urlsArray objectAtIndex:index]];
     }
     
 	return nil;
@@ -535,14 +463,17 @@
     cell.loadSign = load;
     if (cell == nil) 
     {		        
-        cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] 
-                                      reuseIdentifier:CellIdentifier] autorelease];
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/master
+        cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
         
-    }	
-	else 
-    {		
-		[cell setAssets:[self assetsForIndexPath:indexPath]];
-	}
+    }
+    [cell prepareThumailIndex:indexPath.row*4 count:4];
+
+    cell.allUrls = self.urlsArray;
+    cell.passViewController = self;
     return cell;
 }
 
@@ -561,8 +492,6 @@
 -(void)viewDidUnload{
     self.table = nil;
     self.crwAssets = nil;
-    self.assetArrays = nil;
-    self.dataBase = nil;
     self.urlsArray = nil;
     self.viewBar = nil;
     self.tagBar = nil;
@@ -584,21 +513,18 @@
     [save release];
     [reset release];
     [table release];
-	[thuView release];
     [crwAssets release];
-    [assetArrays release];
-    [dataBase release];
     [urlsArray release];
     [selectUrls release];
     [dateArry release];
     [UserId release];
     [UserName release];
-    [_activityView release], _activityView=nil;
     [images release];
     [UrlList release];
     [PLAYID release];
     [alert1 release];
     [val release];
+    [library release];
     [super dealloc];    
 }
 
