@@ -28,7 +28,7 @@
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
     
-    self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
+   // self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
     [temLibrary release];
     NSString *b=NSLocalizedString(@"Back", @"title");
@@ -82,8 +82,8 @@
     [alert1 addSubview:passWord];  
     ME=NO;
     PASS=NO;
-    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    //[self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
+    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
+    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
@@ -93,16 +93,15 @@
     NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
     ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
     {
-        //        NSLog(@"Asset Returned: %@", result);
         if (result == nil) 
         {
             return;
         }
+        Thumbnail *thumbNail = [[Thumbnail alloc]initWithAsset:result];
+        /*
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];
-        [self.crwAssets addObject:button];
-        NSLog(@"self.crwAssets count is %d ",[self.crwAssets count]);
-        
+        [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];*/
+        [self.crwAssets addObject:thumbNail];        
     };
     
     
@@ -123,6 +122,7 @@
         [self.library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     }
     [self.table performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(setPhotoTag) withObject:nil waitUntilDone:NO];
     [pools release];
 }
 -(void)huyou
@@ -232,9 +232,9 @@
     
 }
 -(void)viewDidDisappear:(BOOL)animated{
-//    for (Thumbnail *thub in crwAssets) {
-//        [thub setSelectOvlay];
-//    }
+    for (Thumbnail *thub in crwAssets) {
+        [thub setSelectOvlay];
+    }
 }
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
@@ -246,7 +246,6 @@
             NSURL *thumStr = [self.urlsArray objectAtIndex:index];
             if ([dbStr isEqual:thumStr]) {
                 NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",dbStr];
-               // NSLog(@"JJ%@",[dataBase selectFromTAG:selectTag]);
                 NSInteger count = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];               
                 NSString *num=[NSString stringWithFormat:@"%d",count];
                 [thumbnail setOverlayHidden:num];
@@ -438,7 +437,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([self.urlsArray count] / 4.0);
+    return ceil([self.crwAssets count] / 4.0);
     
 }
 
@@ -481,33 +480,30 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDate *methodStart = [NSDate date];
+    //NSDate *methodStart = [NSDate date];
     static NSString *CellIdentifier = @"Cell";
     ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell.tagOverlay = mode;
     cell.loadSign = load;
     if (cell == nil) 
     {	
-            cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
+            //cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
 
-//        }else{
-//            cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
-//        }
-        
+            cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
     }
-//    else{
-//        [cell setAssets:[self assetsForIndexPath:indexPath]];
-//    }
-        [cell prepareThumailIndex:indexPath.row count:4];
+    else{
+        [cell setAssets:[self assetsForIndexPath:indexPath]];
+    }
+        //[cell prepareThumailIndex:indexPath.row count:4];
 
    
 
     cell.allUrls = self.urlsArray;
     cell.passViewController = self;
-    NSDate *methodFinish = [NSDate date];
-    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    NSLog(@"CellForRow return UITableViewCell time is %f",executionTime);
-    NSLog(@"-----------------------------------------------------------");
+    //NSDate *methodFinish = [NSDate date];
+    //NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    //NSLog(@"CellForRow return UITableViewCell time is %f",executionTime);
+   // NSLog(@"-----------------------------------------------------------");
     return cell;
 }
 
