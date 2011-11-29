@@ -65,13 +65,14 @@
             end = [NSString stringWithFormat:@"%d",[self.urlsArray count]-1];
 
         }
-        NSArray *array = [NSArray arrayWithObjects:begin,end, nil];
+        //NSArray *array = [NSArray arrayWithObjects:begin,end, nil];
         //MyNSOperation *operation = [[MyNSOperation alloc]initWithBeginIndex:begin endIndex:end storeThumbnails:self.crwAssets urls:self.urlsArray];
-        NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array];
-        [operations addObject:operation];
-        [queue addOperation:operation];
+        //NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array];
+        //[operations addObject:operation];
+        //[queue addOperation:operation];
     }
-
+    MyNSOperation *operation = [[MyNSOperation alloc]initWithBeginIndex:0 endIndex:[self.urlsArray count]-1 storeThumbnails:self.crwAssets urls:self.urlsArray];
+    [queue addOperation:operation];
    // self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
     [temLibrary release];
