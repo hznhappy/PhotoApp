@@ -10,7 +10,6 @@
 #import "AlbumController.h"
 #import "PhotoViewController.h"
 #import "tagManagementController.h"
-#import "MyNSOperation.h"
 @implementation AssetTablePicker
 @synthesize assetGroup;
 //@synthesize dataBase;
@@ -23,15 +22,13 @@
 @synthesize pool;
 @synthesize operation1,operation2;
 @synthesize operations;
+@synthesize operation;
 
 #pragma mark -
 #pragma mark UIViewController Methods
 
 -(void)viewDidLoad {
     done = YES;
-   // beginIndex = 0;
-   // endIndex = 60;
-    NSLog(@"DS");
     NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i<[self.urlsArray count]; i++) {
         [thumbNailArray addObject:[NSNull null]];
@@ -41,12 +38,13 @@
 
    dataBase =[DBOperation getInstance];
     [self creatTable];
+    
+    
+    /*
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
     NSInteger threadNumber = 5;
     NSInteger countNum = ceil([self.urlsArray count]/threadNumber);
-    NSInteger rem = [self.urlsArray count]%threadNumber;
-    NSLog(@"%d",rem);
     queue = [[NSOperationQueue alloc]init];
     NSMutableArray *temoperations = [NSMutableArray arrayWithCapacity:threadNumber];
     self.operations = temoperations;
@@ -71,11 +69,20 @@
         //[operations addObject:operation];
         //[queue addOperation:operation];
     }
-    MyNSOperation *operation = [[MyNSOperation alloc]initWithBeginIndex:0 endIndex:[self.urlsArray count]-1 storeThumbnails:self.crwAssets urls:self.urlsArray];
-    [queue addOperation:operation];
    // self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
-    [temLibrary release];
+    [temLibrary release];*/
+    
+    
+    //load thumbnails from another thread
+    queue = [[NSOperationQueue alloc]init];
+    NSInteger startAt = 0;
+    NSInteger endAt = [self.urlsArray count]-1;
+    MyNSOperation *tempOperation = [[MyNSOperation alloc]initWithBeginIndex:startAt endIndex:endAt storeThumbnails:self.crwAssets urls:self.urlsArray];
+    self.operation = tempOperation;
+    [tempOperation release];
+    [queue addOperation:self.operation];
+
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
@@ -298,12 +305,9 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
-//    NSLog(@"%d is operations",[operations count]);
-//    for (MyNSOperation *operation in self.operations) {
-//        if (![operation isFinished]||[operation isExecuting]) {
-//            [operation cancel];
-//        }
-//    }
+
+    self.operation.stopOperation = YES;
+    [self.operation cancel];
 }
 -(void)viewDidDisappear:(BOOL)animated{
 //    for (Thumbnail *thub in crwAssets) {
@@ -638,11 +642,8 @@
     [PLAYID release];
     [alert1 release];
     [val release];
-    [library release];
     [queue release];
-    [operation1 release];
-    [operation2 release];
-    [operations release];
+    [operation release];
     [super dealloc];    
 }
 

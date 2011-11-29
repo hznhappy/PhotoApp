@@ -15,11 +15,17 @@
     NSInteger endIndex;
     NSMutableArray *thumbnails;
     NSMutableArray *allUrls;
+    
+    BOOL stopOperation;
 }
 @property (nonatomic,assign)NSInteger beginIndex;
 @property (nonatomic,assign)NSInteger endIndex;
 @property (nonatomic,retain)NSMutableArray *thumbnails;
 @property (nonatomic,retain)NSMutableArray *allUrls;
+
+@property (nonatomic,assign)BOOL stopOperation;
+
+
 
 
 -(id)initWithBeginIndex:(NSInteger)begin endIndex:(NSInteger)end storeThumbnails:(NSMutableArray *)_thumbnails urls:(NSMutableArray *)_urls;

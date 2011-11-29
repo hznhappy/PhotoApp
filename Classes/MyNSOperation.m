@@ -15,6 +15,9 @@
 @synthesize endIndex;
 @synthesize thumbnails;
 @synthesize allUrls;
+@synthesize stopOperation;
+
+
 -(id)initWithBeginIndex:(NSInteger)begin endIndex:(NSInteger)end storeThumbnails:(NSMutableArray *)_thumbnails urls:(NSMutableArray *)_urls{
     self = [super init];
     if (self) {
@@ -22,6 +25,7 @@
         self.endIndex = end;
         self.thumbnails = [_thumbnails retain];
         self.allUrls = [_urls retain];
+        self.stopOperation = NO;
     }
     return self;
     
@@ -69,19 +73,26 @@
             NSLog(@"A problem occured %@", [error description]);                                     
         };    
         
-        
+        if (i==endIndex) {
+            self.stopOperation = YES;
+        }
         if ([self isCancelled]) {
             return;
         }
-        NSURL *url = [self.allUrls objectAtIndex:i];
-        [url retain];
-        [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
+        [library assetForURL:[self.allUrls objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
     }
     NSDate *finish = [NSDate date];
     NSTimeInterval excuteTime = [finish timeIntervalSinceDate:star];
     NSLog(@"finish time is %f",excuteTime);
 }
 
+-(BOOL)isFinished{
+    if (self.stopOperation) {
+        return YES;
+    }else{
+        return [super isFinished];
+    }
+}
 
 -(void)dealloc{
     [allUrls release];

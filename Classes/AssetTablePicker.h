@@ -13,6 +13,7 @@
 #import "sqlite3.h"
 #import "DBOperation.h"
 #import "prepareThumbnail.h"
+#import "MyNSOperation.h"
 
 #define TAG @"TAG"
 #define PassTable @"PassTable"
@@ -29,13 +30,10 @@
     UIBarButtonItem *lock;
     NSString *selectName;
 
+    MyNSOperation *operation;
+    
 	ALAssetsGroup *assetGroup;
     NSOperationQueue *queue;
-    NSInvocationOperation *operation1;
-    NSInvocationOperation *operation2;
-    NSInvocationOperation *operation3;
-    NSInvocationOperation *operation4;
-    NSInvocationOperation *operation5;
     NSMutableArray *operations;
 	
 	NSMutableArray *crwAssets;
@@ -73,7 +71,7 @@
 @property (nonatomic,retain)PrepareThumbnail *pool;
 @property (nonatomic,retain)NSInvocationOperation *operation1;
 @property (nonatomic,retain)NSInvocationOperation *operation2;
-
+@property (nonatomic,retain)MyNSOperation *operation;
 
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
