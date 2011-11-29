@@ -10,6 +10,7 @@
 #import "AlbumController.h"
 #import "PhotoViewController.h"
 #import "tagManagementController.h"
+#import "MyNSOperation.h"
 @implementation AssetTablePicker
 @synthesize assetGroup;
 //@synthesize dataBase;
@@ -21,6 +22,7 @@
 @synthesize library;
 @synthesize pool;
 @synthesize operation1,operation2;
+@synthesize operations;
 
 #pragma mark -
 #pragma mark UIViewController Methods
@@ -41,22 +43,34 @@
     [self creatTable];
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
-    
-    NSString *begin1 = @"0";
-    NSString *end1 = @"200";
-    
-    NSString *begin2 = @"201";
-    NSString *end2 = [NSString stringWithFormat:@"%d",[self.urlsArray count]-1];    
-    
-    NSArray *array1 = [NSArray arrayWithObjects:begin1,end1, nil];
-    NSArray *array2 = [NSArray arrayWithObjects:begin2,end2, nil];
+    NSInteger threadNumber = 5;
+    NSInteger countNum = ceil([self.urlsArray count]/threadNumber);
+    NSInteger rem = [self.urlsArray count]%threadNumber;
+    NSLog(@"%d",rem);
     queue = [[NSOperationQueue alloc]init];
-    NSInvocationOperation *temoperation1 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array1];
-    NSInvocationOperation *temoperation2 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array2];
-    self.operation1 = temoperation1;
-    self.operation2 = temoperation2;
-    NSArray *operations = [NSArray arrayWithObjects:operation1,operation2, nil];
-    [queue addOperations:operations waitUntilFinished:NO];
+    NSMutableArray *temoperations = [NSMutableArray arrayWithCapacity:threadNumber];
+    self.operations = temoperations;
+    [temoperations release];
+    for (NSInteger i =0; i<threadNumber; i++) {
+        NSString *begin = [NSString stringWithFormat:@"%d",i*countNum];
+        NSString *end = nil;
+        //NSInteger begin = i*countNum;
+        //NSInteger end = 0;
+        if (i!=threadNumber-1) {
+            //end = (i+1)*countNum-1;
+           end = [NSString stringWithFormat:@"%d",(i+1)*countNum-1];
+            
+        }else{
+            //end = [self.urlsArray count]-1;
+            end = [NSString stringWithFormat:@"%d",[self.urlsArray count]-1];
+
+        }
+        NSArray *array = [NSArray arrayWithObjects:begin,end, nil];
+        //MyNSOperation *operation = [[MyNSOperation alloc]initWithBeginIndex:begin endIndex:end storeThumbnails:self.crwAssets urls:self.urlsArray];
+        NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array];
+        [operations addObject:operation];
+        [queue addOperation:operation];
+    }
 
    // self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
@@ -116,7 +130,7 @@
     ME=NO;
     PASS=NO;
     //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.5];
+    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.8];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
@@ -136,11 +150,11 @@
         {
             return;
         }
-        Thumbnail *thumbNail = [[Thumbnail alloc]initWithAsset:result];
-        /*
+        //Thumbnail *thumbNail = [[Thumbnail alloc]initWithAsset:result];
+        
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];*/
-        [self.crwAssets replaceObjectAtIndex:i withObject:thumbNail];        
+        [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];
+        [self.crwAssets replaceObjectAtIndex:i withObject:button];        
     };
     
     
@@ -156,13 +170,11 @@
         NSLog(@"A problem occured %@", [error description]);                                     
     };    
     
-    
-        if ([operation1 isCancelled]) {
-            return;
-        }
-        if ([operation2 isCancelled]) {
-            return;
-        }
+        
+//            if ([op isCancelled]) {
+//                NSLog(@"return thread");
+//                return;
+//        }
         [self.library assetForURL:[self.urlsArray objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
     }
     [self.table performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
@@ -285,13 +297,17 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
-    [operation1 cancel];
-    [operation2 cancel];
+//    NSLog(@"%d is operations",[operations count]);
+//    for (MyNSOperation *operation in self.operations) {
+//        if (![operation isFinished]||[operation isExecuting]) {
+//            [operation cancel];
+//        }
+//    }
 }
 -(void)viewDidDisappear:(BOOL)animated{
-    for (Thumbnail *thub in crwAssets) {
-        [thub setSelectOvlay];
-    }
+//    for (Thumbnail *thub in crwAssets) {
+//        [thub setSelectOvlay];
+//    }
 }
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
@@ -626,7 +642,7 @@
     [queue release];
     [operation1 release];
     [operation2 release];
-
+    [operations release];
     [super dealloc];    
 }
 

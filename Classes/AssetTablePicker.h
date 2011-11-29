@@ -34,6 +34,9 @@
     NSInvocationOperation *operation1;
     NSInvocationOperation *operation2;
     NSInvocationOperation *operation3;
+    NSInvocationOperation *operation4;
+    NSInvocationOperation *operation5;
+    NSMutableArray *operations;
 	
 	NSMutableArray *crwAssets;
 	NSMutableArray *urlsArray;
@@ -79,6 +82,7 @@
 
 //@property (nonatomic,retain) DBOperation *dataBase;
 @property (nonatomic,retain)NSString *PLAYID;
+@property (nonatomic,retain)NSMutableArray *operations;
 @property (nonatomic,retain) NSMutableArray *images;
 @property (nonatomic,retain) NSMutableArray *crwAssets;
 @property (nonatomic,retain) NSMutableArray *urlsArray;

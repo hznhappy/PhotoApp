@@ -115,14 +115,15 @@
             }
         }
 
-    }else{
+    }else{*/
         for (UIButton *bt in self.rowAssets) {
+            if (bt!=nil && (NSNull *) bt != [NSNull null] ) {
             [bt setFrame:frame];
             [self addSubview:bt];
             frame.origin.x = frame.origin.x + frame.size.width + 4;
         }
-    }*/
-    for(Thumbnail *thum in self.rowAssets) {
+    }
+    /*for(Thumbnail *thum in self.rowAssets) {
         if (thum!=nil && (NSNull *) thum != [NSNull null] ) {
             thum.overlay = tagOverlay;
             thum.load = self.loadSign;
@@ -134,7 +135,7 @@
             frame.origin.x = frame.origin.x + frame.size.width + 4;
 
         }
-            }
+            }*/
 
     /*NSDate *methodFinish = [NSDate date];
     NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
