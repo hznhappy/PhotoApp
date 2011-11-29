@@ -28,11 +28,26 @@
     done = YES;
    // beginIndex = 0;
    // endIndex = 60;
+    NSLog(@"DS");
+   dataBase =[DBOperation getInstance];
+    [self creatTable];
+    
+   /* NSString *selectPassTable = [NSString stringWithFormat:@"select URL from PassTable"];
+    NSMutableArray *url=[dataBase selectFromPassTable:selectPassTable];
+    NSMutableArray *ok=[[NSMutableArray alloc]init];
+    for (NSString *dataStr in url) {
+        NSURL *dbStr = [NSURL URLWithString:dataStr];
+        [ok addObject:dbStr];
+    }
+    self.urlsArray=ok;
+    [ok release];
+    NSLog(@"URL:%@",self.urlsArray);*/
+
     
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
     
-    self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
+     self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
     [temLibrary release];
     NSString *b=NSLocalizedString(@"Back", @"title");
@@ -59,7 +74,7 @@
     [self.table setSeparatorColor:[UIColor clearColor]];
 	[self.table setAllowsSelection:NO];
     [self setWantsFullScreenLayout:YES];
-    dataBase =[DBOperation getInstance];
+    
     
        
 
@@ -83,7 +98,8 @@
                                             selector:@selector(getSelectedUrls:) 
                                                 name:@"selectedUrls" 
                                               object:nil];
-    [self creatTable];
+      
+
     alert1 = [[UIAlertView alloc]initWithTitle:@"请输入密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
     passWord = [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
     passWord.backgroundColor = [UIColor whiteColor];  
@@ -91,8 +107,8 @@
     [alert1 addSubview:passWord];  
     ME=NO;
     PASS=NO;
-    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    //[self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
+    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
+    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
@@ -302,19 +318,12 @@
     }
 }
 -(IBAction)lockButtonPressed{
-    NSString *deletePassTable= [NSString stringWithFormat:@"DELETE FROM PassTable"];	
-    [dataBase deleteDB:deletePassTable];
      NSString *a=NSLocalizedString(@"Lock", @"button");
     NSString *b=NSLocalizedString(@"UnLock", @"button");
     if([self.lock.title isEqualToString:a])
     { NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
         val=[[defaults objectForKey:@"name_preference"]retain];
-        for(int i=0;i<[self.urlsArray count];i++)
-        {
-            NSString *insertPassTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(LOCK,PASSWORD,URL) VALUES('%@','%@','%@')",PassTable,@"UnLock",val,[self.urlsArray objectAtIndex:i]];
-            [dataBase insertToTable:insertPassTable];
-        }
-        if(val==nil)
+                if(val==nil)
         { PASS=YES;
            UIAlertView *alert2 = [[UIAlertView alloc]initWithTitle:@"密码为空,请设置密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
             passWord2= [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
@@ -325,6 +334,14 @@
             [alert2 release];
         }
         else{
+             NSString *deletePassTable= [NSString stringWithFormat:@"DELETE FROM PassTable"];
+            [dataBase deleteDB:deletePassTable];
+            for(int i=0;i<[self.urlsArray count];i++)
+            {
+                NSString *insertPassTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(LOCK,PASSWORD,URL) VALUES('%@','%@','%@')",PassTable,@"UnLock",val,[self.urlsArray objectAtIndex:i]];
+                [dataBase insertToTable:insertPassTable];
+            }
+
         [lock setTitle:b];
         }
     }

@@ -71,7 +71,8 @@
     {
     if([[PA objectAtIndex:0] isEqualToString:@"UnLock"])
     {
-    [self performSelector:@selector(play) withObject:nil afterDelay:0.1];
+       // [self play];
+   [self performSelector:@selector(play) withObject:nil afterDelay:0];
     }
     }
 	[super viewDidLoad];

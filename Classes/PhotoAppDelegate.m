@@ -40,7 +40,7 @@
     else
     {*/
         [window addSubview:rootViewController.view];
-   // }
+ //   }
         
     [window makeKeyAndVisible];
     //AssetTablePicker *a=[[AssetTablePicker alloc]init];
