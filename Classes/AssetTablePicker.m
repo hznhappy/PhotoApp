@@ -28,7 +28,9 @@
     done = YES;
    // beginIndex = 0;
    // endIndex = 60;
-    
+    NSLog(@"DS");
+   dataBase =[DBOperation getInstance];
+    [self creatTable];
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
     
@@ -62,7 +64,7 @@
     [self.table setSeparatorColor:[UIColor clearColor]];
 	[self.table setAllowsSelection:NO];
     [self setWantsFullScreenLayout:YES];
-    dataBase =[DBOperation getInstance];
+    
     
        
 
@@ -86,7 +88,8 @@
                                             selector:@selector(getSelectedUrls:) 
                                                 name:@"selectedUrls" 
                                               object:nil];
-    [self creatTable];
+      
+
     alert1 = [[UIAlertView alloc]initWithTitle:@"请输入密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
     passWord = [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
     passWord.backgroundColor = [UIColor whiteColor];  
@@ -313,19 +316,12 @@
     }
 }
 -(IBAction)lockButtonPressed{
-    NSString *deletePassTable= [NSString stringWithFormat:@"DELETE FROM PassTable"];	
-    [dataBase deleteDB:deletePassTable];
      NSString *a=NSLocalizedString(@"Lock", @"button");
     NSString *b=NSLocalizedString(@"UnLock", @"button");
     if([self.lock.title isEqualToString:a])
     { NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
         val=[[defaults objectForKey:@"name_preference"]retain];
-        for(int i=0;i<[self.urlsArray count];i++)
-        {
-            NSString *insertPassTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(LOCK,PASSWORD,URL) VALUES('%@','%@','%@')",PassTable,@"UnLock",val,[self.urlsArray objectAtIndex:i]];
-            [dataBase insertToTable:insertPassTable];
-        }
-        if(val==nil)
+                if(val==nil)
         { PASS=YES;
            UIAlertView *alert2 = [[UIAlertView alloc]initWithTitle:@"密码为空,请设置密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
             passWord2= [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
@@ -336,6 +332,14 @@
             [alert2 release];
         }
         else{
+             NSString *deletePassTable= [NSString stringWithFormat:@"DELETE FROM PassTable"];
+            [dataBase deleteDB:deletePassTable];
+            for(int i=0;i<[self.urlsArray count];i++)
+            {
+                NSString *insertPassTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(LOCK,PASSWORD,URL) VALUES('%@','%@','%@')",PassTable,@"UnLock",val,[self.urlsArray objectAtIndex:i]];
+                [dataBase insertToTable:insertPassTable];
+            }
+
         [lock setTitle:b];
         }
     }
