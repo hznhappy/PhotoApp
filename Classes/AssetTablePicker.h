@@ -31,7 +31,9 @@
 
 	ALAssetsGroup *assetGroup;
     NSOperationQueue *queue;
-    NSInvocationOperation *operation;
+    NSInvocationOperation *operation1;
+    NSInvocationOperation *operation2;
+    NSInvocationOperation *operation3;
 	
 	NSMutableArray *crwAssets;
 	NSMutableArray *urlsArray;
@@ -66,6 +68,9 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
 @property (nonatomic,retain)ALAssetsLibrary *library;
 @property (nonatomic,retain)PrepareThumbnail *pool;
+@property (nonatomic,retain)NSInvocationOperation *operation1;
+@property (nonatomic,retain)NSInvocationOperation *operation2;
+
 
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
@@ -88,7 +93,7 @@
 -(IBAction)resetTags;
 -(IBAction)selectFromFavoriteNames;
 -(IBAction)selectFromAllNames;
--(void)loadPhotos;
+-(void)loadPhotos:(NSArray *)array;
 -(void)setPhotoTag;
 -(void)AddUrl:(NSNotification *)note;
 -(void)RemoveUrl:(NSNotification *)note;

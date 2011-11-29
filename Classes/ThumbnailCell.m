@@ -123,15 +123,18 @@
         }
     }*/
     for(Thumbnail *thum in self.rowAssets) {
-        thum.overlay = tagOverlay;
-        thum.load = self.loadSign;
-        thum.assetArray = self.allUrls;
-        thum.fatherController = self.passViewController;
-        [thum setFrame:frame];
-        [thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
-        [self addSubview:thum];
-        frame.origin.x = frame.origin.x + frame.size.width + 4;
-    }
+        if (thum!=nil && (NSNull *) thum != [NSNull null] ) {
+            thum.overlay = tagOverlay;
+            thum.load = self.loadSign;
+            thum.assetArray = self.allUrls;
+            thum.fatherController = self.passViewController;
+            [thum setFrame:frame];
+            [thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
+            [self addSubview:thum];
+            frame.origin.x = frame.origin.x + frame.size.width + 4;
+
+        }
+            }
 
     /*NSDate *methodFinish = [NSDate date];
     NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];

@@ -20,6 +20,7 @@
 @synthesize images,PLAYID,lock;
 @synthesize library;
 @synthesize pool;
+@synthesize operation1,operation2;
 
 #pragma mark -
 #pragma mark UIViewController Methods
@@ -29,14 +30,34 @@
    // beginIndex = 0;
    // endIndex = 60;
     NSLog(@"DS");
+    NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
+    for (NSInteger i = 0; i<[self.urlsArray count]; i++) {
+        [thumbNailArray addObject:[NSNull null]];
+    }
+    self.crwAssets = thumbNailArray;
+    [thumbNailArray release];
+
    dataBase =[DBOperation getInstance];
     [self creatTable];
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
     
+    NSString *begin1 = @"0";
+    NSString *end1 = @"200";
+    
+    NSString *begin2 = @"201";
+    NSString *end2 = [NSString stringWithFormat:@"%d",[self.urlsArray count]-1];    
+    
+    NSArray *array1 = [NSArray arrayWithObjects:begin1,end1, nil];
+    NSArray *array2 = [NSArray arrayWithObjects:begin2,end2, nil];
     queue = [[NSOperationQueue alloc]init];
-    operation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos) object:nil];
-    [queue addOperation:operation];
+    NSInvocationOperation *temoperation1 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array1];
+    NSInvocationOperation *temoperation2 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array2];
+    self.operation1 = temoperation1;
+    self.operation2 = temoperation2;
+    NSArray *operations = [NSArray arrayWithObjects:operation1,operation2, nil];
+    [queue addOperations:operations waitUntilFinished:NO];
+
    // self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
     [temLibrary release];
@@ -73,9 +94,6 @@
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
     [temp release];
-    NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
-    self.crwAssets = thumbNailArray;
-    [thumbNailArray release];
     NSString *a=NSLocalizedString(@"Cancel", @"title");
     cancel = [[UIBarButtonItem alloc]initWithTitle:a style:UIBarButtonItemStyleDone target:self action:@selector(cancelTag)];
     
@@ -105,9 +123,14 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
    
 }
--(void)loadPhotos{
+-(void)loadPhotos:(NSArray *)array{
     NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
-    ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
+    NSDate *star = [NSDate date];
+    NSInteger beginIndex = [[array objectAtIndex:0]integerValue];
+    NSInteger endIndex = [[array objectAtIndex:1]integerValue];
+    NSLog(@"begin index is %d",beginIndex);
+    for (NSInteger i = beginIndex; i<=endIndex; i++) {
+        ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
     {
         if (result == nil) 
         {
@@ -117,8 +140,7 @@
         /*
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];*/
-        [self.crwAssets addObject:thumbNail];        
-        NSLog(@"loading photos");
+        [self.crwAssets replaceObjectAtIndex:i withObject:thumbNail];        
     };
     
     
@@ -135,14 +157,19 @@
     };    
     
     
-    for (NSURL* url in self.urlsArray) {
-        [self.library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
-        if ([operation isCancelled]) {
+        if ([operation1 isCancelled]) {
             return;
         }
+        if ([operation2 isCancelled]) {
+            return;
+        }
+        [self.library assetForURL:[self.urlsArray objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
     }
     [self.table performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-    [self performSelectorOnMainThread:@selector(setPhotoTag) withObject:nil waitUntilDone:NO];
+   // [self performSelectorOnMainThread:@selector(setPhotoTag) withObject:nil waitUntilDone:NO];
+    NSDate *finish = [NSDate date];
+    NSTimeInterval excuteTime = [finish timeIntervalSinceDate:star];
+    NSLog(@"finish time is %f",excuteTime);
     [pools release];
 }
 -(void)huyou
@@ -258,7 +285,8 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
-    [operation cancel];
+    [operation1 cancel];
+    [operation2 cancel];
 }
 -(void)viewDidDisappear:(BOOL)animated{
     for (Thumbnail *thub in crwAssets) {
@@ -470,7 +498,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([self.crwAssets count] / 4.0);
+    return ceil([self.urlsArray count] / 4.0);
     
 }
 
@@ -596,7 +624,9 @@
     [val release];
     [library release];
     [queue release];
-    [operation release];
+    [operation1 release];
+    [operation2 release];
+
     [super dealloc];    
 }
 
