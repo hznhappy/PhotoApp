@@ -9,11 +9,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AssetTablePicker.m"
-         timestampString = "344159141.562262"
+         timestampString = "344221955.400315"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "476"
-         endingLineNumber = "476"
+         startingLineNumber = "475"
+         endingLineNumber = "475"
          landmarkName = "@implementation AssetTablePicker"
          landmarkType = "3">
       </FileBreakpoint>

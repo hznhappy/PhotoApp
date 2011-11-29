@@ -31,24 +31,9 @@
     NSLog(@"DS");
    dataBase =[DBOperation getInstance];
     [self creatTable];
-    
-   /* NSString *selectPassTable = [NSString stringWithFormat:@"select URL from PassTable"];
-    NSMutableArray *url=[dataBase selectFromPassTable:selectPassTable];
-    NSMutableArray *ok=[[NSMutableArray alloc]init];
-    for (NSString *dataStr in url) {
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        [ok addObject:dbStr];
-    }
-    self.urlsArray=ok;
-    [ok release];
-    NSLog(@"URL:%@",self.urlsArray);*/
-
-    
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
-    
-     self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
-    
+     //self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     [temLibrary release];
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
@@ -119,16 +104,15 @@
     NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
     ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
     {
-        //        NSLog(@"Asset Returned: %@", result);
         if (result == nil) 
         {
             return;
         }
+        Thumbnail *thumbNail = [[Thumbnail alloc]initWithAsset:result];
+        /*
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];
-        [self.crwAssets addObject:button];
-        NSLog(@"self.crwAssets count is %d ",[self.crwAssets count]);
-        
+        [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];*/
+        [self.crwAssets addObject:thumbNail];        
     };
     
     
@@ -149,6 +133,7 @@
         [self.library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     }
     [self.table performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(setPhotoTag) withObject:nil waitUntilDone:NO];
     [pools release];
 }
 -(void)huyou
@@ -263,9 +248,9 @@
     
 }
 -(void)viewDidDisappear:(BOOL)animated{
-//    for (Thumbnail *thub in crwAssets) {
-//        [thub setSelectOvlay];
-//    }
+    for (Thumbnail *thub in crwAssets) {
+        [thub setSelectOvlay];
+    }
 }
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
@@ -472,7 +457,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([self.urlsArray count] / 4.0);
+    return ceil([self.crwAssets count] / 4.0);
     
 }
 
@@ -515,33 +500,30 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDate *methodStart = [NSDate date];
+    //NSDate *methodStart = [NSDate date];
     static NSString *CellIdentifier = @"Cell";
     ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell.tagOverlay = mode;
     cell.loadSign = load;
     if (cell == nil) 
     {	
-            cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
+            //cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
 
-//        }else{
-//            cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
-//        }
-        
+            cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
     }
-//    else{
-//        [cell setAssets:[self assetsForIndexPath:indexPath]];
-//    }
-        [cell prepareThumailIndex:indexPath.row count:4];
+    else{
+        [cell setAssets:[self assetsForIndexPath:indexPath]];
+    }
+        //[cell prepareThumailIndex:indexPath.row count:4];
 
    
 
     cell.allUrls = self.urlsArray;
     cell.passViewController = self;
-    NSDate *methodFinish = [NSDate date];
-    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    NSLog(@"CellForRow return UITableViewCell time is %f",executionTime);
-    NSLog(@"-----------------------------------------------------------");
+    //NSDate *methodFinish = [NSDate date];
+    //NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    //NSLog(@"CellForRow return UITableViewCell time is %f",executionTime);
+   // NSLog(@"-----------------------------------------------------------");
     return cell;
 }
 
