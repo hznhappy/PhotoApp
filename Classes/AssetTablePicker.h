@@ -15,6 +15,7 @@
 #import "prepareThumbnail.h"
 
 #define TAG @"TAG"
+#define PassTable @"PassTable"
 
 
 @interface AssetTablePicker : UIViewController<UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>
@@ -68,6 +69,7 @@
 @property(nonatomic,retain)NSString *UserName;
 @property (nonatomic,assign) ALAssetsGroup  *assetGroup;
 
+
 //@property (nonatomic,retain) DBOperation *dataBase;
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain) NSMutableArray *images;
@@ -76,6 +78,7 @@
 @property (nonatomic,retain) NSMutableArray *selectUrls;
 @property (nonatomic,retain) NSMutableArray *dateArry;
 @property (nonatomic,retain) NSMutableArray *UrlList;
+@property (nonatomic,retain)NSNumber *val;
 -(IBAction)actionButtonPressed;
 -(IBAction)playPhotos;
 -(IBAction)lockButtonPressed;

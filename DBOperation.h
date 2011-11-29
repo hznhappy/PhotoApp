@@ -22,6 +22,7 @@
     NSMutableArray *tagList;
     NSMutableArray *playTableList;
     NSMutableArray *RulesList;
+    NSMutableArray *PassTable;
     NSMutableSet *tag1List;
     NSMutableArray *tagName;
     NSMutableArray *photos;
@@ -37,6 +38,7 @@
 @property(nonatomic,retain)NSMutableArray *photos;
 @property (nonatomic,retain)NSString *name;
 @property (nonatomic,retain)NSString *Transtion;
+@property (nonatomic,retain)NSMutableArray *PassTable;
 +(DBOperation*)getInstance;
 -(void)openDB;
 -(void)createTable:(NSString *)sql;
@@ -54,6 +56,7 @@
 //-(void)selectFromUserTable;
 //apply to AlbumController for retreiving playlist_id,playlist_name from palytable
 -(NSMutableArray *)selectFromPlayTable:(NSString *)sql;
+-(NSMutableArray *)selectFromPassTable:(NSString *)sql;
 //apply to tagManagementController , PopupPanelView,for retreiving user_id,user_name,user_color from UserTable;
 - (NSString *)getUserFromUserTable:(int)id;
 //apply to AlbumController for retreiving playlist_id,playlist_name from playTable

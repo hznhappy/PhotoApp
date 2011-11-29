@@ -105,6 +105,10 @@
     if (overlay) {
         overlayView.hidden = [self tagOverlay];
         if ([self tagOverlay]) {
+           // PhotoViewController *photoController = [[PhotoViewController alloc] initWithPhotoSource:self.assetArray];
+            NSURL *url = [[self.asset defaultRepresentation]url];
+            self.index = [self.assetArray indexOfObject:url];
+
             NSString *indexString = [NSString stringWithFormat:@"%d",self.index];
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:indexString,@"index",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUrl" 

@@ -7,7 +7,8 @@
 //
 
 #import "PhotoAppDelegate.h"
-
+#import "AlbumController.h"
+#import "AssetTablePicker.h"
 @implementation PhotoAppDelegate
 
 @synthesize window;
@@ -21,9 +22,30 @@
     // Override point for customization after application launch.
     // Add the view controller's view to the window and display.
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-    [window addSubview:rootViewController.view];
+   [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+   /* da=[DBOperation getInstance];
+    NSString *selectPassTable = [NSString stringWithFormat:@"select LOCK from PassTable where ID=1"];
+    NSMutableArray *PA=[da selectFromPassTable:selectPassTable];
+    if([PA count]>0)
+    {
+        if([[PA objectAtIndex:0] isEqualToString:@"UnLock"])
+        {
+            //[self performSelector:@selector(play) withObject:nil afterDelay:0.5];
+            //[self play];
+            AssetTablePicker *a=[[AssetTablePicker alloc]init];  
+            [window addSubview:a.view];
+        }
+    }
+
+    else
+    {*/
+        [window addSubview:rootViewController.view];
+   // }
+        
     [window makeKeyAndVisible];
+    //AssetTablePicker *a=[[AssetTablePicker alloc]init];
+    //[a play];
+    
 
     return YES;
 }
@@ -103,6 +125,10 @@
      Called when the application is about to terminate.
      See also applicationDidEnterBackground:.
      */
+    //demoAppDelegate *delegate  = (demoAppDelegate *)  [[UIApplication shareApplication] delegate]；
+    //NSUserDefaults *SaveDefaults = [NSUserDefaults standardUserDefaults];
+    //[SaveDefaults setObject: array forKey:@"SaveKey"];
+
 }
 
 #pragma mark -

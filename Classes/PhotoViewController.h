@@ -34,7 +34,7 @@
 	
     UIBarButtonItem *edit;
     BOOL editing;
-	DBOperation *db;
+	//DBOperation *db;
     PopupPanelView *ppv;
     NSTimer *timer;	
 }

@@ -8,7 +8,7 @@
 #import "DBOperation.h"
 @implementation DBOperation
 @synthesize orderIdList,tagList,playTableList,RulesList;
-@synthesize tag1List,tagName,photos;
+@synthesize tag1List,tagName,photos,PassTable;
 @synthesize name;
 @synthesize Transtion;
 -(NSString *)filePath{
@@ -156,6 +156,22 @@ static DBOperation* singleton;
     sqlite3_finalize(statement);  
     return RulesList;
     
+}
+-(NSMutableArray *)selectFromPassTable:(NSString *)sql
+{
+    NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    self.PassTable= playArray;
+    [playArray release];
+   	sqlite3_stmt *statement;
+	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+		while (sqlite3_step(statement)==SQLITE_ROW) {
+            NSString *new=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,0)];
+            [PassTable addObject:new];
+        }
+    }	
+    sqlite3_finalize(statement);  
+    return PassTable;
+
 }
 - (NSString *)getUserFromUserTable:(int)id
 {
