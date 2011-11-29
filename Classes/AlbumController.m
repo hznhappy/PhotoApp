@@ -65,14 +65,14 @@
     da=[DBOperation getInstance];
     [self creatTable];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
-    NSString *selectPassTable = [NSString stringWithFormat:@"select LOCK from PassTable where ID=1"];
+    NSString *selectPassTable = [NSString stringWithFormat:@"select LOCK from PassTable"];
     NSMutableArray *PA=[da selectFromPassTable:selectPassTable];
     if([PA count]>0)
     {
     if([[PA objectAtIndex:0] isEqualToString:@"UnLock"])
     {
        // [self play];
-   [self performSelector:@selector(play) withObject:nil afterDelay:0];
+   [self performSelector:@selector(play) withObject:nil afterDelay:0.8];
     }
     }
 	[super viewDidLoad];
@@ -88,7 +88,7 @@
     [da createTable:createRules];
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [da createTable:createTag];
-    NSString *createPassTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INTEGER PRIMARY KEY,LOCK,PASSWORD,URL)",PassTable];
+    NSString *createPassTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(LOCK,PASSWORD,PLAYID)",PassTable];
     [da createTable:createPassTable];
     NSString *selectPlayTable = [NSString stringWithFormat:@"select count(*) from PlayTable"];
      NSInteger count=[[[da selectFromPlayTable:selectPlayTable]objectAtIndex:0]intValue];
@@ -373,21 +373,34 @@
 -(void)play
 {
     AssetTablePicker *assetPicker = [[AssetTablePicker alloc]init];
-      assetPicker.hidesBottomBarWhenPushed = YES;
-    NSString *selectPassTable = [NSString stringWithFormat:@"select URL from PassTable"];
-   NSMutableArray *url=[da selectFromPassTable:selectPassTable];
-    NSMutableArray *ok=[[NSMutableArray alloc]init];
-    for (NSString *dataStr in url) {
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        [ok addObject:dbStr];
+    assetPicker.hidesBottomBarWhenPushed = YES;
+    NSString *selectPassTable = [NSString stringWithFormat:@"select PLAYID from PassTable"];
+    NSMutableArray *url=[da selectFromPassTable:selectPassTable];
+    // NSMutableArray *ok=[[NSMutableArray alloc]init];
+    //for (NSString *dataStr in url) {
+    //  NSURL *dbStr = [NSURL URLWithString:dataStr];
+    //[ok addObject:dbStr];
+    //}
+    // assetPicker.urlsArray=ok;
+    //[ok release];if()
+    if([[url objectAtIndex:0]intValue]==1)
+    {
+        assetPicker.urlsArray=allUrl;
     }
-    assetPicker.urlsArray=ok;
-    [ok release];
-    NSString *selectPassTable1 = [NSString stringWithFormat:@"select PASSWORD from PassTable where ID=1"];
+    else if([[url objectAtIndex:0]intValue]==2)
+    {
+        assetPicker.urlsArray=unTagUrl;
+    }
+    else
+    {
+        [self playlistUrl:[[url objectAtIndex:0]intValue]];
+        assetPicker.urlsArray =dbUrl;
+    }
+    NSString *selectPassTable1 = [NSString stringWithFormat:@"select PASSWORD from PassTable"];
     NSMutableArray *password=[da selectFromPassTable:selectPassTable1];
     assetPicker.val=[password objectAtIndex:0];
     NSLog(@"VAL:%@",assetPicker.val);
-     [self.navigationController pushViewController:assetPicker animated:YES];
+    [self.navigationController pushViewController:assetPicker animated:YES];
     NSString *b=NSLocalizedString(@"UnLock", @"button");
     assetPicker.lock.title=b;
     [assetPicker release];

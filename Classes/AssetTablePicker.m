@@ -47,16 +47,29 @@
     
     NSString *begin2 = @"201";
     NSString *end2 = [NSString stringWithFormat:@"%d",[self.urlsArray count]-1];    
-    
+    NSArray *array = [NSArray arrayWithObjects:begin1,end2, nil];
     NSArray *array1 = [NSArray arrayWithObjects:begin1,end1, nil];
     NSArray *array2 = [NSArray arrayWithObjects:begin2,end2, nil];
     queue = [[NSOperationQueue alloc]init];
+    if([end2 intValue]<200)
+    {
+         NSInvocationOperation *temoperation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array];
+        self.operation1 = temoperation;
+         NSArray *operations = [NSArray arrayWithObjects:operation1, nil];
+         [queue addOperations:operations waitUntilFinished:NO];
+        
+    }
+    else
+    {
     NSInvocationOperation *temoperation1 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array1];
     NSInvocationOperation *temoperation2 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array2];
+    
     self.operation1 = temoperation1;
     self.operation2 = temoperation2;
     NSArray *operations = [NSArray arrayWithObjects:operation1,operation2, nil];
+    
     [queue addOperations:operations waitUntilFinished:NO];
+    }
 
    // self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
@@ -238,7 +251,7 @@
 {
     NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
     [dataBase createTable:createTag]; 
-    NSString *createPassTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INTEGER PRIMARY KEY,LOCK,PASSWORD,URL)",PassTable];
+    NSString *createPassTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(LOCK,PASSWORD,PLAYID)",PassTable];
     [dataBase createTable:createPassTable];
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
     [dataBase createTable:createUserTable];
@@ -360,13 +373,12 @@
             [alert2 release];
         }
         else{
-             NSString *deletePassTable= [NSString stringWithFormat:@"DELETE FROM PassTable"];
+            NSString *deletePassTable= [NSString stringWithFormat:@"DELETE FROM PassTable"];
             [dataBase deleteDB:deletePassTable];
-            for(int i=0;i<[self.urlsArray count];i++)
-            {
-                NSString *insertPassTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(LOCK,PASSWORD,URL) VALUES('%@','%@','%@')",PassTable,@"UnLock",val,[self.urlsArray objectAtIndex:i]];
-                [dataBase insertToTable:insertPassTable];
-            }
+            //for(int i=0;i<[self.urlsArray count];i++)
+            // {
+            NSString *insertPassTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(LOCK,PASSWORD,PLAYID) VALUES('%@','%@','%@')",PassTable,@"UnLock",val,self.PLAYID];
+            [dataBase insertToTable:insertPassTable];
 
         [lock setTitle:b];
         }
