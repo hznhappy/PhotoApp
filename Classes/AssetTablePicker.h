@@ -30,6 +30,8 @@
     NSString *selectName;
 
 	ALAssetsGroup *assetGroup;
+    NSOperationQueue *queue;
+    NSInvocationOperation *operation;
 	
 	NSMutableArray *crwAssets;
 	NSMutableArray *urlsArray;

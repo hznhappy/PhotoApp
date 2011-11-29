@@ -86,7 +86,7 @@
 -(void)layoutSubviews {
     
  	CGRect frame = CGRectMake(4, 2, 75, 75);
-    NSDate *methodStart = [NSDate date];
+   // NSDate *methodStart = [NSDate date];
 /*
     if (cellLibrary != nil) {
     if (imagesReady) {
@@ -133,9 +133,9 @@
         frame.origin.x = frame.origin.x + frame.size.width + 4;
     }
 
-    NSDate *methodFinish = [NSDate date];
+    /*NSDate *methodFinish = [NSDate date];
     NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-	NSLog(@"UITableViewCell layoutSubView time %f",executionTime);
+	NSLog(@"UITableViewCell layoutSubView time %f",executionTime);*/
    }
 
 -(void)dealloc 

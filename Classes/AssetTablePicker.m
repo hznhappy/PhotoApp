@@ -32,6 +32,9 @@
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
     
+    queue = [[NSOperationQueue alloc]init];
+    operation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos) object:nil];
+    [queue addOperation:operation];
    // self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
     [temLibrary release];
@@ -91,8 +94,8 @@
     [alert1 addSubview:passWord];  
     ME=NO;
     PASS=NO;
-    [self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
+    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
+    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.5];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
@@ -112,6 +115,7 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];*/
         [self.crwAssets addObject:thumbNail];        
+        NSLog(@"loading photos");
     };
     
     
@@ -130,6 +134,9 @@
     
     for (NSURL* url in self.urlsArray) {
         [self.library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
+        if ([operation isCancelled]) {
+            return;
+        }
     }
     [self.table performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
     [self performSelectorOnMainThread:@selector(setPhotoTag) withObject:nil waitUntilDone:NO];
@@ -245,6 +252,10 @@
 -(void)viewDidAppear:(BOOL)animated{
     self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
     
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [operation cancel];
 }
 -(void)viewDidDisappear:(BOOL)animated{
     for (Thumbnail *thub in crwAssets) {
@@ -580,6 +591,8 @@
     [alert1 release];
     [val release];
     [library release];
+    [queue release];
+    [operation release];
     [super dealloc];    
 }
 
