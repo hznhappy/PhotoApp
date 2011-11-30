@@ -19,7 +19,6 @@
 @synthesize save,reset,UserId,UrlList,UserName;
 @synthesize images,PLAYID,lock;
 @synthesize library;
-@synthesize pool;
 @synthesize operation1,operation2;
 @synthesize operations;
 @synthesize operation;

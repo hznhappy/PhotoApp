@@ -8,8 +8,6 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
-#import "prepareThumbnail.h"
-
 @interface ThumbnailCell : UITableViewCell
 {
     

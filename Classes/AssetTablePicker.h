@@ -12,7 +12,6 @@
 #import "Thumbnail.h"
 #import "sqlite3.h"
 #import "DBOperation.h"
-#import "prepareThumbnail.h"
 #import "MyNSOperation.h"
 
 #define TAG @"TAG"
@@ -40,8 +39,6 @@
     NSMutableArray *dateArray;
     NSMutableArray *images;
     ALAssetsLibrary *liabrary;
-
-    PrepareThumbnail *pool;
     
     
     DBOperation *dataBase;
@@ -66,7 +63,6 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
 @property (nonatomic,retain)ALAssetsLibrary *library;
-@property (nonatomic,retain)PrepareThumbnail *pool;
 @property (nonatomic,retain)NSInvocationOperation *operation1;
 @property (nonatomic,retain)NSInvocationOperation *operation2;
 @property (nonatomic,retain)MyNSOperation *operation;
