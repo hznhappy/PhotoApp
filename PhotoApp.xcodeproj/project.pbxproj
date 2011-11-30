@@ -44,7 +44,6 @@
 		A10FFFFF14593E3F00D007F3 /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = A10FFFFE14593E3F00D007F3 /* person.png */; };
 		A1111478147515F900AD57D0 /* empty1.png in Resources */ = {isa = PBXBuildFile; fileRef = A1111477147515F900AD57D0 /* empty1.png */; };
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
-		A1397ED5147F7C7100531FBF /* prepareThumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = A1397ED4147F7C7100531FBF /* prepareThumbnail.m */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
 		A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAA14441A640087972B /* PhotoImageView.m */; };
@@ -118,8 +117,6 @@
 		A10FFFFE14593E3F00D007F3 /* person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = person.png; sourceTree = "<group>"; };
 		A1111477147515F900AD57D0 /* empty1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty1.png; sourceTree = "<group>"; };
 		A11401C41440016F007B4B95 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
-		A1397ED3147F7C7100531FBF /* prepareThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prepareThumbnail.h; sourceTree = "<group>"; };
-		A1397ED4147F7C7100531FBF /* prepareThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = prepareThumbnail.m; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A1EF3DA914441A640087972B /* PhotoImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -284,8 +281,6 @@
 		A1397ED1147F7C0C00531FBF /* AssetModel */ = {
 			isa = PBXGroup;
 			children = (
-				A1397ED3147F7C7100531FBF /* prepareThumbnail.h */,
-				A1397ED4147F7C7100531FBF /* prepareThumbnail.m */,
 			);
 			name = AssetModel;
 			sourceTree = "<group>";
@@ -434,7 +429,6 @@
 				184FCFCC1471FE410082B51D /* tagManagementController.m in Sources */,
 				184FCFF9147202D70082B51D /* ThumbnailCell.m in Sources */,
 				184FD004147208F20082B51D /* AnimaSelectController.m in Sources */,
-				A1397ED5147F7C7100531FBF /* prepareThumbnail.m in Sources */,
 				A1FF8E351484D39B00D7521C /* MyNSOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

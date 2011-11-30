@@ -356,7 +356,7 @@
     }
     else if ([[list objectAtIndex:indexPath.row]intValue]==1) {
         assetPicker.urlsArray = allUrl;
-          NSString *u=NSLocalizedString(@"ALL", @"title");
+        NSString *u=NSLocalizedString(@"ALL", @"title");
         assetPicker.navigationItem.title = u;
     }
     else

@@ -13,7 +13,7 @@
 @implementation AssetTablePicker
 @synthesize assetGroup;
 //@synthesize dataBase;
-@synthesize crwAssets,urlsArray,selectUrls,dateArry;
+@synthesize crwAssets,urlsArray,dateArry;
 @synthesize table,val;
 @synthesize viewBar,tagBar;
 @synthesize save,reset,UserId,UrlList,UserName;
@@ -29,21 +29,21 @@
 
 -(void)viewDidLoad {
     done = YES;
-    NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
-    for (NSInteger i = 0; i<[self.urlsArray count]; i++) {
-        [thumbNailArray addObject:[NSNull null]];
-    }
-    self.crwAssets = thumbNailArray;
-    [thumbNailArray release];
+//    NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
+//    for (NSInteger i = 0; i<[self.urlsArray count]; i++) {
+//        [thumbNailArray addObject:[NSNull null]];
+//    }
+//    self.crwAssets = thumbNailArray;
+//    [thumbNailArray release];
+    
 
    dataBase =[DBOperation getInstance];
     [self creatTable];
     
     
-    
-    ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
+    /*ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
-    /*
+
     NSInteger threadNumber = 5;
     NSInteger countNum = ceil([self.urlsArray count]/threadNumber);
     queue = [[NSOperationQueue alloc]init];
@@ -69,12 +69,12 @@
         //NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array];
         //[operations addObject:operation];
         //[queue addOperation:operation];
-    }*/
-    self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
-    
+    }
+
+
     [temLibrary release];
     
-    /*
+    
     //load thumbnails from another thread
     queue = [[NSOperationQueue alloc]init];
     NSInteger startAt = 0;
@@ -83,6 +83,13 @@
     self.operation = tempOperation;
     [tempOperation release];
     [queue addOperation:self.operation];*/
+    
+    //MyNSOperation *temOperation = [[MyNSOperation alloc]initWithUrls:self.urlsArray];
+    NSLog(@"%d you",[self.urlsArray count]);
+    queue = [[NSOperationQueue alloc]init];
+    self.operation = [[MyNSOperation alloc]initWithUrls:self.urlsArray];
+    [queue addOperation:operation];
+    
 
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
@@ -144,7 +151,6 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
-   
 }
 -(void)loadPhotos:(NSArray *)array{
     NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
@@ -519,7 +525,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([self.crwAssets count] / 4.0);
+    return ceil([self.urlsArray count] / 4.0);
     
 }
 
@@ -562,45 +568,28 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //NSDate *methodStart = [NSDate date];
     static NSString *CellIdentifier = @"Cell";
-    //ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-   // cell.tagOverlay = mode;
-    //cell.loadSign = load;
+    ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+   
     if (cell == nil) 
     {	
-           // cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[ThumbnailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier]autorelease];
 
-            //cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
-        cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier]autorelease];
     }
-    /*
-    else{
-        [cell setAssets:[self assetsForIndexPath:indexPath]];
-    }*/
-        //[cell prepareThumailIndex:indexPath.row count:4];
-    NSArray *thumbnais = [pool getThumbnailSubViewsFrom:indexPath.row*4 to:4];
-    CGRect frame = CGRectMake(4, 2, 75, 75);
-        for(UIButton *thum in thumbnais) {
-            //            thum.overlay = tagOverlay;
-            //            thum.load = self.loadSign;
-            //            thum.assetArray = self.allUrls;
-            //            thum.fatherController = self.passViewController;
-            [thum setFrame:frame];
-            //[thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
-            [cell addSubview:thum];
-            frame.origin.x = frame.origin.x + frame.size.width + 4;
+    NSMutableArray *assetsArray = [[NSMutableArray alloc]init];
+    for (NSInteger i = 0; i<4; i++) {
+        NSInteger row = (indexPath.row*4)+i;
+        if (row<[self.urlsArray count]) {
+            NSURL *url = [self.urlsArray objectAtIndex:row];
+            ALAsset *asset = [self.operation getAssetsWithUrl:url];
+            if (asset == nil) {
+                return cell;
+            }
+            [assetsArray addObject:asset];
         }
-
-
-    //cell.allUrls = self.urlsArray;
-   // cell.passViewController = self;
-    //NSDate *methodFinish = [NSDate date];
-    //NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    //NSLog(@"CellForRow return UITableViewCell time is %f",executionTime);
-    NSLog(@"return cell");
-    NSLog(@"-----------------------------------------------------------");
+    }
+      [cell displayThumbnails:assetsArray];
+    [assetsArray release];
     return cell;
 }
 
@@ -624,23 +613,25 @@
     self.tagBar = nil;
     self.save = nil;
     self.reset = nil;
-    self.selectUrls = nil;
     self.dateArry = nil;
     self.images = nil;
     [super viewDidUnload];
 }
-- (oneway void)release
+/*- (oneway void)release
 {
     if (![NSThread isMainThread]) {
         [self performSelectorOnMainThread:@selector(release) withObject:nil waitUntilDone:NO];
     } else {
         [super release];
     }
-}
+}*/
 - (void)dealloc
 {   
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [selectName release];
+//    NSLog(@"%d dealloc is url count",[self.urlsArray retainCount]);
+    NSLog(@"%d is crw count",[crwAssets retainCount]);
+    NSLog(@"%d is url count",[urlsArray retainCount]);
+
     [viewBar release];
     [tagBar release];
     [cancel release];
@@ -649,7 +640,6 @@
     [table release];
     [crwAssets release];
     [urlsArray release];
-    [selectUrls release];
     [dateArry release];
     [UserId release];
     [UserName release];
@@ -660,6 +650,7 @@
     [val release];
     [queue release];
     [operation release];
+    [self.view removeFromSuperview];
     [super dealloc];    
 }
 

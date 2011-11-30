@@ -11,54 +11,41 @@
 
 
 @implementation MyNSOperation
-@synthesize beginIndex;
-@synthesize endIndex;
-@synthesize thumbnails;
+
+@synthesize assets;
 @synthesize allUrls;
 @synthesize stopOperation;
 
 
--(id)initWithBeginIndex:(NSInteger)begin endIndex:(NSInteger)end storeThumbnails:(NSMutableArray *)_thumbnails urls:(NSMutableArray *)_urls{
+-(id)initWithUrls:(NSMutableArray *)_urls{
     self = [super init];
     if (self) {
-        self.beginIndex = begin;
-        self.endIndex = end;
-        self.thumbnails = [_thumbnails retain];
-        self.allUrls = [_urls retain];
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc]init ];
+        self.assets = dic;
+        self.allUrls = _urls;
         self.stopOperation = NO;
+        [dic release];
     }
     return self;
+    NSLog(@"come here");
     
 }
 
-
--(void)main{
-    @try {
-        NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
-        [self loadThumbnails];
-        [pools release];
-
-    }
-    @catch (NSException *exception) {
-        NSLog(@"exception %@ and urls is %d",exception,[self.allUrls count]);
-    }
+-(ALAsset *)getAssetsWithUrl:(NSURL *)url{
+    return [self.assets objectForKey:url];
 }
--(void)loadThumbnails{
-    NSDate *star = [NSDate date];
-    ALAssetsLibrary *library = [[ALAssetsLibrary alloc]init];
-    for (NSInteger i = beginIndex; i<=endIndex; i++) {
+-(void)getAssetsFormLiabrary{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    
         ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
         {
             if (result == nil) 
             {
+                self.stopOperation = YES;
                 return;
             }
-            //Thumbnail *thumbNail = [[Thumbnail alloc]initWithAsset:result];
-            
-             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-             [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];
-            button.tag = i;
-            [self.thumbnails replaceObjectAtIndex:i withObject:button];        
+            NSURL *url = [[result defaultRepresentation]url];
+            [self.assets setObject:result forKey:url];        
         };
         
         
@@ -74,18 +61,32 @@
             NSLog(@"A problem occured %@", [error description]);                                     
         };    
         
-        if (i==endIndex) {
-            self.stopOperation = YES;
-        }
+        
+    
+    
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc]init];
+    for (NSURL *url in self.allUrls) {
         if ([self isCancelled]) {
             return;
         }
-        [library assetForURL:[self.allUrls objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
+        [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     }
-    NSDate *finish = [NSDate date];
-    NSTimeInterval excuteTime = [finish timeIntervalSinceDate:star];
-    NSLog(@"finish time is %f",excuteTime);
+    [library release];
+    [pool release];
 }
+
+-(void)main{
+    @try {
+        NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
+        [self getAssetsFormLiabrary];
+        [pools release];
+
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception %@ and urls is %d",exception,[self.allUrls count]);
+    }
+}
+
 
 -(BOOL)isFinished{
     if (self.stopOperation) {
@@ -97,7 +98,7 @@
 
 -(void)dealloc{
     [allUrls release];
-    [thumbnails release];
+    [assets release];
     [super dealloc];
 }
 @end

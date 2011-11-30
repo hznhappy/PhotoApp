@@ -28,7 +28,6 @@
     UIBarButtonItem *reset;
     UIBarButtonItem *cancel;
     UIBarButtonItem *lock;
-    NSString *selectName;
 
     MyNSOperation *operation;
     
@@ -38,7 +37,6 @@
 	
 	NSMutableArray *crwAssets;
 	NSMutableArray *urlsArray;
-    NSMutableArray *selectUrls;
     NSMutableArray *dateArray;
     NSMutableArray *images;
     ALAssetsLibrary *liabrary;
@@ -84,7 +82,6 @@
 @property (nonatomic,retain) NSMutableArray *images;
 @property (nonatomic,retain) NSMutableArray *crwAssets;
 @property (nonatomic,retain) NSMutableArray *urlsArray;
-@property (nonatomic,retain) NSMutableArray *selectUrls;
 @property (nonatomic,retain) NSMutableArray *dateArry;
 @property (nonatomic,retain) NSMutableArray *UrlList;
 @property (nonatomic,retain)NSNumber *val;

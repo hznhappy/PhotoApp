@@ -11,16 +11,14 @@
 
 
 @interface MyNSOperation : NSOperation {
-    NSInteger beginIndex;
-    NSInteger endIndex;
-    NSMutableArray *thumbnails;
+    
+    NSMutableDictionary *assets;
     NSMutableArray *allUrls;
     
     BOOL stopOperation;
 }
-@property (nonatomic,assign)NSInteger beginIndex;
-@property (nonatomic,assign)NSInteger endIndex;
-@property (nonatomic,retain)NSMutableArray *thumbnails;
+
+@property (nonatomic,retain)NSMutableDictionary *assets;
 @property (nonatomic,retain)NSMutableArray *allUrls;
 
 @property (nonatomic,assign)BOOL stopOperation;
@@ -28,6 +26,7 @@
 
 
 
--(id)initWithBeginIndex:(NSInteger)begin endIndex:(NSInteger)end storeThumbnails:(NSMutableArray *)_thumbnails urls:(NSMutableArray *)_urls;
--(void)loadThumbnails;
+-(id)initWithUrls:(NSMutableArray *)_urls;
+-(ALAsset *)getAssetsWithUrl:(NSURL *)url;
+-(void)getAssetsFormLiabrary;
 @end
