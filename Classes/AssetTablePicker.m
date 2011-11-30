@@ -40,9 +40,10 @@
     [self creatTable];
     
     
-    /*
+    
     ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
     self.library = temLibrary;
+    /*
     NSInteger threadNumber = 5;
     NSInteger countNum = ceil([self.urlsArray count]/threadNumber);
     queue = [[NSOperationQueue alloc]init];
@@ -68,12 +69,12 @@
         //NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array];
         //[operations addObject:operation];
         //[queue addOperation:operation];
-    }
-   // self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
+    }*/
+    self.pool = [[PrepareThumbnail alloc]initWithUrls:self.urlsArray assetLibrary:library];
     
-    [temLibrary release];*/
+    [temLibrary release];
     
-    
+    /*
     //load thumbnails from another thread
     queue = [[NSOperationQueue alloc]init];
     NSInteger startAt = 0;
@@ -81,7 +82,7 @@
     MyNSOperation *tempOperation = [[MyNSOperation alloc]initWithBeginIndex:startAt endIndex:endAt storeThumbnails:self.crwAssets urls:self.urlsArray];
     self.operation = tempOperation;
     [tempOperation release];
-    [queue addOperation:self.operation];
+    [queue addOperation:self.operation];*/
 
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
@@ -194,6 +195,8 @@
 }
 -(void)huyou
 {
+    self.operation.stopOperation = YES;
+    [self.operation cancel];
     NSString *a=NSLocalizedString(@"Lock", @"title");
  if([self.lock.title isEqualToString:a])
  {
@@ -306,8 +309,6 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
 
-    self.operation.stopOperation = YES;
-    [self.operation cancel];
 }
 -(void)viewDidDisappear:(BOOL)animated{
 //    for (Thumbnail *thub in crwAssets) {
@@ -518,7 +519,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([self.urlsArray count] / 4.0);
+    return ceil([self.crwAssets count] / 4.0);
     
 }
 
@@ -563,28 +564,43 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     //NSDate *methodStart = [NSDate date];
     static NSString *CellIdentifier = @"Cell";
-    ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    cell.tagOverlay = mode;
-    cell.loadSign = load;
+    //ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+   // cell.tagOverlay = mode;
+    //cell.loadSign = load;
     if (cell == nil) 
     {	
-            //cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
+           // cell = [[[ThumbnailCell alloc] initWithThumbnailPool:pool reuseIdentifier:CellIdentifier] autorelease];
 
-            cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
+            //cell = [[[ThumbnailCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier]autorelease];
+        cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier]autorelease];
     }
+    /*
     else{
         [cell setAssets:[self assetsForIndexPath:indexPath]];
-    }
+    }*/
         //[cell prepareThumailIndex:indexPath.row count:4];
+    NSArray *thumbnais = [pool getThumbnailSubViewsFrom:indexPath.row*4 to:4];
+    CGRect frame = CGRectMake(4, 2, 75, 75);
+        for(UIButton *thum in thumbnais) {
+            //            thum.overlay = tagOverlay;
+            //            thum.load = self.loadSign;
+            //            thum.assetArray = self.allUrls;
+            //            thum.fatherController = self.passViewController;
+            [thum setFrame:frame];
+            //[thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
+            [cell addSubview:thum];
+            frame.origin.x = frame.origin.x + frame.size.width + 4;
+        }
 
-   
 
-    cell.allUrls = self.urlsArray;
-    cell.passViewController = self;
+    //cell.allUrls = self.urlsArray;
+   // cell.passViewController = self;
     //NSDate *methodFinish = [NSDate date];
     //NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
     //NSLog(@"CellForRow return UITableViewCell time is %f",executionTime);
-   // NSLog(@"-----------------------------------------------------------");
+    NSLog(@"return cell");
+    NSLog(@"-----------------------------------------------------------");
     return cell;
 }
 

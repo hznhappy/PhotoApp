@@ -29,15 +29,16 @@
     
 	if((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:_identifier])) {
         self.thumbnailPool = pool;
-        NSMutableArray *array = [[NSMutableArray alloc]init];
-        self.loadedurls = array;
-        [array release];
         
-        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
-        self.rowThumbnails = tempArray;
-        [tempArray release];        
+//        NSMutableArray *array = [[NSMutableArray alloc]init];
+//        self.loadedurls = array;
+//        [array release];
+//        
+//        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
+//        self.rowThumbnails = tempArray;
+//        [tempArray release];        
 	}
-    
+    //[self setNeedsLayout];
     return self;
 }
 /*
@@ -86,6 +87,7 @@
 -(void)layoutSubviews {
     
  	CGRect frame = CGRectMake(4, 2, 75, 75);
+    //[self setNeedsLayout];
    // NSDate *methodStart = [NSDate date];
 /*
     if (cellLibrary != nil) {
@@ -101,28 +103,29 @@
             frame.origin.x = frame.origin.x + frame.size.width + 4;
         }
     }
-    } else 
+    } else */
         if (thumbnailPool != nil) {
-            for(UIButton *thum in [thumbnailPool getThumbnailSubViewsFrom:index*4 to:count]) {
+            for(Thumbnail *thum in [thumbnailPool getThumbnailSubViewsFrom:index*4 to:count]) {
                 //            thum.overlay = tagOverlay;
                 //            thum.load = self.loadSign;
                 //            thum.assetArray = self.allUrls;
                 //            thum.fatherController = self.passViewController;
                 [thum setFrame:frame];
-                //[thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
+                [thum addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:thum action:@selector(toggleSelection)] autorelease]];
                 [self addSubview:thum];
+                [thum setNeedsLayout];
                 frame.origin.x = frame.origin.x + frame.size.width + 4;
             }
         }
 
-    }else{*/
+    /*}else{
         for (UIButton *bt in self.rowAssets) {
             if (bt!=nil && (NSNull *) bt != [NSNull null] ) {
             [bt setFrame:frame];
             [self addSubview:bt];
             frame.origin.x = frame.origin.x + frame.size.width + 4;
         }
-    }
+    }*/
     /*for(Thumbnail *thum in self.rowAssets) {
         if (thum!=nil && (NSNull *) thum != [NSNull null] ) {
             thum.overlay = tagOverlay;
@@ -140,6 +143,7 @@
     /*NSDate *methodFinish = [NSDate date];
     NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
 	NSLog(@"UITableViewCell layoutSubView time %f",executionTime);*/
+    NSLog(@"layout cell subViews");
    }
 
 -(void)dealloc 

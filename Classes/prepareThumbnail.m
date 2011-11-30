@@ -16,8 +16,8 @@
 
 -(id)initWithUrls:(NSMutableArray *)_urls assetLibrary: (ALAssetsLibrary*)asLibrary {
     self = [super init];
-    self.urls = _urls;
-    self.library = asLibrary;
+    self.urls = [_urls retain];
+    self.library = [asLibrary retain];
      NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
     self.thumbNails = dic;
     [dic release];

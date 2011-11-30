@@ -57,6 +57,7 @@
             
              UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
              [button setImage:[UIImage imageWithCGImage:[result thumbnail]] forState:UIControlStateNormal];
+            button.tag = i;
             [self.thumbnails replaceObjectAtIndex:i withObject:button];        
         };
         
