@@ -44,9 +44,6 @@
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
 		A11769C214873E1A00379474 /* AlbumClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769C114873E1A00379474 /* AlbumClass.m */; };
 		A11769CC1487576500379474 /* AssetRef.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769CB1487576400379474 /* AssetRef.m */; };
-		A1176A431487AAF900379474 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1176A411487AAF900379474 /* MainWindow.xib */; };
-		A1176A451487AB0800379474 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1176A411487AAF900379474 /* MainWindow.xib */; };
-		A1176A471487AB1300379474 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1176A411487AAF900379474 /* MainWindow.xib */; };
 		A1176A4B1487ABC800379474 /* PlaylistRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A491487ABC300379474 /* PlaylistRootViewController.m */; };
 		A1176A501487ABEC00379474 /* PersonRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A4E1487ABE700379474 /* PersonRootViewController.m */; };
 		A1176A5F1487B14000379474 /* AssetProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A5C1487B14000379474 /* AssetProducer.m */; };
@@ -54,6 +51,9 @@
 		A138EE1D1487B2440019BF7D /* AlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = A138EE1C1487B2440019BF7D /* AlbumController.m */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
+		A16C7F871487B47B00C634C0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16C7F851487B47B00C634C0 /* MainWindow.xib */; };
+		A16C7F8A1487B48C00C634C0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16C7F851487B47B00C634C0 /* MainWindow.xib */; };
+		A16C7F8C1487B49800C634C0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16C7F851487B47B00C634C0 /* MainWindow.xib */; };
 		A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAA14441A640087972B /* PhotoImageView.m */; };
 		A1EF3DB014441A640087972B /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAC14441A640087972B /* PhotoScrollView.m */; };
 		A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DB214441A840087972B /* PhotoViewController.m */; };
@@ -125,9 +125,6 @@
 		A11769C114873E1A00379474 /* AlbumClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumClass.m; sourceTree = "<group>"; };
 		A11769CA1487576400379474 /* AssetRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetRef.h; sourceTree = "<group>"; };
 		A11769CB1487576400379474 /* AssetRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetRef.m; sourceTree = "<group>"; };
-		A1176A421487AAF900379474 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = ../BackUp/PhotoAppNOV21/en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		A1176A441487AB0800379474 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "../BackUp/PhotoAppNOV21/zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
-		A1176A461487AB1300379474 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "../BackUp/PhotoAppNOV21/zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		A1176A481487ABC100379474 /* PlaylistRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistRootViewController.h; sourceTree = "<group>"; };
 		A1176A491487ABC300379474 /* PlaylistRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistRootViewController.m; sourceTree = "<group>"; };
 		A1176A4D1487ABE500379474 /* PersonRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonRootViewController.h; sourceTree = "<group>"; };
@@ -140,6 +137,9 @@
 		A138EE1C1487B2440019BF7D /* AlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlbumController.m; path = ../AlbumController.m; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		A16C7F861487B47B00C634C0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		A16C7F891487B48C00C634C0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
+		A16C7F8B1487B49800C634C0 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		A1EF3DA914441A640087972B /* PhotoImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1EF3DAA14441A640087972B /* PhotoImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PhotoImageView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A1EF3DAB14441A640087972B /* PhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoScrollView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -232,7 +232,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A1176A411487AAF900379474 /* MainWindow.xib */,
+				A16C7F851487B47B00C634C0 /* MainWindow.xib */,
 				A1111477147515F900AD57D0 /* empty1.png */,
 				184FCFF3147202A00082B51D /* selectOverlay.png */,
 				184FCFF5147202A70082B51D /* selectOverlay@2x.png */,
@@ -436,9 +436,9 @@
 				18D4033A1474FF5A00389097 /* tagManagementController.xib in Resources */,
 				A1111478147515F900AD57D0 /* empty1.png in Resources */,
 				18696E8B147A217100302EB8 /* Settings.bundle in Resources */,
-				A1176A431487AAF900379474 /* MainWindow.xib in Resources */,
-				A1176A451487AB0800379474 /* MainWindow.xib in Resources */,
-				A1176A471487AB1300379474 /* MainWindow.xib in Resources */,
+				A16C7F871487B47B00C634C0 /* MainWindow.xib in Resources */,
+				A16C7F8A1487B48C00C634C0 /* MainWindow.xib in Resources */,
+				A16C7F8C1487B49800C634C0 /* MainWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,12 +526,12 @@
 			name = PlaylistDetailController.xib;
 			sourceTree = "<group>";
 		};
-		A1176A411487AAF900379474 /* MainWindow.xib */ = {
+		A16C7F851487B47B00C634C0 /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A1176A421487AAF900379474 /* en */,
-				A1176A441487AB0800379474 /* zh-Hans */,
-				A1176A461487AB1300379474 /* zh-Hant */,
+				A16C7F861487B47B00C634C0 /* en */,
+				A16C7F891487B48C00C634C0 /* zh-Hans */,
+				A16C7F8B1487B49800C634C0 /* zh-Hant */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
