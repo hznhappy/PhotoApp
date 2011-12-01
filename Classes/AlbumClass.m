@@ -13,11 +13,13 @@
 @synthesize albumId;
 @synthesize albumName;
 @synthesize photoCount;
+@synthesize posterImage;
 
 
 -(void)dealloc{
     [albumId release];
     [albumName release];
+    [posterImage release];
     [super dealloc];
 }
 @end

@@ -13,10 +13,13 @@
     NSString *albumId;
     NSString *albumName;
     NSInteger photoCount;
+    UIImage *posterImage;
 }
 
 @property(nonatomic,retain)NSString *albumId;
 @property(nonatomic,retain)NSString *albumName;
 @property(nonatomic,assign)NSInteger photoCount;
+@property(nonatomic,retain)UIImage *posterImage;
+
 
 @end

@@ -9,26 +9,40 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AssetTablePicker.m"
-         timestampString = "344399485.036909"
+         timestampString = "344423456.717359"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "546"
-         endingLineNumber = "546"
+         startingLineNumber = "550"
+         endingLineNumber = "550"
          landmarkName = "@implementation AssetTablePicker"
          landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/AssetProducer.m"
+         timestampString = "344419792.005597"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "37"
+         endingLineNumber = "37"
+         landmarkName = "-fetchAssets"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/AssetTablePicker.m"
-         timestampString = "344399485.036909"
+         filePath = "Classes/PlaylistProducer.m"
+         timestampString = "344419587.825664"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "583"
-         endingLineNumber = "583"
-         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         startingLineNumber = "23"
+         endingLineNumber = "23"
+         landmarkName = "-init"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

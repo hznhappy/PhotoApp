@@ -45,6 +45,9 @@
 		A1111478147515F900AD57D0 /* empty1.png in Resources */ = {isa = PBXBuildFile; fileRef = A1111477147515F900AD57D0 /* empty1.png */; };
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
 		A11769C214873E1A00379474 /* AlbumClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769C114873E1A00379474 /* AlbumClass.m */; };
+		A11769C9148756A700379474 /* AssetProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769C8148756A600379474 /* AssetProducer.m */; };
+		A11769CC1487576500379474 /* AssetRef.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769CB1487576400379474 /* AssetRef.m */; };
+		A11769CF1487630200379474 /* PlaylistProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769CE1487630200379474 /* PlaylistProducer.m */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
 		A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAA14441A640087972B /* PhotoImageView.m */; };
@@ -120,6 +123,12 @@
 		A11401C41440016F007B4B95 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
 		A11769C014873E1A00379474 /* AlbumClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumClass.h; sourceTree = "<group>"; };
 		A11769C114873E1A00379474 /* AlbumClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumClass.m; sourceTree = "<group>"; };
+		A11769C7148756A600379474 /* AssetProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetProducer.h; sourceTree = "<group>"; };
+		A11769C8148756A600379474 /* AssetProducer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetProducer.m; sourceTree = "<group>"; };
+		A11769CA1487576400379474 /* AssetRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetRef.h; sourceTree = "<group>"; };
+		A11769CB1487576400379474 /* AssetRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetRef.m; sourceTree = "<group>"; };
+		A11769CD1487630200379474 /* PlaylistProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistProducer.h; sourceTree = "<group>"; };
+		A11769CE1487630200379474 /* PlaylistProducer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistProducer.m; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A1EF3DA914441A640087972B /* PhotoImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -284,6 +293,14 @@
 		A1397ED1147F7C0C00531FBF /* AssetModel */ = {
 			isa = PBXGroup;
 			children = (
+				A11769CD1487630200379474 /* PlaylistProducer.h */,
+				A11769CE1487630200379474 /* PlaylistProducer.m */,
+				A11769C014873E1A00379474 /* AlbumClass.h */,
+				A11769C114873E1A00379474 /* AlbumClass.m */,
+				A11769C7148756A600379474 /* AssetProducer.h */,
+				A11769C8148756A600379474 /* AssetProducer.m */,
+				A11769CA1487576400379474 /* AssetRef.h */,
+				A11769CB1487576400379474 /* AssetRef.m */,
 			);
 			name = AssetModel;
 			sourceTree = "<group>";
@@ -314,8 +331,6 @@
 				A1F82E841462909100BED207 /* PlaylistDetailController.m */,
 				184FD002147208E90082B51D /* AnimaSelectController.h */,
 				184FD003147208F20082B51D /* AnimaSelectController.m */,
-				A11769C014873E1A00379474 /* AlbumClass.h */,
-				A11769C114873E1A00379474 /* AlbumClass.m */,
 			);
 			name = TableView;
 			sourceTree = "<group>";
@@ -436,6 +451,9 @@
 				184FD004147208F20082B51D /* AnimaSelectController.m in Sources */,
 				A1FF8E351484D39B00D7521C /* MyNSOperation.m in Sources */,
 				A11769C214873E1A00379474 /* AlbumClass.m in Sources */,
+				A11769C9148756A700379474 /* AssetProducer.m in Sources */,
+				A11769CC1487576500379474 /* AssetRef.m in Sources */,
+				A11769CF1487630200379474 /* PlaylistProducer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

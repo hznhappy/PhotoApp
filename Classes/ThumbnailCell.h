@@ -12,6 +12,7 @@
 {
     
 }
+- (void) albumSelected: (id) sender ;
 
 -(void)displayThumbnails:(NSArray *)array;
 @end

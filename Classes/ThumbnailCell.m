@@ -25,6 +25,12 @@
     }
 }
 
+- (void) albumSelected: (id) sender {
+    NSLog(@"Album Selected");
+    
+}
+
+
 -(void)dealloc 
 {
 

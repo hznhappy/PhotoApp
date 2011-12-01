@@ -359,6 +359,7 @@
 }
 
 -(IBAction)actionButtonPressed{
+    
     NSString *a=NSLocalizedString(@"Lock", @"title");
     if([self.lock.title isEqualToString:a])
     {
@@ -472,11 +473,14 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
+    [[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
+    NSLog(@"play button pressed");
+    /*
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray currentPage:0];
     //[dataBase getUserFromPlayTable:[PLAYID intValue]];
     [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
-    [playPhotoController release];
+    [playPhotoController release];*/
 }
 
 #pragma mark - 
@@ -529,7 +533,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([self.urlsArray count] / 4.0);
+    return 2;//return ceil([self.urlsArray count] / 4.0);
     
 }
 
@@ -626,8 +630,8 @@
 - (void)dealloc
 {   
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    NSLog(@"%d is crw count",[crwAssets retainCount]);
-    NSLog(@"%d is url count",[urlsArray retainCount]);
+//    NSLog(@"%d is crw count",[crwAssets retainCount]);
+//    NSLog(@"%d is url count",[urlsArray retainCount]);
     [viewBar release];
     [tagBar release];
     [cancel release];
