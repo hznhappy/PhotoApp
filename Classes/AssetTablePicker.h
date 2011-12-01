@@ -30,15 +30,13 @@
 
     MyNSOperation *operation;
     
-	ALAssetsGroup *assetGroup;
     NSOperationQueue *queue;
     NSMutableArray *operations;
 	
 	NSMutableArray *crwAssets;
-	NSMutableArray *urlsArray;
+	NSArray *urlsArray;
     NSMutableArray *dateArray;
     NSMutableArray *images;
-    ALAssetsLibrary *liabrary;
     
     
     DBOperation *dataBase;
@@ -69,15 +67,13 @@
 
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
-@property (nonatomic,assign) ALAssetsGroup  *assetGroup;
 
 
-//@property (nonatomic,retain) DBOperation *dataBase;
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain)NSMutableArray *operations;
 @property (nonatomic,retain) NSMutableArray *images;
 @property (nonatomic,retain) NSMutableArray *crwAssets;
-@property (nonatomic,retain) NSMutableArray *urlsArray;
+@property (nonatomic,retain) NSArray *urlsArray;
 @property (nonatomic,retain) NSMutableArray *dateArry;
 @property (nonatomic,retain) NSMutableArray *UrlList;
 @property (nonatomic,retain)NSNumber *val;
@@ -88,10 +84,11 @@
 -(IBAction)resetTags;
 -(IBAction)selectFromFavoriteNames;
 -(IBAction)selectFromAllNames;
--(void)loadPhotos:(NSArray *)array;
 -(void)setPhotoTag;
 -(void)AddUrl:(NSNotification *)note;
 -(void)RemoveUrl:(NSNotification *)note;
 -(void)AddUser:(NSNotification *)note;
 -(void)creatTable;
+
+-(void)getAssets:(ALAsset *)asset;
 @end

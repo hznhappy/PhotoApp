@@ -11,8 +11,6 @@
 #import "PhotoViewController.h"
 #import "tagManagementController.h"
 @implementation AssetTablePicker
-@synthesize assetGroup;
-//@synthesize dataBase;
 @synthesize crwAssets,urlsArray,dateArry;
 @synthesize table,val;
 @synthesize viewBar,tagBar;
@@ -28,12 +26,12 @@
 
 -(void)viewDidLoad {
     done = YES;
-//    NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
+    NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
 //    for (NSInteger i = 0; i<[self.urlsArray count]; i++) {
 //        [thumbNailArray addObject:[NSNull null]];
 //    }
-//    self.crwAssets = thumbNailArray;
-//    [thumbNailArray release];
+    self.crwAssets = thumbNailArray;
+   [thumbNailArray release];
     
 
    dataBase =[DBOperation getInstance];
@@ -85,10 +83,12 @@
     
     //MyNSOperation *temOperation = [[MyNSOperation alloc]initWithUrls:self.urlsArray];
     NSLog(@"%d you",[self.urlsArray count]);
-    queue = [[NSOperationQueue alloc]init];
-    self.operation = [[MyNSOperation alloc]initWithUrls:self.urlsArray];
-    [queue addOperation:operation];
-    
+    NSOperationQueue *_queue = [[NSOperationQueue alloc]init];
+    MyNSOperation *temOperation= [[MyNSOperation alloc]initWithUrls:self.urlsArray viewController:self];
+    self.operation = temOperation;
+    [temOperation release];
+    [_queue addOperation:operation];
+    [_queue release];
 
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
@@ -145,12 +145,17 @@
     ME=NO;
     PASS=NO;
     //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
-    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.8];
+    [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
 }
+
+-(void)getAssets:(ALAsset *)asset{
+    [self.crwAssets addObject:asset];
+}
+
 -(void)loadPhotos:(NSArray *)array{
     NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
     NSDate *star = [NSDate date];
@@ -579,11 +584,11 @@
     for (NSInteger i = 0; i<4; i++) {
         NSInteger row = (indexPath.row*4)+i;
         if (row<[self.urlsArray count]) {
-            NSURL *url = [self.urlsArray objectAtIndex:row];
-            ALAsset *asset = [self.operation getAssetsWithUrl:url];
-            if (asset == nil) {
+            if ([self.crwAssets count]==0||[self.crwAssets objectAtIndex:row]==nil) {
                 return cell;
             }
+            ALAsset *asset = [self.crwAssets objectAtIndex:row];
+           
             [assetsArray addObject:asset];
         }
     }
@@ -616,21 +621,13 @@
     self.images = nil;
     [super viewDidUnload];
 }
-/*- (oneway void)release
-{
-    if (![NSThread isMainThread]) {
-        [self performSelectorOnMainThread:@selector(release) withObject:nil waitUntilDone:NO];
-    } else {
-        [super release];
-    }
-}*/
+
+
 - (void)dealloc
 {   
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-//    NSLog(@"%d dealloc is url count",[self.urlsArray retainCount]);
     NSLog(@"%d is crw count",[crwAssets retainCount]);
     NSLog(@"%d is url count",[urlsArray retainCount]);
-
     [viewBar release];
     [tagBar release];
     [cancel release];
@@ -649,7 +646,6 @@
     [val release];
     [queue release];
     [operation release];
-    [self.view removeFromSuperview];
     [super dealloc];    
 }
 

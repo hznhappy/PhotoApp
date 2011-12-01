@@ -9,24 +9,26 @@
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
-
+@class AssetTablePicker;
 @interface MyNSOperation : NSOperation {
     
-    NSMutableDictionary *assets;
-    NSMutableArray *allUrls;
+    NSArray *allUrls;
+    
+    AssetTablePicker *controller;
     
     BOOL stopOperation;
 }
 
-@property (nonatomic,retain)NSMutableDictionary *assets;
-@property (nonatomic,retain)NSMutableArray *allUrls;
+@property (nonatomic,retain)NSArray *allUrls;
+
+@property (nonatomic,retain)AssetTablePicker *controller;
+
 
 @property (nonatomic,assign)BOOL stopOperation;
 
 
 
 
--(id)initWithUrls:(NSMutableArray *)_urls;
--(ALAsset *)getAssetsWithUrl:(NSURL *)url;
+-(id)initWithUrls:(NSArray *)_urls viewController:(AssetTablePicker *)_controller;
 -(void)getAssetsFormLiabrary;
 @end

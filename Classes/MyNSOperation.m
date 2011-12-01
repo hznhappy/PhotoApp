@@ -8,32 +8,26 @@
 
 #import "MyNSOperation.h"
 #import "Thumbnail.h"
-
+#import "AssetTablePicker.h"
 
 @implementation MyNSOperation
 
-@synthesize assets;
 @synthesize allUrls;
 @synthesize stopOperation;
+@synthesize controller;
 
 
--(id)initWithUrls:(NSMutableArray *)_urls{
+-(id)initWithUrls:(NSArray *)_urls viewController:(AssetTablePicker *)_controller{
     self = [super init];
     if (self) {
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc]init ];
-        self.assets = dic;
         self.allUrls = _urls;
         self.stopOperation = NO;
-        [dic release];
+        self.controller = _controller;
+        [_controller release];
     }
-    return self;
-    NSLog(@"come here");
-    
+    return self;    
 }
 
--(ALAsset *)getAssetsWithUrl:(NSURL *)url{
-    return [self.assets objectForKey:url];
-}
 -(void)getAssetsFormLiabrary{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     
@@ -41,24 +35,17 @@
         {
             if (result == nil) 
             {
+                [self.controller.table performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
                 self.stopOperation = YES;
                 return;
             }
-            NSURL *url = [[result defaultRepresentation]url];
-            [self.assets setObject:result forKey:url];        
+            [self.controller performSelectorOnMainThread:@selector(getAssets:) withObject:result waitUntilDone:NO];       
         };
         
         
         ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error)
         {
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                             message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-                                                            delegate:nil 
-                                                   cancelButtonTitle:@"Ok" 
-                                                   otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            NSLog(@"A problem occured %@", [error description]);                                     
+                NSLog(@"A problem occured %@", [error description]);                                     
         };    
         
         
@@ -77,9 +64,15 @@
 
 -(void)main{
     @try {
-        NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
+        if ([self isCancelled]) {
+            return;
+        }
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
         [self getAssetsFormLiabrary];
-        [pools release];
+        [pool release];
+        if ([self isCancelled]) {
+            return;
+        }
 
     }
     @catch (NSException *exception) {
@@ -97,8 +90,8 @@
 }
 
 -(void)dealloc{
+    //[controller release];
     [allUrls release];
-    [assets release];
     [super dealloc];
 }
 @end

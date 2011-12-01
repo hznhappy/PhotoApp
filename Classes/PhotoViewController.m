@@ -35,7 +35,7 @@
 @synthesize photos,bgPhotos;
 @synthesize img;
 
-- (id)initWithPhotoSource:(NSMutableArray *)aSource currentPage:(NSInteger)page{
+- (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleBarsNotification:) name:@"PhotoViewToggleBars" object:nil];
