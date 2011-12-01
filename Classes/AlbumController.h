@@ -16,6 +16,8 @@
 @interface AlbumController : UIViewController<UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>{
     
     IBOutlet UITableView *tableView;
+    NSMutableDictionary *allAssets;
+    NSMutableArray *albumItems;
     NSMutableArray *list;
     DBOperation *da;
     UIBarButtonItem *editButton;
@@ -30,7 +32,10 @@
     ALAsset *img;
     NSMutableArray *date;
     }
+
+@property(nonatomic,retain)NSMutableDictionary *allAssets;
 @property(nonatomic,retain)NSMutableArray *assetGroups;
+@property(nonatomic,retain)NSMutableArray *albumItems;
 @property(nonatomic,retain)NSMutableSet *SUM;
 @property(nonatomic,retain)NSMutableArray *allUrl;
 @property(nonatomic,retain)NSMutableArray *unTagUrl;
@@ -42,7 +47,7 @@
 @property(nonatomic,retain)ALAsset *img;
 -(void)play;
 -(void)getAssetGroup;
--(void)getAllUrls;
+-(void)getAllAssets;
 -(void)getTagUrls;
 -(void)getUnTagUrls;
 -(void)deleteUnExitUrls;
@@ -50,4 +55,5 @@
 -(void)playlistUrl:(int)row_id;
 -(void)loadPhotos:(NSURL *)url;
 -(void)Special;
+-(void)getAlbumItems;
 @end

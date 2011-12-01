@@ -60,7 +60,7 @@
 //apply to tagManagementController , PopupPanelView,for retreiving user_id,user_name,user_color from UserTable;
 - (NSString *)getUserFromUserTable:(int)id;
 //apply to AlbumController for retreiving playlist_id,playlist_name from playTable
-- (void)getUserFromPlayTable:(int)id;
+- (void)getUserFromPlayTable:(NSString *)_id;
 //apply to AssetTablePickerController for retreiving url from TAG
 -(NSMutableArray *)selectPhotos:(NSString *)sql;
 //-(void)selectUserNameFromTag:(NSString *)sql;

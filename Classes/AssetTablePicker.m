@@ -473,7 +473,7 @@
 }
 -(IBAction)playPhotos{
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray currentPage:0];
-    [dataBase getUserFromPlayTable:[PLAYID intValue]];
+    //[dataBase getUserFromPlayTable:[PLAYID intValue]];
     [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];

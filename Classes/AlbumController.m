@@ -9,6 +9,8 @@
 #import "AlbumController.h"
 #import "AssetTablePicker.h"
 #import "PlaylistDetailController.h"
+#import "AlbumClass.h"
+
 @implementation AlbumController
 @synthesize tableView,list;
 @synthesize assetGroups;
@@ -17,6 +19,8 @@
 @synthesize playListUrl;
 @synthesize tagUrl;
 @synthesize SUM,img;
+@synthesize allAssets;
+@synthesize albumItems;
 
 #pragma mark -
 #pragma mark UIViewController method
@@ -33,25 +37,39 @@
 
 -(void)viewDidLoad
 {
+    da=[DBOperation getInstance];
+    [self creatTable];
     date = [[NSMutableArray alloc]init];
+    NSMutableDictionary *temtdic = [[NSMutableDictionary alloc]init];
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     NSMutableArray *tempArray1 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray2 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray3 = [[NSMutableArray alloc]init];
     NSMutableArray *tempArray4 = [[NSMutableArray alloc]init];
+    NSMutableArray *tempArray5 = [[NSMutableArray alloc]init];
     self.allUrl = tempArray1;
     self.unTagUrl = tempArray2;
     self.tagUrl = tempArray3;
     self.assetGroups = tempArray;
     self.dbUrl=tempArray4;
+    self.allAssets = temtdic;
+    self.albumItems = tempArray5;
     [tempArray release];
     [tempArray1 release];
     [tempArray2 release];
     [tempArray3 release];
     [tempArray4 release];
+    [temtdic release];
+    [tempArray5 release];
+    
+    [self getTagUrls];
+    
+    [self getAlbumItems];
+    
+    [self getAssetGroup];
+
     [self setWantsFullScreenLayout:YES];
 	[self.navigationItem setTitle:@"Loading..."];
-    [self getAssetGroup];
     NSString *bu=NSLocalizedString(@"Edit", @"button");
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     UIBarButtonItem *addButon=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toggleAdd:)];
@@ -62,8 +80,8 @@
     self.navigationItem.rightBarButtonItem = addButon;
     [addButon release];
     [editButton release];
-    da=[DBOperation getInstance];
-    [self creatTable];
+    
+   
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(table1) name:@"addplay" object:nil];
     NSString *selectPassTable = [NSString stringWithFormat:@"select LOCK from PassTable"];
     NSMutableArray *PA=[da selectFromPassTable:selectPassTable];
@@ -77,6 +95,7 @@
     }
 	[super viewDidLoad];
 }
+
 -(void)creatTable
 {
     
@@ -93,16 +112,29 @@
     NSString *selectPlayTable = [NSString stringWithFormat:@"select count(*) from PlayTable"];
      NSInteger count=[[[da selectFromPlayTable:selectPlayTable]objectAtIndex:0]intValue];
   if(count==0)
-  {   NSLog(@"OK");
+  {  
         [self Special];
-    }
+  }
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select play_id from playIdOrder"];
     self.list=[da selectOrderId:selectPlayIdOrder];
    
 }
+-(void)getAlbumItems{
+    for (NSString *_id in self.list) {
+        [da getUserFromPlayTable:_id];
+        AlbumClass *item = [[AlbumClass alloc]init];
+        item.albumId = _id;
+        item.albumName = da.name;
+        NSLog(@"alubm item %@  %@",item.albumId,item.albumName);
+        [self.albumItems addObject:item];
+    }
+
+}
+
 -(void)Special
-{NSString *u=NSLocalizedString(@"ALL", @"title");
-    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,u];
+{
+   // NSString *u=NSLocalizedString(@"ALL", @"title");
+    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,@"ALL"];
     NSLog(@"%@",insertPlayTable);
     [da insertToTable:insertPlayTable];
     NSString *insertPlayTable1= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,@"UNTAG"];
@@ -118,22 +150,42 @@
 #pragma mark -
 #pragma mark get URL method
 -(void)getAssetGroup{
-    dispatch_async(dispatch_get_main_queue(), ^
-       {
            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-           
            void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
            {
                if (group == nil) 
                {
-                   [self.allUrl removeAllObjects];
-                   NSLog(@"KO");
-                   [self performSelectorOnMainThread:@selector(getAllUrls) withObject:nil waitUntilDone:YES];
-                   [self deleteUnExitUrls];
+                   ALAssetsGroup *group;
+                   for(int i=0;i<[assetGroups count];i++)
+                   {
+                       group = (ALAssetsGroup*)[assetGroups objectAtIndex:i];
+                       [group setAssetsFilter:[ALAssetsFilter allAssets]];
+                       
+                   }
+                   NSInteger gCount = [group numberOfAssets];
+                   for (AlbumClass *item in self.albumItems) {
+                       if ([item.albumId intValue]==1) {
+                           item.photoCount = gCount;
+                       }else if([item.albumId intValue]==2){
+                           NSInteger j = gCount-[self.tagUrl count];
+                           if (j>0) {
+                               item.photoCount = j;
+                               NSLog(@"item dfdf %d",item.photoCount);
+                               
+                           }else{
+                               [self playlistUrl:[item.albumId intValue]];
+                               item.photoCount = [self.dbUrl count];
+                           }
+                       }
+                       
+                       
+                   }
+                                      //[self.allUrl removeAllObjects];
+                   [self performSelectorInBackground:@selector(getAllAssets) withObject:nil];
+                   //[self deleteUnExitUrls];
                    return;
                }               
                [self.assetGroups addObject:group];
-               [group numberOfAssets];
                [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
            };
            
@@ -155,11 +207,10 @@
            
            [library release];
            [pool release];
-       });
 }
 
--(void)getAllUrls{
-    [self.allUrl removeAllObjects];
+-(void)getAllAssets{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     for (ALAssetsGroup *group in self.assetGroups) {
         [group setAssetsFilter:[ALAssetsFilter allAssets]];
         [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
@@ -168,10 +219,11 @@
             {
                 return;
             }
-            [self.allUrl addObject:[[result defaultRepresentation]url]];
+            NSString *url = [[[result defaultRepresentation]url]description];
+            [self.allAssets setObject:result forKey:url];
         }];
     }
-   // NSLog(@"LLL%@",allUrl);
+    [pool release];
 }
 
 -(void)getUnTagUrls{
@@ -186,11 +238,8 @@
 -(void)getTagUrls{
     [tagUrl removeAllObjects];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
-    NSMutableArray *photos = [da selectPhotos:selectSql];
-    for (NSString *dataStr in photos) {
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        [self.tagUrl addObject:dbStr];
-    } 
+    self.tagUrl = [da selectPhotos:selectSql];
+;    
 }
 
 -(void)deleteUnExitUrls{
@@ -296,47 +345,35 @@
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
-    
-    [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
-    if([[self.list objectAtIndex:indexPath.row]intValue]==1)
-    {
-        ALAssetsGroup *group = (ALAssetsGroup*)[assetGroups objectAtIndex:0];
-        [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-        //NSInteger gCount = [group numberOfAssets];
-        cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
-        NSString *u=NSLocalizedString(@"ALL", @"title");
-        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,[allUrl count]];
-        [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:0] posterImage]]];
-        
-    }
-    else if([[self.list objectAtIndex:indexPath.row]intValue]==2)
-    {
-        [self getTagUrls];
-        [self getUnTagUrls];
-        [self loadPhotos:[self.unTagUrl objectAtIndex:0]];
-        [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
-        cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
-        NSString *u=NSLocalizedString(@"UNTAG", @"title");
-        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,[unTagUrl count]];
-    }
-    else
-    {
-        
-        
-        int row=[[self.list objectAtIndex:indexPath.row]intValue];
-        [self playlistUrl:row];
-        if([dbUrl count]==0)
-        {
-            [cell.imageView setImage:[UIImage imageNamed:@"empty1.png"]];
-        }
-        else
-        {
-            [self loadPhotos:[self.dbUrl objectAtIndex:0]];
-            [cell.imageView setImage:[UIImage imageWithCGImage:[self.img thumbnail]]];
-            
-        }
-        cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",da.name,[dbUrl count]];
-        
+    switch ([[list objectAtIndex:indexPath.row]intValue]) {
+        case 1:
+            for (AlbumClass *item in self.albumItems) {
+                if ([item.albumId intValue] == 1) {
+                    cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
+                    NSString *u=NSLocalizedString(@"ALL", @"title");
+                    cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,item.photoCount];
+                    [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:0] posterImage]]];
+                }
+            }
+            break;
+        case 2:
+            for (AlbumClass *item in self.albumItems) {
+                if ([item.albumId intValue] == 2) {
+                    cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
+                    NSString *u=NSLocalizedString(@"UNTAG", @"title");
+                    cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",u,item.photoCount];
+                }
+            }
+            break;
+        default:
+            for (AlbumClass *item in self.albumItems) {
+                if(item.photoCount ==0)
+                {
+                    [cell.imageView setImage:[UIImage imageNamed:@"empty1.png"]];
+                }
+                cell.textLabel.text=[NSString stringWithFormat:@"%@ (%d)",item.albumName,item.photoCount];
+            }
+            break;
     }
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     
@@ -519,7 +556,7 @@
                                                            object:self 
                                                          userInfo:dic1];
 
-    [da getUserFromPlayTable:[[list objectAtIndex:indexPath.row]intValue]];
+    [da getUserFromPlayTable:[list objectAtIndex:indexPath.row]];
    
     PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
     detailController.listName =[NSString stringWithFormat:@"%@",da.name];
