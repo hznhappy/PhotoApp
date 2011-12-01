@@ -13,7 +13,7 @@
 @implementation AssetProducer
 @synthesize assets;
 @synthesize library;
-@synthesize ready;
+@synthesize ready,assetGroups;
 @synthesize assetsUrlOrdering;
 
 -(id)initWithAssetsLibrary: (ALAssetsLibrary *)assetLibrary {
@@ -36,7 +36,7 @@
     {
         if (group == nil) 
         {
-            return;
+        return;
         }
         [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
         {         
@@ -50,8 +50,11 @@
              NSString *url = [[[result defaultRepresentation]url]description];
             // XXX fixme
             [self.assetsUrlOrdering addObject:url];
+           
             [self.assets setValue:ref forKey:url];
         }];
+         NSLog(@"assertUrlOrdering: %@",self.assetsUrlOrdering);
+        [self.assetGroups addObject:group];
       
     };
     

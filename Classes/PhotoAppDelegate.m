@@ -22,73 +22,14 @@
     // Override point for customization after application launch.
     // Add the view controller's view to the window and display.
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-   [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-   /* da=[DBOperation getInstance];
-    NSString *selectPassTable = [NSString stringWithFormat:@"select LOCK from PassTable where ID=1"];
-    NSMutableArray *PA=[da selectFromPassTable:selectPassTable];
-    if([PA count]>0)
-    {
-        if([[PA objectAtIndex:0] isEqualToString:@"UnLock"])
-        {
-            //[self performSelector:@selector(play) withObject:nil afterDelay:0.5];
-            //[self play];
-            AssetTablePicker *a=[[AssetTablePicker alloc]init];  
-            [window addSubview:a.view];
-        }
-    }
-
-    else
-    {*/
-        [window addSubview:rootViewController.view];
- //   }
-        
-    [window makeKeyAndVisible];
-    //AssetTablePicker *a=[[AssetTablePicker alloc]init];
-    //[a play];
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     
-
+    
+    
+    [window addSubview:rootViewController.view];
+    [window makeKeyAndVisible];
     return YES;
 }
-//- (BOOL)getSortAppPref {
-   // NSLog(@"KOE");
-	/* As this application provides a Settings.bundle for application
-     preferences, the following is a simple example that retrieves the
-     current user-set preferences. */
-   // NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	/* Similar to the AppPrefs sample, we first test to see if the preferences
-     settings exist, and create if needed. */
-	/*NSData *testValue = [defaults dataForKey:kSettingKey]; // setting exists? */
-	/*if (testValue == nil) {
-        NSLog(@"NIL");
-		NSString *pathStr = [[NSBundle mainBundle] bundlePath];
-		NSString *settingsBundlePath = [pathStr stringByAppendingPathComponent:@"PhotoSettings.bundle"];
-		NSString *finalPath = [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
-		NSDictionary *settingsDict = [NSDictionary dictionaryWithContentsOfFile:finalPath];
-		NSArray *prefSpecifierArray = [settingsDict objectForKey:@"PreferenceSpecifiers"];
-		NSNumber *settingDefault = nil;
-		NSDictionary *prefItem;
-		
-		for (prefItem in prefSpecifierArray) {
-            NSLog(@"LO");
-			NSString *keyValueStr = [prefItem objectForKey:@"Key"];
-			id defaultValue = [prefItem objectForKey:@"DefaultValue"];
-			
-			if ([keyValueStr isEqualToString:kSettingKey]) {
-				settingDefault = defaultValue;
-			}
-		}
-		
-		if (settingDefault != nil) {
-            NSLog(@"ARE");
-			NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         settingDefault, kSettingKey, nil];		
-			[defaults registerDefaults:appDefaults];
-			[defaults synchronize];
-		}
-	}
-	return [defaults boolForKey:kSettingKey];
-}*/
-
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
@@ -125,7 +66,7 @@
      Called when the application is about to terminate.
      See also applicationDidEnterBackground:.
      */
-    //demoAppDelegate *delegate  = (demoAppDelegate *)  [[UIApplication shareApplication] delegate]；
+    //demoAppDelegate *delegate  = (demoAppDelegate *)[[UIApplication shareApplication] delegate];
     //NSUserDefaults *SaveDefaults = [NSUserDefaults standardUserDefaults];
     //[SaveDefaults setObject: array forKey:@"SaveKey"];
 

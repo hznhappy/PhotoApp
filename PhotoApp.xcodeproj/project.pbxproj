@@ -10,7 +10,6 @@
 		184F8D87146B9B81004A87DE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184F8D86146B9B81004A87DE /* MediaPlayer.framework */; };
 		184FCFBF1471F7D50082B51D /* AssetTablePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFBE1471F7D50082B51D /* AssetTablePicker.m */; };
 		184FCFC31471F7EB0082B51D /* Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFC21471F7EB0082B51D /* Thumbnail.m */; };
-		184FCFCA1471FDBB0082B51D /* AlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFC91471FDBB0082B51D /* AlbumController.m */; };
 		184FCFCC1471FE410082B51D /* tagManagementController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFCB1471FE410082B51D /* tagManagementController.m */; };
 		184FCFF4147202A00082B51D /* selectOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 184FCFF3147202A00082B51D /* selectOverlay.png */; };
 		184FCFF6147202A70082B51D /* selectOverlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 184FCFF5147202A70082B51D /* selectOverlay@2x.png */; };
@@ -22,7 +21,6 @@
 		18D402821474E50000389097 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18D402841474E50000389097 /* Localizable.strings */; };
 		18D402901474E55900389097 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18D402921474E55900389097 /* InfoPlist.strings */; };
 		18D402981474E5F500389097 /* PhotoApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D402971474E5F500389097 /* PhotoApp-Info.plist */; };
-		18D402991474E6B700389097 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D4029B1474E6B700389097 /* MainWindow.xib */; };
 		18D4031C1474FC9A00389097 /* AssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D4031E1474FC9A00389097 /* AssetTablePicker.xib */; };
 		18D403211474FCDA00389097 /* PlaylistDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D403231474FCDA00389097 /* PlaylistDetailController.xib */; };
 		18D4033A1474FF5A00389097 /* tagManagementController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D403391474FF5900389097 /* tagManagementController.xib */; };
@@ -45,9 +43,15 @@
 		A1111478147515F900AD57D0 /* empty1.png in Resources */ = {isa = PBXBuildFile; fileRef = A1111477147515F900AD57D0 /* empty1.png */; };
 		A11401C51440016F007B4B95 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11401C41440016F007B4B95 /* logo.jpg */; };
 		A11769C214873E1A00379474 /* AlbumClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769C114873E1A00379474 /* AlbumClass.m */; };
-		A11769C9148756A700379474 /* AssetProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769C8148756A600379474 /* AssetProducer.m */; };
 		A11769CC1487576500379474 /* AssetRef.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769CB1487576400379474 /* AssetRef.m */; };
-		A11769CF1487630200379474 /* PlaylistProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A11769CE1487630200379474 /* PlaylistProducer.m */; };
+		A1176A431487AAF900379474 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1176A411487AAF900379474 /* MainWindow.xib */; };
+		A1176A451487AB0800379474 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1176A411487AAF900379474 /* MainWindow.xib */; };
+		A1176A471487AB1300379474 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1176A411487AAF900379474 /* MainWindow.xib */; };
+		A1176A4B1487ABC800379474 /* PlaylistRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A491487ABC300379474 /* PlaylistRootViewController.m */; };
+		A1176A501487ABEC00379474 /* PersonRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A4E1487ABE700379474 /* PersonRootViewController.m */; };
+		A1176A5F1487B14000379474 /* AssetProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A5C1487B14000379474 /* AssetProducer.m */; };
+		A1176A601487B14000379474 /* PlaylistProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A5E1487B14000379474 /* PlaylistProducer.m */; };
+		A138EE1D1487B2440019BF7D /* AlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = A138EE1C1487B2440019BF7D /* AlbumController.m */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
 		A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAA14441A640087972B /* PhotoImageView.m */; };
@@ -69,7 +73,6 @@
 		184FCFC11471F7E60082B51D /* Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thumbnail.h; sourceTree = "<group>"; };
 		184FCFC21471F7EB0082B51D /* Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Thumbnail.m; sourceTree = "<group>"; };
 		184FCFC81471FD990082B51D /* tagManagementController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tagManagementController.h; sourceTree = "<group>"; };
-		184FCFC91471FDBB0082B51D /* AlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumController.m; sourceTree = "<group>"; };
 		184FCFCB1471FE410082B51D /* tagManagementController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tagManagementController.m; sourceTree = "<group>"; };
 		184FCFF3147202A00082B51D /* selectOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selectOverlay.png; sourceTree = "<group>"; };
 		184FCFF5147202A70082B51D /* selectOverlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selectOverlay@2x.png"; sourceTree = "<group>"; };
@@ -87,15 +90,12 @@
 		18D402941474E58F00389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = "en.lproj/PhotoApp-Info.plist"; sourceTree = "<group>"; };
 		18D402961474E59400389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "zh-Hans"; path = "zh-Hans.lproj/PhotoApp-Info.plist"; sourceTree = "<group>"; };
 		18D402971474E5F500389097 /* PhotoApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PhotoApp-Info.plist"; sourceTree = "<group>"; };
-		18D4029A1474E6B700389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		18D4029C1474E6BF00389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		18D4031D1474FC9A00389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AssetTablePicker.xib; sourceTree = "<group>"; };
 		18D403201474FCA800389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/AssetTablePicker.xib"; sourceTree = "<group>"; };
 		18D403221474FCDA00389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PlaylistDetailController.xib; sourceTree = "<group>"; };
 		18D403271474FD1000389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/PlaylistDetailController.xib"; sourceTree = "<group>"; };
 		18D403391474FF5900389097 /* tagManagementController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = tagManagementController.xib; sourceTree = "<group>"; };
 		18D4033B14750CC700389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/PlaylistDetailController.xib"; sourceTree = "<group>"; };
-		18D4033C14750D9900389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		18D4033D14750DCC00389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		18D4033E14750DD200389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		18D4033F14750DDA00389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "zh-Hant"; path = "zh-Hant.lproj/PhotoApp-Info.plist"; sourceTree = "<group>"; };
@@ -123,12 +123,21 @@
 		A11401C41440016F007B4B95 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
 		A11769C014873E1A00379474 /* AlbumClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumClass.h; sourceTree = "<group>"; };
 		A11769C114873E1A00379474 /* AlbumClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumClass.m; sourceTree = "<group>"; };
-		A11769C7148756A600379474 /* AssetProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetProducer.h; sourceTree = "<group>"; };
-		A11769C8148756A600379474 /* AssetProducer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetProducer.m; sourceTree = "<group>"; };
 		A11769CA1487576400379474 /* AssetRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetRef.h; sourceTree = "<group>"; };
 		A11769CB1487576400379474 /* AssetRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetRef.m; sourceTree = "<group>"; };
-		A11769CD1487630200379474 /* PlaylistProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistProducer.h; sourceTree = "<group>"; };
-		A11769CE1487630200379474 /* PlaylistProducer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistProducer.m; sourceTree = "<group>"; };
+		A1176A421487AAF900379474 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = ../BackUp/PhotoAppNOV21/en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		A1176A441487AB0800379474 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "../BackUp/PhotoAppNOV21/zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
+		A1176A461487AB1300379474 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "../BackUp/PhotoAppNOV21/zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
+		A1176A481487ABC100379474 /* PlaylistRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistRootViewController.h; sourceTree = "<group>"; };
+		A1176A491487ABC300379474 /* PlaylistRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistRootViewController.m; sourceTree = "<group>"; };
+		A1176A4D1487ABE500379474 /* PersonRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonRootViewController.h; sourceTree = "<group>"; };
+		A1176A4E1487ABE700379474 /* PersonRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonRootViewController.m; sourceTree = "<group>"; };
+		A1176A5B1487B14000379474 /* AssetProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetProducer.h; sourceTree = "<group>"; };
+		A1176A5C1487B14000379474 /* AssetProducer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetProducer.m; sourceTree = "<group>"; };
+		A1176A5D1487B14000379474 /* PlaylistProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistProducer.h; sourceTree = "<group>"; };
+		A1176A5E1487B14000379474 /* PlaylistProducer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistProducer.m; sourceTree = "<group>"; };
+		A138EE1B1487B2440019BF7D /* AlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlbumController.h; path = ../AlbumController.h; sourceTree = "<group>"; };
+		A138EE1C1487B2440019BF7D /* AlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlbumController.m; path = ../AlbumController.m; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A1EF3DA914441A640087972B /* PhotoImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -140,7 +149,6 @@
 		A1EF3DC214441E900087972B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupPanelView.h; sourceTree = "<group>"; };
 		A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupPanelView.m; sourceTree = "<group>"; };
-		A1F1FFA5146007F9005FAB2F /* AlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumController.h; sourceTree = "<group>"; };
 		A1F1FFAE14600813005FAB2F /* DBOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOperation.h; sourceTree = "<group>"; };
 		A1F1FFAF14600813005FAB2F /* DBOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBOperation.m; sourceTree = "<group>"; };
 		A1F82E831462909100BED207 /* PlaylistDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistDetailController.h; sourceTree = "<group>"; };
@@ -198,6 +206,10 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				A1176A4D1487ABE500379474 /* PersonRootViewController.h */,
+				A1176A4E1487ABE700379474 /* PersonRootViewController.m */,
+				A1176A481487ABC100379474 /* PlaylistRootViewController.h */,
+				A1176A491487ABC300379474 /* PlaylistRootViewController.m */,
 				18696E8A147A217100302EB8 /* Settings.bundle */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -220,12 +232,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A1176A411487AAF900379474 /* MainWindow.xib */,
 				A1111477147515F900AD57D0 /* empty1.png */,
 				184FCFF3147202A00082B51D /* selectOverlay.png */,
 				184FCFF5147202A70082B51D /* selectOverlay@2x.png */,
 				18D403231474FCDA00389097 /* PlaylistDetailController.xib */,
 				18D403391474FF5900389097 /* tagManagementController.xib */,
-				18D4029B1474E6B700389097 /* MainWindow.xib */,
 				184FD005147208F90082B51D /* AnimaSelectController.xib */,
 				186BF9C01470AEB500961C67 /* AlbumController.xib */,
 				18D4031E1474FC9A00389097 /* AssetTablePicker.xib */,
@@ -293,12 +305,12 @@
 		A1397ED1147F7C0C00531FBF /* AssetModel */ = {
 			isa = PBXGroup;
 			children = (
-				A11769CD1487630200379474 /* PlaylistProducer.h */,
-				A11769CE1487630200379474 /* PlaylistProducer.m */,
+				A1176A5B1487B14000379474 /* AssetProducer.h */,
+				A1176A5C1487B14000379474 /* AssetProducer.m */,
+				A1176A5D1487B14000379474 /* PlaylistProducer.h */,
+				A1176A5E1487B14000379474 /* PlaylistProducer.m */,
 				A11769C014873E1A00379474 /* AlbumClass.h */,
 				A11769C114873E1A00379474 /* AlbumClass.m */,
-				A11769C7148756A600379474 /* AssetProducer.h */,
-				A11769C8148756A600379474 /* AssetProducer.m */,
 				A11769CA1487576400379474 /* AssetRef.h */,
 				A11769CB1487576400379474 /* AssetRef.m */,
 			);
@@ -321,12 +333,12 @@
 		A1F1FF9E146007ED005FAB2F /* TableView */ = {
 			isa = PBXGroup;
 			children = (
+				A138EE1B1487B2440019BF7D /* AlbumController.h */,
+				A138EE1C1487B2440019BF7D /* AlbumController.m */,
 				184FCFC81471FD990082B51D /* tagManagementController.h */,
 				184FCFCB1471FE410082B51D /* tagManagementController.m */,
 				A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */,
 				A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */,
-				A1F1FFA5146007F9005FAB2F /* AlbumController.h */,
-				184FCFC91471FDBB0082B51D /* AlbumController.m */,
 				A1F82E831462909100BED207 /* PlaylistDetailController.h */,
 				A1F82E841462909100BED207 /* PlaylistDetailController.m */,
 				184FD002147208E90082B51D /* AnimaSelectController.h */,
@@ -412,7 +424,6 @@
 				A10F000114593E7A00D007F3 /* playlist.png in Resources */,
 				A10F000314593E7F00D007F3 /* albums.png in Resources */,
 				18D403211474FCDA00389097 /* PlaylistDetailController.xib in Resources */,
-				18D402991474E6B700389097 /* MainWindow.xib in Resources */,
 				A10F59FF1468E8F100A0AC22 /* Selected.png in Resources */,
 				A10F5A001468E8F100A0AC22 /* Unselected.png in Resources */,
 				18D4031C1474FC9A00389097 /* AssetTablePicker.xib in Resources */,
@@ -425,6 +436,9 @@
 				18D4033A1474FF5A00389097 /* tagManagementController.xib in Resources */,
 				A1111478147515F900AD57D0 /* empty1.png in Resources */,
 				18696E8B147A217100302EB8 /* Settings.bundle in Resources */,
+				A1176A431487AAF900379474 /* MainWindow.xib in Resources */,
+				A1176A451487AB0800379474 /* MainWindow.xib in Resources */,
+				A1176A471487AB1300379474 /* MainWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,15 +459,17 @@
 				A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */,
 				184FCFBF1471F7D50082B51D /* AssetTablePicker.m in Sources */,
 				184FCFC31471F7EB0082B51D /* Thumbnail.m in Sources */,
-				184FCFCA1471FDBB0082B51D /* AlbumController.m in Sources */,
 				184FCFCC1471FE410082B51D /* tagManagementController.m in Sources */,
 				184FCFF9147202D70082B51D /* ThumbnailCell.m in Sources */,
 				184FD004147208F20082B51D /* AnimaSelectController.m in Sources */,
 				A1FF8E351484D39B00D7521C /* MyNSOperation.m in Sources */,
 				A11769C214873E1A00379474 /* AlbumClass.m in Sources */,
-				A11769C9148756A700379474 /* AssetProducer.m in Sources */,
 				A11769CC1487576500379474 /* AssetRef.m in Sources */,
-				A11769CF1487630200379474 /* PlaylistProducer.m in Sources */,
+				A1176A4B1487ABC800379474 /* PlaylistRootViewController.m in Sources */,
+				A1176A501487ABEC00379474 /* PersonRootViewController.m in Sources */,
+				A1176A5F1487B14000379474 /* AssetProducer.m in Sources */,
+				A1176A601487B14000379474 /* PlaylistProducer.m in Sources */,
+				A138EE1D1487B2440019BF7D /* AlbumController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,16 +506,6 @@
 			name = "PhotoApp-Info.plist";
 			sourceTree = "<group>";
 		};
-		18D4029B1474E6B700389097 /* MainWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				18D4029A1474E6B700389097 /* en */,
-				18D4029C1474E6BF00389097 /* zh-Hans */,
-				18D4033C14750D9900389097 /* zh-Hant */,
-			);
-			name = MainWindow.xib;
-			sourceTree = "<group>";
-		};
 		18D4031E1474FC9A00389097 /* AssetTablePicker.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -518,6 +524,16 @@
 				18D4033B14750CC700389097 /* zh-Hant */,
 			);
 			name = PlaylistDetailController.xib;
+			sourceTree = "<group>";
+		};
+		A1176A411487AAF900379474 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A1176A421487AAF900379474 /* en */,
+				A1176A441487AB0800379474 /* zh-Hans */,
+				A1176A461487AB1300379474 /* zh-Hant */,
+			);
+			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

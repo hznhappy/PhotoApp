@@ -10,6 +10,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DBOperation.h"
 #import "AlbumClass.h"
+#import "AssetProducer.h"
 
 
 #define PlayTable @"PlayTable"
@@ -25,6 +26,7 @@
     
     PlaylistProducer *playList;
     AlbumClass *selectedAlbum;
+    AssetProducer *p;
 }
 
 @property (nonatomic,retain)PlaylistProducer *playList;
@@ -33,4 +35,6 @@
 @property(nonatomic,retain)AlbumClass *selectedAlbum;
 
 - (void) albumSelected: (id) sender;
+-(IBAction)toggleEdit:(id)sender;
+-(IBAction)toggleAdd:(id)sender;
 @end
