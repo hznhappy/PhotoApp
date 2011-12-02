@@ -12,6 +12,7 @@
 #import "AlbumClass.h"
 #import "AssetProducer.h"
 #import "PlaylistProducer.h"
+#import "DBOperation.h"
 
 
 @implementation AlbumController
@@ -34,13 +35,10 @@
 }
 
 -(void)viewDidLoad
-{
-   p = [[AssetProducer alloc]initWithAssetsLibrary: [[ALAssetsLibrary alloc] init]];
+{   p = [[AssetProducer alloc]initWithAssetsLibrary: [[ALAssetsLibrary alloc] init]];
     self.playList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
-    NSLog(@"playlist:%@",self.playList.list);
     [self setWantsFullScreenLayout:YES];
-	[self.navigationItem setTitle:@"Loading..."];
-    
+	[self.navigationItem setTitle:@"Album"];
     NSString *bu=NSLocalizedString(@"Edit", @"button");
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
@@ -56,11 +54,24 @@
     
     [addButon release];
     [editButton release];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addnumber) name:@"addplay" object:nil];
+     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addcount) name:@"addcount" object:nil];
     
    
 }
+-(void)addcount
+{
+    NSLog(@"SHUAXING"); 
+    [self.tableView reloadData];
+}
+-(void)addnumber
+{   [self.playList creatTable];
+    [self.playList doFetchPlaylists];
+    [self.tableView reloadData];
+
+}
 -(IBAction)toggleEdit:(id)sender
-{NSString *c=NSLocalizedString(@"Done", @"button");
+{   NSString *c=NSLocalizedString(@"Done", @"button");
     NSString *d=NSLocalizedString(@"Edit", @"button");
     if (self.tableView.editing) {
         editButton.title = d;
@@ -86,7 +97,10 @@
 #pragma mark TableView delegate method
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 { 
-       return [self.playList.playlists count];
+ 
+          return [self.playList.playlists count];
+
+   
 }
 
 
@@ -130,12 +144,12 @@
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{     NSInteger INDEX=indexPath.row;
-    [self.playList deleteTable:INDEX];
+{     
     [self.playList.playlists removeObjectAtIndex:indexPath.row];
-    
- 
-     [self.tableView reloadData];
+    NSInteger INDEX=indexPath.row;
+    [self.playList creatTable];
+    [self.playList deleteTable:INDEX];
+    [self.tableView reloadData];
 }
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {   NSUInteger fromRow=[fromIndexPath row];
@@ -144,14 +158,8 @@
 	[self.playList.playlists removeObjectAtIndex:fromRow];
 	[self.playList.playlists insertObject:object atIndex:toRow];
 	[object release];
-    /*NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder"];	
-	NSLog(@"%@",deleteIdTable);
-    [da deleteDB:deleteIdTable];
-    for(int p=0;p<[list count];p++){
-        NSString *insertIdTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,[[list objectAtIndex:p]intValue]];
-        NSLog(@"%@",insertIdTable);
-        [da insertToTable:insertIdTable]; */   
-	//}
+    [self.playList tableorder];
+    [self.tableView reloadData];
 } 
 
 

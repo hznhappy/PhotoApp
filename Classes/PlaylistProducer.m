@@ -15,56 +15,118 @@
 @synthesize playlists;
 @synthesize assetProducer;
 @synthesize list,allUrl;
+@synthesize TagUrl;
+@synthesize assetGroups;
+@synthesize allCount;
 - (id) initWithAssetProcuder:(AssetProducer *)_assetProducer {
     self = [super init];
     da=[DBOperation getInstance];
     [self creatTable];
+     self.assetGroups=[[NSMutableArray alloc]init];
     if (self) {
         self.playlists = [[NSMutableArray alloc]init];
         self.assetProducer = _assetProducer;
-        
-       //[self doFetchPlaylists];
-        [self performSelectorOnMainThread:@selector(doFetchPlaylists) withObject:nil waitUntilDone:YES];
-        //[self performSelector:@selector(doFetchPlaylists) withObject:nil afterDelay:1];
-
-    }
+       
+        [self doFetchPlaylists];
+        [self count];
+         
+      }
     return self;
 }
 
-- (void) doFetchPlaylists {
-    NSLog(@"OK");
+- (void) doFetchPlaylists
+{
     self.playlists = [[NSMutableArray alloc]init];
-    // 1: all
-     for (NSString *_id in self.list) {
-          [da getUserFromPlayTable:_id];
-         //[self.assetProducer fetchAssets];
-        // NSLog(@"assert:%@",assetProducer.assetsUrlOrdering);
-    NSInteger allPhotoscount = [self.assetProducer.assetsUrlOrdering count];
-    AlbumClass *album = [[AlbumClass alloc]init];
-       //  NSLog(@"ALLUIR:%@",allPhotoscount);
-    album.albumId = _id;
-    album.albumName = da.name;
-    // XXX fixme
-    album.photoCount = allPhotoscount;
-    // .....
     
+    for (NSString *_id in self.list) 
+    {
+        [da getUserFromPlayTable:_id];
+        
+        AlbumClass *album = [[AlbumClass alloc]init];
+        album.albumId = _id;
+        album.albumName = da.name;
+        //NSInteger allPhotoscount =allCount;
+      /*  if([_id intValue]==-1)
+        {
+            album.photoCount = allCount;
+            NSLog(@"photoCount:%d",album.photoCount);
+        }
+        else if([_id intValue]==-2)
+        {
+         //album.photoCount=[]  
+            album.photoCount=allCount-[TagUrl count];
+        }*/
+         // .....
+         
     [self.playlists addObject:album];
      }
+   // }
     // 2: untag
     
     // 3: from DB
+}
+-(void)count
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
+    { 
+        if (group == nil) 
+        {
+            ALAssetsGroup *group;
+            for(int i=0;i<[assetGroups count];i++)
+            {
+                group = (ALAssetsGroup*)[assetGroups objectAtIndex:i];
+                [group setAssetsFilter:[ALAssetsFilter allAssets]];
+                allCount +=[group numberOfAssets];
+            }
+            NSLog(@"gcount:%d",allCount);
+            for (AlbumClass *album in self.playlists) {
+                if ([album.albumId intValue]==-1) {
+                    album.photoCount = allCount;
+                }else if([album.albumId intValue]==-2){
+                    NSInteger j = allCount-[self.TagUrl count];
+                    
+                        album.photoCount = j;
+                        NSLog(@"item dfdf %d",album.photoCount);
+                        
+                    }else{
+                        //[self playlistUrl:[item.albumId intValue]];
+                        //item.photoCount = [self.dbUrl count];
+                    }
+                }
+            NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"addcount" 
+                                                               object:self 
+                                                             userInfo:dic1];
+
+
+            return;
+        }               
+        [self.assetGroups addObject:group];
+        
+        NSLog(@"ASSERT:%@",assetGroups);
+};
+
+void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
     
-    /*for (NSString *_id in self.list) {
-        [da getUserFromPlayTable:_id];
-        AlbumClass *item = [[AlbumClass alloc]init];
-        item.albumId = _id;
-        item.albumName = da.name;
-        NSLog(@"alubm item %@  %@",item.albumId,item.albumName);
-        [self.albumItems addObject:item];
-        [item release];
-    }*/
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                     message:[NSString stringWithFormat:@"Error: %@", [error description]] 
+                                                    delegate:nil 
+                                           cancelButtonTitle:@"Ok" 
+                                           otherButtonTitles:nil];
+    [alert show];
+    [alert release];                                 
+};	
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+[library enumerateGroupsWithTypes:ALAssetsGroupAll
+                       usingBlock:assetGroupEnumerator 
+                     failureBlock:assetGroupEnumberatorFailure];
+
+[library release];
+[pool release];
 
 }
+
 
 -(void)deleteTable:(NSInteger)index
 {
@@ -100,23 +162,40 @@
     }
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select play_id from playIdOrder"];
     self.list=[da selectOrderId:selectPlayIdOrder];
-    
 }
-
+-(void)tableorder
+{ da=[DBOperation getInstance];
+    NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM playIdOrder"];	
+     NSLog(@"%@",deleteIdTable);
+     [da deleteDB:deleteIdTable];
+    for(AlbumClass *al in self.playlists)
+    {NSLog(@"AlbumClass:%@",al.albumId);
+     NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(play_id) VALUES(%d)",playIdOrder,[al.albumId intValue]];
+     NSLog(@"%@",insertIdOrder);
+     [da insertToTable:insertIdOrder];    
+    }
+}
 -(void)Special
 {
-    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,@"ALL"];
+    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_id,playList_name) VALUES(%d,'%@')",PlayTable,-1,@"ALL"];
     NSLog(@"%@",insertPlayTable);
     [da insertToTable:insertPlayTable];
-    NSString *insertPlayTable1= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_name) VALUES('%@')",PlayTable,@"UNTAG"];
+    NSString *insertPlayTable1= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_id,playList_name) VALUES(%d,'%@')",PlayTable,-2,@"UNTAG"];
     NSLog(@"%@",insertPlayTable1);
     [da insertToTable:insertPlayTable1];
-    NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,1];
+    NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,-1];
     NSLog(@"%@",insertPlayIdOrder);
     [da insertToTable:insertPlayIdOrder];
-    NSString *insertPlayIdOrder1= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,2];
+    NSString *insertPlayIdOrder1= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,-2];
     NSLog(@"%@",insertPlayIdOrder1);
     [da insertToTable:insertPlayIdOrder1];
+}
+-(void)getTagUrl
+{
+    
+    [self.TagUrl removeAllObjects];
+    NSString *selectSql = @"SELECT DISTINCT URL FROM TAG";
+    self.TagUrl = [da selectPhotos:selectSql];
 }
 
 @end

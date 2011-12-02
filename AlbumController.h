@@ -22,8 +22,6 @@
     
     IBOutlet UITableView *tableView;
     UIBarButtonItem *editButton;
-    
-    
     PlaylistProducer *playList;
     AlbumClass *selectedAlbum;
     AssetProducer *p;
@@ -35,6 +33,8 @@
 @property(nonatomic,retain)AlbumClass *selectedAlbum;
 
 - (void) albumSelected: (id) sender;
+-(void)addnumber;
+-(void)addcount;
 -(IBAction)toggleEdit:(id)sender;
 -(IBAction)toggleAdd:(id)sender;
 @end
