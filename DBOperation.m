@@ -188,9 +188,9 @@ static DBOperation* singleton;
 	return nil;
     
 }
-- (void)getUserFromPlayTable:(NSString *)_id
+- (void)getUserFromPlayTable:(int)_id
 {
-	NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM PlayTable WHERE playList_id=%@",_id];
+	NSString *countSQL = [NSString stringWithFormat:@"SELECT * FROM PlayTable WHERE playList_id=%d",_id];
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		while (sqlite3_step(statement)==SQLITE_ROW) {

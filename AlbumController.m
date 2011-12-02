@@ -20,6 +20,7 @@
 @synthesize tableView;
 @synthesize playList;
 @synthesize selectedAlbum;
+@synthesize I;
 
 #pragma mark -
 #pragma mark UIViewController method
@@ -35,7 +36,9 @@
 }
 
 -(void)viewDidLoad
-{   p = [[AssetProducer alloc]initWithAssetsLibrary: [[ALAssetsLibrary alloc] init]];
+{   
+    database=[DBOperation getInstance];
+    p = [[AssetProducer alloc]initWithAssetsLibrary: [[ALAssetsLibrary alloc] init]];
     self.playList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
     [self setWantsFullScreenLayout:YES];
 	[self.navigationItem setTitle:@"Album"];
@@ -65,8 +68,17 @@
     [self.tableView reloadData];
 }
 -(void)addnumber
-{   [self.playList creatTable];
-    [self.playList doFetchPlaylists];
+{    AlbumClass *al = [self.playList.playlists objectAtIndex:[self.playList.playlists count]-1];
+    [self.playList creatTable];
+    if([al.albumId isEqualToString:[self.playList.list objectAtIndex:[self.playList.list count]-1]])
+    {}
+    else
+    {AlbumClass *album = [[AlbumClass alloc]init];
+        [database getUserFromPlayTable:[[self.playList.list objectAtIndex:[self.playList.list count]-1]intValue]];
+        album.albumId=[self.playList.list objectAtIndex:[self.playList.list count]-1];
+        album.albumName=database.name;
+        [self.playList.playlists addObject:album];
+    }
     [self.tableView reloadData];
 
 }

@@ -18,6 +18,8 @@
 @synthesize TagUrl;
 @synthesize assetGroups;
 @synthesize allCount;
+@synthesize SUM;
+@synthesize dbUrl;
 - (id) initWithAssetProcuder:(AssetProducer *)_assetProducer {
     self = [super init];
     da=[DBOperation getInstance];
@@ -40,11 +42,14 @@
     
     for (NSString *_id in self.list) 
     {
-        [da getUserFromPlayTable:_id];
+        [da getUserFromPlayTable:[_id intValue]];
         
         AlbumClass *album = [[AlbumClass alloc]init];
         album.albumId = _id;
         album.albumName = da.name;
+        [self.playlists addObject:album];
+    }
+
         //NSInteger allPhotoscount =allCount;
       /*  if([_id intValue]==-1)
         {
@@ -58,12 +63,7 @@
         }*/
          // .....
          
-    [self.playlists addObject:album];
-     }
-   // }
-    // 2: untag
-    
-    // 3: from DB
+      
 }
 -(void)count
 {
@@ -79,32 +79,10 @@
                 [group setAssetsFilter:[ALAssetsFilter allAssets]];
                 allCount +=[group numberOfAssets];
             }
-            NSLog(@"gcount:%d",allCount);
-            for (AlbumClass *album in self.playlists) {
-                if ([album.albumId intValue]==-1) {
-                    album.photoCount = allCount;
-                }else if([album.albumId intValue]==-2){
-                    NSInteger j = allCount-[self.TagUrl count];
-                    
-                        album.photoCount = j;
-                        NSLog(@"item dfdf %d",album.photoCount);
-                        
-                    }else{
-                        //[self playlistUrl:[item.albumId intValue]];
-                        //item.photoCount = [self.dbUrl count];
-                    }
-                }
-            NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"addcount" 
-                                                               object:self 
-                                                             userInfo:dic1];
-
-
+            [self photoCount];
             return;
         }               
         [self.assetGroups addObject:group];
-        
-        NSLog(@"ASSERT:%@",assetGroups);
 };
 
 void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
@@ -126,8 +104,30 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
 [pool release];
 
 }
+-(void)photoCount
+{
+    NSLog(@"gcount:%d",allCount);
+    for (AlbumClass *album in self.playlists) {
+        if ([album.albumId intValue]==-1) {
+            album.photoCount = allCount;
+        }else if([album.albumId intValue]==-2){
+            NSInteger j = allCount-[self.TagUrl count];
+            
+            album.photoCount = j;
+            NSLog(@"item dfdf %d",album.photoCount);
+            
+        }else{
+            [self playlistUrl:[album.albumId intValue]];
+           album.photoCount = [self.dbUrl count];
+        }
+    }
+    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addcount" 
+                                                       object:self 
+                                                     userInfo:dic1];
+    
 
-
+}
 -(void)deleteTable:(NSInteger)index
 {
     NSString *deletePlayTable = [NSString stringWithFormat:@"DELETE FROM PlayTable WHERE playList_id=%d",[[list objectAtIndex:index]intValue]];
@@ -197,5 +197,100 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG";
     self.TagUrl = [da selectPhotos:selectSql];
 }
+-(void)playlistUrl:(int)row_id
+{    
+    [SUM removeAllObjects];
+    [dbUrl removeAllObjects];
+    NSString *selectRules0= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
+    NSMutableArray *playlist_UserId0=[da selectFromRules:selectRules0];
+    for(int i=0;i<[playlist_UserId0 count];i++)
+    {
+        NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId0 objectAtIndex:i]intValue]];
+        NSMutableSet *play_url0=[da selectFromTAG1:selectTag];
+        if([self.SUM count]==0)
+        {
+            NSLog(@"0A");
+            NSMutableSet *t=[[NSMutableSet alloc]init];
+            for (NSURL *url in allUrl) {
+                NSString *str= [NSString stringWithFormat:@"%@",url];
+                [t addObject:str];
+            }
+            
+            self.SUM=t;
+            [t release];
+            for (NSString *data in play_url0)
+            {
+                if([self.SUM containsObject:data]) 
+                {
+                    [self.SUM removeObject:data];
+                }
+                
+            }
+        }
+        else
+        {
+            for (NSString *data in play_url0)
+            {
+                if([self.SUM containsObject:data]) 
+                {
+                    
+                    [self.SUM removeObject:data];
+                }
+            }
+        }
+    }
+    
+    NSString *selectRules1= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
+    NSMutableArray *playlist_UserId1=[da selectFromRules:selectRules1];
+    for(int i=0;i<[playlist_UserId1 count];i++)
+    {
+        NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId1 objectAtIndex:i]intValue]];
+        NSMutableSet *play_url1=[da selectFromTAG1:selectTag];
+        if([play_url1 count]==0)
+        {
+            [SUM removeAllObjects];
+            break;
+        }
+        else
+        {
+            if([self.SUM count]==0)
+            {
+                self.SUM=play_url1;
+                
+            }
+            else
+            {
+                [self.SUM intersectSet:play_url1];
+            }
+        }
+    }
+    NSString *selectRules2= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
+    NSMutableArray *playlist_UserId2=[da selectFromRules:selectRules2];
+    for(int i=0;i<[playlist_UserId2 count];i++)
+    {
+        NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId2 objectAtIndex:i]intValue]];
+        NSMutableSet *play_url2=[da selectFromTAG1:selectTag];
+        
+        NSLog(@"WE%@",playlist_UserId2);
+        if([self.SUM count]==0)
+            
+        {
+            self.SUM=play_url2;
+        }
+        else
+        {
+            [SUM unionSet:play_url2];
+        }
+    }
+    
+    
+    
+    for (NSString *dataStr in self.SUM) {
+        NSURL *dbStr = [NSURL URLWithString:dataStr];
+        [dbUrl addObject:dbStr];
+    }
+    //self.dbUrl=SUM;
+}
+
 
 @end

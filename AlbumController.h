@@ -25,12 +25,15 @@
     PlaylistProducer *playList;
     AlbumClass *selectedAlbum;
     AssetProducer *p;
+    NSInteger I;
+    DBOperation *database;
 }
 
 @property (nonatomic,retain)PlaylistProducer *playList;
 @property(nonatomic,retain)IBOutlet UITableView *tableView; 
 
 @property(nonatomic,retain)AlbumClass *selectedAlbum;
+@property(nonatomic,assign)NSInteger I;
 
 - (void) albumSelected: (id) sender;
 -(void)addnumber;

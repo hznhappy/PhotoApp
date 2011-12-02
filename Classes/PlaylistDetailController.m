@@ -59,6 +59,7 @@
   {
       self.tranLabel.text=Transtion;
   }
+    album=[[AlbumController alloc]init];
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
@@ -317,10 +318,10 @@
         }
     }
     }
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
-                                                     userInfo:dic1];
+                                                     userInfo:dic1];*/
 }
 #pragma mark -
 #pragma mark media picker delegate method
@@ -512,10 +513,10 @@
             NSString *deleteplayIdOrder= [NSString stringWithFormat:@"DELETE FROM playIdOrder WHERE play_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
             NSLog(@"%@",deleteplayIdOrder);
             [dataBase deleteDB:deleteplayIdOrder]; 
-            NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+         /*  NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                                object:self 
-                                                             userInfo:dic1];
+                                                             userInfo:dic1];*/
             
         }
 
@@ -544,10 +545,10 @@
         NSLog(@"%@",updateRules);
         [dataBase updateTable:updateRules];
     }
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    /*NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
-                                                     userInfo:dic1];
+                                                     userInfo:dic1];*/
     
 
 
@@ -594,10 +595,10 @@
         [dataBase deleteDB:deleteRules1];
     }
     [selectedIndexPaths removeAllObjects];
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
-                                                     userInfo:dic1];
+                                                     userInfo:dic1];*/
 }
 
 #pragma mark -

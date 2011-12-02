@@ -37,6 +37,8 @@
 @property (nonatomic, retain)NSMutableArray *TagUrl;
 @property (nonatomic, retain)NSMutableArray *assetGroups;
 @property (nonatomic, assign)NSInteger allCount;
+@property (nonatomic, retain)NSMutableSet *SUM;
+@property (nonatomic, retain)NSMutableArray *dbUrl;
 - (id) initWithAssetProcuder:(AssetProducer *)_assetProducer ;
 - (void) doFetchPlaylists;
 -(void)Special;
@@ -45,4 +47,6 @@
 -(void)getTagUrl;
 -(void)tableorder;
 -(void)count;
+-(void)photoCount;
+-(void)playlistUrl:(int)row_id;
 @end
