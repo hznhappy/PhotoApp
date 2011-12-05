@@ -12,6 +12,7 @@
 #import "AlbumClass.h"
 #import "AssetProducer.h"
 #import "PlaylistProducer.h"
+#import "DBOperation.h"
 
 
 @implementation AlbumController
@@ -19,6 +20,7 @@
 @synthesize tableView;
 @synthesize playList;
 @synthesize selectedAlbum;
+@synthesize I;
 
 #pragma mark -
 #pragma mark UIViewController method
@@ -34,8 +36,9 @@
 }
 
 -(void)viewDidLoad
-{
-   p = [[AssetProducer alloc]initWithAssetsLibrary: [[ALAssetsLibrary alloc] init]];
+{   
+    database=[DBOperation getInstance];
+    p = [[AssetProducer alloc]initWithAssetsLibrary: [[ALAssetsLibrary alloc] init]];
     self.playList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
 
     [self setWantsFullScreenLayout:YES];
@@ -56,7 +59,38 @@
     
     [addButon release];
     [editButton release];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addnumber) name:@"addplay" object:nil];
+     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addcount) name:@"addcount" object:nil];
     
+}
+-(void)addcount
+{ 
+    [self.tableView reloadData];
+}
+-(void)addnumber
+{    AlbumClass *al = [self.playList.playlists objectAtIndex:[self.playList.playlists count]-1];
+    [self.playList creatTable];
+    if([al.albumId isEqualToString:[self.playList.list objectAtIndex:[self.playList.list count]-1]])
+    {
+        [database getUserFromPlayTable:[self.playList.list objectAtIndex:[self.playList.list count]-1]];
+        if(![al.albumName isEqualToString:database.name])
+        {
+            [self.playList.playlists removeObjectAtIndex:[self.playList.playlists count]-1];
+            al.albumId=[self.playList.list objectAtIndex:[self.playList.list count]-1];
+            al.albumName=database.name;
+            [self.playList.playlists addObject:al];
+
+        }
+    }
+    else
+    {AlbumClass *album = [[AlbumClass alloc]init];
+        [database getUserFromPlayTable:[self.playList.list objectAtIndex:[self.playList.list count]-1]];
+        album.albumId=[self.playList.list objectAtIndex:[self.playList.list count]-1];
+        album.albumName=database.name;
+        [self.playList.playlists addObject:album];
+    }
+    [self.tableView reloadData];
+
 }
 -(IBAction)toggleEdit:(id)sender
 {
@@ -86,7 +120,10 @@
 #pragma mark TableView delegate method
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 { 
-       return [self.playList.playlists count];
+ 
+          return [self.playList.playlists count];
+
+   
 }
 
 
@@ -121,19 +158,46 @@
     [table deselectRowAtIndexPath:indexPath animated:YES];
     self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
     //[[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
-    
 }
 
-
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+    [self.playList creatTable];
+    if([[self.playList.list objectAtIndex:indexPath.row]intValue]<0)
+    {
+        NSString *a=NSLocalizedString(@"hello", @"title");
+        NSString *b=NSLocalizedString(@"Inherent members, can not be edited", @"title");
+        NSString *c=NSLocalizedString(@"ok", @"title");
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        
+    }
+    
+    else{
+        [database getUserFromPlayTable:[self.playList.list objectAtIndex:indexPath.row]];
+        
+        PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
+        detailController.listName =[NSString stringWithFormat:@"%@",database.name];
+        detailController.Transtion=[NSString stringWithFormat:@"%@",database.Transtion];    
+        detailController.a=[NSString stringWithFormat:@"%@",[self.playList.list objectAtIndex:indexPath.row]];
+        detailController.hidesBottomBarWhenPushed = YES;
+        
+        [self.navigationController pushViewController:detailController animated:YES];
+        [detailController release];
+        
+    }
+    
+}
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{     NSInteger INDEX=indexPath.row;
-    [self.playList deleteTable:INDEX];
+{     
     [self.playList.playlists removeObjectAtIndex:indexPath.row];
-    
- 
-     [self.tableView reloadData];
+    NSInteger INDEX=indexPath.row;
+    [self.playList creatTable];
+    [self.playList deleteTable:INDEX];
+    [self.tableView reloadData];
 }
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {   NSUInteger fromRow=[fromIndexPath row];
@@ -142,14 +206,8 @@
 	[self.playList.playlists removeObjectAtIndex:fromRow];
 	[self.playList.playlists insertObject:object atIndex:toRow];
 	[object release];
-    /*NSString *deleteIdTable= [NSString stringWithFormat:@"DELETE FROM idOrder"];	
-	NSLog(@"%@",deleteIdTable);
-    [da deleteDB:deleteIdTable];
-    for(int p=0;p<[list count];p++){
-        NSString *insertIdTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,[[list objectAtIndex:p]intValue]];
-        NSLog(@"%@",insertIdTable);
-        [da insertToTable:insertIdTable]; */   
-	//}
+    [self.playList tableorder];
+    [self.tableView reloadData];
 } 
 
 

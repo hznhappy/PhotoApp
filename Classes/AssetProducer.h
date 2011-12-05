@@ -31,4 +31,5 @@
 
 -(id)initWithAssetsLibrary: (ALAssetsLibrary *)assetLibrary;
 -(void)fetchAssets;
+//-(void)getPhotoCount;
 @end

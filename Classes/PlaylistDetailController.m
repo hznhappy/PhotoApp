@@ -59,6 +59,7 @@
   {
       self.tranLabel.text=Transtion;
   }
+    album=[[AlbumController alloc]init];
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
@@ -194,10 +195,11 @@
             [selectButton addTarget:self action:@selector(setSelectState:) forControlEvents:UIControlEventTouchUpInside];
             selectButton.frame = CGRectMake(10, 11, 30, 30);
             [selectButton setImage:unselectImg forState:UIControlStateNormal];
+            if(a!=nil)
+            {
             if([playrules_idList containsObject:[orderList objectAtIndex:indexPath.row]])
             {
                 NSString *selectRules= [NSString stringWithFormat:@"select playlist_rules from rules where user_id=%d and playlist_id=%d",[[orderList objectAtIndex:indexPath.row]intValue],[a intValue]];
-                
                  cell.accessoryView = [self getStateButton];
                 [selectedIndexPaths addObject:indexPath];
                 [selectButton setImage:selectImg forState:UIControlStateNormal];
@@ -222,6 +224,7 @@
                 }
                
 
+            }
             }
 
             [cell.contentView addSubview:selectButton];
@@ -317,10 +320,10 @@
         }
     }
     }
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
-                                                     userInfo:dic1];
+                                                     userInfo:dic1];*/
 }
 #pragma mark -
 #pragma mark media picker delegate method
@@ -512,10 +515,10 @@
             NSString *deleteplayIdOrder= [NSString stringWithFormat:@"DELETE FROM playIdOrder WHERE play_id=%d",[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1];
             NSLog(@"%@",deleteplayIdOrder);
             [dataBase deleteDB:deleteplayIdOrder]; 
-            NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+         /*  NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                                object:self 
-                                                             userInfo:dic1];
+                                                             userInfo:dic1];*/
             
         }
 
@@ -544,10 +547,10 @@
         NSLog(@"%@",updateRules);
         [dataBase updateTable:updateRules];
     }
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+    /*NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
-                                                     userInfo:dic1];
+                                                     userInfo:dic1];*/
     
 
 
@@ -594,10 +597,10 @@
         [dataBase deleteDB:deleteRules1];
     }
     [selectedIndexPaths removeAllObjects];
-    NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
+   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
                                                        object:self 
-                                                     userInfo:dic1];
+                                                     userInfo:dic1];*/
 }
 
 #pragma mark -

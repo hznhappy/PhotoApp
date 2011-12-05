@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "AlbumController.h"
 #define MUST     @"Must"
 #define EXCLUDE  @"Exclude"
 #define OPTIONAL @"Optional"
@@ -34,6 +35,7 @@
     NSString *Transtion;
     NSString *a;
     DBOperation *dataBase;
+    AlbumController *album;
     NSMutableArray *playrules_idList;
     NSMutableArray *playIdList;
     NSMutableArray *orderList;

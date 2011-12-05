@@ -16,7 +16,6 @@
     self = [super init];
     if (self) {
         self.asset = _asset;
-
     }
     return self;
 }

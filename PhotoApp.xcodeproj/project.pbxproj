@@ -53,13 +53,17 @@
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
 		A16C7F871487B47B00C634C0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16C7F851487B47B00C634C0 /* MainWindow.xib */; };
 		A16C7F8A1487B48C00C634C0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16C7F851487B47B00C634C0 /* MainWindow.xib */; };
-		A16C7F8C1487B49800C634C0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16C7F851487B47B00C634C0 /* MainWindow.xib */; };
 		A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAA14441A640087972B /* PhotoImageView.m */; };
 		A1EF3DB014441A640087972B /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAC14441A640087972B /* PhotoScrollView.m */; };
 		A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DB214441A840087972B /* PhotoViewController.m */; };
 		A1EF3DC314441E900087972B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EF3DC214441E900087972B /* QuartzCore.framework */; };
 		A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */; };
 		A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFAF14600813005FAB2F /* DBOperation.m */; };
+		A1F7E80F148C9B030088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E80D148C9B030088F366 /* MainWindow.xib */; };
+		A1F7E811148C9B0D0088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E80D148C9B030088F366 /* MainWindow.xib */; };
+		A1F7E816148C9BBF0088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
+		A1F7E818148C9BCB0088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
+		A1F7E81A148C9BF60088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
 		A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F82E841462909100BED207 /* PlaylistDetailController.m */; };
 		A1F9E5961428671E00A69E49 /* tagOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A1F9E5951428671E00A69E49 /* tagOverlay.png */; };
 		A1FF8E351484D39B00D7521C /* MyNSOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FF8E341484D39B00D7521C /* MyNSOperation.m */; };
@@ -137,9 +141,6 @@
 		A138EE1C1487B2440019BF7D /* AlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlbumController.m; path = ../AlbumController.m; sourceTree = "<group>"; };
 		A14291CF142B201500A1B4B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
-		A16C7F861487B47B00C634C0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		A16C7F891487B48C00C634C0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
-		A16C7F8B1487B49800C634C0 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		A1EF3DA914441A640087972B /* PhotoImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1EF3DAA14441A640087972B /* PhotoImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PhotoImageView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A1EF3DAB14441A640087972B /* PhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoScrollView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -151,6 +152,9 @@
 		A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupPanelView.m; sourceTree = "<group>"; };
 		A1F1FFAE14600813005FAB2F /* DBOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOperation.h; sourceTree = "<group>"; };
 		A1F1FFAF14600813005FAB2F /* DBOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBOperation.m; sourceTree = "<group>"; };
+		A1F7E815148C9BBF0088F366 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		A1F7E817148C9BCB0088F366 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
+		A1F7E819148C9BF60088F366 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		A1F82E831462909100BED207 /* PlaylistDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistDetailController.h; sourceTree = "<group>"; };
 		A1F82E841462909100BED207 /* PlaylistDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistDetailController.m; sourceTree = "<group>"; };
 		A1F9E5951428671E00A69E49 /* tagOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tagOverlay.png; path = Classes/tagOverlay.png; sourceTree = "<group>"; };
@@ -232,7 +236,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A16C7F851487B47B00C634C0 /* MainWindow.xib */,
+				A1F7E814148C9BBF0088F366 /* MainWindow.xib */,
 				A1111477147515F900AD57D0 /* empty1.png */,
 				184FCFF3147202A00082B51D /* selectOverlay.png */,
 				184FCFF5147202A70082B51D /* selectOverlay@2x.png */,
@@ -438,7 +442,11 @@
 				18696E8B147A217100302EB8 /* Settings.bundle in Resources */,
 				A16C7F871487B47B00C634C0 /* MainWindow.xib in Resources */,
 				A16C7F8A1487B48C00C634C0 /* MainWindow.xib in Resources */,
-				A16C7F8C1487B49800C634C0 /* MainWindow.xib in Resources */,
+				A1F7E80F148C9B030088F366 /* MainWindow.xib in Resources */,
+				A1F7E811148C9B0D0088F366 /* MainWindow.xib in Resources */,
+				A1F7E816148C9BBF0088F366 /* MainWindow.xib in Resources */,
+				A1F7E818148C9BCB0088F366 /* MainWindow.xib in Resources */,
+				A1F7E81A148C9BF60088F366 /* MainWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,9 +537,25 @@
 		A16C7F851487B47B00C634C0 /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A16C7F861487B47B00C634C0 /* en */,
-				A16C7F891487B48C00C634C0 /* zh-Hans */,
-				A16C7F8B1487B49800C634C0 /* zh-Hant */,
+			);
+			name = MainWindow.xib;
+			path = /Users/andy/Desktop/PhotoApp;
+			sourceTree = "<absolute>";
+		};
+		A1F7E80D148C9B030088F366 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+			);
+			name = MainWindow.xib;
+			path = /Users/andy/Desktop/PhotoApp;
+			sourceTree = "<absolute>";
+		};
+		A1F7E814148C9BBF0088F366 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A1F7E815148C9BBF0088F366 /* en */,
+				A1F7E817148C9BCB0088F366 /* zh-Hans */,
+				A1F7E819148C9BF60088F366 /* zh-Hant */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
