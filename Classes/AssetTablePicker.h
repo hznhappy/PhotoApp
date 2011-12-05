@@ -53,6 +53,7 @@
     BOOL PASS;
     NSNumber *val;
     UITextField *passWord2;
+    UIView *tagBg;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;
@@ -67,7 +68,7 @@
 
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
-
+@property(nonatomic,retain)UIView *tagBg;
 
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain)NSMutableArray *operations;

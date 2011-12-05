@@ -89,6 +89,7 @@
         album.albumName=database.name;
         [self.playList.playlists addObject:album];
     }
+    [self.playList count];
     [self.tableView reloadData];
 
 }
@@ -153,13 +154,12 @@
         [assets addObject:[p.assets valueForKey:url]];
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
-    [assets release];
+    //[assets release];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushThumbnailView" object:nil userInfo:dic];
     [table deselectRowAtIndexPath:indexPath animated:YES];
     self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
     //[[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
 }
-
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     [self.playList creatTable];
     if([[self.playList.list objectAtIndex:indexPath.row]intValue]<0)

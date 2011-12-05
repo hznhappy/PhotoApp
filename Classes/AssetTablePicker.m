@@ -20,6 +20,7 @@
 @synthesize operation1,operation2;
 @synthesize operations;
 @synthesize operation;
+@synthesize tagBg;
 
 #pragma mark -
 #pragma mark UIViewController Methods

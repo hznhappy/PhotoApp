@@ -433,7 +433,6 @@ else{
 	[self setViewState];
     
 	[self enqueuePhotoViewAtIndex:index];
-	
 	[self loadScrollViewWithPage:index-1];
 	[self loadScrollViewWithPage:index];
 	[self loadScrollViewWithPage:index+1];
@@ -551,9 +550,9 @@ else{
 	
 	if (photoView == nil || (NSNull*)photoView == [NSNull null]) {
 		
-		photoView = [[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
+		photoView = [[[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)]autorelease];
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
-		[photoView release];
+		//[photoView release];
 		
 	} 
     ALAsset *alasset = [self.photoSource objectAtIndex:page];

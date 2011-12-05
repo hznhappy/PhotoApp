@@ -25,6 +25,7 @@
     NSMutableArray *TagUrl;
     NSInteger allCount;
     NSMutableArray *assetGroups;
+    NSInteger dbCount;
     
     
 }
@@ -35,6 +36,7 @@
 @property (nonatomic, retain)NSMutableArray *TagUrl;
 @property (nonatomic, retain)NSMutableArray *assetGroups;
 @property (nonatomic, assign)NSInteger allCount;
+@property (nonatomic, assign)NSInteger dbCount;
 @property (nonatomic, retain)NSMutableSet *SUM;
 @property (nonatomic, retain)NSMutableArray *dbUrl;
 - (id) initWithAssetProcuder:(AssetProducer *)_assetProducer ;

@@ -20,6 +20,7 @@
 @synthesize allCount;
 @synthesize SUM;
 @synthesize dbUrl;
+@synthesize dbCount;
 - (id) initWithAssetProcuder:(AssetProducer *)_assetProducer {
     self = [super init];
     da=[DBOperation getInstance];
@@ -66,18 +67,22 @@
 }
 -(void)count
 {
+   [self.assetGroups removeAllObjects];
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
     { 
         if (group == nil) 
-        {
+        { allCount=0;
+              NSLog(@"gcount22:%d",allCount);
             ALAssetsGroup *group;
             for(int i=0;i<[assetGroups count];i++)
             {
                 group = (ALAssetsGroup*)[assetGroups objectAtIndex:i];
                 [group setAssetsFilter:[ALAssetsFilter allAssets]];
                 allCount +=[group numberOfAssets];
+                NSLog(@"gcount33:%d",allCount);
             }
+            NSLog(@"gcount11:%d",allCount);
             [self photoCount];
             return;
         }               
@@ -117,7 +122,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
             
         }else{
             [self playlistUrl:[album.albumId intValue]];
-           album.photoCount = [self.dbUrl count];
+           album.photoCount = dbCount;
         }
     }
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
@@ -196,7 +201,8 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
     self.TagUrl = [da selectPhotos:selectSql];
 }
 -(void)playlistUrl:(int)row_id
-{   BOOL P=YES;
+{   dbCount=0;
+    BOOL P=YES;
     [SUM removeAllObjects];
     [dbUrl removeAllObjects];
     NSString *selectRules1= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
@@ -223,6 +229,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
                 [self.SUM intersectSet:play_url1];
             }
         }
+        dbCount=[SUM count];
     }
     if(P==YES)
     {NSLog(@"yes");
@@ -234,15 +241,14 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
             NSMutableSet *play_url0=[da selectFromTAG1:selectTag];
             if([self.SUM count]==0)
             {
-                NSLog(@"0A");
                 NSMutableSet *t=[[NSMutableSet alloc]init];
-                NSLog(@"ASSETURLoRDERING:%@",self.assetProducer.assetsUrlOrdering);
-                for (NSURL *url in self.assetProducer.assetsUrlOrdering) {
-                    NSString *str= [NSString stringWithFormat:@"%@",url];
-                    [t addObject:str];
+                for (NSString *url in self.assetProducer.assetsUrlOrdering) {
+                    [t addObject:url];
                 }
                 
                 self.SUM=t;
+                dbCount=self.allCount;
+                NSLog(@"dbCount11:%d",dbCount);
                 [t release];
                 for (NSString *data in play_url0)
                 {
@@ -252,6 +258,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
                     }
                     
                 }
+                dbCount=dbCount-[play_url0 count];
             }
             else
             {
@@ -261,6 +268,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
                     {
                         
                         [self.SUM removeObject:data];
+                        dbCount=dbCount-1;
                     }
                 }
             }
@@ -286,11 +294,11 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         }
         
     }
-    
-    for (NSString *dataStr in self.SUM) {
+    NSLog(@"dbCount:%d",dbCount);
+    /*for (NSString *dataStr in self.SUM) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [dbUrl addObject:dbStr];
-    }
+    }*/
 }
 
 
