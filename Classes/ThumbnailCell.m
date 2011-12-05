@@ -11,10 +11,10 @@
 
 @implementation ThumbnailCell
 
--(void)displayThumbnails:(NSArray *)array{
+-(void)displayThumbnails:(NSMutableDictionary *)array{
     CGRect frame = CGRectMake(4, 2, 75, 75);
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    for (ALAsset *asset in array) {
+    for (ALAsset *asset in [array allValues]) {
         UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setFrame:frame];

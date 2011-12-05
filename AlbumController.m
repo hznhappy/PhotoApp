@@ -37,9 +37,9 @@
 {
    p = [[AssetProducer alloc]initWithAssetsLibrary: [[ALAssetsLibrary alloc] init]];
     self.playList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
-    NSLog(@"playlist:%@",self.playList.list);
+
     [self setWantsFullScreenLayout:YES];
-	[self.navigationItem setTitle:@"Loading..."];
+	[self.navigationItem setTitle:@"PlayList"];
     
     NSString *bu=NSLocalizedString(@"Edit", @"button");
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -57,10 +57,10 @@
     [addButon release];
     [editButton release];
     
-   
 }
 -(IBAction)toggleEdit:(id)sender
-{NSString *c=NSLocalizedString(@"Done", @"button");
+{
+    NSString *c=NSLocalizedString(@"Done", @"button");
     NSString *d=NSLocalizedString(@"Edit", @"button");
     if (self.tableView.editing) {
         editButton.title = d;
@@ -107,20 +107,18 @@
        
         cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)",al.albumName,al.photoCount];
 
-       cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    
-    return cell;
+       cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;    
+        return cell;
 }
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    AssetTablePicker *assetPicker = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
-    assetPicker.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:assetPicker animated:YES];
-    [assetPicker release];
+    NSMutableArray *assets = [[NSMutableArray alloc]init ];
+    for (NSString *url in p.assetsUrlOrdering) {
+        [assets addObject:[p.assets valueForKey:url]];
+    }
+    NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
+    [assets release];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushThumbnailView" object:nil userInfo:dic];
     [table deselectRowAtIndexPath:indexPath animated:YES];
-
-    
-    
     self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
     //[[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
     

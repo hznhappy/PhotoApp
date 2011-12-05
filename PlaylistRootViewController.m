@@ -9,6 +9,8 @@
 #import "PlaylistRootViewController.h"
 #import "AlbumController.h"
 #import "AssetTablePicker.h"
+#import "AssetRef.h"
+#import "PhotoViewController.h"
 
 @implementation PlaylistRootViewController
 
@@ -44,15 +46,34 @@
     [self pushViewController:al animated:NO];
     [al release];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushAssetsTablePicker) name:@"pushThumbnailView" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushAssetsTablePicker:) name:@"pushThumbnailView" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getPhotoViewer:) name:@"viewPhotos" object:nil];
 }
 
--(void)pushAssetsTablePicker{
+-(void)pushAssetsTablePicker:(NSNotification *)note{
+    NSDictionary *dic = [note userInfo];
+    NSArray *assetRefs = [dic valueForKey:@"assets"];
+    NSMutableArray *assets = [[NSMutableArray alloc]init];
+    for (AssetRef *aref in assetRefs) {
+        [assets addObject:aref.asset];
+    }
     AssetTablePicker *ap = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
     ap.hidesBottomBarWhenPushed = YES;
+    ap.crwAssets = assets;
+    [assets release];
     [self pushViewController:ap animated:YES];
-    
+    [ap release];    
 }
+
+-(void)getPhotoViewer:(NSNotification *)note{
+    NSDictionary *dicOfPhotoViewer = [note userInfo];
+    NSString *key = [[dicOfPhotoViewer allKeys] objectAtIndex:0];
+    NSArray *assets = [dicOfPhotoViewer valueForKey:key];
+    PhotoViewController *pc = [[PhotoViewController alloc]initWithPhotoSource:assets currentPage:[key integerValue]];
+    [self pushViewController:pc animated:YES];
+    [pc release];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];

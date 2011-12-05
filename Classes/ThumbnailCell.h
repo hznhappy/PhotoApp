@@ -14,5 +14,5 @@
 }
 - (void) albumSelected: (id) sender ;
 
--(void)displayThumbnails:(NSArray *)array;
+-(void)displayThumbnails:(NSMutableDictionary *)array;
 @end

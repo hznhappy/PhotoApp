@@ -89,6 +89,7 @@
 -(void)RemoveUrl:(NSNotification *)note;
 -(void)AddUser:(NSNotification *)note;
 -(void)creatTable;
+-(void)viewPhotos:(id)sender;
 
 -(void)getAssets:(ALAsset *)asset;
 @end

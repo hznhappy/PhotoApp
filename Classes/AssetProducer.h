@@ -13,17 +13,19 @@
     
     NSMutableArray /* URL */ *assetsUrlOrdering;
     
-    NSDictionary /* NSString -> AssetRef mapping */ *assets;
+    NSMutableDictionary /* NSString -> AssetRef mapping */ *assets;
     ALAssetsLibrary *library;
     NSInteger gCount;
     NSMutableArray *assetGroups;
     BOOL ready;
 }
 
-@property (nonatomic,retain) NSDictionary *assets;
+@property (nonatomic,retain) NSMutableDictionary *assets;
 @property (nonatomic,retain) ALAssetsLibrary *library;
 @property (nonatomic,retain)NSMutableArray *assetsUrlOrdering;
 @property (nonatomic,retain)NSMutableArray *assetGroups;
+
+@property (nonatomic,assign)NSInteger gCount;
 
 @property (nonatomic) BOOL ready;
 

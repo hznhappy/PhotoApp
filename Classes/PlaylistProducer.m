@@ -32,14 +32,13 @@
 }
 
 - (void) doFetchPlaylists {
-    NSLog(@"OK");
     self.playlists = [[NSMutableArray alloc]init];
     // 1: all
      for (NSString *_id in self.list) {
           [da getUserFromPlayTable:_id];
          //[self.assetProducer fetchAssets];
         // NSLog(@"assert:%@",assetProducer.assetsUrlOrdering);
-    NSInteger allPhotoscount = [self.assetProducer.assetsUrlOrdering count];
+         NSInteger allPhotoscount = self.assetProducer.gCount;//[self.assetProducer.assetsUrlOrdering count];
     AlbumClass *album = [[AlbumClass alloc]init];
        //  NSLog(@"ALLUIR:%@",allPhotoscount);
     album.albumId = _id;

@@ -12,7 +12,7 @@
 #import "PhotoImageView.h"
 
 @interface PhotoViewController (Private)
-- (void)loadScrollViewWithPage:(NSInteger)page image:(UIImage *)image;
+- (void)loadScrollViewWithPage:(NSInteger)page;
 - (void)layoutScrollViewSubviews;
 - (void)setupScrollViewContentSize;
 - (void)enqueuePhotoViewAtIndex:(NSInteger)theIndex;
@@ -33,7 +33,6 @@
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
 @synthesize photos,bgPhotos;
-@synthesize img;
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
@@ -45,7 +44,6 @@
 		self.wantsFullScreenLayout = YES;		
 		photoSource = [aSource retain];
         self._pageIndex = page;
-        [self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
 	}
 	
 	return self;
@@ -81,18 +79,7 @@
 		[self.view addSubview:_scrollView];
         
 	}
-   	//  load photoviews lazily
-	NSMutableArray *views = [[NSMutableArray alloc] init];
-	for (unsigned i = 0; i < [self.photoSource count]; i++) {
-		[views addObject:[NSNull null]];
-	}
-	self.photoViews = views;
-    NSMutableArray *initPhotos = [[NSMutableArray alloc] init];
-	for (unsigned i = 0; i < [self.photoSource count]; i++) {
-		[initPhotos addObject:[NSNull null]];
-	}
-	self.photos = initPhotos;
-    NSLog(@"%d ",[self.photos count]);
+  
     editing=NO;
      NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
@@ -105,7 +92,6 @@
     [self.view addSubview:ppv];
     //db = [DBOperation getInstance];
     ppv.hidden=YES;
-   	[views release];
     NSMutableArray *array = [[NSMutableArray alloc]init];
     self.photos = array;
     [array release];
@@ -115,13 +101,13 @@
     [temp release];
 }
 -(void)viewDidAppear:(BOOL)animated{
-    [self moveToPhotoAtIndex:_pageIndex animated:NO];
 }
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
     [self.navigationController setToolbarHidden:NO animated:YES];
 	[self setupToolbar];
 	[self setupScrollViewContentSize];
+    [self moveToPhotoAtIndex:_pageIndex animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -129,7 +115,7 @@
 	[super viewWillDisappear:animated];
     [self.navigationController setToolbarHidden:YES animated:YES];		
 }
-
+/*
 -(void)loadPhoto//(NSInteger)page
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -222,7 +208,7 @@
     self.photos = self.bgPhotos;
     [self moveToPhotoAtIndex:nextPage animated:YES];
           [pool release];
-}
+}*/
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
 	
@@ -387,7 +373,7 @@ else{
 
 - (void)photoViewDidFinishLoading:(NSNotification*)notification{
 	if (notification == nil) return;
-	UIImage *image = [self.photos objectAtIndex:2];//[self centerPhotoIndex]];
+	UIImage *image = [UIImage imageWithCGImage:[[[self.photoSource objectAtIndex:[self centerPhotoIndex]]defaultRepresentation]fullScreenImage]];//[self centerPhotoIndex]];
 	if ([[[notification object] objectForKey:@"photo"] isEqual:image]) {
 		if ([[[notification object] objectForKey:@"failed"] boolValue]) {
 			if (_barsHidden) {
@@ -406,20 +392,12 @@ else{
 }
 
 - (void)moveForward:(id)sender{
-    [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
-    NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
-    NSString *nextPage = [NSString stringWithFormat:@"%d",_pageIndex+1];
-    NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
-    [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
-	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];	
+    
+   	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];	
 }
 
 - (void)moveBack:(id)sender{
-    [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
-    NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
-    NSString *nextPage = [NSString stringWithFormat:@"%d",_pageIndex-1];
-    NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
-    [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
+  
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
 }
 
@@ -456,9 +434,9 @@ else{
     
 	[self enqueuePhotoViewAtIndex:index];
 	
-	[self loadScrollViewWithPage:index-1 image:[self.photos objectAtIndex:1]];
-	[self loadScrollViewWithPage:index image:[self.photos objectAtIndex:2]];
-	[self loadScrollViewWithPage:index+1 image:[self.photos objectAtIndex:3]];
+	[self loadScrollViewWithPage:index-1];
+	[self loadScrollViewWithPage:index];
+	[self loadScrollViewWithPage:index+1];
 	
 	
 	[self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:index]).frame animated:animated];
@@ -473,39 +451,11 @@ else{
    // [self doView];	
 }
 
--(void)loadPhotos:(NSURL *)url 
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
-    {
-        if (result != nil) 
-            self.img=[UIImage imageWithCGImage:[[result defaultRepresentation]fullScreenImage]];
-    };
-    
-    void (^failureBlock)(NSError *) = ^(NSError *error) {
-        
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-                                                        delegate:nil 
-                                               cancelButtonTitle:@"Ok" 
-                                               otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        
-        NSLog(@"A problem occured %@", [error description]);	                                 
-    };	
-    
-    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
-    [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
-    [library release];
-    [pool release];
-}
-
 - (void)layoutScrollViewSubviews{
 	
 	NSInteger _index = [self currentPhotoIndex];
 	
-	for (NSInteger page = _index -1; page < _index+2; page++) {
+	for (NSInteger page = _index -1; page < _index+3; page++) {
 		if (page >= 0 && page < [self.photoSource count]){
 			
 			CGFloat originX = self.scrollView.bounds.size.width * page;
@@ -518,17 +468,7 @@ else{
 			}
 			
 			if ([self.photoViews objectAtIndex:page] == [NSNull null] || !((UIView*)[self.photoViews objectAtIndex:page]).superview){
-				if (page == _index -1) {
-                    [self loadScrollViewWithPage:page image:[self.photos objectAtIndex:1]];
-                    
-                }else if (page == _index) {
-                    [self loadScrollViewWithPage:page image:[self.photos objectAtIndex:2]];
-                    
-                }else if (page == _index +1) {
-                    [self loadScrollViewWithPage:page image:[self.photos objectAtIndex:3]];
-                    
-                }
-     
+                [self loadScrollViewWithPage:page];
 			}
 			
 			PhotoImageView *_photoView = (PhotoImageView*)[self.photoViews objectAtIndex:page];
@@ -593,12 +533,12 @@ else{
 	
 }
 
-- (void)loadScrollViewWithPage:(NSInteger)page image:(UIImage *)image{
+- (void)loadScrollViewWithPage:(NSInteger)page{
 	
     if (page < 0) return;
     if (page >= [self.photoSource count]) return;
 	
-	PhotoImageView * photoView = [self.photoViews objectAtIndex:page];
+	PhotoImageView *photoView = [self.photoViews objectAtIndex:page];
 	if ((NSNull*)photoView == [NSNull null]) {
 		
 		photoView = [self dequeuePhotoView];
@@ -616,7 +556,10 @@ else{
 		[photoView release];
 		
 	} 
-       [photoView setPhoto:image];
+    ALAsset *alasset = [self.photoSource objectAtIndex:page];
+    UIImage *image = [UIImage imageWithCGImage:[[alasset defaultRepresentation]fullScreenImage]];
+    [photoView setPhoto:image];
+    
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
 	}
@@ -649,12 +592,6 @@ else{
 	if (_pageIndex != _index && !_rotating) {
         
 		[self setBarsHidden:YES animated:YES];
-
-        NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex];
-        NSString *nextPage = [NSString stringWithFormat:@"%d",_index];
-        NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
-        [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
-
 		_pageIndex = _index;
 		[self setViewState];
 		
@@ -663,7 +600,6 @@ else{
 		}
 		
 	}
-    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -671,7 +607,7 @@ else{
 	if (_index >= [self.photoSource count] || _index < 0) {
 		return;
 	}	
-  
+    [self moveToPhotoAtIndex:_index animated:YES];
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
@@ -777,7 +713,6 @@ else{
 -(void)fireTimer:(NSString *)animateStyle{
     //[self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
     timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
-    NSLog(@"when the timer fire");
 }
 -(void)playPhoto{
     [self setBarsHidden:YES animated:YES];
@@ -809,12 +744,6 @@ else{
         //[timer invalidate];
         _pageIndex = 0;
     }else{
-        [self.photos replaceObjectsInRange:NSMakeRange(0, 5) withObjectsFromArray:self.bgPhotos];
-        NSString *currentPage = [NSString stringWithFormat:@"%d",_pageIndex-1];
-        NSString *nextPage = [NSString stringWithFormat:@"%d",_pageIndex];
-        NSArray *array = [NSArray arrayWithObjects:currentPage,nextPage, nil];
-        NSLog(@"self photos%@",self.photos);
-        [self performSelectorInBackground:@selector(anotherLoad:) withObject:array];
         [self moveToPhotoAtIndex:_index animated:NO];
     }
 }
@@ -840,7 +769,6 @@ else{
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];
-    [img release];
     [super dealloc];
 }
 

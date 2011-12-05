@@ -90,11 +90,8 @@
 	
 	[_photo release], _photo = nil;
 	_photo = [aPhoto retain];
-	
 	if (self.photo) {
-		
-		self.imageView.image = self.photo;
-		
+		self.imageView.image = self.photo;		
 	} 
 	
 	if (self.imageView.image) {

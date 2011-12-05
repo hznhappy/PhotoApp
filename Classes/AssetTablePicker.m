@@ -26,12 +26,7 @@
 
 -(void)viewDidLoad {
     done = YES;
-    NSMutableArray *thumbNailArray = [[NSMutableArray alloc] init];
-//    for (NSInteger i = 0; i<[self.urlsArray count]; i++) {
-//        [thumbNailArray addObject:[NSNull null]];
-//    }
-    self.crwAssets = thumbNailArray;
-   [thumbNailArray release];
+  
     
 
    dataBase =[DBOperation getInstance];
@@ -82,13 +77,12 @@
     [queue addOperation:self.operation];*/
     
     //MyNSOperation *temOperation = [[MyNSOperation alloc]initWithUrls:self.urlsArray];
-    NSLog(@"%d you",[self.urlsArray count]);
-    NSOperationQueue *_queue = [[NSOperationQueue alloc]init];
+/*    NSOperationQueue *_queue = [[NSOperationQueue alloc]init];
     MyNSOperation *temOperation= [[MyNSOperation alloc]initWithUrls:self.urlsArray viewController:self];
     self.operation = temOperation;
     [temOperation release];
     [_queue addOperation:operation];
-    [_queue release];
+    [_queue release];*/
 
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
@@ -473,14 +467,14 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
-    [[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
-    NSLog(@"play button pressed");
-    /*
-    PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.urlsArray currentPage:0];
-    //[dataBase getUserFromPlayTable:[PLAYID intValue]];
+//    [[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
+//    NSLog(@"play button pressed");
+    
+    PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.crwAssets currentPage:0];
+    [dataBase getUserFromPlayTable:PLAYID];
     [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
-    [playPhotoController release];*/
+    [playPhotoController release];
 }
 
 #pragma mark - 
@@ -533,7 +527,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 2;//return ceil([self.urlsArray count] / 4.0);
+    return ceil([self.crwAssets count]/4);//return ceil([self.urlsArray count] / 4.0);
     
 }
 
@@ -577,33 +571,44 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    ThumbnailCell *cell = (ThumbnailCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
    
     if (cell == nil) 
     {	
-        cell = [[[ThumbnailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier]autorelease];
+        cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier]autorelease];
 
     }
-    NSMutableArray *assetsArray = [[NSMutableArray alloc]init];
+
+    [cell.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    CGRect frame = CGRectMake(4, 2, 75, 75);
     for (NSInteger i = 0; i<4; i++) {
         NSInteger row = (indexPath.row*4)+i;
-        if (row<[self.urlsArray count]) {
-            if ([self.crwAssets count]==0||[self.crwAssets objectAtIndex:row]==nil) {
-                return cell;
-            }
+        if (row<[self.crwAssets count]) {
+           
             ALAsset *asset = [self.crwAssets objectAtIndex:row];
            
-            [assetsArray addObject:asset];
-        }
+            UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setFrame:frame];
+            [button setImage:image forState:UIControlStateNormal];
+            [button setTag:row];
+            button.opaque = YES;
+            [button addTarget:self action:@selector(viewPhotos:) forControlEvents:UIControlEventTouchUpInside];
+            [cell addSubview:button];
+            frame.origin.x = frame.origin.x + frame.size.width + 4;        }
     }
-      [cell displayThumbnails:assetsArray];
-    [assetsArray release];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	return 79;
+}
+
+-(void)viewPhotos:(id)sender{
+    UIButton *button = (UIButton *)sender;
+    NSDictionary *dic = [NSDictionary dictionaryWithObject:self.crwAssets forKey:[NSString stringWithFormat:@"%d",button.tag]];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"viewPhotos" object:nil userInfo:dic];    
 }
 
 
@@ -630,7 +635,7 @@
 - (void)dealloc
 {   
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-//    NSLog(@"%d is crw count",[crwAssets retainCount]);
+   NSLog(@"%d is crw count",[crwAssets retainCount]);
 //    NSLog(@"%d is url count",[urlsArray retainCount]);
     [viewBar release];
     [tagBar release];

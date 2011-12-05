@@ -29,7 +29,6 @@
 	UIBarButtonItem *_leftButton;
 	UIBarButtonItem *_rightButton;
 	UIBarButtonItem *_actionButton;
-    UIImage *img;
 
 	
     UIBarButtonItem *edit;
@@ -39,7 +38,6 @@
     NSTimer *timer;	
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
-@property(nonatomic,retain)UIImage *img;
 @property(nonatomic,retain)NSMutableArray *bgPhotos;
 @property(nonatomic,retain)NSMutableArray *photos;
 @property(nonatomic,retain) NSArray *photoSource;
@@ -51,7 +49,5 @@
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;
--(void)loadPhoto;
--(void)anotherLoad:(id)object;
--(void)loadPhotos:(NSURL *)url;
+
 @end
