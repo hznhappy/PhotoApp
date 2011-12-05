@@ -34,7 +34,7 @@
 @synthesize _pageIndex;
 @synthesize photos,bgPhotos;
 
-- (id)initWithPhotoSource:(NSMutableArray *)aSource currentPage:(NSInteger)page{
+- (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleBarsNotification:) name:@"PhotoViewToggleBars" object:nil];
@@ -80,6 +80,12 @@
         
 	}
   
+    NSMutableArray *views = [[NSMutableArray alloc] init];
+	for (unsigned i = 0; i < [self.photoSource count]; i++) {
+		[views addObject:[NSNull null]];
+	}
+	self.photoViews = views;
+
     editing=NO;
      NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
@@ -433,7 +439,6 @@ else{
 	[self setViewState];
     
 	[self enqueuePhotoViewAtIndex:index];
-	
 	[self loadScrollViewWithPage:index-1];
 	[self loadScrollViewWithPage:index];
 	[self loadScrollViewWithPage:index+1];
@@ -534,7 +539,7 @@ else{
 }
 
 - (void)loadScrollViewWithPage:(NSInteger)page{
-	
+	NSLog(@"%@ is self.photoview",self.photoViews);
     if (page < 0) return;
     if (page >= [self.photoSource count]) return;
 	
@@ -557,8 +562,7 @@ else{
 		
 	} 
     ALAsset *alasset = [self.photoSource objectAtIndex:page];
-    UIImage *img = [UIImage imageWithCGImage:[[alasset defaultRepresentation]fullScreenImage]];
-    [photoView setPhoto:img];
+    [photoView setPhoto:alasset];
     
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];

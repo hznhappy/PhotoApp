@@ -51,20 +51,16 @@
 		A138EE1D1487B2440019BF7D /* AlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = A138EE1C1487B2440019BF7D /* AlbumController.m */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
 		A14291D3142B203A00A1B4B4 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291D2142B203A00A1B4B4 /* AddressBookUI.framework */; };
-		A16C7F871487B47B00C634C0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16C7F851487B47B00C634C0 /* MainWindow.xib */; };
-		A16C7F8A1487B48C00C634C0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16C7F851487B47B00C634C0 /* MainWindow.xib */; };
 		A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAA14441A640087972B /* PhotoImageView.m */; };
 		A1EF3DB014441A640087972B /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DAC14441A640087972B /* PhotoScrollView.m */; };
-		A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EF3DB214441A840087972B /* PhotoViewController.m */; };
 		A1EF3DC314441E900087972B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EF3DC214441E900087972B /* QuartzCore.framework */; };
 		A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */; };
 		A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F1FFAF14600813005FAB2F /* DBOperation.m */; };
-		A1F7E80F148C9B030088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E80D148C9B030088F366 /* MainWindow.xib */; };
-		A1F7E811148C9B0D0088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E80D148C9B030088F366 /* MainWindow.xib */; };
 		A1F7E816148C9BBF0088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
 		A1F7E818148C9BCB0088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
 		A1F7E81A148C9BF60088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
 		A1F7E822148C9E940088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
+		A1F7E84B148CB5F90088F366 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F7E84A148CB5F90088F366 /* PhotoViewController.m */; };
 		A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F82E841462909100BED207 /* PlaylistDetailController.m */; };
 		A1F9E5961428671E00A69E49 /* tagOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A1F9E5951428671E00A69E49 /* tagOverlay.png */; };
 		A1FF8E351484D39B00D7521C /* MyNSOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FF8E341484D39B00D7521C /* MyNSOperation.m */; };
@@ -147,7 +143,6 @@
 		A1EF3DAB14441A640087972B /* PhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoScrollView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1EF3DAC14441A640087972B /* PhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PhotoScrollView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A1EF3DB114441A840087972B /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PhotoViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A1EF3DB214441A840087972B /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PhotoViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A1EF3DC214441E900087972B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A1F1FFA1146007F9005FAB2F /* PopupPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupPanelView.h; sourceTree = "<group>"; };
 		A1F1FFA2146007F9005FAB2F /* PopupPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupPanelView.m; sourceTree = "<group>"; };
@@ -156,6 +151,7 @@
 		A1F7E815148C9BBF0088F366 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		A1F7E819148C9BF60088F366 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		A1F7E821148C9E940088F366 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
+		A1F7E84A148CB5F90088F366 /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
 		A1F82E831462909100BED207 /* PlaylistDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistDetailController.h; sourceTree = "<group>"; };
 		A1F82E841462909100BED207 /* PlaylistDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistDetailController.m; sourceTree = "<group>"; };
 		A1F9E5951428671E00A69E49 /* tagOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tagOverlay.png; path = Classes/tagOverlay.png; sourceTree = "<group>"; };
@@ -211,6 +207,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				A1F7E83B148CB2C40088F366 /* PhotoBrower */,
 				A1176A4D1487ABE500379474 /* PersonRootViewController.h */,
 				A1176A4E1487ABE700379474 /* PersonRootViewController.m */,
 				A1176A481487ABC100379474 /* PlaylistRootViewController.h */,
@@ -326,7 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				A1EF3DB114441A840087972B /* PhotoViewController.h */,
-				A1EF3DB214441A840087972B /* PhotoViewController.m */,
+				A1F7E84A148CB5F90088F366 /* PhotoViewController.m */,
 				A1EF3DA914441A640087972B /* PhotoImageView.h */,
 				A1EF3DAA14441A640087972B /* PhotoImageView.m */,
 				A1EF3DAB14441A640087972B /* PhotoScrollView.h */,
@@ -350,6 +347,13 @@
 				184FD003147208F20082B51D /* AnimaSelectController.m */,
 			);
 			name = TableView;
+			sourceTree = "<group>";
+		};
+		A1F7E83B148CB2C40088F366 /* PhotoBrower */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = PhotoBrower;
 			sourceTree = "<group>";
 		};
 		A1FF8E311484D35400D7521C /* MyOperation */ = {
@@ -441,10 +445,6 @@
 				18D4033A1474FF5A00389097 /* tagManagementController.xib in Resources */,
 				A1111478147515F900AD57D0 /* empty1.png in Resources */,
 				18696E8B147A217100302EB8 /* Settings.bundle in Resources */,
-				A16C7F871487B47B00C634C0 /* MainWindow.xib in Resources */,
-				A16C7F8A1487B48C00C634C0 /* MainWindow.xib in Resources */,
-				A1F7E80F148C9B030088F366 /* MainWindow.xib in Resources */,
-				A1F7E811148C9B0D0088F366 /* MainWindow.xib in Resources */,
 				A1F7E816148C9BBF0088F366 /* MainWindow.xib in Resources */,
 				A1F7E818148C9BCB0088F366 /* MainWindow.xib in Resources */,
 				A1F7E81A148C9BF60088F366 /* MainWindow.xib in Resources */,
@@ -463,7 +463,6 @@
 				1D3623260D0F684500981E51 /* PhotoAppDelegate.m in Sources */,
 				A1EF3DB014441A640087972B /* PhotoScrollView.m in Sources */,
 				A1EF3DAF14441A640087972B /* PhotoImageView.m in Sources */,
-				A1EF3DB414441A840087972B /* PhotoViewController.m in Sources */,
 				A1F1FFAA146007F9005FAB2F /* PopupPanelView.m in Sources */,
 				A1F1FFB014600813005FAB2F /* DBOperation.m in Sources */,
 				A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */,
@@ -480,6 +479,7 @@
 				A1176A5F1487B14000379474 /* AssetProducer.m in Sources */,
 				A1176A601487B14000379474 /* PlaylistProducer.m in Sources */,
 				A138EE1D1487B2440019BF7D /* AlbumController.m in Sources */,
+				A1F7E84B148CB5F90088F366 /* PhotoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,22 +535,6 @@
 			);
 			name = PlaylistDetailController.xib;
 			sourceTree = "<group>";
-		};
-		A16C7F851487B47B00C634C0 /* MainWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = MainWindow.xib;
-			path = /Users/andy/Desktop/PhotoApp;
-			sourceTree = "<absolute>";
-		};
-		A1F7E80D148C9B030088F366 /* MainWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = MainWindow.xib;
-			path = /Users/andy/Desktop/PhotoApp;
-			sourceTree = "<absolute>";
 		};
 		A1F7E814148C9BBF0088F366 /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;

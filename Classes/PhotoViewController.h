@@ -16,7 +16,7 @@
 @class PhotoImageView;
 @interface PhotoViewController : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
 @private
-	NSMutableArray *photoSource;
+	NSArray *photoSource;
 	NSMutableArray *_photoViews;
     NSMutableArray *photos;
     NSMutableArray *bgPhotos;
@@ -40,12 +40,12 @@
 @property(nonatomic,retain)PopupPanelView *ppv;
 @property(nonatomic,retain)NSMutableArray *bgPhotos;
 @property(nonatomic,retain)NSMutableArray *photos;
-@property(nonatomic,retain) NSMutableArray *photoSource;
+@property(nonatomic,retain) NSArray *photoSource;
 @property(nonatomic,retain) NSMutableArray *photoViews;
 @property(nonatomic,retain) UIScrollView *scrollView;
 @property(nonatomic,assign) NSInteger _pageIndex;
 
-- (id)initWithPhotoSource:(NSMutableArray *)aSource currentPage:(NSInteger)page;
+- (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;

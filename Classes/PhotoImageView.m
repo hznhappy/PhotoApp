@@ -83,15 +83,16 @@
 	
 }
 
-- (void)setPhoto:(UIImage *)aPhoto{
+- (void)setPhoto:(ALAsset *)aPhoto{
 	
 	if (!aPhoto) return; 
 	if ([aPhoto isEqual:self.photo]) return;
 	
 	[_photo release], _photo = nil;
 	_photo = [aPhoto retain];
-	if (self.photo) {
-		self.imageView.image = self.photo;		
+    UIImage *_image = [UIImage imageWithCGImage:[[self.photo defaultRepresentation]fullScreenImage]];
+	if (_image) {
+		self.imageView.image = _image;		
 	} 
 	
 	if (self.imageView.image) {
