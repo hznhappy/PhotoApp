@@ -195,10 +195,11 @@
             [selectButton addTarget:self action:@selector(setSelectState:) forControlEvents:UIControlEventTouchUpInside];
             selectButton.frame = CGRectMake(10, 11, 30, 30);
             [selectButton setImage:unselectImg forState:UIControlStateNormal];
+            if(a!=nil)
+            {
             if([playrules_idList containsObject:[orderList objectAtIndex:indexPath.row]])
             {
                 NSString *selectRules= [NSString stringWithFormat:@"select playlist_rules from rules where user_id=%d and playlist_id=%d",[[orderList objectAtIndex:indexPath.row]intValue],[a intValue]];
-                
                  cell.accessoryView = [self getStateButton];
                 [selectedIndexPaths addObject:indexPath];
                 [selectButton setImage:selectImg forState:UIControlStateNormal];
@@ -223,6 +224,7 @@
                 }
                
 
+            }
             }
 
             [cell.contentView addSubview:selectButton];

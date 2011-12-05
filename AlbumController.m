@@ -63,18 +63,27 @@
    
 }
 -(void)addcount
-{
-    NSLog(@"SHUAXING"); 
+{ 
     [self.tableView reloadData];
 }
 -(void)addnumber
 {    AlbumClass *al = [self.playList.playlists objectAtIndex:[self.playList.playlists count]-1];
     [self.playList creatTable];
     if([al.albumId isEqualToString:[self.playList.list objectAtIndex:[self.playList.list count]-1]])
-    {}
+    {
+        [database getUserFromPlayTable:[self.playList.list objectAtIndex:[self.playList.list count]-1]];
+        if(![al.albumName isEqualToString:database.name])
+        {
+            [self.playList.playlists removeObjectAtIndex:[self.playList.playlists count]-1];
+            al.albumId=[self.playList.list objectAtIndex:[self.playList.list count]-1];
+            al.albumName=database.name;
+            [self.playList.playlists addObject:al];
+
+        }
+    }
     else
     {AlbumClass *album = [[AlbumClass alloc]init];
-        [database getUserFromPlayTable:[[self.playList.list objectAtIndex:[self.playList.list count]-1]intValue]];
+        [database getUserFromPlayTable:[self.playList.list objectAtIndex:[self.playList.list count]-1]];
         album.albumId=[self.playList.list objectAtIndex:[self.playList.list count]-1];
         album.albumName=database.name;
         [self.playList.playlists addObject:album];
@@ -147,11 +156,37 @@
 
     
     
-    self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
-    //[[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
+    self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];    
+}
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+     [self.playList creatTable];
+    if([[self.playList.list objectAtIndex:indexPath.row]intValue]<0)
+    {
+        NSString *a=NSLocalizedString(@"hello", @"title");
+        NSString *b=NSLocalizedString(@"Inherent members, can not be edited", @"title");
+        NSString *c=NSLocalizedString(@"ok", @"title");
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        
+    }
     
+    else{
+        [database getUserFromPlayTable:[self.playList.list objectAtIndex:indexPath.row]];
+        
+        PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
+        detailController.listName =[NSString stringWithFormat:@"%@",database.name];
+        detailController.Transtion=[NSString stringWithFormat:@"%@",database.Transtion];    
+        detailController.a=[NSString stringWithFormat:@"%@",[self.playList.list objectAtIndex:indexPath.row]];
+        detailController.hidesBottomBarWhenPushed = YES;
+        
+        [self.navigationController pushViewController:detailController animated:YES];
+        [detailController release];
+   
 }
 
+}
 
 #pragma mark -
 #pragma mark Table View Data Source Methods

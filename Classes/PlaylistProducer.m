@@ -14,7 +14,7 @@
 @implementation PlaylistProducer
 @synthesize playlists;
 @synthesize assetProducer;
-@synthesize list,allUrl;
+@synthesize list;
 @synthesize TagUrl;
 @synthesize assetGroups;
 @synthesize allCount;
@@ -42,7 +42,7 @@
     
     for (NSString *_id in self.list) 
     {
-        [da getUserFromPlayTable:[_id intValue]];
+        [da getUserFromPlayTable:_id];
         
         AlbumClass *album = [[AlbumClass alloc]init];
         album.albumId = _id;
@@ -111,7 +111,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         if ([album.albumId intValue]==-1) {
             album.photoCount = allCount;
         }else if([album.albumId intValue]==-2){
-            NSInteger j = allCount-[self.TagUrl count];
+            NSInteger j =allCount-[self.TagUrl count];
             
             album.photoCount = j;
             NSLog(@"item dfdf %d",album.photoCount);
@@ -192,54 +192,14 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
 }
 -(void)getTagUrl
 {
-    
     [self.TagUrl removeAllObjects];
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG";
     self.TagUrl = [da selectPhotos:selectSql];
 }
 -(void)playlistUrl:(int)row_id
-{    
+{   BOOL P=YES;
     [SUM removeAllObjects];
     [dbUrl removeAllObjects];
-    NSString *selectRules0= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
-    NSMutableArray *playlist_UserId0=[da selectFromRules:selectRules0];
-    for(int i=0;i<[playlist_UserId0 count];i++)
-    {
-        NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId0 objectAtIndex:i]intValue]];
-        NSMutableSet *play_url0=[da selectFromTAG1:selectTag];
-        if([self.SUM count]==0)
-        {
-            NSLog(@"0A");
-            NSMutableSet *t=[[NSMutableSet alloc]init];
-            for (NSURL *url in allUrl) {
-                NSString *str= [NSString stringWithFormat:@"%@",url];
-                [t addObject:str];
-            }
-            
-            self.SUM=t;
-            [t release];
-            for (NSString *data in play_url0)
-            {
-                if([self.SUM containsObject:data]) 
-                {
-                    [self.SUM removeObject:data];
-                }
-                
-            }
-        }
-        else
-        {
-            for (NSString *data in play_url0)
-            {
-                if([self.SUM containsObject:data]) 
-                {
-                    
-                    [self.SUM removeObject:data];
-                }
-            }
-        }
-    }
-    
     NSString *selectRules1= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,1];
     NSMutableArray *playlist_UserId1=[da selectFromRules:selectRules1];
     for(int i=0;i<[playlist_UserId1 count];i++)
@@ -249,6 +209,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         if([play_url1 count]==0)
         {
             [SUM removeAllObjects];
+            P=NO;
             break;
         }
         else
@@ -264,32 +225,73 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
             }
         }
     }
-    NSString *selectRules2= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
-    NSMutableArray *playlist_UserId2=[da selectFromRules:selectRules2];
-    for(int i=0;i<[playlist_UserId2 count];i++)
-    {
-        NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId2 objectAtIndex:i]intValue]];
-        NSMutableSet *play_url2=[da selectFromTAG1:selectTag];
+    if(P==YES)
+    {NSLog(@"yes");
+        NSString *selectRules0= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
+        NSMutableArray *playlist_UserId0=[da selectFromRules:selectRules0];
+        for(int i=0;i<[playlist_UserId0 count];i++)
+        {
+            NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId0 objectAtIndex:i]intValue]];
+            NSMutableSet *play_url0=[da selectFromTAG1:selectTag];
+            if([self.SUM count]==0)
+            {
+                NSLog(@"0A");
+                NSMutableSet *t=[[NSMutableSet alloc]init];
+                NSLog(@"ASSETURLoRDERING:%@",self.assetProducer.assetsUrlOrdering);
+                for (NSURL *url in self.assetProducer.assetsUrlOrdering) {
+                    NSString *str= [NSString stringWithFormat:@"%@",url];
+                    [t addObject:str];
+                }
+                
+                self.SUM=t;
+                [t release];
+                for (NSString *data in play_url0)
+                {
+                    if([self.SUM containsObject:data]) 
+                    {
+                        [self.SUM removeObject:data];
+                    }
+                    
+                }
+            }
+            else
+            {
+                for (NSString *data in play_url0)
+                {
+                    if([self.SUM containsObject:data]) 
+                    {
+                        
+                        [self.SUM removeObject:data];
+                    }
+                }
+            }
+        }
         
-        NSLog(@"WE%@",playlist_UserId2);
-        if([self.SUM count]==0)
+        NSString *selectRules2= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,2];
+        NSMutableArray *playlist_UserId2=[da selectFromRules:selectRules2];
+        for(int i=0;i<[playlist_UserId2 count];i++)
+        {
+            NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId2 objectAtIndex:i]intValue]];
+            NSMutableSet *play_url2=[da selectFromTAG1:selectTag];
             
-        {
-            self.SUM=play_url2;
+            NSLog(@"WE%@",playlist_UserId2);
+            if([self.SUM count]==0)
+                
+            {
+                self.SUM=play_url2;
+            }
+            else
+            {
+                [SUM unionSet:play_url2];
+            }
         }
-        else
-        {
-            [SUM unionSet:play_url2];
-        }
+        
     }
-    
-    
     
     for (NSString *dataStr in self.SUM) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         [dbUrl addObject:dbStr];
     }
-    //self.dbUrl=SUM;
 }
 
 

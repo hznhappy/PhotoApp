@@ -15,12 +15,12 @@
 @synthesize ready,assetGroups;
 @synthesize assetsUrlOrdering;
 @synthesize gCount;
-
 -(id)initWithAssetsLibrary: (ALAssetsLibrary *)assetLibrary {
     NSLog(@"AssertProducer");
     self = [super init];
     // ---- grap the library assets
     ///////
+   // self.assets=[[NSDictionary alloc]init];
     self.assetsUrlOrdering = [[NSMutableArray alloc]init];
     self.assetGroups=[[NSMutableArray alloc]init];
     self.library = assetLibrary;
@@ -45,7 +45,7 @@
         [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
          {         
              if(result == nil) 
-             {
+             { //NSLog(@"self.ASSETURLoRDERING:%@",self.assetsUrlOrdering);
                  self.ready = YES;
                  return;
              }
@@ -56,8 +56,10 @@
              [self.assetsUrlOrdering addObject:url];
              
              [self.assets setValue:ref forKey:url];
+            // NSLog(@"assert:%@",self.assets);
          }];
-        [self.assetGroups addObject:group];    
+        [self.assetGroups addObject:group];   
+        
     };
     
     void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
@@ -70,6 +72,7 @@
                          failureBlock:assetGroupEnumberatorFailure];
     
     [pool release];
+    NSLog(@"assert:%@",self.assets);
     
 }
 
