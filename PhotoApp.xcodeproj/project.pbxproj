@@ -64,6 +64,7 @@
 		A1F7E816148C9BBF0088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
 		A1F7E818148C9BCB0088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
 		A1F7E81A148C9BF60088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
+		A1F7E822148C9E940088F366 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F7E814148C9BBF0088F366 /* MainWindow.xib */; };
 		A1F82E851462909100BED207 /* PlaylistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F82E841462909100BED207 /* PlaylistDetailController.m */; };
 		A1F9E5961428671E00A69E49 /* tagOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A1F9E5951428671E00A69E49 /* tagOverlay.png */; };
 		A1FF8E351484D39B00D7521C /* MyNSOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FF8E341484D39B00D7521C /* MyNSOperation.m */; };
@@ -153,8 +154,8 @@
 		A1F1FFAE14600813005FAB2F /* DBOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOperation.h; sourceTree = "<group>"; };
 		A1F1FFAF14600813005FAB2F /* DBOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBOperation.m; sourceTree = "<group>"; };
 		A1F7E815148C9BBF0088F366 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		A1F7E817148C9BCB0088F366 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		A1F7E819148C9BF60088F366 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
+		A1F7E821148C9E940088F366 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		A1F82E831462909100BED207 /* PlaylistDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistDetailController.h; sourceTree = "<group>"; };
 		A1F82E841462909100BED207 /* PlaylistDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistDetailController.m; sourceTree = "<group>"; };
 		A1F9E5951428671E00A69E49 /* tagOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tagOverlay.png; path = Classes/tagOverlay.png; sourceTree = "<group>"; };
@@ -447,6 +448,7 @@
 				A1F7E816148C9BBF0088F366 /* MainWindow.xib in Resources */,
 				A1F7E818148C9BCB0088F366 /* MainWindow.xib in Resources */,
 				A1F7E81A148C9BF60088F366 /* MainWindow.xib in Resources */,
+				A1F7E822148C9E940088F366 /* MainWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,8 +556,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				A1F7E815148C9BBF0088F366 /* en */,
-				A1F7E817148C9BCB0088F366 /* zh-Hans */,
 				A1F7E819148C9BF60088F366 /* zh-Hant */,
+				A1F7E821148C9E940088F366 /* zh-Hans */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
