@@ -68,7 +68,7 @@
 -(void)getPhotoViewer:(NSNotification *)note{
     NSDictionary *dicOfPhotoViewer = [note userInfo];
     NSString *key = [[dicOfPhotoViewer allKeys] objectAtIndex:0];
-    NSArray *assets = [dicOfPhotoViewer valueForKey:key];
+    NSMutableArray *assets = [dicOfPhotoViewer valueForKey:key];
     PhotoViewController *pc = [[PhotoViewController alloc]initWithPhotoSource:assets currentPage:[key integerValue]];
     [self pushViewController:pc animated:YES];
     [pc release];

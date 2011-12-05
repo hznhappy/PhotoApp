@@ -153,7 +153,6 @@
         [assets addObject:[p.assets valueForKey:url]];
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
-    [assets release];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushThumbnailView" object:nil userInfo:dic];
     [table deselectRowAtIndexPath:indexPath animated:YES];
     self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];

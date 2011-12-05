@@ -592,10 +592,10 @@
             [button setFrame:frame];
             [button setImage:image forState:UIControlStateNormal];
             [button setTag:row];
-            button.opaque = YES;
             [button addTarget:self action:@selector(viewPhotos:) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:button];
-            frame.origin.x = frame.origin.x + frame.size.width + 4;        }
+            frame.origin.x = frame.origin.x + frame.size.width + 4;        
+        }
     }
     return cell;
 }

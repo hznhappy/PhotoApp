@@ -34,7 +34,7 @@
 @synthesize _pageIndex;
 @synthesize photos,bgPhotos;
 
-- (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
+- (id)initWithPhotoSource:(NSMutableArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleBarsNotification:) name:@"PhotoViewToggleBars" object:nil];
@@ -557,8 +557,8 @@ else{
 		
 	} 
     ALAsset *alasset = [self.photoSource objectAtIndex:page];
-    UIImage *image = [UIImage imageWithCGImage:[[alasset defaultRepresentation]fullScreenImage]];
-    [photoView setPhoto:image];
+    UIImage *img = [UIImage imageWithCGImage:[[alasset defaultRepresentation]fullScreenImage]];
+    [photoView setPhoto:img];
     
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
