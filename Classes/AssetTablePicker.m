@@ -581,13 +581,21 @@
 
     [cell.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     CGRect frame = CGRectMake(4, 2, 75, 75);
-    for (NSInteger i = 0; i<4; i++) {
+    
+    NSInteger loopCount = 0;
+    if (UIInterfaceOrientationIsLandscape(oritation)) {
+        loopCount = 6;
+    }else
+        loopCount = 4;
+    for (NSInteger i = 0; i<loopCount; i++) {
         NSInteger row = (indexPath.row*4)+i;
         if (row<[self.crwAssets count]) {
            
             ALAsset *asset = [self.crwAssets objectAtIndex:row];
            
             UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
+            [image drawLayer:<#(CALayer *)#> inContext:<#(CGContextRef)#>;
+             
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setFrame:frame];
             [button setImage:image forState:UIControlStateNormal];
@@ -613,8 +621,24 @@
 
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    oritation = toInterfaceOrientation;
 	return (UIInterfaceOrientationIsPortrait(toInterfaceOrientation) || toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    oritation = toInterfaceOrientation;
+    if ((UIInterfaceOrientationIsLandscape(oritation) && UIInterfaceOrientationIsLandscape(previousOrigaton))||(UIInterfaceOrientationIsPortrait(oritation)&&UIInterfaceOrientationIsPortrait(previousOrigaton))) {
+        return;
+    }
+    UIEdgeInsets insets = self.table.contentInset;
+    if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+        [self.table setContentInset:UIEdgeInsetsMake(insets.top-10, insets.left, insets.bottom, insets.right)];
+    }else{
+        [self.table setContentInset:UIEdgeInsetsMake(insets.top+10, insets.left, insets.bottom, insets.right)];
+    }
+    previousOrigaton = toInterfaceOrientation;
+        [self.table reloadData];
+ }
 
 #pragma  mark -
 #pragma  mark Memory management

@@ -53,6 +53,8 @@
     BOOL PASS;
     NSNumber *val;
     UITextField *passWord2;
+    UIInterfaceOrientation oritation;
+    UIInterfaceOrientation previousOrigaton;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;

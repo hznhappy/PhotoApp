@@ -83,16 +83,17 @@
 	
 }
 
-- (void)setPhoto:(ALAsset *)aPhoto{
+- (void)setPhoto:(UIImage *)aPhoto{
 	
 	if (!aPhoto) return; 
 	if ([aPhoto isEqual:self.photo]) return;
 	
 	[_photo release], _photo = nil;
 	_photo = [aPhoto retain];
-    UIImage *_image = [UIImage imageWithCGImage:[[self.photo defaultRepresentation]fullScreenImage]];
-	if (_image) {
-		self.imageView.image = _image;		
+    
+    
+   	if (self.photo) {
+		self.imageView.image = self.photo;		
 	} 
 	
 	if (self.imageView.image) {
@@ -222,10 +223,7 @@
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
-			
-	if (scrollView.zoomScale > 1.0f) {		
-		
-		
+	if (scrollView.zoomScale > 1.0f) {				
 		CGFloat height, width;	
 		
 		if (CGRectGetMaxX(self.imageView.frame) > self.bounds.size.width) {
@@ -280,7 +278,6 @@
 #pragma mark RotateGesture
 
 - (void)rotate:(UIRotationGestureRecognizer*)gesture{
-
 	if (gesture.state == UIGestureRecognizerStateBegan) {
 		
 		[self.layer removeAllAnimations];
@@ -306,6 +303,23 @@
 
 	
 }
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+	if (flag) {
+		
+		if ([[anim valueForKey:@"AnimationType"] integerValue] == 101) {
+			
+			[self resetBackgroundColors];
+			
+		} else if ([[anim valueForKey:@"AnimationType"] integerValue] == 202) {
+			
+			self.layer.transform = CATransform3DIdentity;
+			
+		}
+	}
+	
+}
+
 
 #pragma mark -
 #pragma mark Dealloc

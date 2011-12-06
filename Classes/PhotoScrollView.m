@@ -40,10 +40,8 @@
 	if (self.zoomScale > 1.0f) {
         
 		[((PhotoImageView*)self.superview) killScrollViewZoom];
-        
 		return;
 	}
-    
 	CGRect rect;
 	rect.size = CGSizeMake(self.frame.size.width / PV_ZOOM_SCALE, self.frame.size.height / PV_ZOOM_SCALE);
 	rect.origin.x = MAX((center.x - (rect.size.width / 2.0f)), 0.0f);		

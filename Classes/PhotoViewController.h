@@ -18,8 +18,8 @@
 @private
 	NSArray *photoSource;
 	NSMutableArray *_photoViews;
-    NSMutableArray *photos;
-    NSMutableArray *bgPhotos;
+    NSMutableArray *fullScreenPhotos;
+    
 	UIScrollView *_scrollView;	
 	
 	NSInteger _pageIndex;
@@ -38,14 +38,16 @@
     NSTimer *timer;	
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
-@property(nonatomic,retain)NSMutableArray *bgPhotos;
-@property(nonatomic,retain)NSMutableArray *photos;
+
 @property(nonatomic,retain) NSArray *photoSource;
 @property(nonatomic,retain) NSMutableArray *photoViews;
+@property(nonatomic,retain) NSMutableArray *fullScreenPhotos;
+
 @property(nonatomic,retain) UIScrollView *scrollView;
 @property(nonatomic,assign) NSInteger _pageIndex;
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page;
+-(void)readPhotoFromALAssets;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;

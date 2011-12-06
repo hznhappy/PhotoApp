@@ -32,7 +32,7 @@
 @synthesize photoSource; 
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
-@synthesize photos,bgPhotos;
+@synthesize fullScreenPhotos;
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
@@ -44,11 +44,32 @@
 		self.wantsFullScreenLayout = YES;		
 		photoSource = [aSource retain];
         self._pageIndex = page;
+        NSMutableArray *temp = [[NSMutableArray alloc] init];
+        for (unsigned i = 0; i < [self.photoSource count]; i++) {
+            [temp addObject:[NSNull null]];
+        }
+        self.fullScreenPhotos = temp;
+        [temp release];
 	}
-	
-	return self;
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets) withObject:nil waitUntilDone:NO];//:@selector(readPhotoFromALAssets) withObject:nil];
+	//[self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
+    return self;
 }
 
+-(void)readPhotoFromALAssets{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    for (NSInteger i = _pageIndex-2; i<_pageIndex+3; i++) {
+        if (i > 0 || i < [self.photoSource count]) {
+            UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
+            if ((NSNull *)fullImage == [NSNull null] ) {
+                ALAsset *asset = [self.photoSource objectAtIndex:i];
+                UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];//[asset thumbnail]];
+                [self.fullScreenPhotos replaceObjectAtIndex:i withObject:image];
+            }
+        }
+    }
+    [pool release];
+}
 #pragma mark -
 #pragma mark View Controller Methods
 
@@ -57,7 +78,6 @@
     self.hidesBottomBarWhenPushed = YES;
     self.wantsFullScreenLayout = YES;
 	self.view.backgroundColor = [UIColor blackColor];
-	self.wantsFullScreenLayout = YES;
     
 	if (!_scrollView) {
 		
@@ -85,6 +105,7 @@
 		[views addObject:[NSNull null]];
 	}
 	self.photoViews = views;
+    [views release];
 
     editing=NO;
      NSString *u=NSLocalizedString(@"Edit", @"title");
@@ -98,22 +119,18 @@
     [self.view addSubview:ppv];
     //db = [DBOperation getInstance];
     ppv.hidden=YES;
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    self.photos = array;
-    [array release];
-    
-    NSMutableArray *temp = [[NSMutableArray alloc]init];
-    self.bgPhotos = temp;
-    [temp release];
+        
 }
+
 -(void)viewDidAppear:(BOOL)animated{
+    [self moveToPhotoAtIndex:_pageIndex animated:NO];
 }
+
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
     [self.navigationController setToolbarHidden:NO animated:YES];
 	[self setupToolbar];
 	[self setupScrollViewContentSize];
-    [self moveToPhotoAtIndex:_pageIndex animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -121,100 +138,7 @@
 	[super viewWillDisappear:animated];
     [self.navigationController setToolbarHidden:YES animated:YES];		
 }
-/*
--(void)loadPhoto//(NSInteger)page
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    void (^assetRseult)(ALAsset *) = ^(ALAsset *result) 
-    {
-        if (result == nil) 
-        {
-            return;
-        }
-        CGImageRef ref = [[result defaultRepresentation] fullScreenImage];
-        UIImage *image = [UIImage imageWithCGImage:ref];
-        [self.bgPhotos addObject:image];
-    };
-    
-    void (^failureBlock)(NSError *) = ^(NSError *error) {
-        
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                         message:[NSString stringWithFormat:@"Error: %@", [error description]] 
-                                                        delegate:nil 
-                                               cancelButtonTitle:@"Ok" 
-                                               otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        
-        NSLog(@"A problem occured %@", [error description]);	                                 
-    };	
-    if (_pageIndex ==0) {
-        [self.bgPhotos addObject:[NSNull null]];
-        [self.bgPhotos addObject:[NSNull null]];
-    }else if (_pageIndex ==1) {
-        [self.bgPhotos addObject:[NSNull null]];
-    }
-    NSInteger j = _pageIndex+2;
-    
-    if (j>=[self.photoSource count]) {
-        j = [self.photoSource count]-1;
-    }
-    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
 
-    for (NSInteger i = _pageIndex-2;i <= j;i++) {
-        if (i<0) {
-            i = 0;
-        }
-        [library assetForURL:[self.photoSource objectAtIndex:_pageIndex] resultBlock:assetRseult failureBlock:failureBlock];
-    }
-    if (_pageIndex == [self.photoSource count]-1) {
-        [self.bgPhotos addObject:[NSNull null]];
-        [self.bgPhotos addObject:[NSNull null]];
-    }else if (_pageIndex == [self.photoSource count]-2) {
-        [self.bgPhotos addObject:[NSNull null]];
-    }  
-    [library release];
-    [pool release];
-    self.photos = self.bgPhotos;
-}
--(void)anotherLoad:(id)object
-{
-    NSArray *array = (NSArray *)object;
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    NSInteger currentPage = [[array objectAtIndex:0]integerValue];
-    NSInteger nextPage = [[array objectAtIndex:1]integerValue];
-    if (currentPage<nextPage) {
-        if (nextPage+2<[self.photoSource count]) {
-            [self loadPhotos:[self.photoSource objectAtIndex:nextPage+2]];
-        }
-        for (NSUInteger i = 0; i<5; i++) {
-            if (i == 4) {
-                if (nextPage+2>[self.photoSource count]-1)
-                    [self.bgPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
-                else{
-                    [self.bgPhotos replaceObjectAtIndex:i withObject:self.img];
-                }
-            }else
-            [self.bgPhotos exchangeObjectAtIndex:i withObjectAtIndex:i+1];
-        }    
-    }else if(currentPage>nextPage){
-        if (nextPage-2>=0) {
-            [self loadPhotos:[self.photoSource objectAtIndex:nextPage-2]];
-        }
-        for (NSInteger i = 4; i>=0; i--) {
-            if (i == 0) {
-                if (nextPage-2<0)
-                    [self.bgPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
-                else 
-                    [self.bgPhotos replaceObjectAtIndex:i withObject:self.img];
-            }else
-            [self.bgPhotos exchangeObjectAtIndex:i withObjectAtIndex:i-1];
-        } 
-    }
-    self.photos = self.bgPhotos;
-    [self moveToPhotoAtIndex:nextPage animated:YES];
-          [pool release];
-}*/
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
 	
@@ -379,7 +303,7 @@ else{
 
 - (void)photoViewDidFinishLoading:(NSNotification*)notification{
 	if (notification == nil) return;
-	UIImage *image = [UIImage imageWithCGImage:[[[self.photoSource objectAtIndex:[self centerPhotoIndex]]defaultRepresentation]fullScreenImage]];//[self centerPhotoIndex]];
+	UIImage *image = [self.fullScreenPhotos objectAtIndex:[self centerPhotoIndex]];
 	if ([[[notification object] objectForKey:@"photo"] isEqual:image]) {
 		if ([[[notification object] objectForKey:@"failed"] boolValue]) {
 			if (_barsHidden) {
@@ -432,13 +356,17 @@ else{
 }
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
+//    if ([self.fullScreenPhotos objectAtIndex:(index-1)] || [self.fullScreenPhotos objectAtIndex:(index)]||[self.fullScreenPhotos objectAtIndex:(index+1)]) {
+//        return;
+//    }
    	_pageIndex = index;
-    NSURL *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
-    ppv.url = currentPageUrl;
-    [ppv Buttons];
+   // NSURL *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
+   // ppv.url = currentPageUrl;
+    //[ppv Buttons];
 	[self setViewState];
     
 	[self enqueuePhotoViewAtIndex:index];
+    
 	[self loadScrollViewWithPage:index-1];
 	[self loadScrollViewWithPage:index];
 	[self loadScrollViewWithPage:index+1];
@@ -460,7 +388,7 @@ else{
 	
 	NSInteger _index = [self currentPhotoIndex];
 	
-	for (NSInteger page = _index -1; page < _index+3; page++) {
+	for (NSInteger page = _index -1; page < _index+2; page++) {
 		if (page >= 0 && page < [self.photoSource count]){
 			
 			CGFloat originX = self.scrollView.bounds.size.width * page;
@@ -539,7 +467,6 @@ else{
 }
 
 - (void)loadScrollViewWithPage:(NSInteger)page{
-	NSLog(@"%@ is self.photoview",self.photoViews);
     if (page < 0) return;
     if (page >= [self.photoSource count]) return;
 	
@@ -561,9 +488,12 @@ else{
 		[photoView release];
 		
 	} 
-    ALAsset *alasset = [self.photoSource objectAtIndex:page];
-    [photoView setPhoto:alasset];
-    
+    UIImage *photo = [self.fullScreenPhotos objectAtIndex:page];
+    if ((NSNull *)photo == [NSNull null]) {
+        return;
+    }
+    [photoView setPhoto:[self.fullScreenPhotos objectAtIndex:page]];
+       
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
 	}
@@ -582,7 +512,6 @@ else{
 	photoView.frame = frame;
 }
 
-
 #pragma mark -
 #pragma mark UIScrollView Delegate Methods
 
@@ -597,6 +526,8 @@ else{
         
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
+        //[self performSelectorOnMainThread:@selector(readPhotoFromALAssets) withObject:nil waitUntilDone:NO];
+        [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
 		[self setViewState];
 		
 		if (![scrollView isTracking]) {
@@ -719,6 +650,8 @@ else{
     timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
 }
 -(void)playPhoto{
+    _pageIndex+=1;
+    [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
     [self setBarsHidden:YES animated:YES];
     NSString *animateStyle = [timer userInfo];
     CATransition *animation = [CATransition animation];
@@ -742,7 +675,6 @@ else{
         animation.type = animateStyle;
     }
     [self.scrollView.layer addAnimation:animation forKey:@"animation"];
-    _pageIndex+=1;
     NSInteger _index = self._pageIndex;
 	if (_index >= [self.photoSource count] || _index < 0) {
         //[timer invalidate];
@@ -769,7 +701,7 @@ else{
 - (void)dealloc {
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-    [bgPhotos release];
+    [fullScreenPhotos release];
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];
