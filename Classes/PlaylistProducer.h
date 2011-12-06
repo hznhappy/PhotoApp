@@ -49,4 +49,5 @@
 -(void)count;
 -(void)photoCount;
 -(void)playlistUrl:(int)row_id;
+-(void)selectID;
 @end

@@ -45,7 +45,7 @@
         [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
          {         
              if(result == nil) 
-             { //NSLog(@"self.ASSETURLoRDERING:%@",self.assetsUrlOrdering);
+             { 
                  self.ready = YES;
                  return;
              }
@@ -57,7 +57,7 @@
              
              [self.assets setValue:ref forKey:url];
          }];
-        
+        //NSLog(@"asssetUrl:%@",self.assetsUrlOrdering);
         [self.assetGroups addObject:group];
       
     };

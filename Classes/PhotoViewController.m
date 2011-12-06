@@ -80,6 +80,12 @@
         
 	}
   
+    NSMutableArray *views = [[NSMutableArray alloc] init];
+	for (unsigned i = 0; i < [self.photoSource count]; i++) {
+		[views addObject:[NSNull null]];
+	}
+	self.photoViews = views;
+
     editing=NO;
      NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
@@ -533,7 +539,7 @@ else{
 }
 
 - (void)loadScrollViewWithPage:(NSInteger)page{
-	
+	NSLog(@"%@ is self.photoview",self.photoViews);
     if (page < 0) return;
     if (page >= [self.photoSource count]) return;
 	
@@ -556,8 +562,7 @@ else{
 		
 	} 
     ALAsset *alasset = [self.photoSource objectAtIndex:page];
-    UIImage *image = [UIImage imageWithCGImage:[[alasset defaultRepresentation]fullScreenImage]];
-    [photoView setPhoto:image];
+    [photoView setPhoto:alasset];
     
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];

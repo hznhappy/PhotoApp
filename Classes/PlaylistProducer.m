@@ -25,6 +25,7 @@
     self = [super init];
     da=[DBOperation getInstance];
     [self creatTable];
+    [self selectID];
      self.assetGroups=[[NSMutableArray alloc]init];
     if (self) {
         self.playlists = [[NSMutableArray alloc]init];
@@ -115,6 +116,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         if ([album.albumId intValue]==-1) {
             album.photoCount = allCount;
         }else if([album.albumId intValue]==-2){
+            [self getTagUrl];
             NSInteger j =allCount-[self.TagUrl count];
             
             album.photoCount = j;
@@ -122,7 +124,8 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
             
         }else{
             [self playlistUrl:[album.albumId intValue]];
-           album.photoCount = dbCount;
+        album.photoCount = dbCount;
+            
         }
     }
     NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
@@ -164,8 +167,13 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
     {  
         [self Special];
     }
+    
+}
+-(void)selectID
+{
     NSString *selectPlayIdOrder=[NSString stringWithFormat:@"select play_id from playIdOrder"];
     self.list=[da selectOrderId:selectPlayIdOrder];
+    
 }
 -(void)tableorder
 { da=[DBOperation getInstance];

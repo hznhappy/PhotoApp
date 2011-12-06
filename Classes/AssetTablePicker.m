@@ -21,70 +21,25 @@
 @synthesize operations;
 @synthesize operation;
 @synthesize tagBg;
-
+@synthesize tagRow;
+@synthesize tagNumber;
+@synthesize destinctUrl;
 #pragma mark -
 #pragma mark UIViewController Methods
 
 -(void)viewDidLoad {
-    done = YES;
   
-    
-
+    done = YES;
+    action=YES;
+    overlay=YES;
    dataBase =[DBOperation getInstance];
     [self creatTable];
-    
-    
-    /*ALAssetsLibrary *temLibrary = [[ALAssetsLibrary alloc] init]; 
-    self.library = temLibrary;
-
-    NSInteger threadNumber = 5;
-    NSInteger countNum = ceil([self.urlsArray count]/threadNumber);
-    queue = [[NSOperationQueue alloc]init];
-    NSMutableArray *temoperations = [NSMutableArray arrayWithCapacity:threadNumber];
-    self.operations = temoperations;
-    [temoperations release];
-    for (NSInteger i =0; i<threadNumber; i++) {
-        NSString *begin = [NSString stringWithFormat:@"%d",i*countNum];
-        NSString *end = nil;
-        //NSInteger begin = i*countNum;
-        //NSInteger end = 0;
-        if (i!=threadNumber-1) {
-            //end = (i+1)*countNum-1;
-           end = [NSString stringWithFormat:@"%d",(i+1)*countNum-1];
-            
-        }else{
-            //end = [self.urlsArray count]-1;
-            end = [NSString stringWithFormat:@"%d",[self.urlsArray count]-1];
-
-        }
-        //NSArray *array = [NSArray arrayWithObjects:begin,end, nil];
-        //MyNSOperation *operation = [[MyNSOperation alloc]initWithBeginIndex:begin endIndex:end storeThumbnails:self.crwAssets urls:self.urlsArray];
-        //NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadPhotos:) object:array];
-        //[operations addObject:operation];
-        //[queue addOperation:operation];
-    }
-
-
-    [temLibrary release];
-    
-    
-    //load thumbnails from another thread
-    queue = [[NSOperationQueue alloc]init];
-    NSInteger startAt = 0;
-    NSInteger endAt = [self.urlsArray count]-1;
-    MyNSOperation *tempOperation = [[MyNSOperation alloc]initWithBeginIndex:startAt endIndex:endAt storeThumbnails:self.crwAssets urls:self.urlsArray];
-    self.operation = tempOperation;
-    [tempOperation release];
-    [queue addOperation:self.operation];*/
-    
-    //MyNSOperation *temOperation = [[MyNSOperation alloc]initWithUrls:self.urlsArray];
-/*    NSOperationQueue *_queue = [[NSOperationQueue alloc]init];
-    MyNSOperation *temOperation= [[MyNSOperation alloc]initWithUrls:self.urlsArray viewController:self];
-    self.operation = temOperation;
-    [temOperation release];
-    [_queue addOperation:operation];
-    [_queue release];*/
-
+    NSMutableArray *array=[[NSMutableArray alloc]init];
+    NSMutableArray *array1=[[NSMutableArray alloc]init];
+    self.tagRow=array;
+    self.tagNumber=array1;
+    [array release];
+    [array1 release];
     NSString *b=NSLocalizedString(@"Back", @"title");
     UIButton* backButton = [UIButton buttonWithType:101]; // left-pointing shape!
     [backButton addTarget:self action:@selector(huyou) forControlEvents:UIControlEventTouchUpInside];
@@ -113,7 +68,9 @@
     
        
 
-    
+    /*CGRect viewFrames = CGRectMake(0, 0, 75, 75);
+    overlayView = [[UIImageView alloc]initWithFrame:viewFrames];
+    [overlayView setImage:[UIImage imageNamed:@"selectOverlay.png"]];*/
     
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
@@ -145,6 +102,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
+    [self setPhotoTag];
 }
 
 -(void)getAssets:(ALAsset *)asset{
@@ -322,21 +280,22 @@
 }
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
-    NSMutableArray *photos = [dataBase selectPhotos:selectSql];
-    for (NSString *dataStr in photos) {
+    photos = [dataBase selectPhotos:selectSql];
+   // NSLog(@"PHOTOS:%@",photos);
+    /*for (NSString *dataStr in photos) {
         NSURL *dbStr = [NSURL URLWithString:dataStr];
         for (Thumbnail *thumbnail in self.crwAssets) {
             NSUInteger index = [self.crwAssets indexOfObject:thumbnail];
             NSURL *thumStr = [self.urlsArray objectAtIndex:index];
             if ([dbStr isEqual:thumStr]) {
                 NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",dbStr];
-                NSInteger count = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];               
-                NSString *num=[NSString stringWithFormat:@"%d",count];
+                NSInteger count1 = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];               
+                NSString *num=[NSString stringWithFormat:@"%d",count1];
                 [thumbnail setOverlayHidden:num];
                 
             }
         }
-    } 
+    } */
 }
 
 #pragma mark -
@@ -349,16 +308,20 @@
     mode = NO;
     save.enabled=NO;
     reset.enabled=NO;
+    action=YES;
     [self resetTags];
+    
     [self.table reloadData];
 }
 
 -(IBAction)actionButtonPressed{
-    
+    action=NO;
     NSString *a=NSLocalizedString(@"Lock", @"title");
     if([self.lock.title isEqualToString:a])
     {
     mode = YES;
+    save.enabled=YES;
+    reset.enabled=YES;
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = cancel;
     viewBar.hidden = YES;
@@ -445,12 +408,16 @@
     }
 }
 -(IBAction)resetTags{
-    for (Thumbnail *thum in self.crwAssets) {
-        if ([thum tagOverlay]) {
-            [thum setTagOverlayHidden:YES];
-        }
-    }
+   // for (Thumbnail *thum in self.crwAssets) {
+       // if ([thum tagOverlay]) {
+           // [thum setTagOverlayHidden:YES];
+       // }
+    //}
+    //[overlayView removeFromSuperview];
+    [self.tagRow removeAllObjects];
+    [self.tagNumber removeAllObjects];
     [UrlList removeAllObjects];
+    [self.table reloadData];
 }
 -(IBAction)selectFromFavoriteNames{
     tagManagementController *nameController = [[tagManagementController alloc]init];
@@ -527,9 +494,7 @@
 #pragma mark UITableViewDataSource and Delegate Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    return ceil([self.crwAssets count]/4);//return ceil([self.urlsArray count] / 4.0);
-    
+    return ceil([self.crwAssets count]/4.0);//return ceil([self.urlsArray count] / 4.0);
 }
 
 -(NSArray*)assetsForIndexPath:(NSIndexPath*)_indexPath {
@@ -579,26 +544,74 @@
         cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier]autorelease];
 
     }
-
+     
     [cell.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     CGRect frame = CGRectMake(4, 2, 75, 75);
     for (NSInteger i = 0; i<4; i++) {
         NSInteger row = (indexPath.row*4)+i;
         if (row<[self.crwAssets count]) {
-           
+            
             ALAsset *asset = [self.crwAssets objectAtIndex:row];
-           
+            NSString *url=[[[asset defaultRepresentation]url]description];
+                                  
             UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setFrame:frame];
             [button setImage:image forState:UIControlStateNormal];
             [button setTag:row];
-            button.opaque = YES;
             [button addTarget:self action:@selector(viewPhotos:) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:button];
-            frame.origin.x = frame.origin.x + frame.size.width + 4;        }
+            frame.origin.x = frame.origin.x + frame.size.width + 4;   
+            [self CGRectMake];
+            NSString *ROW=[NSString stringWithFormat:@"%d",row];
+            if([self.tagRow containsObject:ROW])
+            { 
+                [button addSubview:overlayView]; 
+               
+            }
+            if([photos containsObject:url])
+            { [button addSubview:tagBg];
+                NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",url];
+                NSInteger count1 = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];              
+                count.text =[NSString stringWithFormat:@"%d",count1];
+               
+                
+            }
+
+            if([self.tagNumber containsObject:ROW])
+            {
+              
+            }
+        }
     }
     return cell;
+}
+
+-(void)CGRectMake
+{
+    self.tagBg =[[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
+    CGPoint tagBgCenter = tagBg.center;
+    self.tagBg.layer.cornerRadius = 25 / 2.0;
+    self.tagBg.center = tagBgCenter;
+    
+    UIView *tagCount = [[UIView alloc]initWithFrame:CGRectMake(2.6, 2.2, 20, 20)];
+    tagCount.backgroundColor = [UIColor colorWithRed:182/255.0 green:0 blue:0 alpha:1];
+    CGPoint saveCenter = tagCount.center;
+    tagCount.layer.cornerRadius = 20 / 2.0;
+    tagCount.center = saveCenter;
+    count = [[UILabel alloc]initWithFrame:CGRectMake(3, 4, 13, 12)];
+    count.backgroundColor = [UIColor colorWithRed:182/255.0 green:0 blue:0 alpha:1];
+    count.textColor = [UIColor whiteColor];
+    count.textAlignment = UITextAlignmentCenter;
+    count.font = [UIFont boldSystemFontOfSize:11];
+    [tagCount addSubview:count];
+    [self.tagBg addSubview:tagCount];
+    [tagCount release];
+    
+    CGRect viewFrames = CGRectMake(0, 0, 75, 75);
+    overlayView = [[UIImageView alloc]initWithFrame:viewFrames];
+    [overlayView setImage:[UIImage imageNamed:@"selectOverlay.png"]];
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -607,9 +620,35 @@
 }
 
 -(void)viewPhotos:(id)sender{
-    UIButton *button = (UIButton *)sender;
-    NSDictionary *dic = [NSDictionary dictionaryWithObject:self.crwAssets forKey:[NSString stringWithFormat:@"%d",button.tag]];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"viewPhotos" object:nil userInfo:dic];    
+    
+    UIButton *button1= (UIButton *)sender;
+    NSLog(@"button tag:%d",button1.tag);
+    NSString *row=[NSString stringWithFormat:@"%d",button1.tag];
+    
+    if(action==YES)
+    {
+        NSDictionary *dic = [NSDictionary dictionaryWithObject:self.crwAssets forKey:[NSString stringWithFormat:@"%d",button1.tag]];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"viewPhotos" object:nil userInfo:dic];    
+    }
+    else
+    {
+        if([self.tagRow containsObject:row])
+        {
+            //[button1.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            [self.tagRow removeObject:row];
+            [self.tagNumber removeObject:row];
+            NSLog(@"remove:%@",button1.subviews);
+        }
+        else
+        { ALAsset *asset = [self.crwAssets objectAtIndex:button1.tag];
+            NSString *url = [[[asset defaultRepresentation]url] description];
+            [self.UrlList addObject:url];
+            [self.tagRow addObject:row];
+            [self.tagNumber addObject:row];
+            NSLog(@"add");
+        }
+    }
+    [self.table reloadData];
 }
 
 

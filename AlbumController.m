@@ -69,7 +69,7 @@
 }
 -(void)addnumber
 {    AlbumClass *al = [self.playList.playlists objectAtIndex:[self.playList.playlists count]-1];
-    [self.playList creatTable];
+    [self.playList selectID];
     if([al.albumId isEqualToString:[self.playList.list objectAtIndex:[self.playList.list count]-1]])
     {
         [database getUserFromPlayTable:[self.playList.list objectAtIndex:[self.playList.list count]-1]];
@@ -150,18 +150,40 @@
 }
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSMutableArray *assets = [[NSMutableArray alloc]init ];
+    if([[self.playList.list objectAtIndex:indexPath.row]intValue]==-1)
+    {
     for (NSString *url in p.assetsUrlOrdering) {
         [assets addObject:[p.assets valueForKey:url]];
     }
+         NSLog(@"assetsCount:%d",[assets count]);
+    }
+    else if([[self.playList.list objectAtIndex:indexPath.row]intValue]==-2)
+    {
+        for(NSString *url in p.assetsUrlOrdering)
+        {
+            if(![self.playList.TagUrl containsObject:url])
+            {
+               [assets addObject:[p.assets valueForKey:url]];
+            }
+        }
+         NSLog(@"assetsCount:%d",[assets count]);
+    }
+    else
+    {[self.playList playlistUrl:[[self.playList.list objectAtIndex:indexPath.row]intValue]];
+        for(NSString *url in self.playList.SUM)
+        {
+            [assets addObject:[p.assets valueForKey:url]];
+        }
+        NSLog(@"assetsCount:%d",[assets count]);
+    }
     NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
-    //[assets release];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushThumbnailView" object:nil userInfo:dic];
     [table deselectRowAtIndexPath:indexPath animated:YES];
     self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
     //[[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-    [self.playList creatTable];
+    [self.playList selectID];
     if([[self.playList.list objectAtIndex:indexPath.row]intValue]<0)
     {
         NSString *a=NSLocalizedString(@"hello", @"title");
@@ -192,12 +214,24 @@
 #pragma mark -
 #pragma mark Table View Data Source Methods
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{     
+{     [self.playList selectID];
+   if([[self.playList.list objectAtIndex:indexPath.row]intValue]<0)
+    {
+        NSString *a=NSLocalizedString(@"hello", @"title");
+        NSString *b=NSLocalizedString(@"Inherent members, can not be deleted", @"title");
+        NSString *c=NSLocalizedString(@"ok", @"title");
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+    }
+    else{
     [self.playList.playlists removeObjectAtIndex:indexPath.row];
     NSInteger INDEX=indexPath.row;
-    [self.playList creatTable];
+    [self.playList selectID];
     [self.playList deleteTable:INDEX];
     [self.tableView reloadData];
+    }
 }
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {   NSUInteger fromRow=[fromIndexPath row];
