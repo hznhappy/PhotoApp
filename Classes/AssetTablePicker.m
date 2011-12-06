@@ -22,8 +22,8 @@
 @synthesize operation;
 @synthesize tagBg;
 @synthesize tagRow;
-@synthesize tagNumber;
 @synthesize destinctUrl;
+@synthesize photos;
 #pragma mark -
 #pragma mark UIViewController Methods
 
@@ -37,7 +37,7 @@
     NSMutableArray *array=[[NSMutableArray alloc]init];
     NSMutableArray *array1=[[NSMutableArray alloc]init];
     self.tagRow=array;
-    self.tagNumber=array1;
+    self.photos=array1;
     [array release];
     [array1 release];
     NSString *b=NSLocalizedString(@"Back", @"title");
@@ -280,23 +280,8 @@
 }
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
-    photos = [dataBase selectPhotos:selectSql];
-   // NSLog(@"PHOTOS:%@",photos);
-    /*for (NSString *dataStr in photos) {
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        for (Thumbnail *thumbnail in self.crwAssets) {
-            NSUInteger index = [self.crwAssets indexOfObject:thumbnail];
-            NSURL *thumStr = [self.urlsArray objectAtIndex:index];
-            if ([dbStr isEqual:thumStr]) {
-                NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",dbStr];
-                NSInteger count1 = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];               
-                NSString *num=[NSString stringWithFormat:@"%d",count1];
-                [thumbnail setOverlayHidden:num];
-                
-            }
-        }
-    } */
-}
+    self.photos = [dataBase selectPhotos:selectSql];
+   }
 
 #pragma mark -
 #pragma mark ButtonAction Methods
@@ -415,7 +400,6 @@
     //}
     //[overlayView removeFromSuperview];
     [self.tagRow removeAllObjects];
-    [self.tagNumber removeAllObjects];
     [UrlList removeAllObjects];
     [self.table reloadData];
 }
@@ -547,7 +531,13 @@
      
     [cell.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     CGRect frame = CGRectMake(4, 2, 75, 75);
-    for (NSInteger i = 0; i<4; i++) {
+    
+    NSInteger loopCount = 0;
+    if (UIInterfaceOrientationIsLandscape(oritation)) {
+        loopCount = 6;
+    }else
+        loopCount = 4;
+    for (NSInteger i = 0; i<loopCount; i++) {
         NSInteger row = (indexPath.row*4)+i;
         if (row<[self.crwAssets count]) {
             
@@ -555,6 +545,7 @@
             NSString *url=[[[asset defaultRepresentation]url]description];
                                   
             UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
+             
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setFrame:frame];
             [button setImage:image forState:UIControlStateNormal];
@@ -578,10 +569,6 @@
                 
             }
 
-            if([self.tagNumber containsObject:ROW])
-            {
-              
-            }
         }
     }
     return cell;
@@ -636,7 +623,6 @@
         {
             //[button1.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
             [self.tagRow removeObject:row];
-            [self.tagNumber removeObject:row];
             NSLog(@"remove:%@",button1.subviews);
         }
         else
@@ -644,7 +630,6 @@
             NSString *url = [[[asset defaultRepresentation]url] description];
             [self.UrlList addObject:url];
             [self.tagRow addObject:row];
-            [self.tagNumber addObject:row];
             NSLog(@"add");
         }
     }
@@ -653,8 +638,24 @@
 
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    oritation = toInterfaceOrientation;
 	return (UIInterfaceOrientationIsPortrait(toInterfaceOrientation) || toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    oritation = toInterfaceOrientation;
+    if ((UIInterfaceOrientationIsLandscape(oritation) && UIInterfaceOrientationIsLandscape(previousOrigaton))||(UIInterfaceOrientationIsPortrait(oritation)&&UIInterfaceOrientationIsPortrait(previousOrigaton))) {
+        return;
+    }
+    UIEdgeInsets insets = self.table.contentInset;
+    if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+        [self.table setContentInset:UIEdgeInsetsMake(insets.top-10, insets.left, insets.bottom, insets.right)];
+    }else{
+        [self.table setContentInset:UIEdgeInsetsMake(insets.top+10, insets.left, insets.bottom, insets.right)];
+    }
+    previousOrigaton = toInterfaceOrientation;
+        [self.table reloadData];
+ }
 
 #pragma  mark -
 #pragma  mark Memory management
@@ -695,6 +696,9 @@
     [val release];
     [queue release];
     [operation release];
+    [tagRow release];
+    [photos release];
+    [tagBg release];
     [super dealloc];    
 }
 

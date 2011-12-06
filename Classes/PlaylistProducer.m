@@ -49,6 +49,7 @@
         album.albumId = _id;
         album.albumName = da.name;
         [self.playlists addObject:album];
+        [album release];
     }
 
         //NSInteger allPhotoscount =allCount;

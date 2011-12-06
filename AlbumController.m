@@ -88,6 +88,7 @@
         album.albumId=[self.playList.list objectAtIndex:[self.playList.list count]-1];
         album.albumName=database.name;
         [self.playList.playlists addObject:album];
+        [album release];
     }
     [self.playList count];
     [self.tableView reloadData];
@@ -254,7 +255,7 @@
 #pragma mark memory method
 
 - (void)dealloc {
-    
+    [p release];
     [playList release];
     [tableView release];
 

@@ -56,6 +56,7 @@
              [self.assetsUrlOrdering addObject:url];
              
              [self.assets setValue:ref forKey:url];
+             [ref release];
          }];
         //NSLog(@"asssetUrl:%@",self.assetsUrlOrdering);
         [self.assetGroups addObject:group];

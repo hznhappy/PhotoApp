@@ -10,7 +10,7 @@
 @interface PhotoImageView : UIView <UIScrollViewDelegate>{
 @private
 	PhotoScrollView *_scrollView;
-	ALAsset *_photo;
+	UIImage *_photo;
 	UIImageView *_imageView;
 	UIActivityIndicatorView *_activityView;
 	
@@ -19,11 +19,11 @@
 	
 }
 
-@property(nonatomic,readonly) ALAsset *photo;
+@property(nonatomic,readonly) UIImage *photo;
 @property(nonatomic,readonly) UIImageView *imageView;
 @property(nonatomic,readonly) PhotoScrollView *scrollView;
 
-- (void)setPhoto:(ALAsset *)aPhoto;
+- (void)setPhoto:(UIImage *)aPhoto;
 - (void)killScrollViewZoom;
 - (void)layoutScrollViewAnimated:(BOOL)animated;
 - (void)prepareForReusue;

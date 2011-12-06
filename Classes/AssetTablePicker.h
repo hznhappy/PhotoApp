@@ -59,9 +59,10 @@
       UIImageView *overlayView;
     BOOL overlay;
     NSMutableArray *tagRow;
-    NSMutableArray *tagNumber;
     NSMutableArray *destinctUrl;
     NSMutableArray *photos;
+    UIInterfaceOrientation oritation;
+    UIInterfaceOrientation previousOrigaton;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;
@@ -77,7 +78,6 @@
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
 @property(nonatomic,retain)UIView *tagBg;
-@property(nonatomic,retain)NSMutableArray *tagNumber;
 @property(nonatomic,retain)NSMutableArray *destinctUrl;
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain)NSMutableArray *operations;
@@ -87,6 +87,7 @@
 @property (nonatomic,retain) NSMutableArray *dateArry;
 @property (nonatomic,retain) NSMutableArray *UrlList;
 @property (nonatomic,retain)NSNumber *val;
+@property (nonatomic,retain)NSMutableArray *photos;
 -(IBAction)actionButtonPressed;
 -(IBAction)playPhotos;
 -(IBAction)lockButtonPressed;
