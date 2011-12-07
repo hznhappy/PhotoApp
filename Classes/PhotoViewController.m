@@ -503,9 +503,9 @@ else{
 	
 	if (photoView == nil || (NSNull*)photoView == [NSNull null]) {
 		
-		photoView = [[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
+		photoView = [[[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)]autorelease];
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
-		[photoView release];
+		//[photoView release];
 		
 	} 
     UIImage *photo = [self.fullScreenPhotos objectAtIndex:page];

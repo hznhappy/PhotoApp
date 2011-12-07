@@ -43,6 +43,7 @@
     BOOL mode;
     BOOL load;
     BOOL done;
+    BOOL action;
     NSString *UserId;
     NSString *UserName;
     NSMutableArray *UrlList;
@@ -53,6 +54,13 @@
     BOOL PASS;
     NSNumber *val;
     UITextField *passWord2;
+    UIView *tagBg;
+     UILabel *count;
+      UIImageView *overlayView;
+    BOOL overlay;
+    NSMutableArray *tagRow;
+    NSMutableArray *destinctUrl;
+    NSMutableArray *photos;
     UIInterfaceOrientation oritation;
     UIInterfaceOrientation previousOrigaton;
 }
@@ -66,11 +74,11 @@
 @property (nonatomic,retain)NSInvocationOperation *operation1;
 @property (nonatomic,retain)NSInvocationOperation *operation2;
 @property (nonatomic,retain)MyNSOperation *operation;
-
+@property (nonatomic,retain)NSMutableArray *tagRow;
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
-
-
+@property(nonatomic,retain)UIView *tagBg;
+@property(nonatomic,retain)NSMutableArray *destinctUrl;
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain)NSMutableArray *operations;
 @property (nonatomic,retain) NSMutableArray *images;
@@ -79,6 +87,7 @@
 @property (nonatomic,retain) NSMutableArray *dateArry;
 @property (nonatomic,retain) NSMutableArray *UrlList;
 @property (nonatomic,retain)NSNumber *val;
+@property (nonatomic,retain)NSMutableArray *photos;
 -(IBAction)actionButtonPressed;
 -(IBAction)playPhotos;
 -(IBAction)lockButtonPressed;
@@ -92,6 +101,6 @@
 -(void)AddUser:(NSNotification *)note;
 -(void)creatTable;
 -(void)viewPhotos:(id)sender;
-
+-(void)CGRectMake;
 -(void)getAssets:(ALAsset *)asset;
 @end
