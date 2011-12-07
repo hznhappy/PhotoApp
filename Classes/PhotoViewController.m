@@ -50,29 +50,27 @@
         self.fullScreenPhotos = temp;
         [temp release];
 	}
-//    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
-//    UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];//[asset thumbnail]];
-//    [self.fullScreenPhotos replaceObjectAtIndex:_pageIndex withObject:image];
-	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets) withObject:nil waitUntilDone:YES];//:@selector(readPhotoFromALAssets) withObject:nil];
-	//[self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
+
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets) withObject:nil waitUntilDone:NO];
+   
     return self;
 }
 
 -(void)readPhotoFromALAssets{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-
     for (NSInteger i = _pageIndex-2; i<_pageIndex+3; i++) {
         if (i >= 0 && i < [self.photoSource count]) {
             UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
             if ((NSNull *)fullImage == [NSNull null] ) {
                 ALAsset *asset = [self.photoSource objectAtIndex:i];
-                UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];//[asset thumbnail]];
+                UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];
                 [self.fullScreenPhotos replaceObjectAtIndex:i withObject:image];
             }
         }
     }
     [pool release];
 }
+
 #pragma mark -
 #pragma mark View Controller Methods
 
@@ -128,11 +126,6 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [self moveToPhotoAtIndex:_pageIndex animated:NO];
-//    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
-//    UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];//[asset thumbnail]];
-//    [self.fullScreenPhotos replaceObjectAtIndex:_pageIndex withObject:image];
-    //[self loadScrollViewWithPage:_pageIndex];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -368,21 +361,18 @@ else{
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
     NSLog(@"INDEX:%d",index);
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
-//    if ([self.fullScreenPhotos objectAtIndex:(index-1)] || [self.fullScreenPhotos objectAtIndex:(index)]||[self.fullScreenPhotos objectAtIndex:(index+1)]) {
-//        return;
-//    }
    	_pageIndex = index;
  
 	[self setViewState];
     
 	[self enqueuePhotoViewAtIndex:index];
     
-    [self loadScrollViewWithPage:index-1];
+	[self loadScrollViewWithPage:index-1];
 	[self loadScrollViewWithPage:index];
 	[self loadScrollViewWithPage:index+1];
 	
 	
-	[self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:index]).frame animated:NO];
+	[self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:index]).frame animated:animated];
 	
 	
 	if (index + 1 < [self.photoSource count] && (NSNull*)[self.photoViews objectAtIndex:index+1] != [NSNull null]) {
@@ -535,9 +525,9 @@ else{
         
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
-        //[self performSelectorOnMainThread:@selector(readPhotoFromALAssets) withObject:nil waitUntilDone:NO];
+        
         [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
-		[self setViewState];
+       		[self setViewState];
 		
 		if (![scrollView isTracking]) {
 			[self layoutScrollViewSubviews];

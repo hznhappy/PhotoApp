@@ -496,8 +496,6 @@
             [button addTarget:self action:@selector(viewPhotos:) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:button];
             frame.origin.x = frame.origin.x + frame.size.width + 4;   
-            
-          
             NSString *ROW=[NSString stringWithFormat:@"%d",row];
             if([self.tagRow containsObject:ROW])
             { [self CGRectMake];

@@ -56,6 +56,8 @@
 		imageView.opaque = YES;
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
 		imageView.tag = ZOOM_VIEW_TAG;
+        imageView.backgroundColor = nil;
+        imageView.clearsContextBeforeDrawing = YES;
 		[_scrollView addSubview:imageView];
 		_imageView = [imageView retain];
 		[imageView release];
