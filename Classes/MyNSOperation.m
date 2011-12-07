@@ -54,11 +54,14 @@
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc]init];
     for (NSURL *url in self.allUrls) {
         if ([self isCancelled]) {
+             [library release];
             return;
         }
         [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
+         
     }
     [library release];
+   
     [pool release];
 }
 
@@ -73,11 +76,11 @@
         if ([self isCancelled]) {
             return;
         }
-
     }
     @catch (NSException *exception) {
         NSLog(@"exception %@ and urls is %d",exception,[self.allUrls count]);
     }
+   
 }
 
 

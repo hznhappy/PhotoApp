@@ -20,7 +20,6 @@
 @synthesize operation1,operation2;
 @synthesize operations;
 @synthesize operation;
-@synthesize tagBg;
 @synthesize tagRow;
 @synthesize destinctUrl;
 @synthesize photos;
@@ -31,7 +30,6 @@
   
     done = YES;
     action=YES;
-    overlay=YES;
    dataBase =[DBOperation getInstance];
     [self creatTable];
     NSMutableArray *array=[[NSMutableArray alloc]init];
@@ -64,14 +62,6 @@
     [self.table setSeparatorColor:[UIColor clearColor]];
 	[self.table setAllowsSelection:NO];
     [self setWantsFullScreenLayout:YES];
-    
-    
-       
-
-    /*CGRect viewFrames = CGRectMake(0, 0, 75, 75);
-    overlayView = [[UIImageView alloc]initWithFrame:viewFrames];
-    [overlayView setImage:[UIImage imageNamed:@"selectOverlay.png"]];*/
-    
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     self.images = temp;
     [temp release];
@@ -274,9 +264,6 @@
 
 }
 -(void)viewDidDisappear:(BOOL)animated{
-//    for (Thumbnail *thub in crwAssets) {
-//        [thub setSelectOvlay];
-//    }
 }
 -(void)setPhotoTag{
     NSString *selectSql = @"SELECT DISTINCT URL FROM TAG;";
@@ -393,12 +380,6 @@
     }
 }
 -(IBAction)resetTags{
-   // for (Thumbnail *thum in self.crwAssets) {
-       // if ([thum tagOverlay]) {
-           // [thum setTagOverlayHidden:YES];
-       // }
-    //}
-    //[overlayView removeFromSuperview];
     [self.tagRow removeAllObjects];
     [UrlList removeAllObjects];
     [self.table reloadData];
@@ -419,9 +400,6 @@
     [picker release]; 
 }
 -(IBAction)playPhotos{
-//    [[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
-//    NSLog(@"play button pressed");
-    
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.crwAssets currentPage:0];
     [dataBase getUserFromPlayTable:PLAYID];
     [playPhotoController fireTimer:dataBase.Transtion];
@@ -553,18 +531,21 @@
             [button addTarget:self action:@selector(viewPhotos:) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:button];
             frame.origin.x = frame.origin.x + frame.size.width + 4;   
-            [self CGRectMake];
+            
+          
             NSString *ROW=[NSString stringWithFormat:@"%d",row];
             if([self.tagRow containsObject:ROW])
-            { 
-                [button addSubview:overlayView]; 
+            { [self CGRectMake];
+                [button addSubview:[self CGRectMake]]; 
                
             }
             if([photos containsObject:url])
-            { [button addSubview:tagBg];
+            {   [self CGRectMake1];
+                [button addSubview:[self CGRectMake1]];
                 NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",url];
                 NSInteger count1 = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];              
                 count.text =[NSString stringWithFormat:@"%d",count1];
+                [count release];
                
                 
             }
@@ -574,33 +555,36 @@
     return cell;
 }
 
--(void)CGRectMake
+-(UIImageView *)CGRectMake
 {
-    self.tagBg =[[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)];
+    CGRect viewFrames = CGRectMake(0, 0, 75, 75);
+   UIImageView *overlayView = [[[UIImageView alloc]initWithFrame:viewFrames]autorelease];
+    [overlayView setImage:[UIImage imageNamed:@"selectOverlay.png"]];
+    return overlayView;
+}
+-(UIView *)CGRectMake1
+{
+    UIView *tagBg =[[[UIView alloc]initWithFrame:CGRectMake(3, 3, 25, 25)]autorelease];
     CGPoint tagBgCenter = tagBg.center;
-    self.tagBg.layer.cornerRadius = 25 / 2.0;
-    self.tagBg.center = tagBgCenter;
+    tagBg.layer.cornerRadius = 25 / 2.0;
+    tagBg.center = tagBgCenter;
     
     UIView *tagCount = [[UIView alloc]initWithFrame:CGRectMake(2.6, 2.2, 20, 20)];
     tagCount.backgroundColor = [UIColor colorWithRed:182/255.0 green:0 blue:0 alpha:1];
     CGPoint saveCenter = tagCount.center;
     tagCount.layer.cornerRadius = 20 / 2.0;
     tagCount.center = saveCenter;
-    count = [[UILabel alloc]initWithFrame:CGRectMake(3, 4, 13, 12)];
+    count= [[UILabel alloc]initWithFrame:CGRectMake(3, 4, 13, 12)];
     count.backgroundColor = [UIColor colorWithRed:182/255.0 green:0 blue:0 alpha:1];
     count.textColor = [UIColor whiteColor];
     count.textAlignment = UITextAlignmentCenter;
     count.font = [UIFont boldSystemFontOfSize:11];
     [tagCount addSubview:count];
-    [self.tagBg addSubview:tagCount];
+    [tagBg addSubview:tagCount];
     [tagCount release];
-    
-    CGRect viewFrames = CGRectMake(0, 0, 75, 75);
-    overlayView = [[UIImageView alloc]initWithFrame:viewFrames];
-    [overlayView setImage:[UIImage imageNamed:@"selectOverlay.png"]];
-
+    return tagBg;
+   
 }
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	return 79;
@@ -698,7 +682,6 @@
     [operation release];
     [tagRow release];
     [photos release];
-    [tagBg release];
     [super dealloc];    
 }
 

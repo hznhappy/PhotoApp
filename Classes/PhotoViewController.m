@@ -113,7 +113,8 @@
    	self.navigationItem.rightBarButtonItem=edit;
   
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
-    NSURL *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
+    NSString *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
+            NSLog(@"photoSourse:%@",currentPageUrl);
     ppv.url = currentPageUrl;
     [ppv Buttons];
     [self.view addSubview:ppv];

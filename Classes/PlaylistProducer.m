@@ -75,16 +75,13 @@
     { 
         if (group == nil) 
         { allCount=0;
-              NSLog(@"gcount22:%d",allCount);
             ALAssetsGroup *group;
             for(int i=0;i<[assetGroups count];i++)
             {
                 group = (ALAssetsGroup*)[assetGroups objectAtIndex:i];
                 [group setAssetsFilter:[ALAssetsFilter allAssets]];
                 allCount +=[group numberOfAssets];
-                NSLog(@"gcount33:%d",allCount);
             }
-            NSLog(@"gcount11:%d",allCount);
             [self photoCount];
             return;
         }               
@@ -112,7 +109,6 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
 }
 -(void)photoCount
 {
-    NSLog(@"gcount:%d",allCount);
     for (AlbumClass *album in self.playlists) {
         if ([album.albumId intValue]==-1) {
             album.photoCount = allCount;
@@ -120,9 +116,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
             [self getTagUrl];
             NSInteger j =allCount-[self.TagUrl count];
             
-            album.photoCount = j;
-            NSLog(@"item dfdf %d",album.photoCount);
-            
+            album.photoCount = j; 
         }else{
             [self playlistUrl:[album.albumId intValue]];
         album.photoCount = dbCount;
@@ -303,11 +297,6 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         }
         
     }
-    NSLog(@"dbCount:%d",dbCount);
-    /*for (NSString *dataStr in self.SUM) {
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        [dbUrl addObject:dbStr];
-    }*/
 }
 
 

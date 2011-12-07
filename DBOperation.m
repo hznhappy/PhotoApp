@@ -138,8 +138,6 @@ static DBOperation* singleton;
     }	
     sqlite3_finalize(statement);  
     return orderIdList;
-
-    
 }
 -(NSMutableArray *)selectFromRules:(NSString *)sql
 {

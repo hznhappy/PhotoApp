@@ -18,7 +18,7 @@
     DBOperation *da;
     UIScrollView *myscroll;
     UIToolbar *toolBar;
-    NSURL *url;
+    NSString *url;
 }
 @property(nonatomic,retain)UIToolbar *toolBar;
 @property BOOL isOpen;
@@ -26,7 +26,7 @@
 @property CGRect rectForClose;
 @property (nonatomic,retain)NSMutableArray *list;
 @property (nonatomic,retain)UIScrollView *myscroll;
-@property (nonatomic,retain)NSURL *url;
+@property (nonatomic,retain)NSString *url;
 -(void)buttonPressed:(UIButton *)button;
 -(void)viewOpen;
 -(void)viewClose;
