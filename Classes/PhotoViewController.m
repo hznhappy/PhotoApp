@@ -51,6 +51,9 @@
         self.fullScreenPhotos = temp;
         [temp release];
 	}
+//    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
+//    UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];//[asset thumbnail]];
+//    [self.fullScreenPhotos replaceObjectAtIndex:_pageIndex withObject:image];
 	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets) withObject:nil waitUntilDone:NO];//:@selector(readPhotoFromALAssets) withObject:nil];
 	//[self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
     return self;
@@ -142,7 +145,7 @@
 //    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
 //    UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];//[asset thumbnail]];
 //    [self.fullScreenPhotos replaceObjectAtIndex:_pageIndex withObject:image];
-//    [self loadScrollViewWithPage:_pageIndex];
+    //[self loadScrollViewWithPage:_pageIndex];
 
 }
 
@@ -387,12 +390,12 @@ else{
     
 	[self enqueuePhotoViewAtIndex:index];
     
-	[self loadScrollViewWithPage:index-1];
+	//[self loadScrollViewWithPage:index-1];
 	[self loadScrollViewWithPage:index];
-	[self loadScrollViewWithPage:index+1];
+	//[self loadScrollViewWithPage:index+1];
 	
 	
-	[self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:index]).frame animated:animated];
+	[self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:index]).frame animated:NO];
 	
 	
 	if (index + 1 < [self.photoSource count] && (NSNull*)[self.photoViews objectAtIndex:index+1] != [NSNull null]) {
@@ -401,7 +404,6 @@ else{
 	if (index - 1 >= 0 && (NSNull*)[self.photoViews objectAtIndex:index-1] != [NSNull null]) {
 		[((PhotoImageView*)[self.photoViews objectAtIndex:index-1]) killScrollViewZoom];
 	} 	
-   // [self doView];	
 }
 
 - (void)layoutScrollViewSubviews{
@@ -503,9 +505,9 @@ else{
 	
 	if (photoView == nil || (NSNull*)photoView == [NSNull null]) {
 		
-		photoView = [[[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)]autorelease];
+		photoView = [[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
-		//[photoView release];
+		[photoView release];
 		
 	} 
     UIImage *photo = [self.fullScreenPhotos objectAtIndex:page];
@@ -538,7 +540,7 @@ else{
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	NSInteger _index = [self centerPhotoIndex];
-	if (_index >= [self.photoSource count] || _index < 0) {
+	if (_index >= [self.photoSource count] || _index < 0 || (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {
 		return;
 	}
 	
@@ -557,17 +559,17 @@ else{
 	}
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-	NSInteger _index = [self centerPhotoIndex];
-	if (_index >= [self.photoSource count] || _index < 0) {
-		return;
-	}	
-    [self moveToPhotoAtIndex:_index animated:YES];
-}
-
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-	[self layoutScrollViewSubviews];
-}
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//	NSInteger _index = [self centerPhotoIndex];
+//	if (_index >= [self.photoSource count] || _index < 0) {
+//		return;
+//	}	
+//    [self moveToPhotoAtIndex:_index animated:YES];
+//}
+//
+//- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+//	[self layoutScrollViewSubviews];
+//}
 
 
 #pragma mark -
