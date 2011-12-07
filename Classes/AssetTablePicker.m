@@ -518,15 +518,17 @@
             [button addTarget:self action:@selector(viewPhotos:) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:button];
             frame.origin.x = frame.origin.x + frame.size.width + 4;   
-            [self CGRectMake];
             NSString *ROW=[NSString stringWithFormat:@"%d",row];
             if([self.tagRow containsObject:ROW])
             { 
+                [self CGRectMake];
                 [button addSubview:overlayView]; 
                
             }
             if([photos containsObject:url])
-            { [button addSubview:tagBg];
+            { 
+                [self CGRectMake];
+                [button addSubview:tagBg];
                 NSString *selectTag= [NSString stringWithFormat:@"select count(*) from tag where URL='%@'",url];
                 NSInteger count1 = [[[dataBase selectFromTAG:selectTag]objectAtIndex:0]intValue];              
                 count.text =[NSString stringWithFormat:@"%d",count1];

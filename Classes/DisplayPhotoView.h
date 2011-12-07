@@ -14,6 +14,5 @@
 }
 
 @property (nonatomic,retain)UIImage *image;
-- (id)initWithImage:(UIImage *)_image frame:(CGRect)_frame;
 
 @end
