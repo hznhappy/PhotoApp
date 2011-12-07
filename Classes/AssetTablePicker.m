@@ -527,45 +527,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return ceil([self.crwAssets count]/4);//return ceil([self.urlsArray count] / 4.0);
+    return ceil([self.crwAssets count]/4.0);
     
-}
-
--(NSArray*)assetsForIndexPath:(NSIndexPath*)_indexPath {
-    
-	int index = (_indexPath.row*4);
-	int maxIndex = (_indexPath.row*4+3);
-    
-    if(maxIndex < [self.crwAssets count]) {
-        
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
-                [self.crwAssets objectAtIndex:index+2],
-                [self.crwAssets objectAtIndex:index+3],
-                nil];
-    }
-    
-    else if(maxIndex-1 < [self.crwAssets count]) {
-        
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
-                [self.crwAssets objectAtIndex:index+2],
-                nil];
-    }
-    
-    else if(maxIndex-2 < [self.crwAssets count]) {
-        
-        return [NSArray arrayWithObjects:[self.crwAssets objectAtIndex:index],
-                [self.crwAssets objectAtIndex:index+1],
-                nil];
-    }
-    
-    else if(maxIndex-3 < [self.crwAssets count]) {
-        
-        return [NSArray arrayWithObject:[self.crwAssets objectAtIndex:index]];
-    }
-    
-	return nil;
 }
 
 // Customize the appearance of table view cells.
@@ -594,8 +557,7 @@
             ALAsset *asset = [self.crwAssets objectAtIndex:row];
            
             UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
-            [image drawLayer:<#(CALayer *)#> inContext:<#(CGContextRef)#>;
-             
+           
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setFrame:frame];
             [button setImage:image forState:UIControlStateNormal];
@@ -659,8 +621,6 @@
 - (void)dealloc
 {   
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-   NSLog(@"%d is crw count",[crwAssets retainCount]);
-//    NSLog(@"%d is url count",[urlsArray retainCount]);
     [viewBar release];
     [tagBar release];
     [cancel release];

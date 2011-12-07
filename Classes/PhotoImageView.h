@@ -6,6 +6,7 @@
 //  Copyright 2011 chinarewards. All rights reserved.
 //
 @class PhotoScrollView;
+@class DisplayPhotoView;
 #include <AssetsLibrary/AssetsLibrary.h>
 @interface PhotoImageView : UIView <UIScrollViewDelegate>{
 @private

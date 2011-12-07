@@ -9,6 +9,7 @@
 #define ZOOM_VIEW_TAG 0x101
 #import "PhotoImageView.h"
 #import "PhotoScrollView.h"
+#import "DisplayPhotoView.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface RotateGesture : UIRotationGestureRecognizer {}
@@ -51,14 +52,14 @@
 		_scrollView = [scrollView retain];
 		[scrollView release];
 
-		UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:self.bounds];
 		imageView.opaque = YES;
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
 		imageView.tag = ZOOM_VIEW_TAG;
 		[_scrollView addSubview:imageView];
 		_imageView = [imageView retain];
 		[imageView release];
-		
+
 		UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
 		activityView.frame = CGRectMake((CGRectGetWidth(self.frame) / 2) - 11.0f, CGRectGetHeight(self.frame) - 100.0f , 22.0f, 22.0f);
 		activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
@@ -93,6 +94,7 @@
     
     
    	if (self.photo) {
+      
 		self.imageView.image = self.photo;		
 	} 
 	

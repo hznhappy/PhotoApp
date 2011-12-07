@@ -58,6 +58,21 @@
 
 -(void)readPhotoFromALAssets{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    for (NSInteger i = 0; i<[self.photoSource count]; i++) {
+        UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
+        if (i<_pageIndex-2 || i>=_pageIndex+3) {
+            if ([fullImage isKindOfClass:[UIImage class]]) {
+                [self.fullScreenPhotos replaceObjectAtIndex:i withObject:[NSNull null]];
+            }
+        }else{
+            if ((NSNull *)fullImage == [NSNull null] ) {
+                ALAsset *asset = [self.photoSource objectAtIndex:i];
+                UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];//[asset thumbnail]];
+                [self.fullScreenPhotos replaceObjectAtIndex:i withObject:image];
+
+            }
+        }
+    }/*
     for (NSInteger i = _pageIndex-2; i<_pageIndex+3; i++) {
         if (i > 0 || i < [self.photoSource count]) {
             UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
@@ -67,7 +82,7 @@
                 [self.fullScreenPhotos replaceObjectAtIndex:i withObject:image];
             }
         }
-    }
+    }*/
     [pool release];
 }
 #pragma mark -
@@ -124,6 +139,11 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [self moveToPhotoAtIndex:_pageIndex animated:NO];
+//    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
+//    UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];//[asset thumbnail]];
+//    [self.fullScreenPhotos replaceObjectAtIndex:_pageIndex withObject:image];
+//    [self loadScrollViewWithPage:_pageIndex];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -323,12 +343,14 @@ else{
 
 - (void)moveForward:(id)sender{
     
-   	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];	
+   	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];
+	[self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
 }
 
 - (void)moveBack:(id)sender{
   
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
+    [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
 }
 
 - (void)setViewState {	
@@ -360,9 +382,7 @@ else{
 //        return;
 //    }
    	_pageIndex = index;
-   // NSURL *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
-   // ppv.url = currentPageUrl;
-    //[ppv Buttons];
+ 
 	[self setViewState];
     
 	[self enqueuePhotoViewAtIndex:index];
@@ -556,7 +576,7 @@ else{
     [self edit];
     
 }
-
+/*
 - (void)copyPhoto{
 	
 	[[UIPasteboard generalPasteboard] setData:UIImagePNGRepresentation(((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).imageView.image) forPasteboardType:@"public.png"];
@@ -573,7 +593,7 @@ else{
 	[self presentModalViewController:mailViewController animated:YES];
 	[mailViewController release];
 	
-}
+}*/
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{
 	
@@ -636,9 +656,9 @@ else{
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex) {
 		[self markPhoto];
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
-		[self copyPhoto];	
+		//[self copyPhoto];	
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
-		[self emailPhoto];	
+		//[self emailPhoto];	
 	}
 }
 
