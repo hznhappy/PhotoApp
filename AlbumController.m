@@ -40,6 +40,7 @@
     database=[DBOperation getInstance];
     ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
     p = [[AssetProducer alloc]initWithAssetsLibrary:lib];
+    [lib release];
     self.playList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
     [lib release];
     [self setWantsFullScreenLayout:YES];

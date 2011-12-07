@@ -11,7 +11,6 @@
 #import "AssetTablePicker.h"
 #import "AssetRef.h"
 #import "PhotoViewController.h"
-
 @implementation PlaylistRootViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -47,7 +46,7 @@
     [al release];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushAssetsTablePicker:) name:@"pushThumbnailView" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getPhotoViewer:) name:@"viewPhotos" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushPhotosBrowser:) name:@"viewPhotos" object:nil];
 }
 
 -(void)pushAssetsTablePicker:(NSNotification *)note{
@@ -65,11 +64,12 @@
     [ap release];    
 }
 
--(void)getPhotoViewer:(NSNotification *)note{
+-(void)pushPhotosBrowser:(NSNotification *)note{
     NSDictionary *dicOfPhotoViewer = [note userInfo];
     NSString *key = [[dicOfPhotoViewer allKeys] objectAtIndex:0];
     NSMutableArray *assets = [dicOfPhotoViewer valueForKey:key];
     PhotoViewController *pc = [[PhotoViewController alloc]initWithPhotoSource:assets currentPage:[key integerValue]];
+    //PhotosBrowser *pc = [[PhotosBrowser alloc]initWithPhotoSource:assets currentPage:[key integerValue]];
     [self pushViewController:pc animated:YES];
     [pc release];
 }
