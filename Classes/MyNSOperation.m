@@ -51,14 +51,13 @@
         
     
     
-    ALAssetsLibrary *library = [[ALAssetsLibrary alloc]init];
+    ALAssetsLibrary *library = [[[ALAssetsLibrary alloc]init]autorelease];
     for (NSURL *url in self.allUrls) {
         if ([self isCancelled]) {
             return;
         }
         [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
     }
-    [library release];
     [pool release];
 }
 

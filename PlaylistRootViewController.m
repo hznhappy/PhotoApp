@@ -11,7 +11,6 @@
 #import "AssetTablePicker.h"
 #import "AssetRef.h"
 #import "PhotoViewController.h"
-#import "PhotosBrowser.h"
 @implementation PlaylistRootViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil

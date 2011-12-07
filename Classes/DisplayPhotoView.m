@@ -27,7 +27,7 @@
 }
 - (void)drawRect:(CGRect)rect {
     
- 	CGContextRef context = UIGraphicsGetCurrentContext();
+ 	//CGContextRef context = UIGraphicsGetCurrentContext();
 #ifdef NEW_DRAW
     // get the scale from the context by getting the current transform matrix, then asking for
     // its "a" component, which is one of the two scale components. We could also ask for "d".

@@ -38,7 +38,9 @@
 -(void)viewDidLoad
 {   
     database=[DBOperation getInstance];
-    p = [[AssetProducer alloc]initWithAssetsLibrary: [[ALAssetsLibrary alloc] init]];
+    ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
+    p = [[AssetProducer alloc]initWithAssetsLibrary:lib];
+    [lib release];
     self.playList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
 
     [self setWantsFullScreenLayout:YES];
@@ -150,7 +152,7 @@
         return cell;
 }
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSMutableArray *assets = [[NSMutableArray alloc]init ];
+    NSMutableArray *assets = [[[NSMutableArray alloc]init ]autorelease];
     if([[self.playList.list objectAtIndex:indexPath.row]intValue]==-1)
     {
     for (NSString *url in p.assetsUrlOrdering) {
