@@ -525,10 +525,10 @@
 	}
 	
 	if (_pageIndex != _index && !_rotating) {
-        ALAsset *asset = [self.photoSource objectAtIndex:_index];
-        NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
-        ppv.url = currentPageUrl;
-        [ppv Buttons];
+//        ALAsset *asset = [self.photoSource objectAtIndex:_index];
+//        NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+//        ppv.url = currentPageUrl;
+//        [ppv Buttons];
         
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
