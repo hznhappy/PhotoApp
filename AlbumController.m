@@ -179,7 +179,8 @@
         }
         NSLog(@"assetsCount:%d",[assets count]);
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:assets,@"assets",[self.playList.list objectAtIndex:indexPath.row],@"ID",nil];
+   // NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushThumbnailView" object:nil userInfo:dic];
     [table deselectRowAtIndexPath:indexPath animated:YES];
     self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
@@ -204,7 +205,7 @@
         
         PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
         detailController.listName =[NSString stringWithFormat:@"%@",database.name];
-        detailController.Transtion=[NSString stringWithFormat:@"%@",database.Transtion];    
+        detailController.Transtion=[NSString stringWithFormat:@"%@",database.Transtion];
         detailController.a=[NSString stringWithFormat:@"%@",[self.playList.list objectAtIndex:indexPath.row]];
         detailController.hidesBottomBarWhenPushed = YES;
         
@@ -249,8 +250,6 @@
 
 
 - (void) albumSelected: (id) sender {
-    NSLog(@"Album Selected");
-    
 }
 
 #pragma mark -
@@ -260,7 +259,6 @@
     [p release];
     [playList release];
     [tableView release];
-
     [super dealloc];
 }
 @end

@@ -73,7 +73,6 @@
                          failureBlock:assetGroupEnumberatorFailure];
    
     [pool release];
-    NSLog(@"assert:%@",self.assets);
     
 }
 

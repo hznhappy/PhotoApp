@@ -13,9 +13,6 @@ int j=1,count=0;
 -(void)viewDidLoad
 {       
     bool1 = NO;
-    
-   	NSLog(@"tonzghi");
-    
     if(bo!=nil)
     {  
         [self creatButton];
@@ -112,11 +109,8 @@ int j=1,count=0;
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
 {
 
-       NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
+    NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
     ABRecordID recId = ABRecordGetRecordID(person);
-    
-    NSLog(@"%@",readName);
-    NSLog(@"%d",recId);
     fid=[NSString stringWithFormat:@"%d",recId];
     fname=[NSString stringWithFormat:@"%@",readName];
     if([list containsObject:fid])
@@ -289,7 +283,6 @@ int j=1,count=0;
   }
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
    NSString *name=[da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
-    NSLog(@" UserName : %@",name);
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",name,@"UserName",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
                                                        object:self 

@@ -59,6 +59,7 @@
     AssetTablePicker *ap = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
     ap.hidesBottomBarWhenPushed = YES;
     ap.crwAssets = assets;
+    ap.PLAYID=[dic valueForKey:@"ID"];
     [assets release];
     [self pushViewController:ap animated:YES];
     [ap release];    

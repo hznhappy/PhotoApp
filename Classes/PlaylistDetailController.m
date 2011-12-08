@@ -47,10 +47,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
@@ -76,7 +73,7 @@
     NSMutableArray *tempArray = [[NSMutableArray alloc]init];
     NSMutableArray *playArray = [[NSMutableArray alloc]init];
     NSMutableArray *IdOrderArray = [[NSMutableArray alloc]init];
-     NSMutableArray *IdArray = [[NSMutableArray alloc]init];
+    NSMutableArray *IdArray = [[NSMutableArray alloc]init];
     NSMutableArray *temArray = [[NSMutableArray alloc]init];
     self.selectedIndexPaths = temArray;
     self.userNames = tempArray;
@@ -111,10 +108,6 @@
 #pragma mark UITableView  method
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
-}
--(void)international
-{
-    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     switch (section) {
@@ -205,7 +198,7 @@
                 [selectButton setImage:selectImg forState:UIControlStateNormal];
                 NSMutableArray *PlayRules=[dataBase selectFromRules:selectRules];
                 for(NSString * rule in PlayRules)
-                {NSLog(@"ew%d",[rule intValue]);
+                {
                     if([rule intValue]==1)
                     {
                         [stateButton setTitle:MUST forState:UIControlStateNormal];
@@ -242,7 +235,6 @@
         animateController.tranStyle = self.tranLabel.text;
         animateController.play_id=a;
         animateController.Text=textField.text;
-        NSLog(@"anima%@",animateController.play_id);
         [self.navigationController pushViewController:animateController animated:YES];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [animateController release];
@@ -320,11 +312,7 @@
         }
     }
     }
-   /* NSDictionary *dic1 = [NSDictionary dictionaryWithObjectsAndKeys:@"def",@"name",nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"addplay" 
-                                                       object:self 
-                                                     userInfo:dic1];*/
-}
+  }
 #pragma mark -
 #pragma mark media picker delegate method
 - (void) mediaPicker: (MPMediaPickerController *) mediaPicker didPickMediaItems: (MPMediaItemCollection *) mediaItemCollection
@@ -396,10 +384,8 @@
 -(void)changeState:(id)sender{
     UIButton *button = (UIButton *)sender;
     UITableViewCell *cell = (UITableViewCell *)[button superview];
-    NSLog(@"rrrr%@",[button superview]);
     NSIndexPath *index = [listTable indexPathForCell:cell];
     NSInteger Row=index.row;
-    NSLog(@"FFFFF%d",Row);
     int playID=0;
         playID=[[playIdList objectAtIndex:[playIdList count]-1]intValue]+1;
        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
@@ -483,10 +469,6 @@
     [sender resignFirstResponder];
     key=1;
    }
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    NSLog(@"wpro");
-}
 -(void)textFieldDidEndEditing:(UITextField *)textField1
 {
     NSLog(@"end");
@@ -611,9 +593,6 @@
     self.tranLabel.text = labelText;
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-     NSLog(@"LOOOOO");
-   // [textField resignFirstResponder];
-   
 }
 
 - (void)viewDidUnload

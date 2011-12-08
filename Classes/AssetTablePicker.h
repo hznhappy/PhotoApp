@@ -95,12 +95,11 @@
 -(IBAction)selectFromFavoriteNames;
 -(IBAction)selectFromAllNames;
 -(void)setPhotoTag;
--(void)AddUrl:(NSNotification *)note;
--(void)RemoveUrl:(NSNotification *)note;
 -(void)AddUser:(NSNotification *)note;
 -(void)creatTable;
 -(void)viewPhotos:(id)sender;
 -(UIImageView *)CGRectMake;
 -(UIView *)CGRectMake1;
 -(void)getAssets:(ALAsset *)asset;
+-(void)EditPhotoTag;
 @end

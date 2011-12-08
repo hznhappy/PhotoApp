@@ -67,18 +67,6 @@
     [temp release];
     NSString *a=NSLocalizedString(@"Cancel", @"title");
     cancel = [[UIBarButtonItem alloc]initWithTitle:a style:UIBarButtonItemStyleDone target:self action:@selector(cancelTag)];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self 
-                                            selector:@selector(setEditOverlay:) 
-                                                name:@"Set Overlay" 
-                                              object:nil];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self 
-                                            selector:@selector(getSelectedUrls:) 
-                                                name:@"selectedUrls" 
-                                              object:nil];
-      
-
     alert1 = [[UIAlertView alloc]initWithTitle:@"请输入密码"  message:@"\n" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: @"取消",nil];  
     passWord = [[UITextField alloc] initWithFrame:CGRectMake(12, 40, 260, 30)];  
     passWord.backgroundColor = [UIColor whiteColor];  
@@ -86,17 +74,19 @@
     [alert1 addSubview:passWord];  
     ME=NO;
     PASS=NO;
-    //[self performSelectorInBackground:@selector(loadPhotos) withObject:nil];
     [self.table performSelector:@selector(reloadData) withObject:nil afterDelay:.3];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUrl:) name:@"AddUrl" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(RemoveUrl:) name:@"RemoveUrl" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddUser:) name:@"AddUser" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPhotoTag) name:@"setphotoTag" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(EditPhotoTag)name:@"EditPhotoTag" object:nil];
     [self setPhotoTag];
 }
 
 -(void)getAssets:(ALAsset *)asset{
     [self.crwAssets addObject:asset];
+}
+-(void)EditPhotoTag
+{
+    [self setPhotoTag];
+    [self.table reloadData];
 }
 
 -(void)loadPhotos:(NSArray *)array{
@@ -104,7 +94,6 @@
     NSDate *star = [NSDate date];
     NSInteger beginIndex = [[array objectAtIndex:0]integerValue];
     NSInteger endIndex = [[array objectAtIndex:1]integerValue];
-    NSLog(@"begin index is %d",beginIndex);
     for (NSInteger i = beginIndex; i<=endIndex; i++) {
         ALAssetsLibraryAssetForURLResultBlock assetRseult = ^(ALAsset *result) 
     {
@@ -131,13 +120,7 @@
         [alert release];
         NSLog(@"A problem occured %@", [error description]);                                     
     };    
-    
-        
-//            if ([op isCancelled]) {
-//                NSLog(@"return thread");
-//                return;
-//        }
-        [self.library assetForURL:[self.urlsArray objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
+         [self.library assetForURL:[self.urlsArray objectAtIndex:i] resultBlock:assetRseult failureBlock:failureBlock];
     }
     [self.table performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
    // [self performSelectorOnMainThread:@selector(setPhotoTag) withObject:nil waitUntilDone:NO];
@@ -224,30 +207,6 @@
     [dataBase createTable:createPlayTable];
 
 }
--(void)AddUrl:(NSNotification *)note{
-    NSDictionary *dic = [note userInfo];
-    NSString *str = [dic objectForKey:@"index"];
-    NSLog(@"index:%@",str);
-    [UrlList addObject:[self.urlsArray objectAtIndex:[str integerValue]]];
-    if([UrlList count]!=0)
-    {
-        save.enabled = YES;
-        reset.enabled = YES;
-    }
-}
--(void)RemoveUrl:(NSNotification *)note
-{
-    NSDictionary *dic = [note userInfo];
-    NSString *str = [dic objectForKey:@"Removeurl"];
-    [UrlList removeObject:[self.urlsArray objectAtIndex:[str integerValue]]];
-    if([UrlList count]==0)
-    {
-        save.enabled = NO;
-        reset.enabled = NO;
-    }
-    
-    
-}
 -(void)AddUser:(NSNotification *)note
 {
     NSDictionary *dic = [note userInfo];
@@ -307,7 +266,7 @@
     }
 }
 -(IBAction)lockButtonPressed{
-     NSString *a=NSLocalizedString(@"Lock", @"button");
+    NSString *a=NSLocalizedString(@"Lock", @"button");
     NSString *b=NSLocalizedString(@"UnLock", @"button");
     if([self.lock.title isEqualToString:a])
     { NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults]; 
@@ -402,6 +361,7 @@
 -(IBAction)playPhotos{
     PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:self.crwAssets currentPage:0];
     [dataBase getUserFromPlayTable:PLAYID];
+    NSLog(@"PLAYID:%@",PLAYID);
     [playPhotoController fireTimer:dataBase.Transtion];
     [self.navigationController pushViewController:playPhotoController animated:YES];
     [playPhotoController release];
@@ -558,7 +518,8 @@
     UIButton *button1= (UIButton *)sender;
     NSLog(@"button tag:%d",button1.tag);
     NSString *row=[NSString stringWithFormat:@"%d",button1.tag];
-    
+    ALAsset *asset = [self.crwAssets objectAtIndex:button1.tag];
+    NSString *url = [[[asset defaultRepresentation]url] description];
     if(action==YES)
     {
         NSDictionary *dic = [NSDictionary dictionaryWithObject:self.crwAssets forKey:[NSString stringWithFormat:@"%d",button1.tag]];
@@ -568,16 +529,12 @@
     {
         if([self.tagRow containsObject:row])
         {
-            //[button1.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            [self.UrlList removeObject:url];
             [self.tagRow removeObject:row];
-            NSLog(@"remove:%@",button1.subviews);
         }
         else
-        { ALAsset *asset = [self.crwAssets objectAtIndex:button1.tag];
-            NSString *url = [[[asset defaultRepresentation]url] description];
-            [self.UrlList addObject:url];
+        {   [self.UrlList addObject:url];
             [self.tagRow addObject:row];
-            NSLog(@"add");
         }
     }
     [self.table reloadData];

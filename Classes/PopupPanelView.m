@@ -45,8 +45,6 @@
     [da createTable:createTag]; 
     NSString *selectTag= [NSString stringWithFormat:@"select ID from tag where url='%@'",self.url];
     self.list=[da selectFromTAG:selectTag];
-    NSLog(@"OOO%@",self.list);
-    
 }
 CGFloat btx = 20;
 CGFloat bty = 20;
@@ -83,6 +81,10 @@ CGFloat byheight = 30;
     NSString *deleteTag= [NSString stringWithFormat:@"DELETE FROM TAG WHERE ID='%@' and url='%@'",[self.list objectAtIndex:tag],self.url];
     [da deleteDB:deleteTag];
     [self Buttons];
+    NSDictionary *dic= [NSDictionary dictionaryWithObjectsAndKeys:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"EditPhotoTag" 
+                                                       object:self 
+                                                     userInfo:dic];
     
    }
 -(void)viewOpen{

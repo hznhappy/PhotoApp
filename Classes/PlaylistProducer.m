@@ -51,21 +51,6 @@
         [self.playlists addObject:album];
         [album release];
     }
-
-        //NSInteger allPhotoscount =allCount;
-      /*  if([_id intValue]==-1)
-        {
-            album.photoCount = allCount;
-            NSLog(@"photoCount:%d",album.photoCount);
-        }
-        else if([_id intValue]==-2)
-        {
-         //album.photoCount=[]  
-            album.photoCount=allCount-[TagUrl count];
-        }*/
-         // .....
-         
-      
 }
 -(void)count
 {
@@ -251,7 +236,6 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
                 
                 self.SUM=t;
                 dbCount=self.allCount;
-                NSLog(@"dbCount11:%d",dbCount);
                 [t release];
                 for (NSString *data in play_url0)
                 {
@@ -283,8 +267,6 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         {
             NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId2 objectAtIndex:i]intValue]];
             NSMutableSet *play_url2=[da selectFromTAG1:selectTag];
-            
-            NSLog(@"WE%@",playlist_UserId2);
             if([self.SUM count]==0)
                 
             {

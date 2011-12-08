@@ -114,12 +114,11 @@
    	self.navigationItem.rightBarButtonItem=edit;
   
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
-    NSString *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
-            NSLog(@"photoSourse:%@",currentPageUrl);
+    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
+    NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
     ppv.url = currentPageUrl;
     [ppv Buttons];
     [self.view addSubview:ppv];
-    //db = [DBOperation getInstance];
     ppv.hidden=YES;
         
 }
@@ -359,7 +358,10 @@ else{
 	
 }
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
-    NSLog(@"INDEX:%d",index);
+    ALAsset *asset = [self.photoSource objectAtIndex:index];
+    NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+    ppv.url = currentPageUrl;
+    [ppv Buttons];
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
    	_pageIndex = index;
  
@@ -384,9 +386,7 @@ else{
 }
 
 - (void)layoutScrollViewSubviews{
-	
 	NSInteger _index = [self currentPhotoIndex];
-	
 	for (NSInteger page = _index -1; page < _index+2; page++) {
 		if (page >= 0 && page < [self.photoSource count]){
 			
@@ -464,7 +464,7 @@ else{
 	return nil;
 	
 }
-
+/////////////
 - (void)loadScrollViewWithPage:(NSInteger)page{
     if (page < 0) return;
     if (page >= [self.photoSource count]) return;
@@ -517,12 +517,17 @@ else{
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	NSInteger _index = [self centerPhotoIndex];
+   
 	if (_index >= [self.photoSource count] || _index < 0 || (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {
 		return;
 	}
 	
 	if (_pageIndex != _index && !_rotating) {
-        
+        ALAsset *asset = [self.photoSource objectAtIndex:_index];
+        NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+        ppv.url = currentPageUrl;
+        [ppv Buttons];
+
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
         
@@ -535,45 +540,12 @@ else{
 		
 	}
 }
-
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-//	NSInteger _index = [self centerPhotoIndex];
-//	if (_index >= [self.photoSource count] || _index < 0) {
-//		return;
-//	}	
-//    [self moveToPhotoAtIndex:_index animated:YES];
-//}
-//
-//- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-//	[self layoutScrollViewSubviews];
-//}
-
-
 #pragma mark -
 #pragma mark Actions
 - (void)markPhoto{
     [self edit];
     
 }
-/*
-- (void)copyPhoto{
-	
-	[[UIPasteboard generalPasteboard] setData:UIImagePNGRepresentation(((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).imageView.image) forPasteboardType:@"public.png"];
-	
-}
-
-- (void)emailPhoto{
-	
-	MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
-	[mailViewController setSubject:@"Shared Photo"];
-	[mailViewController addAttachmentData:[NSData dataWithData:UIImagePNGRepresentation(((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).imageView.image)] mimeType:@"png" fileName:@"Photo.png"];
-	mailViewController.mailComposeDelegate = self;
-	
-	[self presentModalViewController:mailViewController animated:YES];
-	[mailViewController release];
-	
-}*/
-
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{
 	
 	[self dismissModalViewControllerAnimated:YES];
@@ -676,7 +648,6 @@ else{
     [self.scrollView.layer addAnimation:animation forKey:@"animation"];
     NSInteger _index = self._pageIndex;
 	if (_index >= [self.photoSource count] || _index < 0) {
-        //[timer invalidate];
         _pageIndex = 0;
         [self moveToPhotoAtIndex:_pageIndex animated:NO];
     }else{
