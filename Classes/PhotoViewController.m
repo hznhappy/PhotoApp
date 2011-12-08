@@ -51,15 +51,15 @@
         self.fullScreenPhotos = temp;
         [temp release];
 	}
-
-	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets) withObject:nil waitUntilDone:NO];
-   
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
     return self;
 }
 
--(void)readPhotoFromALAssets{
+-(void)readPhotoFromALAssets:(NSString *)pageIndex{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    for (NSInteger i = _pageIndex-2; i<_pageIndex+3; i++) {
+    NSInteger index = [pageIndex integerValue];
+    for (NSInteger i = index-2; i<index+3; i++) {
         if (i >= 0 && i < [self.photoSource count]) {
             UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
             if ((NSNull *)fullImage == [NSNull null] ) {
@@ -69,6 +69,7 @@
             }
         }
     }
+
     [pool release];
 }
 
@@ -101,7 +102,6 @@
 		[self.view addSubview:_scrollView];
         
 	}
-  
     NSMutableArray *views = [[NSMutableArray alloc] init];
 	for (unsigned i = 0; i < [self.photoSource count]; i++) {
 		[views addObject:[NSNull null]];
@@ -326,13 +326,15 @@ else{
 - (void)moveForward:(id)sender{
     
    	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];
-	[self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
 }
 
 - (void)moveBack:(id)sender{
   
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
-    [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
 }
 
 - (void)setViewState {	
@@ -525,8 +527,9 @@ else{
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
         
-        [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
-       		[self setViewState];
+        NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+        [self performSelectorInBackground:@selector(readPhotoFromALAssets:) withObject:pageIndex];
+        [self setViewState];
 		
 		if (![scrollView isTracking]) {
 			[self layoutScrollViewSubviews];
@@ -535,17 +538,17 @@ else{
 	}
 }
 
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-//	NSInteger _index = [self centerPhotoIndex];
-//	if (_index >= [self.photoSource count] || _index < 0) {
-//		return;
-//	}	
-//    [self moveToPhotoAtIndex:_index animated:YES];
-//}
-//
-//- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-//	[self layoutScrollViewSubviews];
-//}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+	NSInteger _index = [self centerPhotoIndex];
+	if (_index >= [self.photoSource count] || _index < 0) {
+		return;
+	}	
+    [self moveToPhotoAtIndex:_index animated:YES];
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+	[self layoutScrollViewSubviews];
+}
 
 
 #pragma mark -
@@ -554,7 +557,7 @@ else{
     [self edit];
     
 }
-/*
+
 - (void)copyPhoto{
 	
 	[[UIPasteboard generalPasteboard] setData:UIImagePNGRepresentation(((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).imageView.image) forPasteboardType:@"public.png"];
@@ -571,7 +574,7 @@ else{
 	[self presentModalViewController:mailViewController animated:YES];
 	[mailViewController release];
 	
-}*/
+}
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{
 	
@@ -649,8 +652,8 @@ else{
 }
 -(void)playPhoto{
     _pageIndex+=1;
-    [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
-    [self setBarsHidden:YES animated:YES];
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];    [self setBarsHidden:YES animated:YES];
     NSString *animateStyle = [timer userInfo];
     CATransition *animation = [CATransition animation];
     animation.delegate = self;
@@ -677,9 +680,9 @@ else{
 	if (_index >= [self.photoSource count] || _index < 0) {
         //[timer invalidate];
         _pageIndex = 0;
-        [self moveToPhotoAtIndex:_index animated:NO];
+        [self moveToPhotoAtIndex:_pageIndex animated:NO];
     }else{
-        [self moveToPhotoAtIndex:_index animated:NO];
+        [self moveToPhotoAtIndex:_pageIndex animated:NO];
     }
 }
 #pragma mark -

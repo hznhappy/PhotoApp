@@ -478,9 +478,10 @@
 #pragma mark UITableViewDataSource and Delegate Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    return ceil([self.crwAssets count]/4.0);
-    
+    if (UIInterfaceOrientationIsLandscape(oritation)) {
+        return ceil([self.crwAssets count]/6.0);
+    }else
+        return ceil([self.crwAssets count]/4.0);    
 }
 
 // Customize the appearance of table view cells.
