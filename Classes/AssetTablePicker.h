@@ -54,10 +54,9 @@
     BOOL PASS;
     NSNumber *val;
     UITextField *passWord2;
-    UIView *tagBg;
-     UILabel *count;
-      UIImageView *overlayView;
-    BOOL overlay;
+   // UIView *tagBg;
+    UILabel *count;
+   // UIImageView *overlayView;
     NSMutableArray *tagRow;
     NSMutableArray *destinctUrl;
     NSMutableArray *photos;
@@ -77,7 +76,7 @@
 @property (nonatomic,retain)NSMutableArray *tagRow;
 @property(nonatomic,retain)NSString *UserId;
 @property(nonatomic,retain)NSString *UserName;
-@property(nonatomic,retain)UIView *tagBg;
+//@property(nonatomic,retain)UIView *tagBg;
 @property(nonatomic,retain)NSMutableArray *destinctUrl;
 @property (nonatomic,retain)NSString *PLAYID;
 @property (nonatomic,retain)NSMutableArray *operations;
@@ -96,11 +95,11 @@
 -(IBAction)selectFromFavoriteNames;
 -(IBAction)selectFromAllNames;
 -(void)setPhotoTag;
--(void)AddUrl:(NSNotification *)note;
--(void)RemoveUrl:(NSNotification *)note;
 -(void)AddUser:(NSNotification *)note;
 -(void)creatTable;
 -(void)viewPhotos:(id)sender;
--(void)CGRectMake;
+-(UIImageView *)CGRectMake;
+-(UIView *)CGRectMake1;
 -(void)getAssets:(ALAsset *)asset;
+-(void)EditPhotoTag;
 @end

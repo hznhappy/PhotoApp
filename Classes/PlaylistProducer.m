@@ -51,21 +51,6 @@
         [self.playlists addObject:album];
         [album release];
     }
-
-        //NSInteger allPhotoscount =allCount;
-      /*  if([_id intValue]==-1)
-        {
-            album.photoCount = allCount;
-            NSLog(@"photoCount:%d",album.photoCount);
-        }
-        else if([_id intValue]==-2)
-        {
-         //album.photoCount=[]  
-            album.photoCount=allCount-[TagUrl count];
-        }*/
-         // .....
-         
-      
 }
 -(void)count
 {
@@ -75,16 +60,13 @@
     { 
         if (group == nil) 
         { allCount=0;
-              NSLog(@"gcount22:%d",allCount);
             ALAssetsGroup *group;
             for(int i=0;i<[assetGroups count];i++)
             {
                 group = (ALAssetsGroup*)[assetGroups objectAtIndex:i];
                 [group setAssetsFilter:[ALAssetsFilter allAssets]];
                 allCount +=[group numberOfAssets];
-                NSLog(@"gcount33:%d",allCount);
             }
-            NSLog(@"gcount11:%d",allCount);
             [self photoCount];
             return;
         }               
@@ -112,7 +94,6 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
 }
 -(void)photoCount
 {
-    NSLog(@"gcount:%d",allCount);
     for (AlbumClass *album in self.playlists) {
         if ([album.albumId intValue]==-1) {
             album.photoCount = allCount;
@@ -120,9 +101,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
             [self getTagUrl];
             NSInteger j =allCount-[self.TagUrl count];
             
-            album.photoCount = j;
-            NSLog(@"item dfdf %d",album.photoCount);
-            
+            album.photoCount = j; 
         }else{
             [self playlistUrl:[album.albumId intValue]];
         album.photoCount = dbCount;
@@ -241,7 +220,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         dbCount=[SUM count];
     }
     if(P==YES)
-    {NSLog(@"yes");
+    {
         NSString *selectRules0= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
         NSMutableArray *playlist_UserId0=[da selectFromRules:selectRules0];
         for(int i=0;i<[playlist_UserId0 count];i++)
@@ -257,7 +236,6 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
                 
                 self.SUM=t;
                 dbCount=self.allCount;
-                NSLog(@"dbCount11:%d",dbCount);
                 [t release];
                 for (NSString *data in play_url0)
                 {
@@ -289,8 +267,6 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         {
             NSString *selectTag= [NSString stringWithFormat:@"select URL from tag where ID=%d",[[playlist_UserId2 objectAtIndex:i]intValue]];
             NSMutableSet *play_url2=[da selectFromTAG1:selectTag];
-            
-            NSLog(@"WE%@",playlist_UserId2);
             if([self.SUM count]==0)
                 
             {
@@ -303,11 +279,6 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         }
         
     }
-    NSLog(@"dbCount:%d",dbCount);
-    /*for (NSString *dataStr in self.SUM) {
-        NSURL *dbStr = [NSURL URLWithString:dataStr];
-        [dbUrl addObject:dbStr];
-    }*/
 }
 
 

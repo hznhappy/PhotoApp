@@ -24,7 +24,6 @@
 - (void)autosizePopoverToImageSize:(CGSize)imageSize photoImageView:(PhotoImageView*)photoImageView;
 @end
 
-
 @implementation PhotoViewController
 //@synthesize listid;
 @synthesize ppv;
@@ -69,7 +68,7 @@
             }
         }
     }
-
+    
     [pool release];
 }
 
@@ -108,20 +107,20 @@
 	}
 	self.photoViews = views;
     [views release];
-
+    
     editing=NO;
-     NSString *u=NSLocalizedString(@"Edit", @"title");
+    NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;
-  
+    
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
-    NSURL *currentPageUrl = [self.photoSource objectAtIndex:_pageIndex];
+    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
+    NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
     ppv.url = currentPageUrl;
     [ppv Buttons];
     [self.view addSubview:ppv];
-    //db = [DBOperation getInstance];
     ppv.hidden=YES;
-        
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -171,7 +170,7 @@
     }
     
 }
- 
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     
     [self setupScrollViewContentSize];
@@ -189,25 +188,25 @@
 }
 -(void)edit
 {
-      NSString *a=NSLocalizedString(@"Edit", @"title");
-      NSString *b=NSLocalizedString(@"Done", @"title");
+    NSString *a=NSLocalizedString(@"Edit", @"title");
+    NSString *b=NSLocalizedString(@"Done", @"title");
     
     if (editing)
-{  ppv.hidden=NO;
-    
-    ppv.alpha=0.4;
-    
-     [self.view addSubview:ppv];
-    edit.style = UIBarButtonItemStyleBordered;
-    edit.title = a;
-    [ppv viewClose];
-}
-else{
-    ppv.hidden=NO;
-    edit.style = UIBarButtonItemStyleDone;
-    edit.title = b;
-    [ppv viewOpen];
-}
+    {  ppv.hidden=NO;
+        
+        ppv.alpha=0.4;
+        
+        [self.view addSubview:ppv];
+        edit.style = UIBarButtonItemStyleBordered;
+        edit.title = a;
+        [ppv viewClose];
+    }
+    else{
+        ppv.hidden=NO;
+        edit.style = UIBarButtonItemStyleDone;
+        edit.title = b;
+        [ppv viewOpen];
+    }
     editing = !editing;
 }
 - (void)done:(id)sender {
@@ -331,7 +330,7 @@ else{
 }
 
 - (void)moveBack:(id)sender{
-  
+    
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
     NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
 	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
@@ -361,9 +360,13 @@ else{
 	
 }
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
+    ALAsset *asset = [self.photoSource objectAtIndex:index];
+    NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+    ppv.url = currentPageUrl;
+    [ppv Buttons];
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
    	_pageIndex = index;
- 
+    
 	[self setViewState];
     
 	[self enqueuePhotoViewAtIndex:index];
@@ -385,9 +388,7 @@ else{
 }
 
 - (void)layoutScrollViewSubviews{
-	
 	NSInteger _index = [self currentPhotoIndex];
-	
 	for (NSInteger page = _index -1; page < _index+2; page++) {
 		if (page >= 0 && page < [self.photoSource count]){
 			
@@ -493,7 +494,7 @@ else{
         return;
     }
     [photoView setPhoto:[self.fullScreenPhotos objectAtIndex:page]];
-       
+    
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
 	}
@@ -518,11 +519,16 @@ else{
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	NSInteger _index = [self centerPhotoIndex];
+    
 	if (_index >= [self.photoSource count] || _index < 0 || (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {
 		return;
 	}
 	
 	if (_pageIndex != _index && !_rotating) {
+        ALAsset *asset = [self.photoSource objectAtIndex:_index];
+        NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+        ppv.url = currentPageUrl;
+        [ppv Buttons];
         
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
@@ -637,9 +643,9 @@ else{
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex) {
 		[self markPhoto];
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
-		//[self copyPhoto];	
+		[self copyPhoto];	
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
-		//[self emailPhoto];	
+		[self emailPhoto];	
 	}
 }
 
@@ -647,7 +653,6 @@ else{
 #pragma mark timer method
 
 -(void)fireTimer:(NSString *)animateStyle{
-    //[self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
     timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
 }
 -(void)playPhoto{
@@ -678,7 +683,6 @@ else{
     [self.scrollView.layer addAnimation:animation forKey:@"animation"];
     NSInteger _index = self._pageIndex;
 	if (_index >= [self.photoSource count] || _index < 0) {
-        //[timer invalidate];
         _pageIndex = 0;
         [self moveToPhotoAtIndex:_pageIndex animated:NO];
     }else{

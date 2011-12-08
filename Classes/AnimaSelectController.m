@@ -103,7 +103,6 @@
         if(Text==nil||Text.length==0)
         {
           int  playID=[[PlayIdList objectAtIndex:[PlayIdList count]-1]intValue]+1;
-            NSLog(@"HAHA%d",playID);
             NSString *updatePlayTable= [NSString stringWithFormat:@"UPDATE %@ SET Transtion='%@' WHERE playlist_id=%d",PlayTable,[Trans_list objectAtIndex:indexPath.row],playID];
             NSLog(@"%@",updatePlayTable);
             [database updateTable:updatePlayTable];
@@ -112,7 +111,6 @@
         else
         {
           int playID=[[PlayIdList objectAtIndex:[PlayIdList count]-1]intValue];
-             NSLog(@"HeHe%d",playID);
             NSString *updatePlayTable= [NSString stringWithFormat:@"UPDATE %@ SET Transtion='%@' WHERE playlist_id=%d",PlayTable,[Trans_list objectAtIndex:indexPath.row],playID];
             NSLog(@"%@",updatePlayTable);
             [database updateTable:updatePlayTable];

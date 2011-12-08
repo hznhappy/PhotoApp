@@ -28,10 +28,6 @@
     self.ready = NO;
     gCount=0;
     [self fetchAssets];
-    //[self performSelectorOnMainThread:@selector(fetchAssets) withObject:nil waitUntilDone:YES];
-    //[self performSelectorOnMainThread:@selector(count) withObject:nil waitUntilDone:YES];
-    //[self performSelectorOnMainThread:@selector(doFetchPlaylists) withObject:nil waitUntilDone:YES];
-    //[self performSelector:@selector(doFetchPlaylists) withObject:nil afterDelay:0.05];
     return self;
 }
 -(void)fetchAssets{
@@ -73,7 +69,6 @@
                          failureBlock:assetGroupEnumberatorFailure];
    
     [pool release];
-    NSLog(@"assert:%@",self.assets);
     
 }
 

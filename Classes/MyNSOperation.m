@@ -57,6 +57,7 @@
             return;
         }
         [library assetForURL:url resultBlock:assetRseult failureBlock:failureBlock];
+         
     }
     [pool release];
 }
@@ -72,11 +73,11 @@
         if ([self isCancelled]) {
             return;
         }
-
     }
     @catch (NSException *exception) {
         NSLog(@"exception %@ and urls is %d",exception,[self.allUrls count]);
     }
+   
 }
 
 
