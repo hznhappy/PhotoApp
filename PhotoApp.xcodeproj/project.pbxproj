@@ -16,6 +16,8 @@
 		184FCFF9147202D70082B51D /* ThumbnailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FCFF8147202D70082B51D /* ThumbnailCell.m */; };
 		184FD004147208F20082B51D /* AnimaSelectController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FD003147208F20082B51D /* AnimaSelectController.m */; };
 		184FD006147208F90082B51D /* AnimaSelectController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184FD005147208F90082B51D /* AnimaSelectController.xib */; };
+		184FDD8F1495DF1B0086BBDF /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 184FDD8E1495DF1B0086BBDF /* play.png */; };
+		184FDD911495EA5E0086BBDF /* LO.png in Resources */ = {isa = PBXBuildFile; fileRef = 184FDD901495EA5E0086BBDF /* LO.png */; };
 		18696E8B147A217100302EB8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18696E8A147A217100302EB8 /* Settings.bundle */; };
 		186BF9BF1470AEB500961C67 /* AlbumController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186BF9C01470AEB500961C67 /* AlbumController.xib */; };
 		18D402821474E50000389097 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18D402841474E50000389097 /* Localizable.strings */; };
@@ -83,6 +85,8 @@
 		184FD002147208E90082B51D /* AnimaSelectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimaSelectController.h; sourceTree = "<group>"; };
 		184FD003147208F20082B51D /* AnimaSelectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimaSelectController.m; sourceTree = "<group>"; };
 		184FD005147208F90082B51D /* AnimaSelectController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimaSelectController.xib; path = Classes/AnimaSelectController.xib; sourceTree = "<group>"; };
+		184FDD8E1495DF1B0086BBDF /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = play.png; path = Classes/play.png; sourceTree = "<group>"; };
+		184FDD901495EA5E0086BBDF /* LO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LO.png; path = Classes/LO.png; sourceTree = "<group>"; };
 		18696E8A147A217100302EB8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		186BF9C01470AEB500961C67 /* AlbumController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumController.xib; path = Classes/AlbumController.xib; sourceTree = "<group>"; };
 		18D402831474E50000389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -152,7 +156,7 @@
 		A1F7E815148C9BBF0088F366 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		A1F7E819148C9BF60088F366 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/MainWindow.xib"; sourceTree = "<group>"; };
 		A1F7E821148C9E940088F366 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/MainWindow.xib"; sourceTree = "<group>"; };
-		A1F7E84A148CB5F90088F366 /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
+		A1F7E84A148CB5F90088F366 /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoViewController.m; path = Classes/PhotoViewController.m; sourceTree = SOURCE_ROOT; };
 		A1F82E831462909100BED207 /* PlaylistDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistDetailController.h; sourceTree = "<group>"; };
 		A1F82E841462909100BED207 /* PlaylistDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistDetailController.m; sourceTree = "<group>"; };
 		A1F9E5951428671E00A69E49 /* tagOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tagOverlay.png; path = Classes/tagOverlay.png; sourceTree = "<group>"; };
@@ -236,6 +240,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				184FDD8E1495DF1B0086BBDF /* play.png */,
+				184FDD901495EA5E0086BBDF /* LO.png */,
 				A1F7E814148C9BBF0088F366 /* MainWindow.xib */,
 				A1111477147515F900AD57D0 /* empty1.png */,
 				184FCFF3147202A00082B51D /* selectOverlay.png */,
@@ -446,6 +452,8 @@
 				A1F7E818148C9BCB0088F366 /* MainWindow.xib in Resources */,
 				A1F7E81A148C9BF60088F366 /* MainWindow.xib in Resources */,
 				A1F7E822148C9E940088F366 /* MainWindow.xib in Resources */,
+				184FDD8F1495DF1B0086BBDF /* play.png in Resources */,
+				184FDD911495EA5E0086BBDF /* LO.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

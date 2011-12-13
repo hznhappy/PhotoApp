@@ -36,11 +36,14 @@
 }
 
 -(void)viewDidLoad
-{  
+{   
     database=[DBOperation getInstance];
     ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
     p = [[AssetProducer alloc]initWithAssetsLibrary:lib];
+<<<<<<< HEAD
+=======
     [lib release];
+>>>>>>> origin/master
     self.playList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
     [lib release];
     [self setWantsFullScreenLayout:YES];
@@ -152,13 +155,17 @@
         return cell;
 }
 -(void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+<<<<<<< HEAD
     NSMutableArray *assets = [[[NSMutableArray alloc]init]autorelease];
+=======
+    NSMutableArray *assets = [[[NSMutableArray alloc]init ]autorelease];
+>>>>>>> origin/master
     if([[self.playList.list objectAtIndex:indexPath.row]intValue]==-1)
     {
     for (NSString *url in p.assetsUrlOrdering) {
         [assets addObject:[p.assets valueForKey:url]];
     }
-         NSLog(@"assets:%d",[assets count]);
+         NSLog(@"assetsCount:%d",[assets count]);
     }
     else if([[self.playList.list objectAtIndex:indexPath.row]intValue]==-2)
     {
@@ -179,8 +186,7 @@
         }
         NSLog(@"assetsCount:%d",[assets count]);
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:assets,@"assets",[self.playList.list objectAtIndex:indexPath.row],@"ID",nil];
-   // NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
+    NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushThumbnailView" object:nil userInfo:dic];
     [table deselectRowAtIndexPath:indexPath animated:YES];
     self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
@@ -205,7 +211,7 @@
         
         PlaylistDetailController *detailController = [[PlaylistDetailController alloc]initWithNibName:@"PlaylistDetailController" bundle:[NSBundle mainBundle]];
         detailController.listName =[NSString stringWithFormat:@"%@",database.name];
-        detailController.Transtion=[NSString stringWithFormat:@"%@",database.Transtion];
+        detailController.Transtion=[NSString stringWithFormat:@"%@",database.Transtion];    
         detailController.a=[NSString stringWithFormat:@"%@",[self.playList.list objectAtIndex:indexPath.row]];
         detailController.hidesBottomBarWhenPushed = YES;
         
@@ -250,6 +256,8 @@
 
 
 - (void) albumSelected: (id) sender {
+    NSLog(@"Album Selected");
+    
 }
 
 #pragma mark -
@@ -259,6 +267,7 @@
     [p release];
     [playList release];
     [tableView release];
+
     [super dealloc];
 }
 @end

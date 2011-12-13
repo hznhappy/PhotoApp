@@ -10,6 +10,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DBOperation.h"
 #import "PopupPanelView.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 #define PV_IMAGE_GAP 30
 
@@ -36,6 +37,7 @@
 	//DBOperation *db;
     PopupPanelView *ppv;
     NSTimer *timer;	
+    UIButton *playButton;
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
 
@@ -51,5 +53,6 @@
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;
-
+-(void)playVideo;
+-(void)play:(CGRect)framek;
 @end

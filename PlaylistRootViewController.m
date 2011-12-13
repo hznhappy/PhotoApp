@@ -12,6 +12,7 @@
 #import "AssetRef.h"
 #import "PhotoViewController.h"
 @implementation PlaylistRootViewController
+ static NSString* const kFileName=@"output.mov";
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -56,12 +57,43 @@
     for (AssetRef *aref in assetRefs) {
         [assets addObject:aref.asset];
     }
+    
+    
+    
+   /* ALAssetRepresentation *rep = [[assets objectAtIndex:0] defaultRepresentation];
+     NSLog(@"ALAssetRepresentation:%@",rep);
+    NSArray  *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);//在Caches目录下创建文件,此目录下文件不会在应用退出删除
+    NSString *videoPath = [[[paths objectAtIndex:0] stringByAppendingPathComponent:kFileName] retain];
+   // NSString *videoPath = [NSString dataFilePath:[NSString stringWithFormat:@"%@.MOV", kFileName]];
+    NSOutputStream *outPutStream = [NSOutputStream outputStreamToFileAtPath:videoPath append:NO];
+    [outPutStream open];
+    
+    NSUInteger bufferSize = 1024*100;
+    unsigned char buf[bufferSize];
+    NSUInteger writeSize = 0;
+    NSUInteger videoSize = [rep size];
+    NSError *err = nil;
+    while(videoSize != 0)
+    {
+        NSUInteger readSize = (bufferSize < videoSize)?bufferSize:videoSize;
+        [rep getBytes:buf fromOffset: writeSize
+               length:readSize error:&err];
+        [outPutStream write:buf maxLength:readSize];
+        
+        videoSize -= readSize;
+        writeSize += readSize;
+    }
+    [outPutStream close];*/
+    
     AssetTablePicker *ap = [[AssetTablePicker alloc]initWithNibName:@"AssetTablePicker" bundle:[NSBundle mainBundle]];
     ap.hidesBottomBarWhenPushed = YES;
-    ap.crwAssets = assets;
+    ap.crwAssets=assets;
+    NSLog(@"APassets:%d",[ap.crwAssets count]);
     ap.PLAYID=[dic valueForKey:@"ID"];
     [assets release];
-    [self pushViewController:ap animated:YES];
+
+    
+       [self pushViewController:ap animated:YES];
     [ap release];    
 }
 

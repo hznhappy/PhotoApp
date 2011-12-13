@@ -416,7 +416,7 @@
 #pragma mark UITableViewDataSource and Delegate Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+    NSLog(@"crwAsserts count:%d",[self.crwAssets count]);
     return ceil([self.crwAssets count]/4.0);
     
 }
@@ -445,8 +445,10 @@
         if (row<[self.crwAssets count]) {
             
             ALAsset *asset = [self.crwAssets objectAtIndex:row];
-            NSString *url=[[[asset defaultRepresentation]url]description];
-                                  
+            NSURL *url=[[asset defaultRepresentation]url];
+           /// MPMoviePlayerController* theMovie=[[MPMoviePlayerController alloc] initWithContentURL:url]; 
+           // theMovie.scalingMode=MPMovieScalingModeAspectFill; 
+           // UIImage *image = [theMovie thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];                    
             UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
              
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];

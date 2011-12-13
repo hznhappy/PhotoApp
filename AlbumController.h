@@ -11,6 +11,7 @@
 #import "DBOperation.h"
 #import "AlbumClass.h"
 #import "AssetProducer.h"
+#import "AssetRef.h"
 
 
 #define PlayTable @"PlayTable"
