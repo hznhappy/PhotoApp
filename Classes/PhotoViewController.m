@@ -35,6 +35,7 @@
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
 @synthesize fullScreenPhotos;
+@synthesize video;
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
@@ -53,10 +54,9 @@
         self.fullScreenPhotos = temp;
         [temp release];
 	}
-   
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
 
-	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets) withObject:nil waitUntilDone:NO];
-   
     return self;
 }
 -(void)play:(CGRect)framek
@@ -72,12 +72,14 @@
     [playButton setImage:picture forState:UIControlStateNormal];
     [self.scrollView addSubview:playButton];
 
-    
 
 }
--(void)readPhotoFromALAssets{
+
+-(void)readPhotoFromALAssets:(NSString *)pageIndex{
+
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    for (NSInteger i = _pageIndex-2; i<_pageIndex+3; i++) {
+    NSInteger index = [pageIndex integerValue];
+    for (NSInteger i = index-2; i<index+3; i++) {
         if (i >= 0 && i < [self.photoSource count]) {
             UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
             if ((NSNull *)fullImage == [NSNull null] ) {
@@ -117,6 +119,7 @@
             }
         }
     }
+    
     [pool release];
 }
 
@@ -125,7 +128,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+    VI=NO;
     self.hidesBottomBarWhenPushed = YES;
     self.wantsFullScreenLayout = YES;
 	self.view.backgroundColor = [UIColor blackColor];
@@ -150,22 +153,20 @@
 		[self.view addSubview:_scrollView];
         
 	}
-  
     NSMutableArray *views = [[NSMutableArray alloc] init];
 	for (unsigned i = 0; i < [self.photoSource count]; i++) {
 		[views addObject:[NSNull null]];
 	}
+   NSMutableArray *array=[[NSMutableArray alloc]init];
+    self.video=array;
 	self.photoViews = views;
-    [views release];
-  //  UIButton *playButton=[[UIButton alloc]initWithTitle:nil style:UIButtonTypeCustom target:self action:@selector(playVideo)];
-    //在这里初始化那个按键
-    
-    
-       editing=NO;
-     NSString *u=NSLocalizedString(@"Edit", @"title");
+    [views release];   
+    [array release];
+    editing=NO;
+    NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;
-  
+    
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
     ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
     NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
@@ -173,14 +174,12 @@
     [ppv Buttons];
     [self.view addSubview:ppv];
     ppv.hidden=YES;
-        
+    
 }
 -(void)playVideo
 {
     ALAsset *realasset =[self.photoSource objectAtIndex:_pageIndex];
        NSLog(@"alasset:%@",realasset);
-    //  NSString *DATA=[realasset valueForKey:ALAssetTypePhoto];
-    //NSLog(@"data:%@",DATA);
     ALAssetRepresentation *ref = [realasset defaultRepresentation];
     NSURL *url = [ref url];
     NSLog(@"%@ is the url ",url);
@@ -190,11 +189,15 @@
      [player play];
      [player release];*/
     
+    
+    
     MPMoviePlayerController* theMovie=[[MPMoviePlayerController alloc] initWithContentURL:url]; 
     [[theMovie view] setFrame:[self.view bounds]]; // Frame must match parent view
-    [self.scrollView addSubview:[theMovie view]];
-    theMovie.scalingMode =  MPMovieControlModeDefault;
-    theMovie.scalingMode=MPMovieScalingModeAspectFill; 
+    [self.view addSubview:[theMovie view]];
+    //  theMovie.scalingMode =  MPMovieControlModeDefault;
+   // theMovie.scalingMode=MPMovieScalingModeAspectFill; 
+    theMovie.scalingMode=MPMovieMediaTypeMaskAudio;
+    theMovie.controlStyle = MPMovieControlModeHidden;
     //theMovie.scalingMode = MPMovieScalingModeFill;
     //   UIImage *imageSel = [theMovie thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
     // Register for the playback finished notification. 
@@ -207,11 +210,12 @@
     // Movie playback is asynchronous, so this method returns immediately. 
     [theMovie play];  
 
+    
+    
 }
 // When the movie is done,release the controller. 
 -(void)myMovieFinishedCallback:(NSNotification*)aNotification 
  {
-     NSLog(@"STOP");
  MPMoviePlayerController* theMovie=[aNotification object]; 
  [[NSNotificationCenter defaultCenter] removeObserver:self 
  name:MPMoviePlayerPlaybackDidFinishNotification 
@@ -274,7 +278,7 @@
     }
     
 }
- 
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     
     [self setupScrollViewContentSize];
@@ -292,25 +296,24 @@
 }
 -(void)edit
 {
-      NSString *a=NSLocalizedString(@"Edit", @"title");
-      NSString *b=NSLocalizedString(@"Done", @"title");
-    
-   if (editing)
-{  ppv.hidden=NO;
-    
-    ppv.alpha=0.4;
-    
-     [self.view addSubview:ppv];
-    edit.style = UIBarButtonItemStyleBordered;
-    edit.title = a;
-    [ppv viewClose];
-}
-else{
-    ppv.hidden=NO;
-    edit.style = UIBarButtonItemStyleDone;
-    edit.title = b;
-    [ppv viewOpen];
-}
+    NSString *a=NSLocalizedString(@"Edit", @"title");
+    NSString *b=NSLocalizedString(@"Done", @"title");
+    if (editing)
+    {  ppv.hidden=NO;
+        
+        ppv.alpha=0.4;
+        
+        [self.view addSubview:ppv];
+        edit.style = UIBarButtonItemStyleBordered;
+        edit.title = a;
+        [ppv viewClose];
+    }
+    else{
+        ppv.hidden=NO;
+        edit.style = UIBarButtonItemStyleDone;
+        edit.title = b;
+        [ppv viewOpen];
+    }
     editing = !editing;
     
     
@@ -432,13 +435,15 @@ else{
 - (void)moveForward:(id)sender{
     
    	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];
-	[self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
 }
 
 - (void)moveBack:(id)sender{
-  
+    
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
-    [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
 }
 
 - (void)setViewState {	
@@ -469,25 +474,17 @@ else{
     NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
     ppv.url = currentPageUrl;
     [ppv Buttons];
-    ALAsset *realasset =[self.photoSource objectAtIndex:index];
-    NSLog(@"alasset:%@",realasset);
-    if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
-    {
-        //[self play];
-        
-    }
-
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
    	_pageIndex = index;
- 
-	[self setViewState];
     
+	[self setViewState];
 	[self enqueuePhotoViewAtIndex:index];
     
 	[self loadScrollViewWithPage:index-1];
+    VI=YES;
 	[self loadScrollViewWithPage:index];
+    VI=NO;
 	[self loadScrollViewWithPage:index+1];
-	
 	
 	[self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:index]).frame animated:animated];
 	
@@ -579,8 +576,9 @@ else{
 	return nil;
 	
 }
-/////////////
+
 - (void)loadScrollViewWithPage:(NSInteger)page{
+    
     if (page < 0) return;
     if (page >= [self.photoSource count]) return;
 	
@@ -607,7 +605,7 @@ else{
         return;
     }
     [photoView setPhoto:[self.fullScreenPhotos objectAtIndex:page]];
-       
+    
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
 	}
@@ -624,18 +622,25 @@ else{
 	frame.origin.x = xOrigin;
 	frame.origin.y = 0;
 	photoView.frame = frame;
+    if(VI==YES)
+    {
     ALAsset *realasset =[self.photoSource objectAtIndex:page];
     NSLog(@"alasset:%@",realasset);
     if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
-    {   
+    {  
+        
+        NSString *p=[NSString stringWithFormat:@"%d",page];
+                [self.video addObject:p];
         CGRect frame1 =frame;
         frame1.origin.x =xOrigin+130;
         frame1.origin.y = 210;
         frame1.size.height=60;
         frame1.size.width=60;
         [self play:frame1];
+    }
+    }
         
-    }     
+       
 }
 
 #pragma mark -
@@ -643,31 +648,24 @@ else{
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
 	NSInteger _index = [self centerPhotoIndex];
-   
+    
 	if (_index >= [self.photoSource count] || _index < 0 || (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {
 		return;
 	}
 	
 	if (_pageIndex != _index && !_rotating) {
-        ALAsset *asset = [self.photoSource objectAtIndex:_index];
-        NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
-        ppv.url = currentPageUrl;
-        [ppv Buttons];
-        ALAsset *realasset =[self.photoSource objectAtIndex:_index];
-        NSLog(@"alasset:%@",realasset);
-        if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
-        {
-            //[self play];
-            
-        }
-
-
+//        ALAsset *asset = [self.photoSource objectAtIndex:_index];
+//        NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+//        ppv.url = currentPageUrl;
+//        [ppv Buttons];
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
         
-        [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
-       		[self setViewState];
+        NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+        [self performSelectorInBackground:@selector(readPhotoFromALAssets:) withObject:pageIndex];
+        [self setViewState];
 		
 		if (![scrollView isTracking]) {
 			[self layoutScrollViewSubviews];
@@ -675,12 +673,45 @@ else{
 		
 	}
 }
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+	NSInteger _index = [self centerPhotoIndex];
+	if (_index >= [self.photoSource count] || _index < 0) {
+		return;
+	}	
+    [self moveToPhotoAtIndex:_index animated:YES];
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+	[self layoutScrollViewSubviews];
+}
+
+
 #pragma mark -
 #pragma mark Actions
 - (void)markPhoto{
     [self edit];
     
 }
+
+- (void)copyPhoto{
+	
+	[[UIPasteboard generalPasteboard] setData:UIImagePNGRepresentation(((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).imageView.image) forPasteboardType:@"public.png"];
+	
+}
+
+- (void)emailPhoto{
+	
+	MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+	[mailViewController setSubject:@"Shared Photo"];
+	[mailViewController addAttachmentData:[NSData dataWithData:UIImagePNGRepresentation(((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).imageView.image)] mimeType:@"png" fileName:@"Photo.png"];
+	mailViewController.mailComposeDelegate = self;
+	
+	[self presentModalViewController:mailViewController animated:YES];
+	[mailViewController release];
+	
+}
+
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{
 	
 	[self dismissModalViewControllerAnimated:YES];
@@ -742,9 +773,9 @@ else{
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex) {
 		[self markPhoto];
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
-		//[self copyPhoto];	
+		[self copyPhoto];	
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
-		//[self emailPhoto];	
+		[self emailPhoto];	
 	}
 }
 
@@ -752,13 +783,12 @@ else{
 #pragma mark timer method
 
 -(void)fireTimer:(NSString *)animateStyle{
-    //[self performSelectorOnMainThread:@selector(loadPhoto) withObject:nil waitUntilDone:NO];
     timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
 }
 -(void)playPhoto{
     _pageIndex+=1;
-    [self performSelectorInBackground:@selector(readPhotoFromALAssets) withObject:nil];
-    [self setBarsHidden:YES animated:YES];
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];    [self setBarsHidden:YES animated:YES];
     NSString *animateStyle = [timer userInfo];
     CATransition *animation = [CATransition animation];
     animation.delegate = self;

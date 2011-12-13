@@ -70,7 +70,7 @@ int j=1,count=0;
 }
 -(void)creatTable
 {
-   
+    
     NSString *createUserTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY,NAME)",UserTable];
     [da createTable:createUserTable];
     NSString *createIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT PRIMARY KEY)",idOrder];//OrderID INTEGER PRIMARY KEY,
@@ -84,7 +84,7 @@ int j=1,count=0;
 {
     
     NSString *selectIdOrder1=[NSString stringWithFormat:@"select id from idOrder where id=0"];
-   NSMutableArray *IDList=[da selectOrderId:selectIdOrder1];
+    NSMutableArray *IDList=[da selectOrderId:selectIdOrder1];
     if([IDList count]==0)
     {
         NSString *insertUserTable= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,NAME) VALUES(%d,'%@')",UserTable,0,@"NoBody"];
@@ -93,11 +93,11 @@ int j=1,count=0;
         NSString *insertIdOrder= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID) VALUES(%d)",idOrder,0];
         NSLog(@"%@",insertIdOrder);
         [da insertToTable:insertIdOrder];
-
+        
     }
     NSString *selectIdOrder=[NSString stringWithFormat:@"select id from idOrder"];
     self.list=[da selectOrderId:selectIdOrder];
-
+    
 }
 -(IBAction)toggleAdd:(id)sender
 {  bool1=YES;
@@ -108,7 +108,7 @@ int j=1,count=0;
 } 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person 
 {
-
+    
     NSString *readName=(NSString *)ABRecordCopyCompositeName(person);
     ABRecordID recId = ABRecordGetRecordID(person);
     fid=[NSString stringWithFormat:@"%d",recId];
@@ -117,8 +117,8 @@ int j=1,count=0;
     {
         NSString *b=NSLocalizedString(@"Already exists", @"button");
         NSString *a=NSLocalizedString(@"note", @"button");
-         NSString *c=NSLocalizedString(@"ok", @"button");
-            
+        NSString *c=NSLocalizedString(@"ok", @"button");
+        
         
         UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle:a
@@ -152,7 +152,7 @@ int j=1,count=0;
 
 -(IBAction)toggleEdit:(id)sender
 { NSString *a=NSLocalizedString(@"Edit", @"title");
-     NSString *b=NSLocalizedString(@"Done", @"title");
+    NSString *b=NSLocalizedString(@"Done", @"title");
     if (self.tableView.editing) {
         editButton.title = a;
     }else{
@@ -168,7 +168,7 @@ int j=1,count=0;
 
 -(void)viewWillAppear:(BOOL)animated
 {
-         bool1=NO;
+    bool1=NO;
     tools.alpha=1;
     tools.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.barStyle=UIBarStyleBlack;    
@@ -178,7 +178,7 @@ int j=1,count=0;
 {
     tools.alpha=0;
     self.navigationController.navigationBar.barStyle=UIBarStyleBlackTranslucent;
-  
+    
 } 
 }
 -(void)table
@@ -224,14 +224,14 @@ int j=1,count=0;
 	if (cell == nil) {
 		cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
-      
-        if([[self.list objectAtIndex:indexPath.row]intValue]==0)
+    
+    if([[self.list objectAtIndex:indexPath.row]intValue]==0)
     {
         cell.textLabel.textColor=[UIColor colorWithRed:167/255.0 green:124/255.0 blue:83/255.0 alpha:1.0];
     }
     cell.textLabel.text =[da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
-       //[NSString stringWithFormat:@"%@",da.name];
-
+    //[NSString stringWithFormat:@"%@",da.name];
+    
     
     return cell; 
 }
@@ -241,7 +241,7 @@ int j=1,count=0;
 {	
     id1=[NSString stringWithFormat:@"%d",indexPath.row]; 
     [id1 retain];
-     
+    
     NSString *selectTag= [NSString stringWithFormat:@"select ID from tag"];
     
     NSMutableArray *listid1=[da selectFromTAG:selectTag];
@@ -256,39 +256,39 @@ int j=1,count=0;
     }
     else
     {
-    if([listid1 containsObject:[list objectAtIndex:indexPath.row]])
-    {
-        NSString *a=NSLocalizedString(@"hello", @"title");
-        NSString *b=NSLocalizedString(@"This person has been used as a photo tag, you sure you want to delete it", @"title");
-        NSString *c=NSLocalizedString(@"NO", @"title");
-        NSString *d=NSLocalizedString(@"YES", @"title");
-
-        UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
-        [alert1 addButtonWithTitle:d];
-        [alert1 show];
-        [alert1 release];
-        
+        if([listid1 containsObject:[list objectAtIndex:indexPath.row]])
+        {
+            NSString *a=NSLocalizedString(@"hello", @"title");
+            NSString *b=NSLocalizedString(@"This person has been used as a photo tag, you sure you want to delete it", @"title");
+            NSString *c=NSLocalizedString(@"NO", @"title");
+            NSString *d=NSLocalizedString(@"YES", @"title");
+            
+            UIAlertView *alert1=[[UIAlertView alloc] initWithTitle:a message:b delegate:self cancelButtonTitle:c otherButtonTitles:nil];
+            [alert1 addButtonWithTitle:d];
+            [alert1 show];
+            [alert1 release];
+            
+        }
+        else
+        {
+            NSString *deleteIdTable = [NSString stringWithFormat:@"DELETE FROM idOrder WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
+            NSLog(@"%@",deleteIdTable );
+            [da deleteDB:deleteIdTable ];  
+            NSString *DeleteUserTable= [NSString stringWithFormat:@"DELETE FROM UserTable WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
+            [da deleteDB:DeleteUserTable];
+            [self creatTable];
+            [self.tableView reloadData];
+        }
     }
-    else
-    {
-        NSString *deleteIdTable = [NSString stringWithFormat:@"DELETE FROM idOrder WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
-        NSLog(@"%@",deleteIdTable );
-        [da deleteDB:deleteIdTable ];  
-        NSString *DeleteUserTable= [NSString stringWithFormat:@"DELETE FROM UserTable WHERE ID='%@'",[self.list objectAtIndex:indexPath.row]];
-        [da deleteDB:DeleteUserTable];
-        [self creatTable];
-        [self.tableView reloadData];
-    }
-    }
-  }
+}
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-   NSString *name=[da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
+    NSString *name=[da getUserFromUserTable:[[list objectAtIndex:indexPath.row]intValue]];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[self.list objectAtIndex:indexPath.row],@"UserId",name,@"UserName",nil];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"AddUser" 
                                                        object:self 
                                                      userInfo:dic];
-
-     [self dismissModalViewControllerAnimated:YES];
+    
+    [self dismissModalViewControllerAnimated:YES];
     [table deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -220,7 +220,7 @@ void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
         dbCount=[SUM count];
     }
     if(P==YES)
-    {NSLog(@"yes");
+    {
         NSString *selectRules0= [NSString stringWithFormat:@"select user_id from rules where playlist_id=%d and playlist_rules=%d",row_id,0];
         NSMutableArray *playlist_UserId0=[da selectFromRules:selectRules0];
         for(int i=0;i<[playlist_UserId0 count];i++)

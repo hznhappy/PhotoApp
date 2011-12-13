@@ -38,9 +38,11 @@
     PopupPanelView *ppv;
     NSTimer *timer;	
     UIButton *playButton;
+    NSMutableArray *video;
+    BOOL VI;
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
-
+@property(nonatomic,retain)NSMutableArray *video;
 @property(nonatomic,retain) NSArray *photoSource;
 @property(nonatomic,retain) NSMutableArray *photoViews;
 @property(nonatomic,retain) NSMutableArray *fullScreenPhotos;
@@ -49,7 +51,7 @@
 @property(nonatomic,assign) NSInteger _pageIndex;
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page;
--(void)readPhotoFromALAssets;
+-(void)readPhotoFromALAssets:(NSString *)pageIndex;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;

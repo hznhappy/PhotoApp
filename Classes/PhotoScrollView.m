@@ -77,7 +77,6 @@
 		}
 		
 	}
-    
 	[self zoomToRect:rect animated:YES];	
     
 }
