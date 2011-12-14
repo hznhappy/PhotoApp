@@ -55,7 +55,7 @@
         self.fullScreenPhotos = temp;
         [temp release];
 	}
-    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+    NSString *pageIndex = [NSString stringWithFormat:@"%d",self._pageIndex];
 	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
     
     return self;
@@ -103,6 +103,7 @@
     
    // [note setText:@"are you like it?"];
     [favorite addSubview:note];
+    [note release];
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom]; 
     button1.frame = CGRectMake(10, 80, 60, 30);
     [button1 setBackgroundColor:[UIColor grayColor]]; 
@@ -255,6 +256,15 @@
     
     
     
+    
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"touchBegan");
+    [self setBarsHidden:!_barsHidden animated:YES];
+    
+    
+    
 }
 // When the movie is done,release the controller. 
 -(void)myMovieFinishedCallback:(NSNotification*)aNotification 
@@ -264,16 +274,8 @@
  name:MPMoviePlayerPlaybackDidFinishNotification 
  object:theMovie2]; 
  // Release the movie instance created in playMovieAtURL
- [theMovie2 release]; 
+ //[theMovie2 release]; 
  }
- 
- 
- 
-
-
-//}
-
-
 -(void)viewDidAppear:(BOOL)animated{
     [self moveToPhotoAtIndex:_pageIndex animated:NO];
 }
@@ -286,8 +288,8 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-    NSLog(@"play stop");
     [theMovie stop];
+    
     [timer invalidate];
 	[super viewWillDisappear:animated];
     [self.navigationController setToolbarHidden:YES animated:YES];		
@@ -697,7 +699,6 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     favorite.hidden=YES;
     favo=NO;
-    NSLog(@"%@",favo);
 	NSInteger _index = [self centerPhotoIndex];
     
 	if (_index >= [self.photoSource count] || _index < 0 || (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {

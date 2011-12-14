@@ -548,6 +548,7 @@
     length.text=[length.text stringByAppendingString:b];
     [video addSubview:length];
     [length release];
+    [tu release];
     [video setBackgroundColor:[UIColor grayColor]];
     video.alpha=0.8;
     return video;

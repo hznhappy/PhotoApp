@@ -82,7 +82,9 @@
         sw.albumName=@"I LIKE";
         [self.playList.playlists addObject:sw];
         NSLog(@"DS");
+        [sw release];
     }
+    [al release];
      [self.playList selectID];
     [self.playList count];
     [self.tableView reloadData];
