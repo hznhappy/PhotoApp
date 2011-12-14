@@ -14,6 +14,7 @@
 
 
 
+
 @interface PhotoViewController (Private)
 - (void)loadScrollViewWithPage:(NSInteger)page;
 - (void)layoutScrollViewSubviews;
@@ -56,7 +57,7 @@
 	}
     NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
 	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
-
+    
     return self;
 }
 -(void)play:(CGRect)framek
@@ -66,7 +67,7 @@
     playButton.frame =framek;
     [playButton addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchUpInside];
     
-    UIImage *picture = [UIImage imageNamed:@"LO.png"];
+    UIImage *picture = [UIImage imageNamed:@"ji.png"];
     // set the image for the button
     [playButton setBackgroundImage:picture forState:UIControlStateNormal];
     [playButton setImage:picture forState:UIControlStateNormal];
@@ -74,7 +75,81 @@
 
 
 }
+-(void)CFG
+{
+    db=[DBOperation getInstance];
+    NSString *createTag= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(ID INT,URL TEXT,NAME,PRIMARY KEY(ID,URL))",TAG];
+    [db createTable:createTag];
+    NSString *createPlayTable= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INTEGER PRIMARY KEY,playList_name,Transtion)",PlayTable];
+    [db createTable:createPlayTable];
+    NSString *createPlayIdOrder= [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(play_id INT PRIMARY KEY)",playIdOrder];
+    [db createTable:createPlayIdOrder];
+    NSString *createRules=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(playList_id INT,playList_rules INT,user_id INT,user_name)",Rules];
+    [db createTable:createRules];
+    favorite=[[UIView alloc]initWithFrame:CGRectMake(1,160,80,150)];
+    [favorite setBackgroundColor:[UIColor grayColor]];
+    favorite.alpha=0.5;
+    
+    UILabel *note=[[UILabel alloc]initWithFrame:CGRectMake(0, 10, 80, 30)];
+    [note setBackgroundColor:[UIColor grayColor]];
+    note.numberOfLines = 10;
+    note.text = @"do you like it?";
+    CGSize size = CGSizeMake(60, 1000);
+    CGSize labelSize = [note.text sizeWithFont:note.font 
+                              constrainedToSize:size
+                                  lineBreakMode:UILineBreakModeClip];
+    note.frame = CGRectMake(note.frame.origin.x, note.frame.origin.y,
+                             note.frame.size.width,labelSize.height);
+    
+   // [note setText:@"are you like it?"];
+    [favorite addSubview:note];
+    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom]; 
+    button1.frame = CGRectMake(10, 80, 60, 30);
+    [button1 setBackgroundColor:[UIColor grayColor]]; 
+    [button1 setTitle:@"YES" forState:UIControlStateNormal];
+    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom]; 
+    button2.frame = CGRectMake(10, 115, 60, 30);
+    [button2 setBackgroundColor:[UIColor grayColor]]; 
+    [button2 setTitle:@"NO" forState:UIControlStateNormal];
+    [button1 addTarget:self action:@selector(button1Pressed) forControlEvents:UIControlEventTouchDown];
+    [button2 addTarget:self action:@selector(button2Pressed) forControlEvents:UIControlEventTouchDown];
+    [favorite addSubview:button1];
+    [favorite addSubview:button2];
+    //favorite.hidden=YES;
+    
 
+}
+-(void)favorite
+{
+    favorite.hidden=NO;
+    [self.view addSubview:favorite];
+}
+-(void)button1Pressed
+{
+    NSLog(@"button1");
+    favorite.hidden=YES;
+    NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%d','%@','%@')",TAG,-1,[[realasset defaultRepresentation]url],@"like"];
+    NSLog(@"JJJJ%@",insertTag);
+    [db insertToTable:insertTag];
+    NSString *insertPlayTable= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(playList_id,playList_name) VALUES(%d,'%@')",PlayTable,-3,@"I LIKE"];
+    NSLog(@"%@",insertPlayTable);
+    [db insertToTable:insertPlayTable];
+    NSString *insertPlayIdOrder= [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@(play_id) VALUES(%d)",playIdOrder,-3];
+    NSLog(@"%@",insertPlayIdOrder);
+    [db insertToTable:insertPlayIdOrder];
+    NSString *insertRules= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(playList_id,playList_rules,user_id,user_name) VALUES('%d','%d','%d','%@')",Rules,-3,1,-1,@"like"];
+    NSLog(@"%@",insertRules);
+    [db insertToTable:insertRules];  
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"addfavorate" 
+                                                       object:self 
+                                                     userInfo:dic];
+}
+-(void)button2Pressed
+{
+    NSLog(@"button2");
+    favorite.hidden=YES;
+}
 -(void)readPhotoFromALAssets:(NSString *)pageIndex{
 
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -83,37 +158,8 @@
         if (i >= 0 && i < [self.photoSource count]) {
             UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
             if ((NSNull *)fullImage == [NSNull null] ) {
-                ALAsset *asset = [self.photoSource objectAtIndex:i];
-               UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];
-               
-               // ALAssetRepresentation *rep = [asset defaultRepresentation];
-               // NSLog(@"ALAssetRepresentation:%@",rep);
-               // NSArray  *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);//在Caches目录下创建文件,此目录下文件不会在应用退出删除
-              //  NSString *videoPath = [[[paths objectAtIndex:0] stringByAppendingPathComponent:kFileName] retain];
-                // NSString *videoPath = [NSString dataFilePath:[NSString stringWithFormat:@"%@.MOV", kFileName]];
-               // NSOutputStream *outPutStream = [NSOutputStream outputStreamToFileAtPath:videoPath append:NO];
-               // [outPutStream open];
-                
-              /*  NSUInteger bufferSize = 1024*100;
-                unsigned char buf[bufferSize];
-                NSUInteger writeSize = 0;
-                NSUInteger videoSize = [rep size];
-                NSError *err = nil;
-                while(videoSize != 0)
-                {
-                    NSUInteger readSize = (bufferSize < videoSize)?bufferSize:videoSize;
-                    [rep getBytes:buf fromOffset: writeSize
-                           length:readSize error:&err];
-                   // [outPutStream write:buf maxLength:readSize];
-                    
-                    videoSize -= readSize;
-                    writeSize += readSize;
-                }
-                //[outPutStream close];
-
-                */
-              //  MPMoviePlayerViewController *moviePlayerVC =[[MPMoviePlayerViewController alloc] initWithContentURL:[[asset defaultRepresentation] url]];
-                
+            ALAsset *asset = [self.photoSource objectAtIndex:i];
+            UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];
             [self.fullScreenPhotos replaceObjectAtIndex:i withObject:image];
                 
             }
@@ -129,6 +175,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     VI=NO;
+    [self CFG];
     self.hidesBottomBarWhenPushed = YES;
     self.wantsFullScreenLayout = YES;
 	self.view.backgroundColor = [UIColor blackColor];
@@ -178,20 +225,16 @@
 }
 -(void)playVideo
 {
-    ALAsset *realasset =[self.photoSource objectAtIndex:_pageIndex];
-       NSLog(@"alasset:%@",realasset);
-    ALAssetRepresentation *ref = [realasset defaultRepresentation];
+    ALAsset *realasset1 =[self.photoSource objectAtIndex:_pageIndex];
+       NSLog(@"alasset:%@",realasset1);
+    ALAssetRepresentation *ref = [realasset1 defaultRepresentation];
     NSURL *url = [ref url];
     NSLog(@"%@ is the url ",url);
-    /* MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:url];
-     [[player view] setFrame:[self.view bounds]]; // Frame must match parent view
-     [self.view addSubview:[player view]];
-     [player play];
-     [player release];*/
-    
-    
-    
-    MPMoviePlayerController* theMovie=[[MPMoviePlayerController alloc] initWithContentURL:url]; 
+       
+    theMovie=[[MPMoviePlayerController alloc] initWithContentURL:url]; 
+  //  NSTimeInterval duration = theMovie.duration;
+  //  NSLog(@"LENGTH:%f",theMovie.duration);
+
     [[theMovie view] setFrame:[self.view bounds]]; // Frame must match parent view
     [self.view addSubview:[theMovie view]];
     //  theMovie.scalingMode =  MPMovieControlModeDefault;
@@ -209,19 +252,19 @@
     
     // Movie playback is asynchronous, so this method returns immediately. 
     [theMovie play];  
-
+    
     
     
 }
 // When the movie is done,release the controller. 
 -(void)myMovieFinishedCallback:(NSNotification*)aNotification 
  {
- MPMoviePlayerController* theMovie=[aNotification object]; 
+ MPMoviePlayerController* theMovie2=[aNotification object]; 
  [[NSNotificationCenter defaultCenter] removeObserver:self 
  name:MPMoviePlayerPlaybackDidFinishNotification 
- object:theMovie]; 
+ object:theMovie2]; 
  // Release the movie instance created in playMovieAtURL
- [theMovie release]; 
+ [theMovie2 release]; 
  }
  
  
@@ -243,6 +286,8 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"play stop");
+    [theMovie stop];
     [timer invalidate];
 	[super viewWillDisappear:animated];
     [self.navigationController setToolbarHidden:YES animated:YES];		
@@ -299,7 +344,7 @@
     NSString *a=NSLocalizedString(@"Edit", @"title");
     NSString *b=NSLocalizedString(@"Done", @"title");
     if (editing)
-    {  ppv.hidden=NO;
+    { 
         
         ppv.alpha=0.4;
         
@@ -624,7 +669,7 @@
 	photoView.frame = frame;
     if(VI==YES)
     {
-    ALAsset *realasset =[self.photoSource objectAtIndex:page];
+    realasset =[self.photoSource objectAtIndex:page];
     NSLog(@"alasset:%@",realasset);
     if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
     {  
@@ -639,8 +684,10 @@
         [self play:frame1];
     }
     }
-        
-       
+    favo=YES;
+    [self performSelector:@selector(favorite) withObject:nil afterDelay:2.0];    
+   //[self favorite];   
+    
 }
 
 #pragma mark -
@@ -648,7 +695,9 @@
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
+    favorite.hidden=YES;
+    favo=NO;
+    NSLog(@"%@",favo);
 	NSInteger _index = [self centerPhotoIndex];
     
 	if (_index >= [self.photoSource count] || _index < 0 || (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {

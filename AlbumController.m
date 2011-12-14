@@ -63,7 +63,29 @@
     [editButton release];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addnumber) name:@"addplay" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addcount) name:@"addcount" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addfavorate) name:@"addfavorate" object:nil];
     
+}
+-(void)addfavorate
+{NSMutableArray *al=[[NSMutableArray alloc]init];
+    NSLog(@"SD");
+    for(int i=0;i<[self.playList.playlists count];i++)
+    {
+   AlbumClass *album = [self.playList.playlists objectAtIndex:i];
+        [al addObject:album.albumId];
+    }
+    NSLog(@"al.id:%@",al);
+    if(![al containsObject:@"-3"])
+    {
+        AlbumClass *sw=[[AlbumClass alloc]init];
+        sw.albumId=@"-3";
+        sw.albumName=@"I LIKE";
+        [self.playList.playlists addObject:sw];
+        NSLog(@"DS");
+    }
+     [self.playList selectID];
+    [self.playList count];
+    [self.tableView reloadData];
 }
 -(void)addcount
 { 

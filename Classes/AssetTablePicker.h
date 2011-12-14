@@ -62,6 +62,8 @@
     NSMutableArray *photos;
     UIInterfaceOrientation oritation;
     UIInterfaceOrientation previousOrigaton;
+    int minute;
+    int second;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;
@@ -100,6 +102,7 @@
 -(void)viewPhotos:(id)sender;
 -(UIImageView *)CGRectMake;
 -(UIView *)CGRectMake1;
+-(UIView *)CGRectMake2;
 -(void)getAssets:(ALAsset *)asset;
 -(void)EditPhotoTag;
 @end

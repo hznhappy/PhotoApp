@@ -11,7 +11,7 @@
 #import "DBOperation.h"
 #import "PopupPanelView.h"
 #import <MediaPlayer/MediaPlayer.h>
-
+#define Rules    @"Rules"
 #define PV_IMAGE_GAP 30
 
 @class PhotoImageView;
@@ -34,12 +34,16 @@
 	
     UIBarButtonItem *edit;
     BOOL editing;
-	//DBOperation *db;
+	DBOperation *db;
     PopupPanelView *ppv;
     NSTimer *timer;	
     UIButton *playButton;
     NSMutableArray *video;
     BOOL VI;
+    BOOL favo;
+    MPMoviePlayerController* theMovie;
+    UIView *favorite;
+    ALAsset *realasset;
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
 @property(nonatomic,retain)NSMutableArray *video;
@@ -57,4 +61,8 @@
 -(void)fireTimer:(NSString *)animateStyle;
 -(void)playVideo;
 -(void)play:(CGRect)framek;
+-(void)favorite;
+-(void)CFG;
+-(void)button1Pressed;
+-(void)button2Pressed;
 @end

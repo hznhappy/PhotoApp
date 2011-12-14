@@ -10,6 +10,9 @@
 #import "AlbumController.h"
 #import "PhotoViewController.h"
 #import "tagManagementController.h"
+#import <AVFoundation/AVFoundation.h>
+
+
 @implementation AssetTablePicker
 @synthesize crwAssets,urlsArray,dateArry;
 @synthesize table,val;
@@ -88,7 +91,6 @@
     [self setPhotoTag];
     [self.table reloadData];
 }
-
 -(void)loadPhotos:(NSArray *)array{
     NSAutoreleasePool *pools = [[NSAutoreleasePool alloc]init];
     NSDate *star = [NSDate date];
@@ -448,9 +450,6 @@
             
             ALAsset *asset = [self.crwAssets objectAtIndex:row];
             NSURL *url=[[asset defaultRepresentation]url];
-           /// MPMoviePlayerController* theMovie=[[MPMoviePlayerController alloc] initWithContentURL:url]; 
-           // theMovie.scalingMode=MPMovieScalingModeAspectFill; 
-           // UIImage *image = [theMovie thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];                    
             UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
              
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -461,6 +460,23 @@
             [cell addSubview:button];
             frame.origin.x = frame.origin.x + frame.size.width + 4;   
             NSString *ROW=[NSString stringWithFormat:@"%d",row];
+            if ([[asset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
+            {
+                NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
+                                                                 forKey:AVURLAssetPreferPreciseDurationAndTimingKey];           
+                AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:opts]; 
+                
+                minute = 0, second = 0; 
+                second = urlAsset.duration.value / urlAsset.duration.timescale;
+                if (second >= 60) {
+                    int index = second / 60;
+                    minute = index;
+                    second = second - index*60;                        
+                }    
+                [button addSubview:[self CGRectMake2]];
+                
+            }
+
             if([self.tagRow containsObject:ROW])
             { [self CGRectMake];
                 [button addSubview:[self CGRectMake]]; 
@@ -511,6 +527,32 @@
     [tagCount release];
     return tagBg;
    
+}
+-(UIView *)CGRectMake2
+{UIView *video =[[[UIView alloc]initWithFrame:CGRectMake(0, 54, 74, 16)]autorelease];
+    UILabel *length=[[UILabel alloc]initWithFrame:CGRectMake(30, 0, 44, 16)];
+    UIButton *tu=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 16)];
+  //  tu= [UIButton buttonWithType:UIButtonTypeCustom]; 
+    UIImage *picture = [UIImage imageNamed:@"VED.png"];
+    // set the image for the button
+    [tu setBackgroundImage:picture forState:UIControlStateNormal];
+    [video addSubview:tu];
+    
+
+    [length setBackgroundColor:[UIColor grayColor]];
+    length.alpha=0.8;
+    NSString *a=[NSString stringWithFormat:@"%d",minute];
+     NSString *b=[NSString stringWithFormat:@"%d",second];
+    length.text=a;
+    length.text=[length.text stringByAppendingString:@":"];
+    length.text=[length.text stringByAppendingString:b];
+    [video addSubview:length];
+    [length release];
+    [video setBackgroundColor:[UIColor grayColor]];
+    video.alpha=0.8;
+    return video;
+
+    
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
