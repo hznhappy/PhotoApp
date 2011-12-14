@@ -8,6 +8,8 @@
 @class PhotoScrollView;
 @class DisplayPhotoView;
 #include <AssetsLibrary/AssetsLibrary.h>
+#import <Foundation/Foundation.h>
+
 @interface PhotoImageView : UIView <UIScrollViewDelegate>{
 @private
 	PhotoScrollView *_scrollView;
@@ -25,8 +27,17 @@
 @property(nonatomic,readonly) PhotoScrollView *scrollView;
 
 - (void)setPhoto:(UIImage *)aPhoto;
+- (void)rotatePhoto;
+-(void)savePhoto;
 - (void)killScrollViewZoom;
 - (void)layoutScrollViewAnimated:(BOOL)animated;
 - (void)prepareForReusue;
 - (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
 @end
+
+
+@interface UIImage (UIImage_Extensions)
+
+- (UIImage *)imageRotatedByDegrees:(CGFloat)degrees;
+
+@end;

@@ -13,7 +13,8 @@
 #import "AssetProducer.h"
 #import "PlaylistProducer.h"
 #import "DBOperation.h"
-
+#import "AssetRef.h"
+#import <AVFoundation/AVFoundation.h>
 
 @implementation AlbumController
 
@@ -180,13 +181,44 @@
         NSLog(@"assetsCount:%d",[assets count]);
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:assets,@"assets",[self.playList.list objectAtIndex:indexPath.row],@"ID",nil];
-    // NSDictionary *dic = [NSDictionary dictionaryWithObject:assets forKey:@"assets"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushThumbnailView" object:nil userInfo:dic];
-    [table deselectRowAtIndexPath:indexPath animated:YES];
-    self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
-    //[[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
+//    AssetRef *asset = [assets objectAtIndex:2081];
+//    ALAsset *realasset = asset.asset;
+//    ALAssetRepresentation *ref = [realasset defaultRepresentation];
+//    NSURL *url = [ref url];
+//    NSLog(@"%@ is the url ",url);
+//    MPMoviePlayerController* theMovie=[[MPMoviePlayerController alloc] initWithContentURL:url]; 
+//    theMovie.scalingMode=MPMovieScalingModeAspectFill; 
+//    [[theMovie view]setFrame:self.view.bounds];
+//    [theMovie setControlStyle:MPMovieControlStyleEmbedded];
+//    [self.view addSubview:[theMovie view]];
+//     [theMovie prepareToPlay];
+//    // Register for the playback finished notification. 
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self 
+//                                             selector:@selector(myMovieFinishedCallback:) 
+//                                                 name:MPMoviePlayerPlaybackDidFinishNotification 
+//                                               object:theMovie]; 
+    
+    // Movie playback is asynchronous, so this method returns immediately. 
+   // [theMovie play];  
+[table deselectRowAtIndexPath:indexPath animated:YES];
+self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
+//[[UIApplication sharedApplication]sendAction:@selector(albumSelected:) to:nil from:self forEvent:nil];
 }
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+
+// When the movie is done,release the controller. 
+-(void)myMovieFinishedCallback:(NSNotification*)aNotification 
+{
+    MPMoviePlayerController* theMovie=[aNotification object]; 
+    [[NSNotificationCenter defaultCenter] removeObserver:self 
+                                                    name:MPMoviePlayerPlaybackDidFinishNotification 
+                                                  object:theMovie]; 
+    NSLog(@"PO");
+    // Release the movie instance created in playMovieAtURL
+    [theMovie release]; 
+}
+    - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     [self.playList selectID];
     if([[self.playList.list objectAtIndex:indexPath.row]intValue]<0)
     {

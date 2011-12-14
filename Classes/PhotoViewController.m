@@ -10,7 +10,7 @@
 #import "PopupPanelView.h"
 #import "tagManagementController.h"
 #import "PhotoImageView.h"
-
+#import "CropView.h"
 @interface PhotoViewController (Private)
 - (void)loadScrollViewWithPage:(NSInteger)page;
 - (void)layoutScrollViewSubviews;
@@ -20,8 +20,27 @@
 - (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated;
 - (NSInteger)centerPhotoIndex;
 - (void)setupToolbar;
+- (void)setupEditToolbar;
 - (void)setViewState;
 - (void)autosizePopoverToImageSize:(CGSize)imageSize photoImageView:(PhotoImageView*)photoImageView;
+@end
+
+@implementation UIImage (Crop)
+
+- (UIImage *)crop:(CGRect)rect {
+    
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    
+    if (scale>1.0) {        
+        rect = CGRectMake(rect.origin.x*scale , rect.origin.y*scale, rect.size.width*scale, rect.size.height*scale);        
+    }
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage], rect);
+    UIImage *result = [UIImage imageWithCGImage:imageRef]; 
+    CGImageRelease(imageRef);
+    return result;
+}
+
 @end
 
 @implementation PhotoViewController
@@ -32,6 +51,7 @@
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
 @synthesize fullScreenPhotos;
+@synthesize cropView;
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
@@ -108,7 +128,14 @@
 	self.photoViews = views;
     [views release];
     
+    CropView *temCV = [[CropView alloc]initWithFrame:CGRectMake(60, 140, 200, 200)];
+    temCV.backgroundColor = [UIColor clearColor];
+    self.cropView = temCV;
+    [temCV release];
+    
+    tagShow = NO;
     editing=NO;
+    croping = NO;
     NSString *u=NSLocalizedString(@"Edit", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
    	self.navigationItem.rightBarButtonItem=edit;
@@ -117,10 +144,9 @@
     ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
     NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
     ppv.url = currentPageUrl;
+    ppv.alpha = 0.4;
     [ppv Buttons];
-    [self.view addSubview:ppv];
-    ppv.hidden=YES;
-    
+    [ppv viewClose];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -186,32 +212,6 @@
     _rotating = NO;
     
 }
--(void)edit
-{
-    NSString *a=NSLocalizedString(@"Edit", @"title");
-    NSString *b=NSLocalizedString(@"Done", @"title");
-    
-    if (editing)
-    {  ppv.hidden=NO;
-        
-        ppv.alpha=0.4;
-        
-        [self.view addSubview:ppv];
-        edit.style = UIBarButtonItemStyleBordered;
-        edit.title = a;
-        [ppv viewClose];
-    }
-    else{
-        ppv.hidden=NO;
-        edit.style = UIBarButtonItemStyleDone;
-        edit.title = b;
-        [ppv viewOpen];
-    }
-    editing = !editing;
-}
-- (void)done:(id)sender {
-	[self dismissModalViewControllerAnimated:YES];
-}
 
 - (void)setupToolbar {
 	UIBarButtonItem *action = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonHit:)];
@@ -254,6 +254,153 @@
 	[action release];
 	[flex release];
 	
+}
+
+#pragma mark -
+#pragma mark EditMethods
+-(void)edit
+{
+    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.hidesBackButton = YES;
+    UIBarButtonItem *cancell = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelEdit)];
+    self.navigationItem.leftBarButtonItem = cancell;
+    [self setupEditToolbar];
+    editing = YES;
+    
+}
+
+-(void)cancelEdit{
+    self.navigationItem.leftBarButtonItem = nil;
+    self.navigationItem.rightBarButtonItem = edit;
+    [self setupToolbar];
+    self.navigationItem.hidesBackButton = NO;
+    editing = NO;
+    if (cropView.superview!=nil) {
+        [cropView removeFromSuperview];
+    }
+    
+}
+
+- (void)setupEditToolbar{
+    [self setToolbarItems:nil];
+    UIBarButtonItem *rotate = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"refresh.png"] 
+                                                              style:UIBarButtonItemStylePlain 
+                                                             target:self 
+                                                             action:@selector(rotatePhoto)];
+    
+	UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    UIBarButtonItem *tag = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"tag.png"] 
+                                                           style:UIBarButtonItemStylePlain 
+                                                          target:self 
+                                                          action:@selector(markPhoto)];
+    
+    UIBarButtonItem *crop = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"wrench.png"]
+                                                                                style:UIBarButtonItemStylePlain
+                                                                               target:self 
+                                                                               action:@selector(cropPhoto)];
+    [self setToolbarItems:[NSArray arrayWithObjects:rotate,flex,tag,flex,crop, nil]];
+    
+    [rotate release];
+    [flex release];
+    [crop release];
+    [tag release];
+}
+
+-(void)rotatePhoto{
+    if (self.navigationItem.rightBarButtonItem == nil) {
+        UIBarButtonItem *cropItem=[[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(saveCropPhoto:)];
+        self.navigationItem.rightBarButtonItem = cropItem;
+        [cropItem release];
+    }
+       
+    if (!self.navigationItem.rightBarButtonItem.enabled) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+    self.navigationItem.rightBarButtonItem.title = @"Save";
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
+        return;
+    }else{
+        [photoView rotatePhoto];
+    }
+}
+
+- (void)markPhoto{
+    if (tagShow)
+    {  
+        [ppv viewClose];
+    }
+    else{
+        if (ppv.superview == nil) {
+            [self.view addSubview:ppv];
+        }
+        [ppv viewOpen];
+    }
+    tagShow = !tagShow;
+
+    
+}
+
+
+
+-(void)cropPhoto{
+    
+    if (cropView.superview!=nil) {
+        self.navigationItem.rightBarButtonItem = nil;
+        [cropView removeFromSuperview];
+        croping = NO;
+    }else{
+        self.navigationItem.rightBarButtonItem = nil;
+        UIBarButtonItem *cropItem=[[UIBarButtonItem alloc]initWithTitle:@"Crop" style:UIBarButtonItemStyleDone target:self action:@selector(saveCropPhoto:)];
+        self.navigationItem.rightBarButtonItem = cropItem;
+        [cropItem release];
+        [self.view addSubview:self.cropView];
+        croping = YES;
+    }
+    
+}
+
+-(void)saveCropPhoto:(id)sender{
+    UIBarButtonItem *barButton = (UIBarButtonItem *)sender;
+    barButton.enabled = NO;
+    if (croping) {
+        UIImageWriteToSavedPhotosAlbum([self croppedPhoto], nil, nil, nil);
+        [self.cropView removeFromSuperview];
+    }else{
+        PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+        if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
+            return;
+        }else{
+            [photoView savePhoto];
+        }
+    }
+}
+
+- (UIImage *)croppedPhoto
+{
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
+        return nil;
+    }else{
+        UIImage *orignImage = photoView.photo;
+        UIScrollView *scrollView = (UIScrollView *)photoView.scrollView;
+    
+        CGFloat zoomScale = scrollView.zoomScale;
+        CGFloat cx =  self.cropView.frame.origin.x  / zoomScale;
+        CGFloat cy =  self.cropView.frame.origin.y  / zoomScale;
+        CGFloat cw = self.cropView.frame.size.width / zoomScale;
+        CGFloat ch = self.cropView.frame.size.height / zoomScale;
+        CGRect cropRect = CGRectMake(cx, cy, cw, ch);
+        NSLog(@"crop photo frame is %@ and ImageView frmae  is %@",NSStringFromCGRect(cropRect),NSStringFromCGRect(photoView.imageView.frame));
+        
+        CGImageRef imageRef = CGImageCreateWithImageInRect([orignImage CGImage], cropRect);
+        UIImage *result = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+        
+        
+        return result;
+    }
 }
 
 - (NSInteger)currentPhotoIndex{
@@ -311,7 +458,9 @@
 				[self setBarsHidden:NO animated:YES];
 			}
 		} 
-		[self setViewState];
+        if (!editing) {
+            [self setViewState];
+        }
 	}
 }
 
@@ -367,7 +516,9 @@
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
    	_pageIndex = index;
     
-	[self setViewState];
+	if (!editing) {
+        [self setViewState];
+    }
     
 	[self enqueuePhotoViewAtIndex:index];
     
@@ -535,7 +686,9 @@
         
         NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
         [self performSelectorInBackground:@selector(readPhotoFromALAssets:) withObject:pageIndex];
-        [self setViewState];
+        if (!editing) {
+            [self setViewState];
+        }
 		
 		if (![scrollView isTracking]) {
 			[self layoutScrollViewSubviews];
@@ -559,10 +712,6 @@
 
 #pragma mark -
 #pragma mark Actions
-- (void)markPhoto{
-    [self edit];
-    
-}
 
 - (void)copyPhoto{
 	
@@ -571,7 +720,12 @@
 }
 
 - (void)emailPhoto{
-	
+	/*MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc]init];
+    messageController.messageComposeDelegate = self;
+    messageController.recipients = [NSArray arrayWithObject:@"23234567"];  
+    messageController.body = @"iPhone OS4";
+    [self presentModalViewController:messageController animated:YES];
+    [messageController release];*/
 	MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
 	[mailViewController setSubject:@"Shared Photo"];
 	[mailViewController addAttachmentData:[NSData dataWithData:UIImagePNGRepresentation(((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).imageView.image)] mimeType:@"png" fileName:@"Photo.png"];
@@ -582,6 +736,9 @@
 	
 }
 
+-(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result{
+    [self dismissModalViewControllerAnimated:YES];
+}
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{
 	
 	[self dismissModalViewControllerAnimated:YES];
@@ -646,7 +803,9 @@
 		[self copyPhoto];	
 	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
 		[self emailPhoto];	
-	}
+	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3){
+        [self cropPhoto];
+    }
 }
 
 #pragma mark -
@@ -711,8 +870,7 @@
 	[_photoViews release];
 	[photoSource release];
 	[_scrollView release];
+    [cropView release];
     [super dealloc];
 }
-
-
 @end

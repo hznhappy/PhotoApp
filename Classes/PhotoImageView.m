@@ -29,6 +29,40 @@
 - (void)layoutScrollViewAnimated:(BOOL)animated;
 @end
 
+CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
+
+@implementation UIImage (UIImage_Extensions)
+
+- (UIImage *)imageRotatedByDegrees:(CGFloat)degrees 
+{
+    // calculate the size of the rotated view's containing box for our drawing space
+    UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.size.width, self.size.height)];
+    CGAffineTransform t = CGAffineTransformMakeRotation(DegreesToRadians(degrees));
+    rotatedViewBox.transform = t;
+    CGSize rotatedSize = rotatedViewBox.frame.size;
+    [rotatedViewBox release];
+    
+    // Create the bitmap context
+    UIGraphicsBeginImageContext(rotatedSize);
+    CGContextRef bitmap = UIGraphicsGetCurrentContext();
+    
+    // Move the origin to the middle of the image so we will rotate and scale around the center.
+    CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
+    
+    //   // Rotate the image context
+    CGContextRotateCTM(bitmap, DegreesToRadians(degrees));
+    
+    // Now, draw the rotated/scaled image into the context
+    CGContextScaleCTM(bitmap, 1.0, -1.0);
+    CGContextDrawImage(bitmap, CGRectMake(-self.size.width / 2, -self.size.height / 2, self.size.width, self.size.height), [self CGImage]);
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+    
+}
+
+@end
 
 @implementation PhotoImageView 
 
@@ -97,7 +131,7 @@
     
    	if (self.photo) {
       
-		self.imageView.image = self.photo;		
+		self.imageView.image = self.photo;	
 	} 
 	
 	if (self.imageView.image) {
@@ -110,8 +144,20 @@
 		
 		
 	} 
-	
 	[self layoutScrollViewAnimated:NO];
+}
+
+
+-(void)rotatePhoto{
+
+    UIImage *image = [self.photo imageRotatedByDegrees:90];
+    self.photo = image;
+
+}
+
+-(void)savePhoto{
+    UIImageWriteToSavedPhotosAlbum(self.photo, nil, nil, nil);
+
 }
 - (void)prepareForReusue{
 	
@@ -142,11 +188,9 @@
 		height = MIN(CGRectGetHeight(self.imageView.frame) + self.imageView.frame.origin.x, CGRectGetHeight(self.bounds));
 		width = MIN(CGRectGetWidth(self.imageView.frame) + self.imageView.frame.origin.y, CGRectGetWidth(self.bounds));
 		self.scrollView.frame = CGRectMake((self.bounds.size.width / 2) - (width / 2), (self.bounds.size.height / 2) - (height / 2), width, height);
-		
 	} else {
 		
 		[self layoutScrollViewAnimated:NO];
-		
 	}
 }
 
