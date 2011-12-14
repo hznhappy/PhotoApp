@@ -11,6 +11,7 @@
 #import "DBOperation.h"
 #import "AlbumClass.h"
 #import "AssetProducer.h"
+#import "AssetRef.h"
 
 
 #define PlayTable @"PlayTable"
@@ -38,6 +39,7 @@
 - (void) albumSelected: (id) sender;
 -(void)addnumber;
 -(void)addcount;
+-(void)addfavorate;
 -(IBAction)toggleEdit:(id)sender;
 -(IBAction)toggleAdd:(id)sender;
 @end

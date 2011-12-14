@@ -10,12 +10,15 @@
 #import "PopupPanelView.h"
 #import "tagManagementController.h"
 #import "PhotoImageView.h"
+<<<<<<< HEAD
 #import "CropView.h"
+=======
 #import "AssetRef.h"
 
 
 
 
+>>>>>>> origin/master
 @interface PhotoViewController (Private)
 - (void)loadScrollViewWithPage:(NSInteger)page;
 - (void)layoutScrollViewSubviews;
@@ -56,8 +59,11 @@
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
 @synthesize fullScreenPhotos;
+<<<<<<< HEAD
 @synthesize cropView;
+=======
 @synthesize video;
+>>>>>>> origin/master
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
@@ -172,6 +178,7 @@
     favorite.hidden=YES;
 }
 -(void)readPhotoFromALAssets:(NSString *)pageIndex{
+
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     NSInteger index = [pageIndex integerValue];
     for (NSInteger i = index-2; i<index+3; i++) {
@@ -227,8 +234,8 @@
    NSMutableArray *array=[[NSMutableArray alloc]init];
     self.video=array;
 	self.photoViews = views;
+<<<<<<< HEAD
     [views release];
-    [array release];
     
     CropView *temCV = [[CropView alloc]initWithFrame:CGRectMake(60, 140, 200, 200)];
     temCV.backgroundColor = [UIColor clearColor];
@@ -236,6 +243,10 @@
     [temCV release];
     
     tagShow = NO;
+=======
+    [views release];   
+    [array release];
+>>>>>>> origin/master
     editing=NO;
     croping = NO;
     NSString *u=NSLocalizedString(@"Edit", @"title");
@@ -366,6 +377,37 @@
     _rotating = NO;
     
 }
+<<<<<<< HEAD
+=======
+-(void)edit
+{
+    NSString *a=NSLocalizedString(@"Edit", @"title");
+    NSString *b=NSLocalizedString(@"Done", @"title");
+    if (editing)
+    { 
+        
+        ppv.alpha=0.4;
+        
+        [self.view addSubview:ppv];
+        edit.style = UIBarButtonItemStyleBordered;
+        edit.title = a;
+        [ppv viewClose];
+    }
+    else{
+        ppv.hidden=NO;
+        edit.style = UIBarButtonItemStyleDone;
+        edit.title = b;
+        [ppv viewOpen];
+    }
+    editing = !editing;
+    
+    
+}
+
+- (void)done:(id)sender {
+	[self dismissModalViewControllerAnimated:YES];
+}
+>>>>>>> origin/master
 
 - (void)setupToolbar {
 	UIBarButtonItem *action = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonHit:)];
@@ -670,10 +712,14 @@
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
    	_pageIndex = index;
     
+<<<<<<< HEAD
 	if (!editing) {
         [self setViewState];
     }
     
+=======
+	[self setViewState];
+>>>>>>> origin/master
 	[self enqueuePhotoViewAtIndex:index];
     
 	[self loadScrollViewWithPage:index-1];

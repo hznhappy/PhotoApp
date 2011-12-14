@@ -10,7 +10,8 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DBOperation.h"
 #import "PopupPanelView.h"
-
+#import <MediaPlayer/MediaPlayer.h>
+#define Rules    @"Rules"
 #define PV_IMAGE_GAP 30
 @class CropView;
 @class PhotoImageView;
@@ -35,11 +36,19 @@
     BOOL tagShow;
     BOOL croping;
 	//DBOperation *db;
+	DBOperation *db;
     PopupPanelView *ppv;
     NSTimer *timer;	
+    UIButton *playButton;
+    NSMutableArray *video;
+    BOOL VI;
+    BOOL favo;
+    MPMoviePlayerController* theMovie;
+    UIView *favorite;
+    ALAsset *realasset;
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
-
+@property(nonatomic,retain)NSMutableArray *video;
 @property(nonatomic,retain) NSArray *photoSource;
 @property(nonatomic,retain) NSMutableArray *photoViews;
 @property(nonatomic,retain) NSMutableArray *fullScreenPhotos;
@@ -53,6 +62,12 @@
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;
+-(void)playVideo;
+-(void)play:(CGRect)framek;
+-(void)favorite;
+-(void)CFG;
+-(void)button1Pressed;
+-(void)button2Pressed;
 - (UIImage *) croppedPhoto;
 @end
 
