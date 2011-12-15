@@ -141,10 +141,16 @@
     
 
 }
--(void)favorite
-{
+-(void)favorite:(NSString *)inter
+{  
+    if([inter integerValue]==_pageIndex)
+    {
+    NSLog(@"FACORITE");
+    
     favorite.hidden=NO;
     [self.view addSubview:favorite];
+    }
+  //  [favorite CommitAnimations];
 }
 -(void)button1Pressed
 {
@@ -677,7 +683,7 @@
     }
     
 	[self enqueuePhotoViewAtIndex:index];
-    
+  
 	[self loadScrollViewWithPage:index-1];
     VI=YES;
 	[self loadScrollViewWithPage:index];
@@ -796,6 +802,7 @@
 		photoView = [[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
 		[photoView release];
+        NSLog(@"CHONGYONG");
 		
 	} 
     UIImage *photo = [self.fullScreenPhotos objectAtIndex:page];
@@ -837,8 +844,11 @@
         [self play:frame1];
     }
     }
-    favo=YES;
-    [self performSelector:@selector(favorite) withObject:nil afterDelay:2.0];    
+    NSString *p=[NSString stringWithFormat:@"%d",page];
+    if(VI==YES)
+    {
+        [self performSelector:@selector(favorite:) withObject:p afterDelay:2.5];    
+    }
    //[self favorite];   
     
 }
