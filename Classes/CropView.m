@@ -147,20 +147,50 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     touchStart = [[touches anyObject] locationInView:self];
-    isResizing = (self.bounds.size.width - touchStart.x < kResizeThumbSize &&
+    
+    rightBottomCorner = (self.bounds.size.width - touchStart.x < kResizeThumbSize &&
                   self.bounds.size.height - touchStart.y < kResizeThumbSize);
-    if (isResizing) {
+    leftTopCorner = (touchStart.x - self.bounds.origin.x < kResizeThumbSize &&
+                       touchStart.y - self.bounds.origin.y < kResizeThumbSize);
+    leftBottomCorner = (touchStart.x - self.bounds.origin.x < kResizeThumbSize &&
+                             self.bounds.origin.y - touchStart.y < kResizeThumbSize);
+    rightTopCorner = (touchStart.y - self.bounds.origin.y < kResizeThumbSize &&
+                           self.bounds.size.width - touchStart.x <kResizeThumbSize);
+    
+    if (rightBottomCorner) {
         touchStart = CGPointMake(touchStart.x - self.bounds.size.width,
                                  touchStart.y - self.bounds.size.height);
+    }else if(rightTopCorner){
+//        touchStart = CGPointMake(touchStart.x - self.bounds.size.width, 
+//                                 touchStart.y - self.bounds.origin.y);
+    }else if(leftTopCorner){
+        
+    }else if(leftBottomCorner){
+        
     }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     CGPoint touchPoint = [[touches anyObject] locationInView:self];
-    if (isResizing) {
+    if (rightBottomCorner) {
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y,
                                 touchPoint.x - touchStart.x, touchPoint.y - touchStart.y);
-    } else {
+    }else if(rightTopCorner){
+        NSLog(@"%.1f is the distance",touchPoint.x - touchStart.x);
+        self.frame = CGRectMake(self.frame.origin.x,self.frame.origin.y + touchPoint.y - touchStart.y, 
+                                self.frame.size.width + touchPoint.x - touchStart.x, self.frame.size.height - touchPoint.y + touchStart.y);
+
+    }else if(leftTopCorner){
+        self.frame = CGRectMake(self.frame.origin.x+touchPoint.x - touchStart.x, self.frame.origin.y+touchPoint.y - touchStart.y,
+                                self.frame.size.width - touchPoint.x + touchStart.x, self.frame.size.height - touchPoint.y + touchStart.y);
+
+    }else if(leftBottomCorner){
+        self.frame = CGRectMake(self.frame.origin.x +  touchPoint.x - touchStart.x, self.frame.origin.y,
+                                self.frame.size.width - touchPoint.x + touchStart.x, self.frame.size.height + touchPoint.y - touchStart.y);
+
+    }
+    
+    else {
         self.center = CGPointMake(self.center.x + touchPoint.x - touchStart.x,
                                   self.center.y + touchPoint.y - touchStart.y);
     }

@@ -12,7 +12,10 @@
 @interface CropView : UIView {
     @private
     CGPoint touchStart;
-    BOOL isResizing;
+    BOOL rightBottomCorner;
+    BOOL rightTopCorner;
+    BOOL leftTopCorner;
+    BOOL leftBottomCorner;
 }
 
 @end

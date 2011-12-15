@@ -86,7 +86,7 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 		_scrollView = [scrollView retain];
 		[scrollView release];
 
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:self.bounds];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:self.frame];
 		imageView.opaque = YES;
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
 		imageView.tag = ZOOM_VIEW_TAG;
