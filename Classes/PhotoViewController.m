@@ -84,15 +84,10 @@
 -(void)play:(CGRect)framek
 {
         
-    playButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+   
     playButton.frame =framek;
-    [playButton addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchUpInside];
+        [self.scrollView addSubview:playButton];
     
-    UIImage *picture = [UIImage imageNamed:@"ji.png"];
-    // set the image for the button
-    [playButton setBackgroundImage:picture forState:UIControlStateNormal];
-    [playButton setImage:picture forState:UIControlStateNormal];
-    [self.scrollView addSubview:playButton];
 
 
 }
@@ -109,34 +104,45 @@
     [db createTable:createRules];
     favorite=[[UIView alloc]initWithFrame:CGRectMake(1,160,80,150)];
     [favorite setBackgroundColor:[UIColor grayColor]];
-    favorite.alpha=0.5;
-    
-    UILabel *note=[[UILabel alloc]initWithFrame:CGRectMake(0, 10, 80, 30)];
-    [note setBackgroundColor:[UIColor grayColor]];
-    note.numberOfLines = 10;
-    note.text = @"do you like it?";
+   favorite.alpha=0.6;
+    UIImage *bubble = [UIImage imageNamed:@"bubble.png"];
+	bubbleImageView = [[UIImageView alloc] initWithImage:[bubble stretchableImageWithLeftCapWidth:21 topCapHeight:14]];
+
+    bubbleImageView.frame = CGRectMake(0,0,80,150);
+    //[favorite addSubview:bubbleImageView];
+
+    UILabel *note=[[UILabel alloc]initWithFrame:CGRectMake(15, 10, 80, 30)];
+    [note setBackgroundColor:[UIColor clearColor]];
+    note.numberOfLines = 10;  
+    note.text = @"Do you like it?";
+   
+    //note.baselineAdjustment = UIBaselineAdjustmentNone; 
+    //note.highlighted = YES;       
+
+    //note.highlightedTextColor = [UIColor whiteColor];      
+    note.textColor = [UIColor whiteColor];
+    note.font = [UIFont boldSystemFontOfSize:18];
+     //[note setText:@"do you like it?"];
     CGSize size = CGSizeMake(60, 1000);
     CGSize labelSize = [note.text sizeWithFont:note.font 
                               constrainedToSize:size
                                   lineBreakMode:UILineBreakModeClip];
     note.frame = CGRectMake(note.frame.origin.x, note.frame.origin.y,
                              note.frame.size.width,labelSize.height);
-    
-   // [note setText:@"are you like it?"];
-    [favorite addSubview:note];
+   [favorite addSubview:note];
     [note release];
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom]; 
     button1.frame = CGRectMake(10, 80, 60, 30);
-    [button1 setBackgroundColor:[UIColor grayColor]]; 
+    [button1 setBackgroundColor:[UIColor clearColor]]; 
     [button1 setTitle:@"YES" forState:UIControlStateNormal];
     UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom]; 
     button2.frame = CGRectMake(10, 115, 60, 30);
-    [button2 setBackgroundColor:[UIColor grayColor]]; 
+    [button2 setBackgroundColor:[UIColor clearColor]]; 
     [button2 setTitle:@"NO" forState:UIControlStateNormal];
     [button1 addTarget:self action:@selector(button1Pressed) forControlEvents:UIControlEventTouchDown];
     [button2 addTarget:self action:@selector(button2Pressed) forControlEvents:UIControlEventTouchDown];
-    [favorite addSubview:button1];
-    [favorite addSubview:button2];
+   [favorite addSubview:button1];
+   [favorite addSubview:button2];
     //favorite.hidden=YES;
     
 
@@ -145,17 +151,33 @@
 {  
     if([inter integerValue]==_pageIndex)
     {
+         //favorite.hidden=NO;
     NSLog(@"FACORITE");
-    
-    favorite.hidden=NO;
     [self.view addSubview:favorite];
+   // 
+       
+        
+        [UIView animateWithDuration:0.5 
+                         animations:^{
+                             //myPickerView.frame = CGRectMake(0, 210, 310, 180);
+                             favorite.alpha = 0.6;
+                         }];
+        
+
+        //favorite.hidden=NO;
+
     }
   //  [favorite CommitAnimations];
 }
 -(void)button1Pressed
 {
     NSLog(@"button1");
-    favorite.hidden=YES;
+   // favorite.hidden=YES;
+    [UIView animateWithDuration:0.8 
+                     animations:^{
+                         //myPickerView.frame = CGRectMake(0, 210, 310, 180);
+                        favorite.alpha = 0;
+                     }];
     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%d','%@','%@')",TAG,-1,[[realasset defaultRepresentation]url],@"like"];
     NSLog(@"JJJJ%@",insertTag);
     [db insertToTable:insertTag];
@@ -176,7 +198,13 @@
 -(void)button2Pressed
 {
     NSLog(@"button2");
-    favorite.hidden=YES;
+   // favorite.hidden=YES;
+    [UIView animateWithDuration:0.8 
+                     animations:^{
+                         //myPickerView.frame = CGRectMake(0, 210, 310, 180);
+                         favorite.alpha = 0;
+                     }];
+
 }
 -(void)readPhotoFromALAssets:(NSString *)pageIndex{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -256,6 +284,15 @@
     ppv.alpha = 0.4;
     [ppv Buttons];
     [ppv viewClose];
+    
+    
+    playButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    [playButton addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *picture = [UIImage imageNamed:@"ji.png"];
+    // set the image for the button
+    [playButton setBackgroundImage:picture forState:UIControlStateNormal];
+    [playButton setImage:picture forState:UIControlStateNormal];
+
 }
 -(void)playVideo
 {
@@ -858,8 +895,13 @@
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    favorite.hidden=YES;
-    favo=NO;
+  
+    [UIView animateWithDuration:0
+                     animations:^{
+                         //myPickerView.frame = CGRectMake(0, 210, 310, 180);
+                         favorite.alpha = 0;
+                     }];
+
 	NSInteger _index = [self centerPhotoIndex];
     
 	if (_index >= [self.photoSource count] || _index < 0 || (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {

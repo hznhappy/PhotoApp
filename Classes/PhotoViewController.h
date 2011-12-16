@@ -46,6 +46,8 @@
     MPMoviePlayerController* theMovie;
     UIView *favorite;
     ALAsset *realasset;
+    
+    UIImageView *bubbleImageView;
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
 @property(nonatomic,retain)NSMutableArray *video;
