@@ -46,6 +46,8 @@
     MPMoviePlayerController* theMovie;
     UIView *favorite;
     ALAsset *realasset;
+    
+    UIImageView *bubbleImageView;
 }
 @property(nonatomic,retain)PopupPanelView *ppv;
 @property(nonatomic,retain)NSMutableArray *video;
@@ -64,7 +66,7 @@
 -(void)fireTimer:(NSString *)animateStyle;
 -(void)playVideo;
 -(void)play:(CGRect)framek;
--(void)favorite;
+-(void)favorite:(NSString *)inter;
 -(void)CFG;
 -(void)button1Pressed;
 -(void)button2Pressed;

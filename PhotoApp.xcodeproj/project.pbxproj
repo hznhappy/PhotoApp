@@ -20,6 +20,7 @@
 		1861AAD21498ACA900C537FE /* ji.png in Resources */ = {isa = PBXBuildFile; fileRef = 1861AAD11498ACA900C537FE /* ji.png */; };
 		18696E8B147A217100302EB8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18696E8A147A217100302EB8 /* Settings.bundle */; };
 		186BF9BF1470AEB500961C67 /* AlbumController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186BF9C01470AEB500961C67 /* AlbumController.xib */; };
+		18782B21149ADDC800836515 /* bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 18782B20149ADDC800836515 /* bubble.png */; };
 		18D402821474E50000389097 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18D402841474E50000389097 /* Localizable.strings */; };
 		18D402901474E55900389097 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18D402921474E55900389097 /* InfoPlist.strings */; };
 		18D402981474E5F500389097 /* PhotoApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D402971474E5F500389097 /* PhotoApp-Info.plist */; };
@@ -94,6 +95,7 @@
 		1861AAD11498ACA900C537FE /* ji.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ji.png; sourceTree = "<group>"; };
 		18696E8A147A217100302EB8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		186BF9C01470AEB500961C67 /* AlbumController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumController.xib; path = Classes/AlbumController.xib; sourceTree = "<group>"; };
+		18782B20149ADDC800836515 /* bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble.png; sourceTree = "<group>"; };
 		18D402831474E50000389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		18D402851474E50800389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		18D402911474E55900389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 		A1EF3DA3144419710087972B /* OnePhotoController */ = {
 			isa = PBXGroup;
 			children = (
+				18782B20149ADDC800836515 /* bubble.png */,
 				A1EF3DB114441A840087972B /* PhotoViewController.h */,
 				A1F7E84A148CB5F90088F366 /* PhotoViewController.m */,
 				A1EF3DA914441A640087972B /* PhotoImageView.h */,
@@ -475,6 +478,7 @@
 				A1DAD46314983C7C00004688 /* wrench.png in Resources */,
 				1861AAB814986FC400C537FE /* VED.png in Resources */,
 				1861AAD21498ACA900C537FE /* ji.png in Resources */,
+				18782B21149ADDC800836515 /* bubble.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
