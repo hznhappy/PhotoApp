@@ -114,7 +114,7 @@
     UILabel *note=[[UILabel alloc]initWithFrame:CGRectMake(0, 10, 80, 30)];
     [note setBackgroundColor:[UIColor grayColor]];
     note.numberOfLines = 10;
-    note.text = @"do you like it?";
+    note.text = @"Do you like it?";
     CGSize size = CGSizeMake(60, 1000);
     CGSize labelSize = [note.text sizeWithFont:note.font 
                               constrainedToSize:size

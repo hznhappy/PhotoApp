@@ -18,4 +18,6 @@
     BOOL leftBottomCorner;
 }
 
+//-(void)drawLine:(CGRect)rect;
+//-(void)clearLine:(CGRect)rect;
 @end
