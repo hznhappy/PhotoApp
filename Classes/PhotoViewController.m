@@ -308,7 +308,7 @@
 
     [[theMovie view] setFrame:[self.view bounds]]; // Frame must match parent view
     [self.view addSubview:[theMovie view]];
-    //  theMovie.scalingMode =  MPMovieControlModeDefault;
+    //theMovie.scalingMode =  MPMovieControlModeDefault;
    // theMovie.scalingMode=MPMovieScalingModeAspectFill; 
     theMovie.scalingMode=MPMovieMediaTypeMaskAudio;
     theMovie.controlStyle = MPMovieControlModeHidden;
@@ -554,8 +554,14 @@
         UIBarButtonItem *cropItem=[[UIBarButtonItem alloc]initWithTitle:@"Crop" style:UIBarButtonItemStyleDone target:self action:@selector(saveCropPhoto:)];
         self.navigationItem.rightBarButtonItem = cropItem;
         [cropItem release];
-        [self.view addSubview:self.cropView];
-        croping = YES;
+        PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+        if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
+            return;
+        }else{
+            photoView.alpha = 0.4;
+            [self.view addSubview:self.cropView];
+            croping = YES;
+        }
     }
     
 }
@@ -583,16 +589,34 @@
         return nil;
     }else{
         UIImage *orignImage = photoView.photo;
-        UIScrollView *scrollView = (UIScrollView *)photoView.scrollView;
-    
-        CGFloat zoomScale = scrollView.zoomScale;
-        CGFloat cx =  self.cropView.frame.origin.x  / zoomScale;
-        CGFloat cy =  self.cropView.frame.origin.y  / zoomScale;
-        CGFloat cw = self.cropView.frame.size.width / zoomScale;
-        CGFloat ch = self.cropView.frame.size.height / zoomScale;
-        CGRect cropRect = CGRectMake(cx, cy, cw, ch);
-        NSLog(@"crop photo frame is %@ and ImageView frmae  is %@",NSStringFromCGRect(cropRect),NSStringFromCGRect(photoView.imageView.frame));
+        UIScrollView *pScrollView = (UIScrollView *)photoView.scrollView;
+        CGFloat zoomScale = pScrollView.zoomScale;
         
+        CGFloat hfactor = photoView.imageView.image.size.width / photoView.imageView.frame.size.width;
+        CGFloat vfactor = photoView.imageView.image.size.height / photoView.imageView.frame.size.height;
+//        CGRect visibleRect;
+//        visibleRect.origin = pScrollView.contentOffset;
+//        visibleRect.size = pScrollView.bounds.size;
+//       // NSLog(@"scrollview frame is %@",NSStringFromCGRect(pScrollView.frame));
+//       // NSLog(@"scrollview bounds is %@",NSStringFromCGRect(pScrollView.bounds));
+//        float theScale = 1.0 / zoomScale;
+//        visibleRect.origin.x *= theScale;
+//        visibleRect.origin.y *= theScale;
+//        visibleRect.size.width *= theScale;
+//        visibleRect.size.height *= theScale;
+//        NSLog(@"scrollView visibleRect is %@",NSStringFromCGRect(visibleRect));
+////        CGFloat cofX = pScrollView.contentOffset.x;
+////        CGFloat cofY = pScrollView.contentOffset.y;
+//        
+//        CGRect newRect = [self.view convertRect:self.cropView.frame toView:pScrollView];
+        CGPoint point = [self.view convertPoint:self.cropView.frame.origin toView:photoView.imageView];
+        NSLog(@"must the same %@ %@",NSStringFromCGPoint(point),NSStringFromCGPoint(self.cropView.frame.origin));
+        CGFloat cx =  (point.x)  * hfactor*zoomScale;
+        CGFloat cy =  (point.y) * vfactor*zoomScale;
+        CGFloat cw = self.cropView.frame.size.width * hfactor;
+        CGFloat ch = self.cropView.frame.size.height * vfactor;
+        CGRect cropRect = CGRectMake(cx, cy, cw, ch);
+        NSLog(@"crop photo frame is %@ and ImageView frame  is %@",NSStringFromCGRect(cropRect),NSStringFromCGRect(photoView.imageView.frame));
         CGImageRef imageRef = CGImageCreateWithImageInRect([orignImage CGImage], cropRect);
         UIImage *result = [UIImage imageWithCGImage:imageRef];
         CGImageRelease(imageRef);
@@ -757,7 +781,7 @@
 			}
 			
 			PhotoImageView *_photoView = (PhotoImageView*)[self.photoViews objectAtIndex:page];
-			CGRect newframe = CGRectMake(originX, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
+			CGRect newframe = CGRectMake(originX, 0.0f, 320,480);//self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
 			
 			if (!CGRectEqualToRect(_photoView.frame, newframe)) {	
 				
@@ -836,11 +860,9 @@
 	
 	if (photoView == nil || (NSNull*)photoView == [NSNull null]) {
 		
-		photoView = [[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
+		photoView = [[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320,480)];
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
-		[photoView release];
-        NSLog(@"CHONGYONG");
-		
+		[photoView release];		
 	} 
     UIImage *photo = [self.fullScreenPhotos objectAtIndex:page];
     if ((NSNull *)photo == [NSNull null]) {
@@ -867,7 +889,6 @@
     if(VI==YES)
     {
     realasset =[self.photoSource objectAtIndex:page];
-    NSLog(@"alasset:%@",realasset);
     if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
     {  
         

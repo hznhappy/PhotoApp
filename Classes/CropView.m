@@ -256,41 +256,7 @@
                                   self.center.y + touchPoint.y - touchStart.y);
     }
 }
-/*
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self clearLine:self.frame];
-}
--(void)drawLine:(CGRect)rect{
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextSetLineWidth(context, 0.8f);
-    
-    CGFloat colX1 = CGRectGetMaxX(rect)/3.0;
-    CGFloat colX2 = 2*colX1;
-    CGFloat rowY1 = CGRectGetMaxY(rect)/3.0;
-    CGFloat rowY2 = 2*rowY1;
-    
-    CGContextBeginPath(context);
-    CGContextMoveToPoint(context, colX1, CGRectGetMinY(rect));  
-    CGContextAddLineToPoint(context, colX1, CGRectGetMaxY(rect));
-    
-    CGContextMoveToPoint(context, colX2, CGRectGetMinY(rect));
-    CGContextAddLineToPoint(context, colX2, CGRectGetMaxY(rect));
-    
-    CGContextMoveToPoint(context, CGRectGetMinX(rect),rowY1);
-    CGContextAddLineToPoint(context, CGRectGetMaxX(rect),rowY1);
-    
-    CGContextMoveToPoint(context, CGRectGetMinX(rect),rowY2);
-    CGContextAddLineToPoint(context,CGRectGetMaxX(rect),rowY2);
-    
-    CGContextStrokePath(context);
 
-}
-
--(void)clearLine:(CGRect)rect{
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextClearRect(context, rect);
-}*/
 - (void)dealloc
 {
     [super dealloc];

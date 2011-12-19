@@ -25,7 +25,7 @@
 @property(nonatomic,readonly) UIImage *photo;
 @property(nonatomic,readonly) UIImageView *imageView;
 @property(nonatomic,readonly) PhotoScrollView *scrollView;
-
+-(UIBezierPath *)createArcShadowPathForRect:(CGRect)rect ;
 - (void)setPhoto:(UIImage *)aPhoto;
 - (void)rotatePhoto;
 -(void)savePhoto;

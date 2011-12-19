@@ -5,7 +5,7 @@
 //  Created by Andy on 10/12/11.
 //  Copyright 2011 chinarewards. All rights reserved.
 //
-
+#define archeight 25
 #define ZOOM_VIEW_TAG 0x101
 #import "PhotoImageView.h"
 #import "PhotoScrollView.h"
@@ -78,7 +78,7 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.opaque = YES;
 		
-		PhotoScrollView *scrollView = [[PhotoScrollView alloc] initWithFrame:self.bounds];
+		PhotoScrollView *scrollView = [[PhotoScrollView alloc] initWithFrame:self.frame];
 		scrollView.backgroundColor = [UIColor blackColor];
 		scrollView.opaque = YES;
 		scrollView.delegate = self;
@@ -92,6 +92,10 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 		imageView.tag = ZOOM_VIEW_TAG;
         imageView.backgroundColor = nil;
         imageView.clearsContextBeforeDrawing = YES;
+//        imageView.layer.shadowRadius = 2.0;
+//        imageView.layer.shadowOpacity = 0.7;
+//        imageView.layer.shadowColor = [UIColor blackColor].CGColor;
+//        imageView.layer.shadowPath = [[self createArcShadowPathForRect:imageView.frame] CGPath];
 		[_scrollView addSubview:imageView];
 		_imageView = [imageView retain];
 		[imageView release];
@@ -111,6 +115,34 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
     return self;
 }
 
+
+
+
+
+-(UIBezierPath *)createArcShadowPathForRect:(CGRect)rect {
+    
+    CGFloat h_padding =  (self.imageView.frame.size.width - rect.size.width) /2;
+    CGFloat v_padding =  (self.imageView.frame.size.height - rect.size.height) /2-10;
+    
+    CGPoint startPoint =        CGPointMake(0 + h_padding, rect.size.height + v_padding) ;
+    CGPoint pointTwo =          CGPointMake(0 + h_padding, rect.size.height + archeight + v_padding) ;
+    CGPoint controlCenterPoint =   CGPointMake(rect.size.width/2 + h_padding, rect.size.height + v_padding+ 10);
+    CGPoint leftDownPoint =     CGPointMake(rect.size.width + h_padding, rect.size.height + archeight + v_padding) ;
+    CGPoint leftUpPoint =       CGPointMake(rect.size.width + h_padding, rect.size.height + v_padding) ;
+    
+    UIBezierPath *path = nil;
+    if(!path) {
+        path = [[UIBezierPath bezierPath] retain];
+        [path moveToPoint:startPoint];
+        [path moveToPoint:pointTwo];        
+        [path addQuadCurveToPoint:leftDownPoint controlPoint:controlCenterPoint];
+        [path addLineToPoint:leftUpPoint];
+        [path addLineToPoint:startPoint];
+        [path closePath];
+        
+    }
+    return path;
+}
 - (void)layoutSubviews{
 	[super layoutSubviews];
 		
@@ -131,7 +163,8 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
     
    	if (self.photo) {
       
-		self.imageView.image = self.photo;	
+		self.imageView.image = self.photo;
+        NSLog(@"Photo size is %@",NSStringFromCGSize(self.photo.size));
 	} 
 	
 	if (self.imageView.image) {
