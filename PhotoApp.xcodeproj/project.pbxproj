@@ -51,6 +51,7 @@
 		A1176A501487ABEC00379474 /* PersonRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A4E1487ABE700379474 /* PersonRootViewController.m */; };
 		A1176A5F1487B14000379474 /* AssetProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A5C1487B14000379474 /* AssetProducer.m */; };
 		A1176A601487B14000379474 /* PlaylistProducer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1176A5E1487B14000379474 /* PlaylistProducer.m */; };
+		A125B6A114A18CB8002A9CFB /* GridView.m in Sources */ = {isa = PBXBuildFile; fileRef = A125B6A014A18CB8002A9CFB /* GridView.m */; };
 		A12AB1EB14974D030086C88D /* CropView.m in Sources */ = {isa = PBXBuildFile; fileRef = A12AB1EA14974D020086C88D /* CropView.m */; };
 		A138EE1D1487B2440019BF7D /* AlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = A138EE1C1487B2440019BF7D /* AlbumController.m */; };
 		A14291D0142B201500A1B4B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14291CF142B201500A1B4B4 /* AddressBook.framework */; };
@@ -97,7 +98,7 @@
 		186BF9C01470AEB500961C67 /* AlbumController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumController.xib; path = Classes/AlbumController.xib; sourceTree = "<group>"; };
 		18782B20149ADDC800836515 /* bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble.png; sourceTree = "<group>"; };
 		18D402831474E50000389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		18D402851474E50800389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		18D402851474E50800389097 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		18D402911474E55900389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		18D402931474E55F00389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		18D402941474E58F00389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = "en.lproj/PhotoApp-Info.plist"; sourceTree = "<group>"; };
@@ -110,7 +111,7 @@
 		18D403391474FF5900389097 /* tagManagementController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = tagManagementController.xib; sourceTree = "<group>"; };
 		18D4033B14750CC700389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/PlaylistDetailController.xib"; sourceTree = "<group>"; };
 		18D4033D14750DCC00389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		18D4033E14750DD200389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		18D4033E14750DD200389097 /* zh-Hant */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		18D4033F14750DDA00389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "zh-Hant"; path = "zh-Hant.lproj/PhotoApp-Info.plist"; sourceTree = "<group>"; };
 		18D4034014750E5E00389097 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hant"; path = "zh-Hant.lproj/AssetTablePicker.xib"; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -146,6 +147,8 @@
 		A1176A5C1487B14000379474 /* AssetProducer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetProducer.m; sourceTree = "<group>"; };
 		A1176A5D1487B14000379474 /* PlaylistProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistProducer.h; sourceTree = "<group>"; };
 		A1176A5E1487B14000379474 /* PlaylistProducer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistProducer.m; sourceTree = "<group>"; };
+		A125B69F14A18CB8002A9CFB /* GridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridView.h; sourceTree = "<group>"; };
+		A125B6A014A18CB8002A9CFB /* GridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridView.m; sourceTree = "<group>"; };
 		A12AB1E914974D020086C88D /* CropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropView.h; sourceTree = "<group>"; };
 		A12AB1EA14974D020086C88D /* CropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropView.m; sourceTree = "<group>"; };
 		A138EE1B1487B2440019BF7D /* AlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlbumController.h; path = ../AlbumController.h; sourceTree = "<group>"; };
@@ -359,6 +362,8 @@
 				A1FB8341148E01C800E52050 /* DisplayPhotoView.m */,
 				A12AB1E914974D020086C88D /* CropView.h */,
 				A12AB1EA14974D020086C88D /* CropView.m */,
+				A125B69F14A18CB8002A9CFB /* GridView.h */,
+				A125B6A014A18CB8002A9CFB /* GridView.m */,
 			);
 			name = OnePhotoController;
 			sourceTree = "<group>";
@@ -512,6 +517,7 @@
 				A1F7E84B148CB5F90088F366 /* PhotoViewController.m in Sources */,
 				A1FB8342148E01C800E52050 /* DisplayPhotoView.m in Sources */,
 				A12AB1EB14974D030086C88D /* CropView.m in Sources */,
+				A125B6A114A18CB8002A9CFB /* GridView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

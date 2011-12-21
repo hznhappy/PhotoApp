@@ -29,9 +29,10 @@
 	UIBarButtonItem *_leftButton;
 	UIBarButtonItem *_rightButton;
 	UIBarButtonItem *_actionButton;
+    UIBarButtonItem *edit;
+    UIBarButtonItem *saveItem;
 
 	CropView *cropView;
-    UIBarButtonItem *edit;
     BOOL editing;
     BOOL tagShow;
     BOOL croping;
@@ -55,7 +56,6 @@
 @property(nonatomic,retain) NSMutableArray *photoViews;
 @property(nonatomic,retain) NSMutableArray *fullScreenPhotos;
 
-@property (nonatomic,retain)CropView *cropView;
 @property(nonatomic,retain) UIScrollView *scrollView;
 @property(nonatomic,assign) NSInteger _pageIndex;
 

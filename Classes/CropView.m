@@ -7,24 +7,37 @@
 //
 
 #import "CropView.h"
+#import "PhotoImageView.h"
+#import "GridView.h"
 #import <QuartzCore/QuartzCore.h>
 #define kResizeThumbSize 15
 
 @implementation CropView
-
+@synthesize photoImageView;
+@synthesize photoBrowserView;
+@synthesize cropImage;
 + (Class)layerClass {
 	return [CATiledLayer class];
 }
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame ImageView:(PhotoImageView *)_photoImageView superView:(UIView *)supView
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        CATiledLayer *tiledLayer = (CATiledLayer *)[self layer];
-        tiledLayer.levelsOfDetail = 4;
-        self.layer.borderColor = [UIColor whiteColor].CGColor;
-        self.layer.borderWidth = 1.5;
+        self.photoImageView = _photoImageView;
+        self.photoBrowserView = supView;
+        CGSize size = self.frame.size;
+        cropImageView = [[UIImageView alloc]initWithFrame:CGRectMake(2, 2, size.width-4, size.height-4)];
+        self.cropImage = [self croppedPhoto];
+        [cropImageView setImage:self.cropImage];
+        [self addSubview:cropImageView];
+        
+        gridView = [[GridView alloc]initWithFrame:CGRectMake(1, 1, size.width-2, size.height-2)];
+        gridView.backgroundColor = [UIColor clearColor];
+        gridView.hidden = YES;
+        [self addSubview:gridView];
+
     }
     return self;
 }
@@ -181,33 +194,120 @@
 
 }
  */
+
 -(void)drawRect:(CGRect)rect{
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextSetLineWidth(context, 0.8f);
+    CGContextSetLineWidth(context, 6.0f);
+    CGFloat minX = CGRectGetMinX(rect);
+    CGFloat maxX = CGRectGetMaxX(rect);
+    CGFloat minY = CGRectGetMinY(rect);
+    CGFloat maxY = CGRectGetMaxY(rect);
+
+    //CGContextBeginPath(context);
     
-    CGFloat colX1 = CGRectGetMaxX(rect)/3.0;
-    CGFloat colX2 = 2*colX1;
-    CGFloat rowY1 = CGRectGetMaxY(rect)/3.0;
-    CGFloat rowY2 = 2*rowY1;
+//    CGContextSetLineWidth(context, 2.0f);
+//    CGContextMoveToPoint(context, minX, minY);
+//    CGContextAddLineToPoint(context, maxX, minY);
+//    CGContextAddLineToPoint(context, maxX, maxY);
+//    CGContextAddLineToPoint(context, minX, maxY);
+//    CGContextAddLineToPoint(context, minX, minY);
+//    CGContextStrokePath(context);
+
+    CGContextMoveToPoint(context, maxX/12.0,minY);
+    CGContextAddLineToPoint(context, minX, minY);
+    CGContextAddLineToPoint(context, minX, maxY/12.0);
     
-    CGContextBeginPath(context);
-    CGContextMoveToPoint(context, colX1, CGRectGetMinY(rect));  
-    CGContextAddLineToPoint(context, colX1, CGRectGetMaxY(rect));
+    CGContextMoveToPoint(context, maxX * 11/12.0,minY);
+    CGContextAddLineToPoint(context, maxX, minY);
+    CGContextAddLineToPoint(context, maxX, maxY/12.0);
     
-    CGContextMoveToPoint(context, colX2, CGRectGetMinY(rect));
-    CGContextAddLineToPoint(context, colX2, CGRectGetMaxY(rect));
+    CGContextMoveToPoint(context, maxX,maxY* 11/12.0);
+    CGContextAddLineToPoint(context, maxX, maxY);
+    CGContextAddLineToPoint(context, maxX * 11/12.0, maxY);
     
-    CGContextMoveToPoint(context, CGRectGetMinX(rect),rowY1);
-    CGContextAddLineToPoint(context, CGRectGetMaxX(rect),rowY1);
-    
-    CGContextMoveToPoint(context, CGRectGetMinX(rect),rowY2);
-    CGContextAddLineToPoint(context,CGRectGetMaxX(rect),rowY2);
-    
+    CGContextMoveToPoint(context, maxX/12.0,maxY);
+    CGContextAddLineToPoint(context, minX, maxY);
+    CGContextAddLineToPoint(context, minX, maxY * 11/12.0);
     CGContextStrokePath(context);
+
+    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    CGContextMoveToPoint(context, maxX/12.0,minY);
+    CGContextAddLineToPoint(context, maxX * 11/12.0,minY);
+    
+    CGContextMoveToPoint(context, maxX, maxY/12.0);
+    CGContextAddLineToPoint(context, maxX,maxY* 11/12.0);
+    
+    CGContextMoveToPoint(context, maxX * 11/12.0, maxY);
+    CGContextAddLineToPoint(context, maxX/12.0,maxY);
+    
+    CGContextMoveToPoint(context, minX, maxY * 11/12.0);
+    CGContextAddLineToPoint(context, minX, maxY/12.0);
+    CGContextStrokePath(context);
+    
+//    CGContextMoveToPoint(context, maxX/12.0,minY-0.8);
+//    CGContextAddLineToPoint(context, minX-0.8, minY-0.8);
+//    CGContextAddLineToPoint(context, minX-0.8, maxY/12.0);
+//    CGFloat colX1 = CGRectGetMaxX(rect)/3.0;
+//    CGFloat colX2 = 2*colX1;
+//    CGFloat rowY1 = CGRectGetMaxY(rect)/3.0;
+//    CGFloat rowY2 = 2*rowY1;
+//    
+//    CGContextBeginPath(context);
+//    CGContextMoveToPoint(context, colX1, CGRectGetMinY(rect));  
+//    CGContextAddLineToPoint(context, colX1, CGRectGetMaxY(rect));
+//    
+//    CGContextMoveToPoint(context, colX2, CGRectGetMinY(rect));
+//    CGContextAddLineToPoint(context, colX2, CGRectGetMaxY(rect));
+//    
+//    CGContextMoveToPoint(context, CGRectGetMinX(rect),rowY1);
+//    CGContextAddLineToPoint(context, CGRectGetMaxX(rect),rowY1);
+//    
+//    CGContextMoveToPoint(context, CGRectGetMinX(rect),rowY2);
+//    CGContextAddLineToPoint(context,CGRectGetMaxX(rect),rowY2);
+    
 }
 
+- (UIImage *)croppedPhoto
+{
+        UIImage *orignImage = self.photoImageView.photo;
+        UIScrollView *pScrollView = (UIScrollView *)photoImageView.scrollView;
+        CGFloat zoomScale = pScrollView.zoomScale;
+        
+        CGFloat hfactor = photoImageView.imageView.image.size.width / photoImageView.imageView.frame.size.width;
+        CGFloat vfactor = photoImageView.imageView.image.size.height / photoImageView.imageView.frame.size.height;
+        //        CGRect visibleRect;
+        //        visibleRect.origin = pScrollView.contentOffset;
+        //        visibleRect.size = pScrollView.bounds.size;
+        //       // NSLog(@"scrollview frame is %@",NSStringFromCGRect(pScrollView.frame));
+        //       // NSLog(@"scrollview bounds is %@",NSStringFromCGRect(pScrollView.bounds));
+        //        float theScale = 1.0 / zoomScale;
+        //        visibleRect.origin.x *= theScale;
+        //        visibleRect.origin.y *= theScale;
+        //        visibleRect.size.width *= theScale;
+        //        visibleRect.size.height *= theScale;
+        //        NSLog(@"scrollView visibleRect is %@",NSStringFromCGRect(visibleRect));
+        ////        CGFloat cofX = pScrollView.contentOffset.x;
+        ////        CGFloat cofY = pScrollView.contentOffset.y;
+        //        
+        //        CGRect newRect = [self.view convertRect:self.cropView.frame toView:pScrollView];
+        CGPoint point = [self convertPoint:cropImageView.frame.origin toView:photoImageView.imageView];
+
+        CGFloat cx =  (point.x)  * hfactor*zoomScale;
+        CGFloat cy =  (point.y) * vfactor*zoomScale;
+        CGFloat cw = cropImageView.frame.size.width * hfactor;
+        CGFloat ch = cropImageView.frame.size.height * vfactor;
+        CGRect cropRect = CGRectMake(cx, cy, cw, ch);
+
+        CGImageRef imageRef = CGImageCreateWithImageInRect([orignImage CGImage], cropRect);
+        UIImage *result = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+        
+        
+        return result;
+}
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    gridView.hidden = NO;
     touchStart = [[touches anyObject] locationInView:self];
     rightBottomCorner = (self.bounds.size.width - touchStart.x < kResizeThumbSize &&
                   self.bounds.size.height - touchStart.y < kResizeThumbSize);
@@ -255,10 +355,26 @@
         self.center = CGPointMake(self.center.x + touchPoint.x - touchStart.x,
                                   self.center.y + touchPoint.y - touchStart.y);
     }
+    
+    CGSize size = self.frame.size;
+    self.cropImage = [self croppedPhoto];
+    cropImageView.image = self.cropImage;
+    cropImageView.frame = CGRectMake(2, 2, size.width-4, size.height-4);
+    gridView.frame = CGRectMake(1, 1, size.width-2, size.height-2);
+    
 }
 
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    gridView.hidden = YES;
+}
 - (void)dealloc
 {
+    [cropImage release];
+    [photoImageView release];
+    [gridView release];
+    [photoBrowserView release];
+    [cropImageView release];
+    [cropImageView release];
     [super dealloc];
 }
 

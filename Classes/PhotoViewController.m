@@ -56,7 +56,6 @@
 @synthesize photoViews=_photoViews;
 @synthesize _pageIndex;
 @synthesize fullScreenPhotos;
-@synthesize cropView;
 @synthesize video;
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
@@ -265,16 +264,14 @@
     [views release];
     [array release];
     
-    CropView *temCV = [[CropView alloc]initWithFrame:CGRectMake(60, 140, 200, 200)];
-    temCV.backgroundColor = [UIColor clearColor];
-    self.cropView = temCV;
-    [temCV release];
-    
     tagShow = NO;
     editing=NO;
     croping = NO;
     NSString *u=NSLocalizedString(@"Edit", @"title");
+    NSString *save = NSLocalizedString(@"Save", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
+    saveItem=[[UIBarButtonItem alloc]initWithTitle:save style:UIBarButtonItemStyleDone target:self action:@selector(savePhoto:)];
+
    	self.navigationItem.rightBarButtonItem=edit;
     
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
@@ -459,7 +456,8 @@
 #pragma mark EditMethods
 -(void)edit
 {
-    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.rightBarButtonItem = saveItem;
+    saveItem.enabled = NO;
     self.navigationItem.hidesBackButton = YES;
     UIBarButtonItem *cancell = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelEdit)];
     self.navigationItem.leftBarButtonItem = cancell;
@@ -476,8 +474,13 @@
     editing = NO;
     if (cropView.superview!=nil) {
         [cropView removeFromSuperview];
+    } 
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+        if (photoView.alpha!=1.0) {
+            photoView.alpha = 1.0;
+        }
     }
-    
 }
 
 - (void)setupEditToolbar{
@@ -518,9 +521,8 @@
     }
     self.navigationItem.rightBarButtonItem.title = @"Save";
     PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
-    if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
-        return;
-    }else{
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+   
         [photoView rotatePhoto];
     }
 }
@@ -544,44 +546,55 @@
 
 
 -(void)cropPhoto{
-    
-    if (cropView.superview!=nil) {
-        self.navigationItem.rightBarButtonItem = nil;
-        [cropView removeFromSuperview];
-        croping = NO;
-    }else{
-        self.navigationItem.rightBarButtonItem = nil;
-        UIBarButtonItem *cropItem=[[UIBarButtonItem alloc]initWithTitle:@"Crop" style:UIBarButtonItemStyleDone target:self action:@selector(saveCropPhoto:)];
-        self.navigationItem.rightBarButtonItem = cropItem;
-        [cropItem release];
-        PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
-        if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
-            return;
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+        
+        
+        if (cropView.superview!=nil) {
+            self.navigationItem.rightBarButtonItem = nil;
+            [cropView removeFromSuperview];
+            photoView.alpha = 1.0;
+            self.navigationItem.rightBarButtonItem = saveItem;
+            saveItem.enabled = NO;
+            croping = NO;
         }else{
-            photoView.alpha = 0.4;
-            [self.view addSubview:self.cropView];
+            self.navigationItem.rightBarButtonItem = nil;
+            UIBarButtonItem *cropItem=[[UIBarButtonItem alloc]initWithTitle:@"Crop" style:UIBarButtonItemStyleDone target:self action:@selector(setCropPhoto:)];
+            self.navigationItem.rightBarButtonItem = cropItem;
+            [cropItem release];
+            
+            photoView.alpha = 0.3;
+            CropView *temCV = [[CropView alloc]initWithFrame:CGRectMake(60, 140, 200, 200) ImageView:photoView superView:self.view];
+            temCV.backgroundColor = [UIColor clearColor];
+            cropView = temCV;
+            [temCV release];
+            
+            [self.view addSubview:cropView];
             croping = YES;
         }
     }
+
+}
+
+-(void)setCropPhoto:(id)sender{
+    self.navigationItem.rightBarButtonItem = saveItem;
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+        [photoView setPhoto:cropView.cropImage];
+    }
+   }
+
+-(void)savePhoto{
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
+        return;
+    }else{
+        [photoView savePhoto];
+    }
+    
     
 }
-
--(void)saveCropPhoto:(id)sender{
-    UIBarButtonItem *barButton = (UIBarButtonItem *)sender;
-    barButton.enabled = NO;
-    if (croping) {
-        UIImageWriteToSavedPhotosAlbum([self croppedPhoto], nil, nil, nil);
-        [self.cropView removeFromSuperview];
-    }else{
-        PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
-        if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
-            return;
-        }else{
-            [photoView savePhoto];
-        }
-    }
-}
-
+/*
 - (UIImage *)croppedPhoto
 {
     PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
@@ -610,13 +623,12 @@
 //        
 //        CGRect newRect = [self.view convertRect:self.cropView.frame toView:pScrollView];
         CGPoint point = [self.view convertPoint:self.cropView.frame.origin toView:photoView.imageView];
-        NSLog(@"must the same %@ %@",NSStringFromCGPoint(point),NSStringFromCGPoint(self.cropView.frame.origin));
+       // NSLog(@"must the same %@ %@",NSStringFromCGPoint(point),NSStringFromCGPoint(self.cropView.frame.origin));
         CGFloat cx =  (point.x)  * hfactor*zoomScale;
         CGFloat cy =  (point.y) * vfactor*zoomScale;
         CGFloat cw = self.cropView.frame.size.width * hfactor;
         CGFloat ch = self.cropView.frame.size.height * vfactor;
         CGRect cropRect = CGRectMake(cx, cy, cw, ch);
-        NSLog(@"crop photo frame is %@ and ImageView frame  is %@",NSStringFromCGRect(cropRect),NSStringFromCGRect(photoView.imageView.frame));
         CGImageRef imageRef = CGImageCreateWithImageInRect([orignImage CGImage], cropRect);
         UIImage *result = [UIImage imageWithCGImage:imageRef];
         CGImageRelease(imageRef);
@@ -625,7 +637,7 @@
         return result;
     }
 }
-
+*/
 - (NSInteger)currentPhotoIndex{
 	
 	return _pageIndex;

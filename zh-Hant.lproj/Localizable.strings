@@ -3,40 +3,41 @@
   PhotoApp
 
   Created by apple on 11-11-17.
-  Copyright 2011年 chinarewards. All rights reserved.
+  Copyright 2011Âπ¥ chinarewards. All rights reserved.
 */
-"Edit"="編輯";
-"Albums"="相簿";
-"Done"="完成";
-"ALL"="所有";
-"UNTAG"="未標記";
-"hello"="你好";
-"Inherent members, can not be edited"="固有成員，無法編輯";
-"Inherent members, can not be deleted"="固有成員，無法刪除";
-"ok"="確定";
-"Back"="返回";
-"Already exists"="已經存在";
-"note"="提示";
-"This person has been used as a photo tag, you sure you want to delete it"="此人已經作為標記,確定要刪除嗎?";
-"NO"="否";
-"YES"="是";
-"Cancel"="取消";
-"Mark"="標記";
-"Copy"="複製";
-"Email"="郵件";
-"Please fill out the rule name"="請先填寫規則名!";
-"Rule name can not be empty!"="規則名不能為空";
-"fade"="淡化";
-"cube"="立方體";
-"reveal"="揭開";
-"push"="推擠";
-"moveIn"="覆蓋";
-"suckEffect"="吸收";
-"oglFlip"="翻轉";
-"rippleEffect"="波紋";
-"pageCurl"="翻頁";
-"pageUnCurl"="反翻頁";
-"UnLock"="解锁";
-"Back"="返回";
-"Lock"="鎖定";
-"The password is wrong"="密碼錯誤";
+"Edit"="Á∑®ËºØ";
+"Save"="保存";
+"Albums"="Áõ∏Á∞ø";
+"Done"="ÂÆåÊàê";
+"ALL"="ÊâÄÊúâ";
+"UNTAG"="Êú™Ê®ôË®ò";
+"hello"="‰Ω†Â•Ω";
+"Inherent members, can not be edited"="Âõ∫ÊúâÊàêÂì°ÔºåÁÑ°Ê≥ïÁ∑®ËºØ";
+"Inherent members, can not be deleted"="Âõ∫ÊúâÊàêÂì°ÔºåÁÑ°Ê≥ïÂà™Èô§";
+"ok"="Á¢∫ÂÆö";
+"Back"="ËøîÂõû";
+"Already exists"="Â∑≤Á∂ìÂ≠òÂú®";
+"note"="ÊèêÁ§∫";
+"This person has been used as a photo tag, you sure you want to delete it"="Ê≠§‰∫∫Â∑≤Á∂ì‰ΩúÁÇ∫Ê®ôË®ò,Á¢∫ÂÆöË¶ÅÂà™Èô§Âóé?";
+"NO"="Âê¶";
+"YES"="ÊòØ";
+"Cancel"="ÂèñÊ∂à";
+"Mark"="Ê®ôË®ò";
+"Copy"="Ë§áË£Ω";
+"Email"="ÈÉµ‰ª∂";
+"Please fill out the rule name"="Ë´ãÂÖàÂ°´ÂØ´Ë¶èÂâáÂêç!";
+"Rule name can not be empty!"="Ë¶èÂâáÂêç‰∏çËÉΩÁÇ∫Á©∫";
+"fade"="Ê∑°Âåñ";
+"cube"="Á´ãÊñπÈ´î";
+"reveal"="Êè≠Èñã";
+"push"="Êé®Êì†";
+"moveIn"="Ë¶ÜËìã";
+"suckEffect"="Âê∏Êî∂";
+"oglFlip"="ÁøªËΩâ";
+"rippleEffect"="Ê≥¢Á¥ã";
+"pageCurl"="ÁøªÈ†Å";
+"pageUnCurl"="ÂèçÁøªÈ†Å";
+"UnLock"="Ëß£ÈîÅ";
+"Back"="ËøîÂõû";
+"Lock"="ÈéñÂÆö";
+"The password is wrong"="ÂØÜÁ¢ºÈåØË™§";

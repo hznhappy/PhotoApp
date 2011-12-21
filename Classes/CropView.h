@@ -8,14 +8,28 @@
 
 #import <UIKit/UIKit.h>
 
-
+@class PhotoImageView;
+@class GridView;
 @interface CropView : UIView {
     @private
     CGPoint touchStart;
+    
     BOOL rightBottomCorner;
     BOOL rightTopCorner;
     BOOL leftTopCorner;
     BOOL leftBottomCorner;
+    
+    PhotoImageView *photoImageView;
+    UIView *photoBrowserView;
+    UIImageView *cropImageView;
+    GridView *gridView;
+    
+    UIImage *cropImage;
 }
 
+@property (nonatomic,retain)PhotoImageView *photoImageView;
+@property (nonatomic,retain)UIView *photoBrowserView;
+@property (nonatomic,retain)UIImage *cropImage;
+- (id)initWithFrame:(CGRect)frame ImageView:(PhotoImageView *)_photoImageView superView:(UIView *)supView;
+- (UIImage *)croppedPhoto;
 @end
