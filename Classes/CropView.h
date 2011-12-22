@@ -32,4 +32,5 @@
 @property (nonatomic,retain)UIImage *cropImage;
 - (id)initWithFrame:(CGRect)frame ImageView:(PhotoImageView *)_photoImageView superView:(UIView *)supView;
 - (UIImage *)croppedPhoto;
+- (void)setCropView;
 @end

@@ -57,6 +57,7 @@
 @synthesize _pageIndex;
 @synthesize fullScreenPhotos;
 @synthesize video;
+@synthesize cropView;
 
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page{
 	if ((self = [super init])) {
@@ -270,7 +271,7 @@
     NSString *u=NSLocalizedString(@"Edit", @"title");
     NSString *save = NSLocalizedString(@"Save", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
-    saveItem=[[UIBarButtonItem alloc]initWithTitle:save style:UIBarButtonItemStyleDone target:self action:@selector(savePhoto:)];
+    saveItem=[[UIBarButtonItem alloc]initWithTitle:save style:UIBarButtonItemStyleDone target:self action:@selector(savePhoto)];
 
    	self.navigationItem.rightBarButtonItem=edit;
     
@@ -463,6 +464,9 @@
     self.navigationItem.leftBarButtonItem = cancell;
     [self setupEditToolbar];
     editing = YES;
+    if (!self.scrollView.scrollEnabled) {
+        self.scrollView.scrollEnabled = YES;
+    }
     
 }
 
@@ -480,6 +484,9 @@
         if (photoView.alpha!=1.0) {
             photoView.alpha = 1.0;
         }
+    }
+    if (!self.scrollView.scrollEnabled) {
+        self.scrollView.scrollEnabled = YES;
     }
 }
 
@@ -524,6 +531,7 @@
     if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
    
         [photoView rotatePhoto];
+        [self.cropView setCropView];
     }
 }
 
@@ -546,6 +554,12 @@
 
 
 -(void)cropPhoto{
+    
+    if (!self.scrollView.scrollEnabled) {
+        self.scrollView.scrollEnabled = YES;
+    }else{
+        self.scrollView.scrollEnabled = NO;
+    }
     PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
     if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
         
@@ -566,7 +580,7 @@
             photoView.alpha = 0.3;
             CropView *temCV = [[CropView alloc]initWithFrame:CGRectMake(60, 140, 200, 200) ImageView:photoView superView:self.view];
             temCV.backgroundColor = [UIColor clearColor];
-            cropView = temCV;
+            self.cropView = [temCV retain];
             [temCV release];
             
             [self.view addSubview:cropView];
@@ -578,18 +592,30 @@
 
 -(void)setCropPhoto:(id)sender{
     self.navigationItem.rightBarButtonItem = saveItem;
+    if (!saveItem.enabled) {
+        saveItem.enabled = YES;
+    }
     PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
     if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
-        [photoView setPhoto:cropView.cropImage];
+        photoView.alpha =1.0;
+        [photoView setPhoto:self.cropView.cropImage];
     }
-   }
+    [cropView removeFromSuperview];
+}
 
 -(void)savePhoto{
+    if (!self.scrollView.scrollEnabled) {
+        self.scrollView.scrollEnabled = YES;
+    }
+    saveItem.enabled = NO;
     PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
     if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
         return;
     }else{
         [photoView savePhoto];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"The photo already save to camera roll!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
     }
     
     

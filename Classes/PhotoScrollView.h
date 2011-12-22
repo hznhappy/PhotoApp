@@ -7,7 +7,7 @@
 //
 
 #define PV_ZOOM_SCALE 2.5
-@interface PhotoScrollView : UIScrollView {
+@interface PhotoScrollView : UIScrollView <UIScrollViewDelegate>{
 
 }
 

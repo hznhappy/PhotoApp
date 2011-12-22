@@ -29,14 +29,15 @@
         self.photoBrowserView = supView;
         CGSize size = self.frame.size;
         cropImageView = [[UIImageView alloc]initWithFrame:CGRectMake(2, 2, size.width-4, size.height-4)];
-        self.cropImage = [self croppedPhoto];
-        [cropImageView setImage:self.cropImage];
+        [self setCropView];
         [self addSubview:cropImageView];
         
         gridView = [[GridView alloc]initWithFrame:CGRectMake(1, 1, size.width-2, size.height-2)];
         gridView.backgroundColor = [UIColor clearColor];
         gridView.hidden = YES;
         [self addSubview:gridView];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setCropView) name:@"ChangeCropView" object:nil];
 
     }
     return self;
@@ -306,6 +307,12 @@
         
         return result;
 }
+
+-(void)setCropView{
+    self.cropImage = [self croppedPhoto];
+    [cropImageView setImage:self.cropImage];
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     gridView.hidden = NO;
     touchStart = [[touches anyObject] locationInView:self];
@@ -357,8 +364,7 @@
     }
     
     CGSize size = self.frame.size;
-    self.cropImage = [self croppedPhoto];
-    cropImageView.image = self.cropImage;
+    [self setCropView];
     cropImageView.frame = CGRectMake(2, 2, size.width-4, size.height-4);
     gridView.frame = CGRectMake(1, 1, size.width-2, size.height-2);
     
@@ -369,6 +375,7 @@
 }
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [cropImage release];
     [photoImageView release];
     [gridView release];

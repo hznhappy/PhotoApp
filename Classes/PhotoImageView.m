@@ -352,8 +352,12 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 	} else {
 		[self layoutScrollViewAnimated:YES];
 	}
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"ChangeCropView" object:nil];
 }	
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"ChangeCropView" object:nil];
+}
 
 #pragma mark -
 #pragma mark RotateGesture

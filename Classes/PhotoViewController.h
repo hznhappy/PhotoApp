@@ -36,7 +36,7 @@
     BOOL editing;
     BOOL tagShow;
     BOOL croping;
-	//DBOperation *db;
+
 	DBOperation *db;
     PopupPanelView *ppv;
     NSTimer *timer;	
@@ -56,6 +56,7 @@
 @property(nonatomic,retain) NSMutableArray *photoViews;
 @property(nonatomic,retain) NSMutableArray *fullScreenPhotos;
 
+@property(nonatomic,retain)CropView *cropView;
 @property(nonatomic,retain) UIScrollView *scrollView;
 @property(nonatomic,assign) NSInteger _pageIndex;
 
@@ -70,7 +71,7 @@
 -(void)CFG;
 -(void)button1Pressed;
 -(void)button2Pressed;
-- (UIImage *) croppedPhoto;
+//- (UIImage *) croppedPhoto;
 @end
 
 @interface UIImage (Crop)
