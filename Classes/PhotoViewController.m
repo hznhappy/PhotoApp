@@ -577,7 +577,7 @@
             self.navigationItem.rightBarButtonItem = cropItem;
             [cropItem release];
             
-            photoView.alpha = 0.3;
+            photoView.alpha = 0.4;
             CropView *temCV = [[CropView alloc]initWithFrame:CGRectMake(60, 140, 200, 200) ImageView:photoView superView:self.view];
             temCV.backgroundColor = [UIColor clearColor];
             self.cropView = [temCV retain];

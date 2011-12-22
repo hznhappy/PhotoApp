@@ -33,4 +33,6 @@
 - (id)initWithFrame:(CGRect)frame ImageView:(PhotoImageView *)_photoImageView superView:(UIView *)supView;
 - (UIImage *)croppedPhoto;
 - (void)setCropView;
+- (CGRect)restrictFrame:(CGRect)rect;
+- (CGPoint)restrictCenter:(CGPoint)point;
 @end

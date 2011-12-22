@@ -5,11 +5,9 @@
 //  Created by Andy on 10/12/11.
 //  Copyright 2011 chinarewards. All rights reserved.
 //
-#define archeight 25
 #define ZOOM_VIEW_TAG 0x101
 #import "PhotoImageView.h"
 #import "PhotoScrollView.h"
-#import "DisplayPhotoView.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface RotateGesture : UIRotationGestureRecognizer {}
@@ -92,10 +90,6 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 		imageView.tag = ZOOM_VIEW_TAG;
         imageView.backgroundColor = nil;
         imageView.clearsContextBeforeDrawing = YES;
-//        imageView.layer.shadowRadius = 2.0;
-//        imageView.layer.shadowOpacity = 0.7;
-//        imageView.layer.shadowColor = [UIColor blackColor].CGColor;
-//        imageView.layer.shadowPath = [[self createArcShadowPathForRect:imageView.frame] CGPath];
 		[_scrollView addSubview:imageView];
 		_imageView = [imageView retain];
 		[imageView release];
@@ -119,30 +113,6 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 
 
 
--(UIBezierPath *)createArcShadowPathForRect:(CGRect)rect {
-    
-    CGFloat h_padding =  (self.imageView.frame.size.width - rect.size.width) /2;
-    CGFloat v_padding =  (self.imageView.frame.size.height - rect.size.height) /2-10;
-    
-    CGPoint startPoint =        CGPointMake(0 + h_padding, rect.size.height + v_padding) ;
-    CGPoint pointTwo =          CGPointMake(0 + h_padding, rect.size.height + archeight + v_padding) ;
-    CGPoint controlCenterPoint =   CGPointMake(rect.size.width/2 + h_padding, rect.size.height + v_padding+ 10);
-    CGPoint leftDownPoint =     CGPointMake(rect.size.width + h_padding, rect.size.height + archeight + v_padding) ;
-    CGPoint leftUpPoint =       CGPointMake(rect.size.width + h_padding, rect.size.height + v_padding) ;
-    
-    UIBezierPath *path = nil;
-    if(!path) {
-        path = [[UIBezierPath bezierPath] retain];
-        [path moveToPoint:startPoint];
-        [path moveToPoint:pointTwo];        
-        [path addQuadCurveToPoint:leftDownPoint controlPoint:controlCenterPoint];
-        [path addLineToPoint:leftUpPoint];
-        [path addLineToPoint:startPoint];
-        [path closePath];
-        
-    }
-    return path;
-}
 - (void)layoutSubviews{
 	[super layoutSubviews];
 		
@@ -303,8 +273,8 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 	return [self.scrollView viewWithTag:ZOOM_VIEW_TAG];
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
-	if (scrollView.zoomScale > 1.0f) {				
+-(void)scrollViewDidZoom:(UIScrollView *)scrollView{
+    if (scrollView.zoomScale > 1.0f) {				
 		CGFloat height, width;	
 		
 		if (CGRectGetMaxX(self.imageView.frame) > self.bounds.size.width) {
@@ -323,14 +293,14 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 			} else {
 			}
 		}
-
+        
 		CGRect frame = self.scrollView.frame;
 		self.scrollView.frame = CGRectMake((self.bounds.size.width / 2) - (width / 2), (self.bounds.size.height / 2) - (height / 2), width, height);
 		self.scrollView.layer.position = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
 		if (!CGRectEqualToRect(frame, self.scrollView.frame)) {		
 			
 			CGFloat offsetY, offsetX;
-
+            
 			if (frame.origin.y < self.scrollView.frame.origin.y) {
 				offsetY = self.scrollView.contentOffset.y - (self.scrollView.frame.origin.y - frame.origin.y);
 			} else {				
@@ -342,18 +312,18 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 			} else {				
 				offsetX = self.scrollView.contentOffset.x - (frame.origin.x - self.scrollView.frame.origin.x);
 			}
-
+            
 			if (offsetY < 0) offsetY = 0;
 			if (offsetX < 0) offsetX = 0;
 			
 			self.scrollView.contentOffset = CGPointMake(offsetX, offsetY);
 		}
-
+        
 	} else {
 		[self layoutScrollViewAnimated:YES];
 	}
     [[NSNotificationCenter defaultCenter]postNotificationName:@"ChangeCropView" object:nil];
-}	
+}
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [[NSNotificationCenter defaultCenter]postNotificationName:@"ChangeCropView" object:nil];
