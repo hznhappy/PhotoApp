@@ -38,7 +38,6 @@
 		A100BFB914455FE300D85BD6 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = A100BFB514455FE300D85BD6 /* right.png */; };
 		A100BFBA14455FE300D85BD6 /* right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A100BFB614455FE300D85BD6 /* right@2x.png */; };
 		A103C80614AAB0CB00C10122 /* PhotoSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A103C80514AAB0CB00C10122 /* PhotoSource.m */; };
-		A103C81A14AAE98D00C10122 /* TileImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A103C81914AAE98C00C10122 /* TileImageView.m */; };
 		A10F000114593E7A00D007F3 /* playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F000014593E7A00D007F3 /* playlist.png */; };
 		A10F000314593E7F00D007F3 /* albums.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F000214593E7F00D007F3 /* albums.png */; };
 		A10F59FF1468E8F100A0AC22 /* Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = A10F59FD1468E8F100A0AC22 /* Selected.png */; };
@@ -95,8 +94,8 @@
 		1861AAD11498ACA900C537FE /* ji.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ji.png; sourceTree = "<group>"; };
 		18696E8A147A217100302EB8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		186BF9C01470AEB500961C67 /* AlbumController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumController.xib; path = Classes/AlbumController.xib; sourceTree = "<group>"; };
-		18D402831474E50000389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		18D402851474E50800389097 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		18D402831474E50000389097 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		18D402851474E50800389097 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		18D402911474E55900389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		18D402931474E55F00389097 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		18D402941474E58F00389097 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = "en.lproj/PhotoApp-Info.plist"; sourceTree = "<group>"; };
@@ -128,8 +127,6 @@
 		A100BFB614455FE300D85BD6 /* right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@2x.png"; sourceTree = "<group>"; };
 		A103C80414AAB0CA00C10122 /* PhotoSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoSource.h; sourceTree = "<group>"; };
 		A103C80514AAB0CB00C10122 /* PhotoSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoSource.m; sourceTree = "<group>"; };
-		A103C81814AAE98C00C10122 /* TileImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileImageView.h; sourceTree = "<group>"; };
-		A103C81914AAE98C00C10122 /* TileImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TileImageView.m; sourceTree = "<group>"; };
 		A10F000014593E7A00D007F3 /* playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist.png; sourceTree = "<group>"; };
 		A10F000214593E7F00D007F3 /* albums.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = albums.png; sourceTree = "<group>"; };
 		A10F59FD1468E8F100A0AC22 /* Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Selected.png; sourceTree = "<group>"; };
@@ -361,8 +358,6 @@
 				A125B6A014A18CB8002A9CFB /* GridView.m */,
 				A103C80414AAB0CA00C10122 /* PhotoSource.h */,
 				A103C80514AAB0CB00C10122 /* PhotoSource.m */,
-				A103C81814AAE98C00C10122 /* TileImageView.h */,
-				A103C81914AAE98C00C10122 /* TileImageView.m */,
 			);
 			name = OnePhotoController;
 			sourceTree = "<group>";
@@ -515,7 +510,6 @@
 				A12AB1EB14974D030086C88D /* CropView.m in Sources */,
 				A125B6A114A18CB8002A9CFB /* GridView.m in Sources */,
 				A103C80614AAB0CB00C10122 /* PhotoSource.m in Sources */,
-				A103C81A14AAE98D00C10122 /* TileImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

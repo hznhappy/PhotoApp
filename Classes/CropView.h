@@ -34,5 +34,5 @@
 - (UIImage *)croppedPhoto;
 - (void)setCropView;
 - (CGRect)restrictFrame:(CGRect)rect;
-//- (CGPoint)restrictCenter:(CGPoint)point;
+- (BOOL)restrictCenter:(CGRect)rect;
 @end

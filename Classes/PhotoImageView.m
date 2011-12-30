@@ -9,7 +9,7 @@
 #import "PhotoImageView.h"
 #import "PhotoScrollView.h"
 #import <QuartzCore/QuartzCore.h>
-#import "TileImageView.h"
+
 @interface RotateGesture : UIRotationGestureRecognizer {}
 @end
 
@@ -67,7 +67,6 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 @synthesize photo=_photo;
 @synthesize imageView=_imageView;
 @synthesize scrollView=_scrollView;
-@synthesize backTiledView;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
@@ -77,7 +76,7 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.opaque = YES;
 		
-		PhotoScrollView *scrollView = [[PhotoScrollView alloc] initWithFrame:self.frame];
+		PhotoScrollView *scrollView = [[PhotoScrollView alloc] initWithFrame:self.bounds];
 		scrollView.backgroundColor = [UIColor blackColor];
 		scrollView.opaque = YES;
 		scrollView.delegate = self;
@@ -85,7 +84,7 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 		_scrollView = [scrollView retain];
 		[scrollView release];
 
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:self.frame];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:self.bounds];
 		imageView.opaque = YES;
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
 		imageView.tag = ZOOM_VIEW_TAG;
@@ -172,7 +171,6 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
     UIImage *backgroundImage = UIGraphicsGetImageFromCurrentImageContext();	
     UIGraphicsEndImageContext();
     self.imageView.image = backgroundImage;
-    NSLog(@"clear%@",backgroundImage);
 }
 
 - (void)displayImageFailure{
@@ -183,6 +181,7 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 
     UIImage *image = [self.photo imageRotatedByDegrees:90];
     self.photo = image;
+    [self setClearPhoto];
 
 }
 
@@ -361,12 +360,6 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
     [[NSNotificationCenter defaultCenter]postNotificationName:@"ChangeCropView" object:nil];
 }
 
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
-	// Remove back tiled view.
-	[backTiledView removeFromSuperview];
-	// Set the current TiledImageView to be the old view.
-	self.backTiledView = frontTiledView;
-}
 #pragma mark -
 #pragma mark RotateGesture
 

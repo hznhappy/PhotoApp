@@ -406,6 +406,8 @@
     
     [self setupScrollViewContentSize];
     [self moveToPhotoAtIndex:_pageIndex animated:NO];
+    PhotoImageView *photoView = (PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex];
+    [photoView setClearPhoto];
     [self.scrollView scrollRectToVisible:((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).frame animated:YES];
     
     //  unhide side views
@@ -837,7 +839,7 @@
 			}
 			
 			PhotoImageView *_photoView = (PhotoImageView*)[self.photoViews objectAtIndex:page];
-			CGRect newframe = CGRectMake(originX, 0.0f, 320,480);//self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
+			CGRect newframe = CGRectMake(originX, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
 			
 			if (!CGRectEqualToRect(_photoView.frame, newframe)) {	
 				
@@ -968,7 +970,6 @@
 	frame.origin.x = xOrigin;
 	frame.origin.y = 0;
 	photoView.frame = frame;
-    NSLog(@"aready here");
 //    if(VI==YES)
 //    {
 //    realasset =[self.photoSource objectAtIndex:page];
@@ -1259,6 +1260,7 @@
 - (void)dealloc {
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [saveItem release];
     [fullScreenPhotos release];
 	[_photoViews release];
 	[photoSource release];

@@ -245,28 +245,6 @@
     CGContextMoveToPoint(context, minX, maxY * 11/12.0);
     CGContextAddLineToPoint(context, minX, maxY/12.0);
     CGContextStrokePath(context);
-    
-//    CGContextMoveToPoint(context, maxX/12.0,minY-0.8);
-//    CGContextAddLineToPoint(context, minX-0.8, minY-0.8);
-//    CGContextAddLineToPoint(context, minX-0.8, maxY/12.0);
-//    CGFloat colX1 = CGRectGetMaxX(rect)/3.0;
-//    CGFloat colX2 = 2*colX1;
-//    CGFloat rowY1 = CGRectGetMaxY(rect)/3.0;
-//    CGFloat rowY2 = 2*rowY1;
-//    
-//    CGContextBeginPath(context);
-//    CGContextMoveToPoint(context, colX1, CGRectGetMinY(rect));  
-//    CGContextAddLineToPoint(context, colX1, CGRectGetMaxY(rect));
-//    
-//    CGContextMoveToPoint(context, colX2, CGRectGetMinY(rect));
-//    CGContextAddLineToPoint(context, colX2, CGRectGetMaxY(rect));
-//    
-//    CGContextMoveToPoint(context, CGRectGetMinX(rect),rowY1);
-//    CGContextAddLineToPoint(context, CGRectGetMaxX(rect),rowY1);
-//    
-//    CGContextMoveToPoint(context, CGRectGetMinX(rect),rowY2);
-//    CGContextAddLineToPoint(context,CGRectGetMaxX(rect),rowY2);
-    
 }
 
 - (UIImage *)croppedPhoto
@@ -342,8 +320,10 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     CGPoint touchPoint = [[touches anyObject] locationInView:self];
+    
     CGRect newFrame;
     if (rightBottomCorner) {
+      
         newFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y,
                                 touchPoint.x - touchStart.x, touchPoint.y - touchStart.y);
         self.frame = [self restrictFrame:newFrame];
@@ -367,11 +347,19 @@
     }
     
     else {
+        CGRect oldFrame = self.frame;
         CGPoint newCenter = CGPointMake(self.center.x + touchPoint.x - touchStart.x,
                                   self.center.y + touchPoint.y - touchStart.y);
+        CGRect caculate = CGRectMake(newCenter.x-self.frame.size.width/2.0, newCenter.y-self.frame.size.height/2.0, self.frame.size.width,self.frame.size.height);
+        //self.center = newCenter;
 //        self.center = [self restrictCenter:newCenter];
-        self.center = newCenter;
-        self.frame = [self restrictFrame:self.frame];
+        if (![self restrictCenter:caculate]) {
+            self.center = newCenter;
+            self.frame = [self restrictFrame:self.frame];
+        }else{
+            self.frame = oldFrame;
+        }
+        
     }
     
     CGSize size = self.frame.size;
@@ -383,7 +371,7 @@
 
 -(CGRect)restrictFrame:(CGRect)rect{
     //need to fix
-    /*CGRect imageViewRect = self.photoImageView.imageView.frame;
+    CGRect imageViewRect = self.photoImageView.imageView.frame;
     CGRect relativeRect = [self.superview convertRect:rect toView:self.photoImageView.imageView];
     CGFloat selfMinX = CGRectGetMinX(relativeRect);
     CGFloat selfMaxX = CGRectGetMaxX(relativeRect);
@@ -394,56 +382,44 @@
     CGFloat maxX = CGRectGetMaxX(imageViewRect);
     CGFloat minY = CGRectGetMinY(imageViewRect);
     CGFloat maxY = CGRectGetMaxY(imageViewRect);
-
+    
     if (selfMinX < minX) {
         relativeRect.origin.x = minX;
         relativeRect.size = self.frame.size;
-        NSLog(@"doing x work ");
     }
-    else if(selfMinY < minY){
+     if(selfMinY < minY){
         relativeRect.origin.y = minY;
         relativeRect.size = self.frame.size;
-        NSLog(@"doing y work");
     }
-    else if(selfMaxX > maxX)
-        relativeRect.size.width -= selfMaxX + maxX;
-    else if(selfMaxY > maxY)
-        relativeRect.size.height -= selfMaxY + maxY;
+    if(selfMaxX > maxX){
+        relativeRect.size.width -= (selfMaxX - maxX);
+    }
+    if(selfMaxY > maxY)
+        relativeRect.size.height -= (selfMaxY - maxY);
 
-    return [self.photoImageView.imageView convertRect:relativeRect toView:self.superview];*/
-    return rect;
+    return [self.photoImageView.imageView convertRect:relativeRect toView:self.superview];
+   // return rect;
     
 }
 
-//-(CGPoint)restrictCenter:(CGPoint)point{
-//    CGRect imageViewRect = self.photoImageView.imageView.frame;
-//    CGRect relativeRect = [self.superview convertRect:self.frame toView:self.photoImageView.imageView];
-//    CGFloat selfMinX = CGRectGetMinX(relativeRect);
-//    CGFloat selfMaxX = CGRectGetMaxX(relativeRect);
-//    CGFloat selfMinY = CGRectGetMinY(relativeRect);
-//    CGFloat selfMaxY = CGRectGetMaxY(relativeRect);
-//    
-//    CGFloat minX = CGRectGetMinX(imageViewRect);
-//    CGFloat maxX = CGRectGetMaxX(imageViewRect);
-//    CGFloat minY = CGRectGetMinY(imageViewRect);
-//    CGFloat maxY = CGRectGetMaxY(imageViewRect);
-//    
-//    if (selfMinX < minX) {
-//        relativeRect.origin.x = minX;
-//        relativeRect.size = self.frame.size;
-//    }
-//    else if(selfMinY < minY){
-//        relativeRect.origin.y = minY;
-//        relativeRect.size = self.frame.size;
-//    }
-//    else if(selfMaxX > maxX)
-//        relativeRect.size.width -= selfMaxX + maxX;
-//    else if(selfMaxY > maxY)
-//        relativeRect.size.height -= selfMaxY + maxY;
-//    CGRect newRect = [self.photoImageView.imageView convertRect:relativeRect toView:self.superview];
-//    
-//    return point;
-//}
+-(BOOL)restrictCenter:(CGRect)rect{
+    CGRect imageViewRect = self.photoImageView.imageView.frame;
+    CGRect relativeRect = [self.superview convertRect:rect toView:self.photoImageView.imageView];
+    //CGFloat selfMinX = CGRectGetMinX(relativeRect);
+    CGFloat selfMaxX = CGRectGetMaxX(relativeRect);
+   // CGFloat selfMinY = CGRectGetMinY(relativeRect);
+    CGFloat selfMaxY = CGRectGetMaxY(relativeRect);
+    
+   // CGFloat minX = CGRectGetMinX(imageViewRect);
+    CGFloat maxX = CGRectGetMaxX(imageViewRect);
+    //CGFloat minY = CGRectGetMinY(imageViewRect);
+    CGFloat maxY = CGRectGetMaxY(imageViewRect);
+    
+    if(selfMaxX > maxX || selfMaxY > maxY)
+        return YES;
+    else    
+        return NO;
+}
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     gridView.hidden = YES;
