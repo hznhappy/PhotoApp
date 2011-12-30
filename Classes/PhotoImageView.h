@@ -7,6 +7,7 @@
 //
 @class PhotoScrollView;
 @class DisplayPhotoView;
+@class TileImageView;
 #include <AssetsLibrary/AssetsLibrary.h>
 #import <Foundation/Foundation.h>
 
@@ -19,13 +20,19 @@
 	
 	BOOL _loading;
 	CGFloat _beginRadians;
-	
+    // The TiledImageView that is currently front most
+	TileImageView* frontTiledView;
+	// The old TiledImageView that we draw on top of when the zooming stops
+	TileImageView* backTiledView;
 }
 
 @property(nonatomic,readonly) UIImage *photo;
 @property(nonatomic,readonly) UIImageView *imageView;
 @property(nonatomic,readonly) PhotoScrollView *scrollView;
+@property(retain) TileImageView *backTiledView;
 - (void)setPhoto:(UIImage *)aPhoto;
+-(void)setClearPhoto;
+- (void)displayImageFailure;
 - (void)rotatePhoto;
 -(void)savePhoto;
 - (void)killScrollViewZoom;

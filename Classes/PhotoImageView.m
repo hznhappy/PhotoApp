@@ -9,7 +9,7 @@
 #import "PhotoImageView.h"
 #import "PhotoScrollView.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "TileImageView.h"
 @interface RotateGesture : UIRotationGestureRecognizer {}
 @end
 
@@ -67,6 +67,7 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 @synthesize photo=_photo;
 @synthesize imageView=_imageView;
 @synthesize scrollView=_scrollView;
+@synthesize backTiledView;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
@@ -94,8 +95,9 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 		_imageView = [imageView retain];
 		[imageView release];
 
-		UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-		activityView.frame = CGRectMake((CGRectGetWidth(self.frame) / 2) - 11.0f, CGRectGetHeight(self.frame) - 100.0f , 22.0f, 22.0f);
+		UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+       // [activityView startAnimating];
+		activityView.frame = CGRectMake((CGRectGetWidth(self.frame) / 2) - 15.0f, (CGRectGetHeight(self.frame)/2) - 15.0f , 30.0f, 30.0f);
 		activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
 		[self addSubview:activityView];
 		_activityView = [activityView retain];
@@ -123,33 +125,59 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 }
 
 - (void)setPhoto:(UIImage *)aPhoto{
-	
-	if (!aPhoto) return; 
-	if ([aPhoto isEqual:self.photo]) return;
+//    [_activityView startAnimating];
+//	if (!aPhoto) return; 
+//	if ([aPhoto isEqual:self.photo]) return;
 	
 	[_photo release], _photo = nil;
 	_photo = [aPhoto retain];
     
     
    	if (self.photo) {
-      
-		self.imageView.image = self.photo;
-        NSLog(@"Photo size is %@",NSStringFromCGSize(self.photo.size));
-	} 
-	
-	if (self.imageView.image) {
+        CGRect imageRect = CGRectMake(0.0f,0.0f,CGImageGetWidth(self.photo.CGImage)*0.3,CGImageGetHeight(self.photo.CGImage)*0.3);
+        
+        UIGraphicsBeginImageContext(imageRect.size);		
+        CGContextRef context = UIGraphicsGetCurrentContext();		
+        CGContextSaveGState(context);
+        CGContextTranslateCTM(context, 0, imageRect.size.height);
+        CGContextScaleCTM(context, 1, -1);
+        CGContextDrawImage(context, imageRect, self.photo.CGImage);
+        CGContextRestoreGState(context);		
+        UIImage *backgroundImage = UIGraphicsGetImageFromCurrentImageContext();	
+        UIGraphicsEndImageContext();		
+		self.imageView.image = backgroundImage;
+        //NSLog(@"Photo size is %@ %@",NSStringFromCGSize(self.photo.size),self.photo);
 		
 		[_activityView stopAnimating];
 		self.userInteractionEnabled = YES;
 		
 		_loading=NO;
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"PhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:NO], @"failed", nil]];
-		
-		
-	} 
-	[self layoutScrollViewAnimated:NO];
+		//[[NSNotificationCenter defaultCenter] postNotificationName:@"PhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:NO], @"failed", nil]];
+		[self layoutScrollViewAnimated:NO];
+	}else{
+        [_activityView startAnimating];
+    }
 }
 
+-(void)setClearPhoto{
+    CGRect imageRect = CGRectMake(0.0f,0.0f,CGImageGetWidth(self.photo.CGImage),CGImageGetHeight(self.photo.CGImage));
+    
+    UIGraphicsBeginImageContext(imageRect.size);		
+    CGContextRef context = UIGraphicsGetCurrentContext();		
+    CGContextSaveGState(context);
+    CGContextTranslateCTM(context, 0, imageRect.size.height);
+    CGContextScaleCTM(context, 1, -1);
+    CGContextDrawImage(context, imageRect, self.photo.CGImage);
+    CGContextRestoreGState(context);		
+    UIImage *backgroundImage = UIGraphicsGetImageFromCurrentImageContext();	
+    UIGraphicsEndImageContext();
+    self.imageView.image = backgroundImage;
+    NSLog(@"clear%@",backgroundImage);
+}
+
+- (void)displayImageFailure{
+    [_activityView stopAnimating];
+}
 
 -(void)rotatePhoto{
 
@@ -203,7 +231,9 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.0001];
 	}
-		
+    if (CGSizeEqualToSize(self.imageView.image.size, CGSizeZero)) {
+        return;
+    }
 	CGFloat hfactor = self.imageView.image.size.width / self.frame.size.width;
 	CGFloat vfactor = self.imageView.image.size.height / self.frame.size.height;
 	
@@ -244,15 +274,17 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 }
 
 - (void)killScrollViewZoom{
-	
+	if (CGSizeEqualToSize(self.imageView.image.size, CGSizeZero)) {
+        return;
+    }
+
 	if (!self.scrollView.zoomScale > 1.0f) return;
 
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDidStopSelector:@selector(killZoomAnimationDidStop:finished:context:)];
 	[UIView setAnimationDelegate:self];
-
-	CGFloat hfactor = self.imageView.image.size.width / self.frame.size.width;
+    CGFloat hfactor = self.imageView.image.size.width / self.frame.size.width;
 	CGFloat vfactor = self.imageView.image.size.height / self.frame.size.height;
 	
 	CGFloat factor = MAX(hfactor, vfactor);
@@ -329,6 +361,12 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
     [[NSNotificationCenter defaultCenter]postNotificationName:@"ChangeCropView" object:nil];
 }
 
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+	// Remove back tiled view.
+	[backTiledView removeFromSuperview];
+	// Set the current TiledImageView to be the old view.
+	self.backTiledView = frontTiledView;
+}
 #pragma mark -
 #pragma mark RotateGesture
 

@@ -75,7 +75,8 @@ static DBOperation* singleton;
     return photos;
 }
 -(NSMutableArray *)selectFromPlayTable:(NSString *)sql
-{NSMutableArray *playArray = [[NSMutableArray alloc]init];
+{
+    NSMutableArray *playArray = [[NSMutableArray alloc]init];
     self.playTableList= playArray;
     [playArray release];
 	sqlite3_stmt *statement;
@@ -92,8 +93,9 @@ static DBOperation* singleton;
     
 }
 -(NSMutableArray *)selectFromTAG:(NSString *)sql
-{ NSMutableArray *playArray = [[NSMutableArray alloc]init];
-     self.tagList= playArray;
+{
+    NSMutableArray *playArray = [[NSMutableArray alloc]init];
+    self.tagList= playArray;
     [playArray release];
     sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
@@ -108,7 +110,8 @@ static DBOperation* singleton;
 }
 
 -(NSMutableSet *)selectFromTAG1:(NSString *)sql
-{NSMutableSet *playArray = [[NSMutableSet alloc]init];
+{
+    NSMutableSet *playArray = [[NSMutableSet alloc]init];
     self.tag1List= playArray;
     [playArray release];
     sqlite3_stmt *statement;
@@ -121,7 +124,7 @@ static DBOperation* singleton;
     }	
     sqlite3_finalize(statement); 
     return tag1List;
-
+    
     
 }
 -(NSMutableArray *)selectOrderId:(NSString *)sql
@@ -134,7 +137,7 @@ static DBOperation* singleton;
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             NSString *newid=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
             [orderIdList addObject:newid];
-            }
+        }
     }	
     sqlite3_finalize(statement);  
     return orderIdList;
@@ -149,7 +152,7 @@ static DBOperation* singleton;
 		while (sqlite3_step(statement)==SQLITE_ROW) {
             NSString *newId=[NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,0)];
             [RulesList addObject:newId];
-    }
+        }
     }	
     sqlite3_finalize(statement);  
     return RulesList;
@@ -169,7 +172,7 @@ static DBOperation* singleton;
     }	
     sqlite3_finalize(statement);  
     return PassTable;
-
+    
 }
 - (NSString *)getUserFromUserTable:(int)id
 {
@@ -177,12 +180,12 @@ static DBOperation* singleton;
 	sqlite3_stmt *statement;
 	if (sqlite3_prepare_v2(db, [countSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
 		while (sqlite3_step(statement)==SQLITE_ROW) {
-        self.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
+            self.name = [NSString stringWithUTF8String:(char*) sqlite3_column_text(statement,1)];
 		}
 		sqlite3_finalize(statement);
         return name;
 	}
-   
+    
 	return nil;
     
 }
@@ -198,8 +201,8 @@ static DBOperation* singleton;
 			
 		}
 		sqlite3_finalize(statement);
-        }
-	}
+    }
+}
 -(BOOL)exitInDatabase:(NSString *)sql{
     sqlite3_stmt *stmt;
     int value=0;
@@ -218,7 +221,8 @@ static DBOperation* singleton;
 }
 
 -(void)deleteDB:(NSString *)sql
-{char *et;
+{
+    char *et;
     if (sqlite3_exec(db, [sql UTF8String], NULL, NULL, &et) != SQLITE_OK) {
         NSAssert1(0,@"Updating table failed.%s",et);
     }    

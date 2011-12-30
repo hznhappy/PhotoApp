@@ -383,7 +383,7 @@
 
 -(CGRect)restrictFrame:(CGRect)rect{
     //need to fix
-   /* CGRect imageViewRect = self.photoImageView.imageView.frame;
+    /*CGRect imageViewRect = self.photoImageView.imageView.frame;
     CGRect relativeRect = [self.superview convertRect:rect toView:self.photoImageView.imageView];
     CGFloat selfMinX = CGRectGetMinX(relativeRect);
     CGFloat selfMaxX = CGRectGetMaxX(relativeRect);

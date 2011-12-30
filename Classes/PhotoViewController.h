@@ -10,12 +10,14 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DBOperation.h"
 #import "PopupPanelView.h"
+#import "PhotoSource.h"
 #import <MediaPlayer/MediaPlayer.h>
 #define Rules    @"Rules"
 #define PV_IMAGE_GAP 30
 @class CropView;
 @class PhotoImageView;
-@interface PhotoViewController : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate,MFMessageComposeViewControllerDelegate> {
+@interface PhotoViewController : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate, PhotoSourceDelegate,
+                                                    MFMailComposeViewControllerDelegate,MFMessageComposeViewControllerDelegate> {
 @private
 	NSArray *photoSource;
 	NSMutableArray *_photoViews;
@@ -60,8 +62,9 @@
 @property(nonatomic,retain) UIScrollView *scrollView;
 @property(nonatomic,assign) NSInteger _pageIndex;
 
+-(void)startToLoadImageAtIndex:(NSUInteger)index;
 - (id)initWithPhotoSource:(NSArray *)aSource currentPage:(NSInteger)page;
--(void)readPhotoFromALAssets:(NSString *)pageIndex;
+//-(void)readPhotoFromALAssets:(NSString *)pageIndex;
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;
 -(void)fireTimer:(NSString *)animateStyle;
@@ -71,6 +74,7 @@
 -(void)CFG;
 -(void)button1Pressed;
 -(void)button2Pressed;
+- (UIImage *)imageAtIndex:(NSUInteger)index;
 //- (UIImage *) croppedPhoto;
 @end
 

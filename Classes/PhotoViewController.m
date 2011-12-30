@@ -12,6 +12,7 @@
 #import "PhotoImageView.h"
 #import "CropView.h"
 #import "AssetRef.h"
+#import "PhotoSource.h"
 
 
 
@@ -63,21 +64,21 @@
 	if ((self = [super init])) {
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleBarsNotification:) name:@"PhotoViewToggleBars" object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidFinishLoading:) name:@"PhotoDidFinishLoading" object:nil];
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidFinishLoading:) name:@"PhotoDidFinishLoading" object:nil];
 		
 		self.hidesBottomBarWhenPushed = YES;
 		self.wantsFullScreenLayout = YES;		
 		photoSource = [aSource retain];
         self._pageIndex = page;
-        NSMutableArray *temp = [[NSMutableArray alloc] init];
-        for (unsigned i = 0; i < [self.photoSource count]; i++) {
-            [temp addObject:[NSNull null]];
-        }
-        self.fullScreenPhotos = temp;
-        [temp release];
+//        NSMutableArray *temp = [[NSMutableArray alloc] init];
+//        for (unsigned i = 0; i < [self.photoSource count]; i++) {
+//            [temp addObject:[NSNull null]];
+//        }
+//        self.fullScreenPhotos = temp;
+//        [temp release];
 	}
-    NSString *pageIndex = [NSString stringWithFormat:@"%d",self._pageIndex];
-	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
+//    NSString *pageIndex = [NSString stringWithFormat:@"%d",self._pageIndex];
+//	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
     
     return self;
 }
@@ -206,23 +207,23 @@
                      }];
 
 }
--(void)readPhotoFromALAssets:(NSString *)pageIndex{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    NSInteger index = [pageIndex integerValue];
-    for (NSInteger i = index-2; i<index+3; i++) {
-        if (i >= 0 && i < [self.photoSource count]) {
-            UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
-            if ((NSNull *)fullImage == [NSNull null] ) {
-            ALAsset *asset = [self.photoSource objectAtIndex:i];
-            UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];
-            [self.fullScreenPhotos replaceObjectAtIndex:i withObject:image];
-                
-            }
-        }
-    }
-    
-    [pool release];
-}
+//-(void)readPhotoFromALAssets:(NSString *)pageIndex{
+//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+//    NSInteger index = [pageIndex integerValue];
+//    for (NSInteger i = index-2; i<index+3; i++) {
+//        if (i >= 0 && i < [self.photoSource count]) {
+//            UIImage *fullImage = [self.fullScreenPhotos objectAtIndex:i];
+//            if ((NSNull *)fullImage == [NSNull null] ) {
+//            ALAsset *asset = [self.photoSource objectAtIndex:i];
+//            UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullScreenImage]];
+//            [self.fullScreenPhotos replaceObjectAtIndex:i withObject:image];
+//                
+//            }
+//        }
+//    }
+//    
+//    [pool release];
+//}
 
 #pragma mark -
 #pragma mark View Controller Methods
@@ -276,9 +277,9 @@
    	self.navigationItem.rightBarButtonItem=edit;
     
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
-    ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex];
-    NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
-    ppv.url = currentPageUrl;
+    //ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex]->_asset;
+   // NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+    //ppv.url = currentPageUrl;
     ppv.alpha = 0.4;
     [ppv Buttons];
     [ppv viewClose];
@@ -290,7 +291,6 @@
     // set the image for the button
     [playButton setBackgroundImage:picture forState:UIControlStateNormal];
     [playButton setImage:picture forState:UIControlStateNormal];
-
 }
 -(void)playVideo
 {
@@ -345,7 +345,12 @@
  //[theMovie2 release]; 
  }
 -(void)viewDidAppear:(BOOL)animated{
-    [self moveToPhotoAtIndex:_pageIndex animated:NO];
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    NSLog(@"why is null %@",photoView);
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+        [photoView setClearPhoto];   
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -353,6 +358,9 @@
     [self.navigationController setToolbarHidden:NO animated:YES];
 	[self setupToolbar];
 	[self setupScrollViewContentSize];
+    [self moveToPhotoAtIndex:_pageIndex animated:NO];
+    [self startToLoadImageAtIndex:_pageIndex];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -710,20 +718,21 @@
 #pragma mark -
 #pragma mark Photo View Methods
 
-- (void)photoViewDidFinishLoading:(NSNotification*)notification{
-	if (notification == nil) return;
-	UIImage *image = [self.fullScreenPhotos objectAtIndex:[self centerPhotoIndex]];
-	if ([[[notification object] objectForKey:@"photo"] isEqual:image]) {
-		if ([[[notification object] objectForKey:@"failed"] boolValue]) {
-			if (_barsHidden) {
-				[self setBarsHidden:NO animated:YES];
-			}
-		} 
-        if (!editing) {
-            [self setViewState];
-        }
-	}
-}
+//- (void)photoViewDidFinishLoading:(NSNotification*)notification{
+//	if (notification == nil) return;
+//	PhotoSource *source = [self.photoSource objectAtIndex:[self centerPhotoIndex]];
+//    UIImage *image = source.photoImage;
+//	if ([[[notification object] objectForKey:@"photo"] isEqual:image]) {
+//		if ([[[notification object] objectForKey:@"failed"] boolValue]) {
+//			if (_barsHidden) {
+//				[self setBarsHidden:NO animated:YES];
+//			}
+//		} 
+//        if (!editing) {
+//            [self setViewState];
+//        }
+//	}
+//}
 
 - (NSInteger)centerPhotoIndex{
 	
@@ -735,15 +744,24 @@
 - (void)moveForward:(id)sender{
     
    	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];
-    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
-	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+        [photoView setClearPhoto];   
+    }
+//    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+//	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
 }
 
 - (void)moveBack:(id)sender{
     
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
-    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
-	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+        [photoView setClearPhoto];   
+    }
+
+//    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
+//	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
 }
 
 - (void)setViewState {	
@@ -770,9 +788,9 @@
 	
 }
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
-    ALAsset *asset = [self.photoSource objectAtIndex:index];
-    NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
-    ppv.url = currentPageUrl;
+   // ALAsset *asset = [self.photoSource objectAtIndex:index];
+    //NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+   // ppv.url = currentPageUrl;
     [ppv Buttons];
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
    	_pageIndex = index;
@@ -880,6 +898,32 @@
 	
 }
 
+-(void)startToLoadImageAtIndex:(NSUInteger)index{
+    NSUInteger i;
+    
+    if (index > 0) {
+        
+        // Release anything < index - 1
+        for (i = 0; i < index-1; i++) { [(PhotoSource *)[self.photoSource objectAtIndex:i] releasePhoto]; /*NSLog(@"Release image at index %i", i);*/ }
+        
+        // Preload index - 1
+        i = index - 1; 
+        if (i < photoSource.count) { [(PhotoSource *)[self.photoSource objectAtIndex:i] obtainImageInBackgroundAndNotify:self]; /*NSLog(@"Pre-loading image at index %i", i);*/ }
+        
+    }
+    if (index < photoSource.count - 1) {
+        
+        // Release anything > index + 1
+        for (i = index + 2; i < photoSource.count; i++) { [(PhotoSource *)[self.photoSource objectAtIndex:i] releasePhoto]; /*NSLog(@"Release image at index %i", i);*/ }
+        
+        // Preload index + 1
+        i = index + 1; 
+        if (i < photoSource.count) { [(PhotoSource *)[self.photoSource objectAtIndex:i] obtainImageInBackgroundAndNotify:self]; /*NSLog(@"Pre-loading image at index %i", i);*/ }
+        
+    }
+
+}
+
 - (void)loadScrollViewWithPage:(NSInteger)page{
     
     if (page < 0) return;
@@ -902,12 +946,12 @@
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
 		[photoView release];		
 	} 
-    UIImage *photo = [self.fullScreenPhotos objectAtIndex:page];
-    if ((NSNull *)photo == [NSNull null]) {
-        return;
-    }
-    [photoView setPhoto:[self.fullScreenPhotos objectAtIndex:page]];
-    
+//    UIImage *photo = [self. objectAtIndex:page];
+//    if ((NSNull *)photo == [NSNull null]) {
+//        return;
+//    }
+//    [photoView setPhoto:[self.fullScreenPhotos objectAtIndex:page]];
+    [photoView setPhoto:[self imageAtIndex:page]];
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
 	}
@@ -924,30 +968,84 @@
 	frame.origin.x = xOrigin;
 	frame.origin.y = 0;
 	photoView.frame = frame;
-    if(VI==YES)
-    {
-    realasset =[self.photoSource objectAtIndex:page];
-    if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
-    {  
-        
-        NSString *p=[NSString stringWithFormat:@"%d",page];
-                [self.video addObject:p];
-        CGRect frame1 =frame;
-        frame1.origin.x =xOrigin+130;
-        frame1.origin.y = 210;
-        frame1.size.height=60;
-        frame1.size.width=60;
-        [self play:frame1];
-    }
-    }
-    NSString *p=[NSString stringWithFormat:@"%d",page];
-    if(VI==YES)
-    {
-        [self performSelector:@selector(favorite:) withObject:p afterDelay:2.5];    
-    }
+    NSLog(@"aready here");
+//    if(VI==YES)
+//    {
+//    realasset =[self.photoSource objectAtIndex:page];
+//    if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
+//    {  
+//        
+//        NSString *p=[NSString stringWithFormat:@"%d",page];
+//                [self.video addObject:p];
+//        CGRect frame1 =frame;
+//        frame1.origin.x =xOrigin+130;
+//        frame1.origin.y = 210;
+//        frame1.size.height=60;
+//        frame1.size.width=60;
+//        [self play:frame1];
+//    }
+//    }
+//    NSString *p=[NSString stringWithFormat:@"%d",page];
+//    if(VI==YES)
+//    {
+//        [self performSelector:@selector(favorite:) withObject:p afterDelay:2.5];    
+//    }
    //[self favorite];   
     
 }
+
+#pragma mark -
+#pragma mark Photos
+
+// Get image if it has been loaded, otherwise nil
+- (UIImage *)imageAtIndex:(NSUInteger)index {
+	if (self.photoSource && index < self.photoSource.count) {
+        
+		// Get image or obtain in background
+		PhotoSource *photo = [self.photoSource objectAtIndex:index];
+		if ([photo isImageAvailable]) {
+			return [photo image];
+		} else {
+			[photo obtainImageInBackgroundAndNotify:self];
+		}
+		
+	}
+	return nil;
+}
+
+#pragma mark -
+#pragma mark PhotoDelegate
+
+- (void)photoDidFinishLoading:(PhotoSource *)photo {
+	NSUInteger index = [self.photoSource indexOfObject:photo];
+    PhotoImageView *photoView = (PhotoImageView *)[self.photoViews objectAtIndex:index];
+   // NSLog(@"need to load index %d %@",index,photoView);
+	if (index != NSNotFound) {
+
+		if ((NSNull *)photoView!=[NSNull null]&&photoView!=nil) {
+          //  NSLog(@"finish and the index is %d",index);
+			// Tell page to display image again
+			[photoView setPhoto:[self imageAtIndex:index]];
+			
+		}
+	}
+}
+
+- (void)photoDidFailToLoad:(PhotoSource *)photo {
+	NSUInteger index = [self.photoSource indexOfObject:photo];
+     PhotoImageView *photoView = (PhotoImageView *)[self.photoViews objectAtIndex:index];
+	if (index != NSNotFound) {
+		if (index != NSNotFound) {
+            if ((NSNull *)photoView!=[NSNull null]&&photoView!=nil) {
+                
+                // Tell page to display image again
+                [photoView displayImageFailure];
+                
+            }
+        }
+	}
+}
+
 
 #pragma mark -
 #pragma mark UIScrollView Delegate Methods
@@ -963,7 +1061,7 @@
 
 	NSInteger _index = [self centerPhotoIndex];
     
-	if (_index >= [self.photoSource count] || _index < 0 || (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {
+	if (_index >= [self.photoSource count] || _index < 0 ){//|| (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {
 		return;
 	}
 	
@@ -974,9 +1072,8 @@
 //        [ppv Buttons];
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
-        
-        NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
-        [self performSelectorInBackground:@selector(readPhotoFromALAssets:) withObject:pageIndex];
+        //[self moveToPhotoAtIndex:_index animated:YES];
+        [self startToLoadImageAtIndex:_pageIndex];
         if (!editing) {
             [self setViewState];
         }
@@ -994,6 +1091,11 @@
 		return;
 	}	
     [self moveToPhotoAtIndex:_index animated:YES];
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+        [photoView setClearPhoto];   
+    }
+
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{

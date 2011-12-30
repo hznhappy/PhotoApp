@@ -11,6 +11,7 @@
 #import "AssetTablePicker.h"
 #import "AssetRef.h"
 #import "PhotoViewController.h"
+#import "PhotoSource.h"
 @implementation PlaylistRootViewController
  static NSString* const kFileName=@"output.mov";
 
@@ -101,10 +102,15 @@
     NSDictionary *dicOfPhotoViewer = [note userInfo];
     NSString *key = [[dicOfPhotoViewer allKeys] objectAtIndex:0];
     NSMutableArray *assets = [dicOfPhotoViewer valueForKey:key];
-    PhotoViewController *pc = [[PhotoViewController alloc]initWithPhotoSource:assets currentPage:[key integerValue]];
+    NSMutableArray *photoSource  = [[NSMutableArray alloc]init];
+    for (id as in assets) {
+        [photoSource addObject:[PhotoSource PhotoWithAsset:as]];
+    }
+    PhotoViewController *pc = [[PhotoViewController alloc]initWithPhotoSource:photoSource currentPage:[key integerValue]];
     //PhotosBrowser *pc = [[PhotosBrowser alloc]initWithPhotoSource:assets currentPage:[key integerValue]];
     [self pushViewController:pc animated:YES];
     [pc release];
+    [photoSource release];
 }
 
 - (void)viewDidUnload
