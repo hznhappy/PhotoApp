@@ -12,7 +12,7 @@
 #import "Thumbnail.h"
 #import "sqlite3.h"
 #import "DBOperation.h"
-#import "MyNSOperation.h"
+
 
 #define TAG @"TAG"
 #define PassTable @"PassTable"
@@ -27,11 +27,6 @@
     UIBarButtonItem *reset;
     UIBarButtonItem *cancel;
     UIBarButtonItem *lock;
-
-    MyNSOperation *operation;
-    
-    NSOperationQueue *queue;
-    NSMutableArray *operations;
 	
 	NSMutableArray *crwAssets;
 	NSArray *urlsArray;
@@ -72,12 +67,10 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
 @property (nonatomic,retain)ALAssetsLibrary *library;
-@property (nonatomic,retain)NSInvocationOperation *operation1;
-@property (nonatomic,retain)NSInvocationOperation *operation2;
-@property (nonatomic,retain)MyNSOperation *operation;
+
 @property (nonatomic,retain)NSMutableArray *tagRow;
-@property(nonatomic,retain)NSString *UserId;
-@property(nonatomic,retain)NSString *UserName;
+@property (nonatomic,retain)NSString *UserId;
+@property (nonatomic,retain)NSString *UserName;
 //@property(nonatomic,retain)UIView *tagBg;
 @property(nonatomic,retain)NSMutableArray *destinctUrl;
 @property (nonatomic,retain)NSString *PLAYID;
