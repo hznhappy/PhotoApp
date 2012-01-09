@@ -133,18 +133,18 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
     
     
    	if (self.photo) {
-        CGRect imageRect = CGRectMake(0.0f,0.0f,CGImageGetWidth(self.photo.CGImage)*0.3,CGImageGetHeight(self.photo.CGImage)*0.3);
-        
-        UIGraphicsBeginImageContext(imageRect.size);		
-        CGContextRef context = UIGraphicsGetCurrentContext();		
-        CGContextSaveGState(context);
-        CGContextTranslateCTM(context, 0, imageRect.size.height);
-        CGContextScaleCTM(context, 1, -1);
-        CGContextDrawImage(context, imageRect, self.photo.CGImage);
-        CGContextRestoreGState(context);		
-        UIImage *backgroundImage = UIGraphicsGetImageFromCurrentImageContext();	
-        UIGraphicsEndImageContext();		
-		self.imageView.image = backgroundImage;
+//        CGRect imageRect = CGRectMake(0.0f,0.0f,CGImageGetWidth(self.photo.CGImage)*0.3,CGImageGetHeight(self.photo.CGImage)*0.3);
+//        
+//        UIGraphicsBeginImageContext(imageRect.size);		
+//        CGContextRef context = UIGraphicsGetCurrentContext();		
+//        CGContextSaveGState(context);
+//        CGContextTranslateCTM(context, 0, imageRect.size.height);
+//        CGContextScaleCTM(context, 1, -1);
+//        CGContextDrawImage(context, imageRect, self.photo.CGImage);
+//        CGContextRestoreGState(context);		
+//        UIImage *backgroundImage = UIGraphicsGetImageFromCurrentImageContext();	
+//        UIGraphicsEndImageContext();		
+		self.imageView.image = self.photo;//backgroundImage;
         //NSLog(@"Photo size is %@ %@",NSStringFromCGSize(self.photo.size),self.photo);
 		
 		[_activityView stopAnimating];
@@ -249,8 +249,7 @@ CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 	self.scrollView.contentSize = CGSizeMake(self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
 	self.scrollView.contentOffset = CGPointMake(0.0f, 0.0f);
 	self.imageView.frame = self.scrollView.bounds;
-
-
+    
 	if (animated) {
 		[UIView commitAnimations];
 	}

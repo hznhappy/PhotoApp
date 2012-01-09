@@ -26,6 +26,7 @@
 - (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated;
 - (NSInteger)centerPhotoIndex;
 - (void)setupToolbar;
+-(void)setCropConstrainToolBar;
 - (void)setupEditToolbar;
 - (void)setViewState;
 - (void)autosizePopoverToImageSize:(CGSize)imageSize photoImageView:(PhotoImageView*)photoImageView;
@@ -70,27 +71,19 @@
 		self.wantsFullScreenLayout = YES;		
 		photoSource = [aSource retain];
         self._pageIndex = page;
-//        NSMutableArray *temp = [[NSMutableArray alloc] init];
-//        for (unsigned i = 0; i < [self.photoSource count]; i++) {
-//            [temp addObject:[NSNull null]];
-//        }
-//        self.fullScreenPhotos = temp;
-//        [temp release];
-	}
-//    NSString *pageIndex = [NSString stringWithFormat:@"%d",self._pageIndex];
-//	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
+    }
     
     return self;
 }
 -(void)play:(CGRect)framek
 {
-        
-   
-    playButton.frame =framek;
-        [self.scrollView addSubview:playButton];
     
-
-
+    
+    playButton.frame =framek;
+    [self.scrollView addSubview:playButton];
+    
+    
+    
 }
 -(void)CFG
 {
@@ -105,32 +98,32 @@
     [db createTable:createRules];
     favorite=[[UIView alloc]initWithFrame:CGRectMake(1,160,80,150)];
     [favorite setBackgroundColor:[UIColor grayColor]];
-   favorite.alpha=0.6;
+    favorite.alpha=0.6;
     UIImage *bubble = [UIImage imageNamed:@"bubble.png"];
 	bubbleImageView = [[UIImageView alloc] initWithImage:[bubble stretchableImageWithLeftCapWidth:21 topCapHeight:14]];
-
+    
     bubbleImageView.frame = CGRectMake(0,0,80,150);
     //[favorite addSubview:bubbleImageView];
-
+    
     UILabel *note=[[UILabel alloc]initWithFrame:CGRectMake(15, 10, 80, 30)];
     [note setBackgroundColor:[UIColor clearColor]];
     note.numberOfLines = 10;  
     note.text = @"Do you like it?";
-   
+    
     //note.baselineAdjustment = UIBaselineAdjustmentNone; 
     //note.highlighted = YES;       
-
+    
     //note.highlightedTextColor = [UIColor whiteColor];      
     note.textColor = [UIColor whiteColor];
     note.font = [UIFont boldSystemFontOfSize:18];
-     //[note setText:@"do you like it?"];
+    //[note setText:@"do you like it?"];
     CGSize size = CGSizeMake(60, 1000);
     CGSize labelSize = [note.text sizeWithFont:note.font 
-                              constrainedToSize:size
-                                  lineBreakMode:UILineBreakModeClip];
+                             constrainedToSize:size
+                                 lineBreakMode:UILineBreakModeClip];
     note.frame = CGRectMake(note.frame.origin.x, note.frame.origin.y,
-                             note.frame.size.width,labelSize.height);
-   [favorite addSubview:note];
+                            note.frame.size.width,labelSize.height);
+    [favorite addSubview:note];
     [note release];
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom]; 
     button1.frame = CGRectMake(10, 80, 60, 30);
@@ -142,21 +135,21 @@
     [button2 setTitle:@"NO" forState:UIControlStateNormal];
     [button1 addTarget:self action:@selector(button1Pressed) forControlEvents:UIControlEventTouchDown];
     [button2 addTarget:self action:@selector(button2Pressed) forControlEvents:UIControlEventTouchDown];
-   [favorite addSubview:button1];
-   [favorite addSubview:button2];
+    [favorite addSubview:button1];
+    [favorite addSubview:button2];
     //favorite.hidden=YES;
     
-
+    
 }
 -(void)favorite:(NSString *)inter
 {  
     if([inter integerValue]==_pageIndex)
     {
-         //favorite.hidden=NO;
-    NSLog(@"FACORITE");
-    [self.view addSubview:favorite];
-   // 
-       
+        //favorite.hidden=NO;
+        NSLog(@"FACORITE");
+        [self.view addSubview:favorite];
+        // 
+        
         
         [UIView animateWithDuration:0.5 
                          animations:^{
@@ -164,20 +157,20 @@
                              favorite.alpha = 0.6;
                          }];
         
-
+        
         //favorite.hidden=NO;
-
+        
     }
-  //  [favorite CommitAnimations];
+    //  [favorite CommitAnimations];
 }
 -(void)button1Pressed
 {
     NSLog(@"button1");
-   // favorite.hidden=YES;
+    // favorite.hidden=YES;
     [UIView animateWithDuration:0.8 
                      animations:^{
                          //myPickerView.frame = CGRectMake(0, 210, 310, 180);
-                        favorite.alpha = 0;
+                         favorite.alpha = 0;
                      }];
     NSString *insertTag= [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(ID,URL,NAME) VALUES('%d','%@','%@')",TAG,-1,[[realasset defaultRepresentation]url],@"like"];
     NSLog(@"JJJJ%@",insertTag);
@@ -199,13 +192,13 @@
 -(void)button2Pressed
 {
     NSLog(@"button2");
-   // favorite.hidden=YES;
+    // favorite.hidden=YES;
     [UIView animateWithDuration:0.8 
                      animations:^{
                          //myPickerView.frame = CGRectMake(0, 210, 310, 180);
                          favorite.alpha = 0;
                      }];
-
+    
 }
 //-(void)readPhotoFromALAssets:(NSString *)pageIndex{
 //    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -260,7 +253,7 @@
 	for (unsigned i = 0; i < [self.photoSource count]; i++) {
 		[views addObject:[NSNull null]];
 	}
-   NSMutableArray *array=[[NSMutableArray alloc]init];
+    NSMutableArray *array=[[NSMutableArray alloc]init];
     self.video=array;
 	self.photoViews = views;
     [views release];
@@ -273,13 +266,40 @@
     NSString *save = NSLocalizedString(@"Save", @"title");
     edit=[[UIBarButtonItem alloc]initWithTitle:u style:UIBarButtonItemStyleBordered target:self action:@selector(edit)];
     saveItem=[[UIBarButtonItem alloc]initWithTitle:save style:UIBarButtonItemStyleDone target:self action:@selector(savePhoto)];
-
-   	self.navigationItem.rightBarButtonItem=edit;
+    //[saveItem setTintColor:[UIColor colorWithRed:1.0 green:240/255.0 blue:0 alpha:1.0]];
+//    UIButton *customButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    customButton.frame = CGRectMake(0, 0, 40, 30);
+//    customButton.tintColor = [UIColor colorWithRed:1.0 green:240/255.0 blue:0 alpha:1.0];
+//    [customButton setTitle:@"Save" forState:UIControlStateNormal];
+//    customButton.titleLabel.text = @"Save";
+//    customButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
+//    customButton.titleLabel.textColor = [UIColor blackColor];
+//    [customButton addTarget:self action:@selector(savePhoto) forControlEvents:UIControlEventTouchUpInside];
+//    UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 40, 30)];
+//    
+//    [backLabel setFont:[UIFont fontWithName:[[UIFont fontNamesForFamilyName:@"Arial Rounded MT Bold"] objectAtIndex:0] size:24.0]];
+//    [backLabel setTextColor:[UIColor blackColor]];
+//    [backLabel setShadowColor:[UIColor clearColor]];
+//    [backLabel setText:@"Save"];
+//    [backLabel sizeToFit];
+//    [backLabel setBackgroundColor:[UIColor colorWithRed:1.0 green:240/255.0 blue:0 alpha:1.0]];
+//    saveItem = [[UIBarButtonItem alloc]initWithCustomView:backLabel];
+//    [saveItem setTintColor:[UIColor colorWithRed:1.0 green:240/255.0 blue:0 alpha:1.0]];
+//    saveItem.style = UIBarButtonItemStyleBordered;
+//    UILabel *lblTotCaratteri = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 25, 15)];
+//    lblTotCaratteri.textAlignment = UITextAlignmentCenter;
+//    lblTotCaratteri.font = [UIFont italicSystemFontOfSize:13.0];
+//    lblTotCaratteri.textColor = [UIColor greenColor];
+//    lblTotCaratteri.backgroundColor = [UIColor clearColor];
+//    lblTotCaratteri.adjustsFontSizeToFitWidth = YES;
+//    lblTotCaratteri.text = @"0";
+//    edit.customView = lblTotCaratteri;
+    self.navigationItem.rightBarButtonItem=edit;
     
     ppv = [[PopupPanelView alloc] initWithFrame:CGRectMake(0, 62, 320, 375)];
-    //ALAsset *asset = [self.photoSource objectAtIndex:_pageIndex]->_asset;
-   // NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
-    //ppv.url = currentPageUrl;
+    ALAsset *asset = [[self.photoSource objectAtIndex:_pageIndex] alasset];
+    NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+    ppv.url = currentPageUrl;
     ppv.alpha = 0.4;
     [ppv Buttons];
     [ppv viewClose];
@@ -290,24 +310,24 @@
     UIImage *picture = [UIImage imageNamed:@"ji.png"];
     // set the image for the button
     [playButton setBackgroundImage:picture forState:UIControlStateNormal];
-    [playButton setImage:picture forState:UIControlStateNormal];
+    [playButton setBackgroundColor:[UIColor clearColor]];
 }
 -(void)playVideo
 {
-    ALAsset *realasset1 =[self.photoSource objectAtIndex:_pageIndex];
-       NSLog(@"alasset:%@",realasset1);
+    ALAsset *realasset1 =[[self.photoSource objectAtIndex:_pageIndex] alasset];
+    
     ALAssetRepresentation *ref = [realasset1 defaultRepresentation];
     NSURL *url = [ref url];
-    NSLog(@"%@ is the url ",url);
-       
+    
+    
     theMovie=[[MPMoviePlayerController alloc] initWithContentURL:url]; 
-  //  NSTimeInterval duration = theMovie.duration;
-  //  NSLog(@"LENGTH:%f",theMovie.duration);
-
+    //  NSTimeInterval duration = theMovie.duration;
+    //  NSLog(@"LENGTH:%f",theMovie.duration);
+    
     [[theMovie view] setFrame:[self.view bounds]]; // Frame must match parent view
     [self.view addSubview:[theMovie view]];
     //theMovie.scalingMode =  MPMovieControlModeDefault;
-   // theMovie.scalingMode=MPMovieScalingModeAspectFill; 
+    // theMovie.scalingMode=MPMovieScalingModeAspectFill; 
     theMovie.scalingMode=MPMovieMediaTypeMaskAudio;
     theMovie.controlStyle = MPMovieControlModeHidden;
     //theMovie.scalingMode = MPMovieScalingModeFill;
@@ -336,21 +356,20 @@
 }
 // When the movie is done,release the controller. 
 -(void)myMovieFinishedCallback:(NSNotification*)aNotification 
- {
- MPMoviePlayerController* theMovie2=[aNotification object]; 
- [[NSNotificationCenter defaultCenter] removeObserver:self 
- name:MPMoviePlayerPlaybackDidFinishNotification 
- object:theMovie2]; 
- // Release the movie instance created in playMovieAtURL
- //[theMovie2 release]; 
- }
+{
+    MPMoviePlayerController* theMovie2=[aNotification object]; 
+    [[NSNotificationCenter defaultCenter] removeObserver:self 
+                                                    name:MPMoviePlayerPlaybackDidFinishNotification 
+                                                  object:theMovie2]; 
+    // Release the movie instance created in playMovieAtURL
+    //[theMovie2 release]; 
+}
 -(void)viewDidAppear:(BOOL)animated{
-    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
-    NSLog(@"why is null %@",photoView);
-    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
-        [photoView setClearPhoto];   
-    }
-
+//    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+//    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+//        [photoView setClearPhoto];   
+//    }
+//    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -472,12 +491,22 @@
     self.navigationItem.hidesBackButton = YES;
     UIBarButtonItem *cancell = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelEdit)];
     self.navigationItem.leftBarButtonItem = cancell;
+    [cancell release];
     [self setupEditToolbar];
     editing = YES;
     if (!self.scrollView.scrollEnabled) {
         self.scrollView.scrollEnabled = YES;
     }
-    
+    if (cropView.superview !=nil) {
+        [cropView removeFromSuperview];
+    }
+    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+        if (photoView.alpha!=1.0) {
+            photoView.alpha = 1.0;
+        }
+    }
+
 }
 
 -(void)cancelEdit{
@@ -502,7 +531,7 @@
 
 - (void)setupEditToolbar{
     [self setToolbarItems:nil];
-    UIBarButtonItem *rotate = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"refresh.png"] 
+    UIBarButtonItem *rotate = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"rotate.png"] 
                                                               style:UIBarButtonItemStylePlain 
                                                              target:self 
                                                              action:@selector(rotatePhoto)];
@@ -514,10 +543,10 @@
                                                           target:self 
                                                           action:@selector(markPhoto)];
     
-    UIBarButtonItem *crop = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"wrench.png"]
-                                                                                style:UIBarButtonItemStylePlain
-                                                                               target:self 
-                                                                               action:@selector(cropPhoto)];
+    UIBarButtonItem *crop = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"crop.png"]
+                                                            style:UIBarButtonItemStylePlain
+                                                           target:self 
+                                                           action:@selector(cropPhoto)];
     [self setToolbarItems:[NSArray arrayWithObjects:rotate,flex,tag,flex,crop, nil]];
     
     [rotate release];
@@ -526,20 +555,46 @@
     [tag release];
 }
 
+-(void)setCropConstrainToolBar{
+    [self setToolbarItems:nil];
+    UIBarButtonItem *cancell = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(edit)];
+    self.navigationItem.leftBarButtonItem = nil;
+    self.navigationItem.leftBarButtonItem = cancell;
+    [cancell release];
+    
+    UIBarButtonItem *constrain = [[UIBarButtonItem alloc]initWithTitle:@"Constrain" style:UIBarButtonItemStyleBordered target:self action:@selector(cropConstrain)];
+    UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    constrain.width = 100;
+    [self setToolbarItems:[NSArray arrayWithObjects:flex,constrain,flex, nil]];
+    [constrain release];
+    [flex release];
+}
+
+-(void)cropConstrain{
+    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:nil 
+                                                      delegate:self 
+                                             cancelButtonTitle:@"Cancel" 
+                                        destructiveButtonTitle:nil 
+                                             otherButtonTitles:@"Original",@"Square",@"3 x 2",@"4 x 3",@"4 x 6",@"5 x 7",@"8 x 10",@"16 x 9", nil];
+    sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    [sheet showInView:self.view];
+    [sheet release];
+}
+
 -(void)rotatePhoto{
     if (self.navigationItem.rightBarButtonItem == nil) {
         UIBarButtonItem *cropItem=[[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(saveCropPhoto:)];
         self.navigationItem.rightBarButtonItem = cropItem;
         [cropItem release];
     }
-       
+    
     if (!self.navigationItem.rightBarButtonItem.enabled) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }
     self.navigationItem.rightBarButtonItem.title = @"Save";
     PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
     if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
-   
+        
         [photoView rotatePhoto];
         [self.cropView setCropView];
     }
@@ -557,7 +612,7 @@
         [ppv viewOpen];
     }
     tagShow = !tagShow;
-
+    
     
 }
 
@@ -586,18 +641,24 @@
             UIBarButtonItem *cropItem=[[UIBarButtonItem alloc]initWithTitle:@"Crop" style:UIBarButtonItemStyleDone target:self action:@selector(setCropPhoto:)];
             self.navigationItem.rightBarButtonItem = cropItem;
             [cropItem release];
-            
+            [self setCropConstrainToolBar];
             photoView.alpha = 0.4;
-            CropView *temCV = [[CropView alloc]initWithFrame:CGRectMake(60, 140, 200, 200) ImageView:photoView superView:self.view];
+            CGRect cropRect = [photoView.scrollView convertRect:photoView.imageView.frame toView:self.view];
+//            cropRect.origin.x +=20;
+//            cropRect.origin.y +=20;
+//            cropRect.size.width -=40;
+//            cropRect.size.height -=40;
+            NSLog(@"crop rect %@",NSStringFromCGRect(cropRect));
+            CropView *temCV = [[CropView alloc]initWithFrame:CGRectMake(110, 190, 100, 100) ImageView:photoView superView:self.view];//CGRectMake(110, 190, 100, 100)
             temCV.backgroundColor = [UIColor clearColor];
-            self.cropView = [temCV retain];
+            self.cropView = temCV;
             [temCV release];
             
             [self.view addSubview:cropView];
             croping = YES;
         }
     }
-
+    
 }
 
 -(void)setCropPhoto:(id)sender{
@@ -623,7 +684,7 @@
         return;
     }else{
         [photoView savePhoto];
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"The photo already save to camera roll!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert" message:@"The photo have save to PhotoAlbum!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         [alert release];
     }
@@ -631,49 +692,49 @@
     
 }
 /*
-- (UIImage *)croppedPhoto
-{
-    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
-    if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
-        return nil;
-    }else{
-        UIImage *orignImage = photoView.photo;
-        UIScrollView *pScrollView = (UIScrollView *)photoView.scrollView;
-        CGFloat zoomScale = pScrollView.zoomScale;
-        
-        CGFloat hfactor = photoView.imageView.image.size.width / photoView.imageView.frame.size.width;
-        CGFloat vfactor = photoView.imageView.image.size.height / photoView.imageView.frame.size.height;
-//        CGRect visibleRect;
-//        visibleRect.origin = pScrollView.contentOffset;
-//        visibleRect.size = pScrollView.bounds.size;
-//       // NSLog(@"scrollview frame is %@",NSStringFromCGRect(pScrollView.frame));
-//       // NSLog(@"scrollview bounds is %@",NSStringFromCGRect(pScrollView.bounds));
-//        float theScale = 1.0 / zoomScale;
-//        visibleRect.origin.x *= theScale;
-//        visibleRect.origin.y *= theScale;
-//        visibleRect.size.width *= theScale;
-//        visibleRect.size.height *= theScale;
-//        NSLog(@"scrollView visibleRect is %@",NSStringFromCGRect(visibleRect));
-////        CGFloat cofX = pScrollView.contentOffset.x;
-////        CGFloat cofY = pScrollView.contentOffset.y;
-//        
-//        CGRect newRect = [self.view convertRect:self.cropView.frame toView:pScrollView];
-        CGPoint point = [self.view convertPoint:self.cropView.frame.origin toView:photoView.imageView];
-       // NSLog(@"must the same %@ %@",NSStringFromCGPoint(point),NSStringFromCGPoint(self.cropView.frame.origin));
-        CGFloat cx =  (point.x)  * hfactor*zoomScale;
-        CGFloat cy =  (point.y) * vfactor*zoomScale;
-        CGFloat cw = self.cropView.frame.size.width * hfactor;
-        CGFloat ch = self.cropView.frame.size.height * vfactor;
-        CGRect cropRect = CGRectMake(cx, cy, cw, ch);
-        CGImageRef imageRef = CGImageCreateWithImageInRect([orignImage CGImage], cropRect);
-        UIImage *result = [UIImage imageWithCGImage:imageRef];
-        CGImageRelease(imageRef);
-        
-        
-        return result;
-    }
-}
-*/
+ - (UIImage *)croppedPhoto
+ {
+ PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+ if (photoView == nil || (NSNull *)photoView == [NSNull null]) {
+ return nil;
+ }else{
+ UIImage *orignImage = photoView.photo;
+ UIScrollView *pScrollView = (UIScrollView *)photoView.scrollView;
+ CGFloat zoomScale = pScrollView.zoomScale;
+ 
+ CGFloat hfactor = photoView.imageView.image.size.width / photoView.imageView.frame.size.width;
+ CGFloat vfactor = photoView.imageView.image.size.height / photoView.imageView.frame.size.height;
+ //        CGRect visibleRect;
+ //        visibleRect.origin = pScrollView.contentOffset;
+ //        visibleRect.size = pScrollView.bounds.size;
+ //       // NSLog(@"scrollview frame is %@",NSStringFromCGRect(pScrollView.frame));
+ //       // NSLog(@"scrollview bounds is %@",NSStringFromCGRect(pScrollView.bounds));
+ //        float theScale = 1.0 / zoomScale;
+ //        visibleRect.origin.x *= theScale;
+ //        visibleRect.origin.y *= theScale;
+ //        visibleRect.size.width *= theScale;
+ //        visibleRect.size.height *= theScale;
+ //        NSLog(@"scrollView visibleRect is %@",NSStringFromCGRect(visibleRect));
+ ////        CGFloat cofX = pScrollView.contentOffset.x;
+ ////        CGFloat cofY = pScrollView.contentOffset.y;
+ //        
+ //        CGRect newRect = [self.view convertRect:self.cropView.frame toView:pScrollView];
+ CGPoint point = [self.view convertPoint:self.cropView.frame.origin toView:photoView.imageView];
+ // NSLog(@"must the same %@ %@",NSStringFromCGPoint(point),NSStringFromCGPoint(self.cropView.frame.origin));
+ CGFloat cx =  (point.x)  * hfactor*zoomScale;
+ CGFloat cy =  (point.y) * vfactor*zoomScale;
+ CGFloat cw = self.cropView.frame.size.width * hfactor;
+ CGFloat ch = self.cropView.frame.size.height * vfactor;
+ CGRect cropRect = CGRectMake(cx, cy, cw, ch);
+ CGImageRef imageRef = CGImageCreateWithImageInRect([orignImage CGImage], cropRect);
+ UIImage *result = [UIImage imageWithCGImage:imageRef];
+ CGImageRelease(imageRef);
+ 
+ 
+ return result;
+ }
+ }
+ */
 - (NSInteger)currentPhotoIndex{
 	
 	return _pageIndex;
@@ -746,24 +807,20 @@
 - (void)moveForward:(id)sender{
     
    	[self moveToPhotoAtIndex:[self centerPhotoIndex]+1 animated:NO];
-    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
-    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
-        [photoView setClearPhoto];   
-    }
-//    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
-//	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
+//    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+//    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+//        [photoView setClearPhoto];   
+//    }
 }
 
 - (void)moveBack:(id)sender{
     
 	[self moveToPhotoAtIndex:[self centerPhotoIndex]-1 animated:NO];
-    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
-    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
-        [photoView setClearPhoto];   
-    }
-
-//    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
-//	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];
+//    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+//    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+//        [photoView setClearPhoto];   
+//    }
+//    
 }
 
 - (void)setViewState {	
@@ -790,9 +847,9 @@
 	
 }
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
-   // ALAsset *asset = [self.photoSource objectAtIndex:index];
-    //NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
-   // ppv.url = currentPageUrl;
+    ALAsset *asset = [[self.photoSource objectAtIndex:index]alasset];
+    NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+    ppv.url = currentPageUrl;
     [ppv Buttons];
 	NSAssert(index < [self.photoSource count] && index >= 0, @"Photo index passed out of bounds");
    	_pageIndex = index;
@@ -802,7 +859,7 @@
     }
     
 	[self enqueuePhotoViewAtIndex:index];
-  
+    
 	[self loadScrollViewWithPage:index-1];
     VI=YES;
 	[self loadScrollViewWithPage:index];
@@ -923,7 +980,7 @@
         if (i < photoSource.count) { [(PhotoSource *)[self.photoSource objectAtIndex:i] obtainImageInBackgroundAndNotify:self]; /*NSLog(@"Pre-loading image at index %i", i);*/ }
         
     }
-
+    
 }
 
 - (void)loadScrollViewWithPage:(NSInteger)page{
@@ -944,20 +1001,19 @@
 	
 	if (photoView == nil || (NSNull*)photoView == [NSNull null]) {
 		
-		photoView = [[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320,480)];
+		photoView = [[[PhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width,self.scrollView.bounds.size.height)]autorelease];
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
-		[photoView release];		
+		//[photoView release];		
 	} 
-//    UIImage *photo = [self. objectAtIndex:page];
-//    if ((NSNull *)photo == [NSNull null]) {
-//        return;
-//    }
-//    [photoView setPhoto:[self.fullScreenPhotos objectAtIndex:page]];
+//    ALAsset *asset = [[self.photoSource objectAtIndex:page]alasset];
+//    CGImageRef ref = [asset aspectRatioThumbnail];
+//    UIImage *img = [UIImage imageWithCGImage:ref];
     [photoView setPhoto:[self imageAtIndex:page]];
+    
     if (photoView.superview == nil) {
 		[self.scrollView addSubview:photoView];
 	}
-     
+    
 	CGRect frame = self.scrollView.frame;
 	NSInteger centerPageIndex = _pageIndex;
 	CGFloat xOrigin = (frame.size.width * page);
@@ -970,28 +1026,28 @@
 	frame.origin.x = xOrigin;
 	frame.origin.y = 0;
 	photoView.frame = frame;
-//    if(VI==YES)
-//    {
-//    realasset =[self.photoSource objectAtIndex:page];
-//    if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
-//    {  
-//        
-//        NSString *p=[NSString stringWithFormat:@"%d",page];
-//                [self.video addObject:p];
-//        CGRect frame1 =frame;
-//        frame1.origin.x =xOrigin+130;
-//        frame1.origin.y = 210;
-//        frame1.size.height=60;
-//        frame1.size.width=60;
-//        [self play:frame1];
-//    }
-//    }
-//    NSString *p=[NSString stringWithFormat:@"%d",page];
-//    if(VI==YES)
-//    {
-//        [self performSelector:@selector(favorite:) withObject:p afterDelay:2.5];    
-//    }
-   //[self favorite];   
+    if(VI==YES)
+    {
+        realasset =[[self.photoSource objectAtIndex:page]alasset];
+        if ([[realasset valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo]) 
+        {  
+            
+            NSString *p=[NSString stringWithFormat:@"%d",page];
+            [self.video addObject:p];
+            CGRect frame1 =frame;
+            frame1.origin.x =xOrigin+130;
+            frame1.origin.y = 210;
+            frame1.size.height=60;
+            frame1.size.width=60;
+            [self play:frame1];
+        }
+    }
+    NSString *p=[NSString stringWithFormat:@"%d",page];
+    if(VI==YES)
+    {
+        [self performSelector:@selector(favorite:) withObject:p afterDelay:3];    
+    }
+    //[self favorite];   
     
 }
 
@@ -1008,6 +1064,7 @@
 			return [photo image];
 		} else {
 			[photo obtainImageInBackgroundAndNotify:self];
+            return [photo fuzzyImage];
 		}
 		
 	}
@@ -1020,11 +1077,11 @@
 - (void)photoDidFinishLoading:(PhotoSource *)photo {
 	NSUInteger index = [self.photoSource indexOfObject:photo];
     PhotoImageView *photoView = (PhotoImageView *)[self.photoViews objectAtIndex:index];
-   // NSLog(@"need to load index %d %@",index,photoView);
+    // NSLog(@"need to load index %d %@",index,photoView);
 	if (index != NSNotFound) {
-
-		if ((NSNull *)photoView!=[NSNull null]&&photoView!=nil) {
-          //  NSLog(@"finish and the index is %d",index);
+        
+		if ((NSNull *)photoView!=[NSNull null]&&photoView!=nil&&index == _pageIndex) {
+            //  NSLog(@"finish and the index is %d",index);
 			// Tell page to display image again
 			[photoView setPhoto:[self imageAtIndex:index]];
 			
@@ -1034,7 +1091,7 @@
 
 - (void)photoDidFailToLoad:(PhotoSource *)photo {
 	NSUInteger index = [self.photoSource indexOfObject:photo];
-     PhotoImageView *photoView = (PhotoImageView *)[self.photoViews objectAtIndex:index];
+    PhotoImageView *photoView = (PhotoImageView *)[self.photoViews objectAtIndex:index];
 	if (index != NSNotFound) {
 		if (index != NSNotFound) {
             if ((NSNull *)photoView!=[NSNull null]&&photoView!=nil) {
@@ -1053,13 +1110,13 @@
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-  
+    
     [UIView animateWithDuration:0
                      animations:^{
                          //myPickerView.frame = CGRectMake(0, 210, 310, 180);
                          favorite.alpha = 0;
                      }];
-
+    
 	NSInteger _index = [self centerPhotoIndex];
     
 	if (_index >= [self.photoSource count] || _index < 0 ){//|| (NSNull *)[self.fullScreenPhotos objectAtIndex:_index] == [NSNull null]) {
@@ -1067,10 +1124,10 @@
 	}
 	
 	if (_pageIndex != _index && !_rotating) {
-//        ALAsset *asset = [self.photoSource objectAtIndex:_index];
-//        NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
-//        ppv.url = currentPageUrl;
-//        [ppv Buttons];
+        ALAsset *asset = [[self.photoSource objectAtIndex:_index]alasset];
+        NSString *currentPageUrl=[[[asset defaultRepresentation]url]description];
+        ppv.url = currentPageUrl;
+        [ppv Buttons];
 		[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
         //[self moveToPhotoAtIndex:_index animated:YES];
@@ -1092,11 +1149,11 @@
 		return;
 	}	
     [self moveToPhotoAtIndex:_index animated:YES];
-    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
-    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
-        [photoView setClearPhoto];   
-    }
-
+//    PhotoImageView *photoView = [self.photoViews objectAtIndex:_pageIndex];
+//    if (photoView != nil && (NSNull *)photoView != [NSNull null]) {
+//        [photoView setPhoto:[self imageAtIndex:_pageIndex]];   
+//    }
+    
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
@@ -1115,11 +1172,11 @@
 
 - (void)emailPhoto{
 	/*MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc]init];
-    messageController.messageComposeDelegate = self;
-    messageController.recipients = [NSArray arrayWithObject:@"23234567"];  
-    messageController.body = @"iPhone OS4";
-    [self presentModalViewController:messageController animated:YES];
-    [messageController release];*/
+     messageController.messageComposeDelegate = self;
+     messageController.recipients = [NSArray arrayWithObject:@"23234567"];  
+     messageController.body = @"iPhone OS4";
+     [self presentModalViewController:messageController animated:YES];
+     [messageController release];*/
 	MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
 	[mailViewController setSubject:@"Shared Photo"];
 	[mailViewController addAttachmentData:[NSData dataWithData:UIImagePNGRepresentation(((PhotoImageView*)[self.photoViews objectAtIndex:_pageIndex]).imageView.image)] mimeType:@"png" fileName:@"Photo.png"];
@@ -1191,14 +1248,45 @@
 	
 	if (buttonIndex == actionSheet.cancelButtonIndex) {
 		return;
-	} else if (buttonIndex == actionSheet.firstOtherButtonIndex) {
-		[self markPhoto];
-	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
-		[self copyPhoto];	
-	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
-		[self emailPhoto];	
-	} else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3){
-        [self cropPhoto];
+	} 
+    if (editing) {
+        if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            NSLog(@"first");
+            [self.cropView setFrame:CGRectMake(110, 190, 100, 100)];
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
+            CGRect rect = self.cropView.frame;
+            CGPoint center = self.cropView.center;
+            rect.size.width *= 2;
+            rect.size.height *= 2;
+            self.cropView.frame = CGRectMake(center.x-rect.size.width/2, center.y-rect.size.height/2, rect.size.width, rect.size.height);	
+            [self.cropView setCropView];
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
+            CGFloat maxSize = MAX(self.cropView.frame.size.width, self.cropView.frame.size.height);
+            
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3){
+            [self cropPhoto];
+        }else if (buttonIndex == actionSheet.firstOtherButtonIndex + 4){
+            [self cropPhoto];
+        }else if (buttonIndex == actionSheet.firstOtherButtonIndex + 5){
+            [self cropPhoto];
+        }else if (buttonIndex == actionSheet.firstOtherButtonIndex + 6){
+            [self cropPhoto];
+        }else if (buttonIndex == actionSheet.firstOtherButtonIndex + 7){
+            [self cropPhoto];
+        }else if (buttonIndex == actionSheet.firstOtherButtonIndex + 8){
+            [self cropPhoto];
+        }
+        
+    }else{
+        if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            [self markPhoto];
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
+            [self copyPhoto];	
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
+            [self emailPhoto];	
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3){
+            [self cropPhoto];
+        }
     }
 }
 
@@ -1206,12 +1294,16 @@
 #pragma mark timer method
 
 -(void)fireTimer:(NSString *)animateStyle{
-    timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
+    timer = [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(playPhoto) userInfo:animateStyle repeats:YES];
 }
 -(void)playPhoto{
     _pageIndex+=1;
-    NSString *pageIndex = [NSString stringWithFormat:@"%d",_pageIndex];
-	[self performSelectorOnMainThread:@selector(readPhotoFromALAssets:) withObject:pageIndex waitUntilDone:NO];    [self setBarsHidden:YES animated:YES];
+    NSInteger _index = self._pageIndex;
+    if (_index >= [self.photoSource count] || _index < 0) {
+        _pageIndex = 0;
+    }
+    [self startToLoadImageAtIndex:_pageIndex];
+    [self setBarsHidden:YES animated:YES];
     NSString *animateStyle = [timer userInfo];
     CATransition *animation = [CATransition animation];
     animation.delegate = self;
@@ -1234,13 +1326,9 @@
         animation.type = animateStyle;
     }
     [self.scrollView.layer addAnimation:animation forKey:@"animation"];
-    NSInteger _index = self._pageIndex;
-	if (_index >= [self.photoSource count] || _index < 0) {
-        _pageIndex = 0;
-        [self moveToPhotoAtIndex:_pageIndex animated:NO];
-    }else{
-        [self moveToPhotoAtIndex:_pageIndex animated:NO];
-    }
+    
+    [self moveToPhotoAtIndex:_pageIndex animated:NO];
+   
 }
 #pragma mark -
 #pragma mark Memory

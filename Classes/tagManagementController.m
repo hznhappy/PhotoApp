@@ -205,12 +205,6 @@ int j=1,count=0;
 	[super dealloc];
 	
 }
--(id)initWithDelegate:(id)delegate
-{
-	if (self==[super init]) {
-	}
-	return self;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

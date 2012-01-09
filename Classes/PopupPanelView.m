@@ -18,7 +18,8 @@
 @synthesize myscroll;
 @synthesize url;
 - (id)initWithFrame:(CGRect)frame {
-    if (self == [super initWithFrame:frame]) {
+    self = [super initWithFrame:frame];
+    if (self) {
         self.url = nil;
 		isOpen = NO;
 		rectForOpen = self.frame;

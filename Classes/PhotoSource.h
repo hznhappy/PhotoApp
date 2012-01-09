@@ -28,6 +28,8 @@
 - (id)initWithAsset:(ALAsset *)asset;
 
 - (BOOL)isImageAvailable;
+-(ALAsset *)alasset;
+-(UIImage *)fuzzyImage;
 - (UIImage *)image;
 - (UIImage *)obtainImage;
 - (void)obtainImageInBackgroundAndNotify:(id <PhotoSourceDelegate>)notifyDelegate;

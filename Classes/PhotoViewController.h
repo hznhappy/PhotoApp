@@ -45,7 +45,7 @@
     UIButton *playButton;
     NSMutableArray *video;
     BOOL VI;
-    BOOL favo;
+    //BOOL favo;
     MPMoviePlayerController* theMovie;
     UIView *favorite;
     ALAsset *realasset;

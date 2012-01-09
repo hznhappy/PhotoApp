@@ -49,6 +49,7 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushAssetsTablePicker:) name:@"pushThumbnailView" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushPhotosBrowser:) name:@"viewPhotos" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(playPhotoWithAnimation:) name:@"PlayPhoto" object:nil];
 }
 
 -(void)pushAssetsTablePicker:(NSNotification *)note{
@@ -111,6 +112,21 @@
     [self pushViewController:pc animated:YES];
     [pc release];
     [photoSource release];
+}
+
+-(void)playPhotoWithAnimation:(NSNotification *)note{
+    NSDictionary *dic = [note userInfo];
+    NSMutableArray *assets = [dic valueForKey:@"0"];
+    NSString *transtion = [dic valueForKey:@"animation"];
+    NSMutableArray *animatePhotos  = [[NSMutableArray alloc]init];
+    for (id as in assets) {
+        [animatePhotos addObject:[PhotoSource PhotoWithAsset:as]];
+    }
+
+    PhotoViewController *playPhotoController = [[PhotoViewController alloc]initWithPhotoSource:animatePhotos currentPage:0];
+    [playPhotoController fireTimer:transtion];
+    [self pushViewController:playPhotoController animated:YES];
+    [playPhotoController release];
 }
 
 - (void)viewDidUnload

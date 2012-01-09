@@ -20,11 +20,17 @@
     self = [super init];
     // ---- grap the library assets
     ///////
-    self.assets = [[NSMutableDictionary alloc]init];
+     NSMutableDictionary *tempAsset= [[NSMutableDictionary alloc]init];
+    self.assets = tempAsset;
+    [tempAsset release];
     self.gCount = 0;
-    self.assetsUrlOrdering = [[NSMutableArray alloc]init];
-    self.assetGroups=[[NSMutableArray alloc]init];
-    self.library = assetLibrary;
+    NSMutableArray *tempUrlOrdering = [[NSMutableArray alloc]init];
+    self.assetsUrlOrdering = tempUrlOrdering;
+    [tempUrlOrdering release];
+    NSMutableArray *tempArray =[[NSMutableArray alloc]init];
+    self.assetGroups = tempArray;
+    [tempArray release];
+    self.library = [assetLibrary retain];
     self.ready = NO;
     gCount=0;
     [self fetchAssets];

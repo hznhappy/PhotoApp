@@ -26,9 +26,13 @@
     da=[DBOperation getInstance];
     [self creatTable];
     [self selectID];
-     self.assetGroups=[[NSMutableArray alloc]init];
+    NSMutableArray *temp1 =[[NSMutableArray alloc]init];
+    self.assetGroups = temp1;
+    [temp1 release];
     if (self) {
-        self.playlists = [[NSMutableArray alloc]init];
+        NSMutableArray *temp2 = [[NSMutableArray alloc]init];
+        self.playlists = temp2;
+        [temp2 release];
         self.assetProducer = _assetProducer;
        
         [self doFetchPlaylists];
@@ -39,8 +43,9 @@
 }
 
 - (void) doFetchPlaylists {
-    self.playlists = [[NSMutableArray alloc]init];
-    
+   NSMutableArray *t = [[NSMutableArray alloc]init];
+    self.playlists = t;
+    [t release];
     for (NSString *_id in self.list) 
     {
         [da getUserFromPlayTable:_id];

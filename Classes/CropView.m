@@ -199,21 +199,12 @@
 -(void)drawRect:(CGRect)rect{
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextSetLineWidth(context, 6.0f);
+    CGContextSetLineWidth(context, 8.0f);
     CGFloat minX = CGRectGetMinX(rect);
     CGFloat maxX = CGRectGetMaxX(rect);
     CGFloat minY = CGRectGetMinY(rect);
     CGFloat maxY = CGRectGetMaxY(rect);
 
-    //CGContextBeginPath(context);
-    
-//    CGContextSetLineWidth(context, 2.0f);
-//    CGContextMoveToPoint(context, minX, minY);
-//    CGContextAddLineToPoint(context, maxX, minY);
-//    CGContextAddLineToPoint(context, maxX, maxY);
-//    CGContextAddLineToPoint(context, minX, maxY);
-//    CGContextAddLineToPoint(context, minX, minY);
-//    CGContextStrokePath(context);
 
     CGContextMoveToPoint(context, maxX/12.0,minY);
     CGContextAddLineToPoint(context, minX, minY);
@@ -256,22 +247,6 @@
         CGFloat hfactor = photoImageView.imageView.image.size.width / photoImageView.imageView.frame.size.width;
         CGFloat vfactor = photoImageView.imageView.image.size.height / photoImageView.imageView.frame.size.height;
     
-        //        CGRect visibleRect;
-        //        visibleRect.origin = pScrollView.contentOffset;
-        //        visibleRect.size = pScrollView.bounds.size;
-        //       // NSLog(@"scrollview frame is %@",NSStringFromCGRect(pScrollView.frame));
-        //       // NSLog(@"scrollview bounds is %@",NSStringFromCGRect(pScrollView.bounds));
-        //        float theScale = 1.0 / zoomScale;
-        //        visibleRect.origin.x *= theScale;
-        //        visibleRect.origin.y *= theScale;
-        //        visibleRect.size.width *= theScale;
-        //        visibleRect.size.height *= theScale;
-        //        NSLog(@"scrollView visibleRect is %@",NSStringFromCGRect(visibleRect));
-        ////        CGFloat cofX = pScrollView.contentOffset.x;
-        ////        CGFloat cofY = pScrollView.contentOffset.y;
-        //        
-        //        CGRect newRect = [self.view convertRect:self.cropView.frame toView:pScrollView];
-    
         CGPoint point = [self convertPoint:cropImageView.frame.origin toView:photoImageView.imageView];
 
         CGFloat cx =  (point.x)  * hfactor*zoomScale;
@@ -283,7 +258,6 @@
         CGImageRef imageRef = CGImageCreateWithImageInRect([orignImage CGImage], cropRect);
         UIImage *result = [UIImage imageWithCGImage:imageRef];
         CGImageRelease(imageRef);
-        
         
         return result;
 }
@@ -347,10 +321,10 @@
     }
     
     else {
-        CGRect oldFrame = self.frame;
+       // CGRect oldFrame = self.frame;
         CGPoint newCenter = CGPointMake(self.center.x + touchPoint.x - touchStart.x,
                                   self.center.y + touchPoint.y - touchStart.y);
-        CGRect caculate = CGRectMake(newCenter.x-(self.frame.size.width/2.0), newCenter.y-(self.frame.size.height/2.0), self.frame.size.width,self.frame.size.height);
+        //CGRect caculate = CGRectMake(newCenter.x-(self.frame.size.width/2.0), newCenter.y-(self.frame.size.height/2.0), self.frame.size.width,self.frame.size.height);
         //self.center = newCenter;
 //        self.center = [self restrictCenter:newCenter];
 //        if (![self restrictCenter:caculate]) {
@@ -393,12 +367,10 @@
         relativeRect.size = self.frame.size;
     }
     if(selfMaxX > maxX){
-        //NSLog(@"the image x:%.1f and the crop is %.1f",maxX,selfMaxX);
         relativeRect.size.width = self.frame.size.width;
         relativeRect.origin.x = maxX - relativeRect.size.width;
     }
     if(selfMaxY > maxY){
-        NSLog(@"the image Y:%.1f and the crop is %.1f",maxY,selfMaxY);
         relativeRect.size.height = self.frame.size.height;
         relativeRect.origin.y = maxY - relativeRect.size.height-0.1;
     }
@@ -416,7 +388,6 @@
     [photoImageView release];
     [gridView release];
     [photoBrowserView release];
-    [cropImageView release];
     [cropImageView release];
     [super dealloc];
 }

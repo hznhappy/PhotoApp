@@ -42,8 +42,9 @@
     ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
     p = [[AssetProducer alloc]initWithAssetsLibrary:lib];
     [lib release];
-    self.playList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
-    [lib release];
+    PlaylistProducer *tempList = [[PlaylistProducer alloc]initWithAssetProcuder:p];
+    self.playList = tempList;
+    [tempList release];
     [self setWantsFullScreenLayout:YES];
 	[self.navigationItem setTitle:@"PlayList"];
     
@@ -68,7 +69,8 @@
     
 }
 -(void)addfavorate
-{NSMutableArray *al=[[NSMutableArray alloc]init];
+{
+    NSMutableArray *al=[[NSMutableArray alloc]init];
     NSLog(@"SD");
     for(int i=0;i<[self.playList.playlists count];i++)
     {
@@ -239,7 +241,7 @@ self.selectedAlbum = [self.playList.playlists objectAtIndex: indexPath.row];
                                                   object:theMovie]; 
     NSLog(@"PO");
     // Release the movie instance created in playMovieAtURL
-    [theMovie release]; 
+    //[theMovie release]; 
 }
     - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     [self.playList selectID];

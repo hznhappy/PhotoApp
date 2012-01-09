@@ -7,12 +7,26 @@
 
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "ThumbnailImageView.h"
 
-@interface ThumbnailCell : UITableViewCell
+@class ThumbnailCell;
+
+@protocol ThumbnailCellSelectionDelegate <NSObject>
+
+-(void)selectedThumbnailCell:(ThumbnailCell *)cell selectedAtIndex:(NSUInteger)index;
+
+@end 
+
+@interface ThumbnailCell : UITableViewCell<ThumbnailSelectionDelegate>
 {
-    
+    NSUInteger rowNumber;
+    id<ThumbnailCellSelectionDelegate>selectionDelegate;
 }
-- (void) albumSelected: (id) sender ;
 
--(void)displayThumbnails:(NSMutableDictionary *)array;
+@property (nonatomic, assign) NSUInteger rowNumber;
+@property (nonatomic, assign) id<ThumbnailCellSelectionDelegate> selectionDelegate;
+
+
+-(void)displayThumbnails:(NSArray *)array count:(NSUInteger)count;
+-(void)clearSelection;
 @end

@@ -10,27 +10,38 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 @implementation ThumbnailCell
+@synthesize selectionDelegate;
+@synthesize rowNumber;
 
--(void)displayThumbnails:(NSMutableDictionary *)array{
+-(void)displayThumbnails:(NSArray *)array count:(NSUInteger)count{
     CGRect frame = CGRectMake(4, 2, 75, 75);
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    for (ALAsset *asset in [array allValues]) {
-        UIImage *image = [UIImage imageWithCGImage:[asset thumbnail]];
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setFrame:frame];
-        [button setImage:image forState:UIControlStateNormal];
-        [self addSubview:button];
-        frame.origin.x = frame.origin.x + frame.size.width + 4;
+    for (NSUInteger i = 0;i <count; i++) {
+        if (i < [array count]) {
+            ALAsset *asset = [array objectAtIndex:i];
+            ThumbnailImageView *thumImageView = [[ThumbnailImageView alloc]initWithAsset:asset index:rowNumber*count+i];
+            thumImageView.frame = frame;
+            thumImageView.delegate = self;
+            [self addSubview:thumImageView];
+            [thumImageView release];
+            frame.origin.x = frame.origin.x + frame.size.width + 4;
+        }
         
     }
 }
 
-- (void) albumSelected: (id) sender {
-    NSLog(@"Album Selected");
-    
+-(void)clearSelection{
+    for (UIView *view in self.subviews) {
+        if ([view isKindOfClass:[ThumbnailImageView class]]) {
+            [(ThumbnailImageView *)view clearSelection];
+        }
+    }
 }
-
-
+#pragma mark -
+#pragma mark delegate methods;
+-(void)thumbnailImageViewSelected:(ThumbnailImageView *)thumbnailImageView{
+    [selectionDelegate selectedThumbnailCell:self selectedAtIndex:thumbnailImageView.thumbnailIndex];
+}
 -(void)dealloc 
 {
 

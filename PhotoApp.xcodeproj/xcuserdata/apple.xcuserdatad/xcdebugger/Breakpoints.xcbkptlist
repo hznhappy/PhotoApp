@@ -37,12 +37,40 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "AlbumController.m"
-         timestampString = "345553642.481841"
+         timestampString = "347788434.760718"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "176"
-         endingLineNumber = "176"
-         landmarkName = "-tableView:didSelectRowAtIndexPath:"
+         startingLineNumber = "177"
+         endingLineNumber = "177"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/PhotoViewController.m"
+         timestampString = "347535109.909188"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1051"
+         endingLineNumber = "1051"
+         landmarkName = "-loadScrollViewWithPage:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/PhotoViewController.m"
+         timestampString = "347535109.909188"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1264"
+         endingLineNumber = "1264"
+         landmarkName = "-actionSheet:clickedButtonAtIndex:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

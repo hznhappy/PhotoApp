@@ -70,6 +70,15 @@
     return self.photoImage;
 }
 
+-(ALAsset *)alasset{
+    return self._asset;
+}
+
+-(UIImage *)fuzzyImage{
+    CGImageRef ref = [self._asset aspectRatioThumbnail];
+    UIImage *image = [UIImage imageWithCGImage:ref];
+    return image;
+}
 - (UIImage *)obtainImage{
     if (!self.photoImage) {
 		

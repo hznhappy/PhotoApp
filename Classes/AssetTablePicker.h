@@ -12,13 +12,13 @@
 #import "Thumbnail.h"
 #import "sqlite3.h"
 #import "DBOperation.h"
-#import "MyNSOperation.h"
+#import "ThumbnailCell.h"
 
 #define TAG @"TAG"
 #define PassTable @"PassTable"
 
 
-@interface AssetTablePicker : UIViewController<UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>
+@interface AssetTablePicker : UIViewController<ThumbnailCellSelectionDelegate,UIScrollViewDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>
 {
     UITableView *table;
     UIToolbar *viewBar;
@@ -27,11 +27,6 @@
     UIBarButtonItem *reset;
     UIBarButtonItem *cancel;
     UIBarButtonItem *lock;
-
-    MyNSOperation *operation;
-    
-    NSOperationQueue *queue;
-    NSMutableArray *operations;
 	
 	NSMutableArray *crwAssets;
 	NSArray *urlsArray;
@@ -64,6 +59,7 @@
     UIInterfaceOrientation previousOrigaton;
     int minute;
     int second;
+    NSUInteger selectedRow;
 }
 @property (nonatomic,retain)IBOutlet UITableView *table;
 @property (nonatomic,retain)IBOutlet UIToolbar *viewBar;
@@ -72,12 +68,10 @@
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *reset;
 @property (nonatomic,retain)IBOutlet UIBarButtonItem *lock;
 @property (nonatomic,retain)ALAssetsLibrary *library;
-@property (nonatomic,retain)NSInvocationOperation *operation1;
-@property (nonatomic,retain)NSInvocationOperation *operation2;
-@property (nonatomic,retain)MyNSOperation *operation;
+
 @property (nonatomic,retain)NSMutableArray *tagRow;
-@property(nonatomic,retain)NSString *UserId;
-@property(nonatomic,retain)NSString *UserName;
+@property (nonatomic,retain)NSString *UserId;
+@property (nonatomic,retain)NSString *UserName;
 //@property(nonatomic,retain)UIView *tagBg;
 @property(nonatomic,retain)NSMutableArray *destinctUrl;
 @property (nonatomic,retain)NSString *PLAYID;
